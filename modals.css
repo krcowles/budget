@@ -1,0 +1,17 @@
+.modal-content {
+    margin-bottom: 0px;
+}
+.modal-close {
+    position: relative;
+    margin-bottom: 0px;
+}
+#acct, #cc {
+    margin-bottom: 4px;
+}
+#expamt {
+    height: 18px;
+    width: 68px;
+}
+#pay {
+    margin-bottom: 0px;
+}

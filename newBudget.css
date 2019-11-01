@@ -1,0 +1,31 @@
+#page {
+    margin-left: 16px;
+}
+#old {
+    display: none;
+}
+#new {
+    position: relative;
+    top: 24px;
+}
+.acctname, .bud, .bal {
+    height: 18px;
+    font-size: 14px;
+}
+.acctname {
+    width: 180px;
+}
+.bud {
+    width: 100px;
+}
+.bal {
+    width: 100px;
+}
+#done {
+    position: relative;
+    left: 120px;
+}
+textarea {
+    height: 22px;
+    font-size: 16px;
+}

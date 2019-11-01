@@ -1,0 +1,66 @@
+ table {
+	font-size: 16px;
+	text-align: center;
+    margin-top: 5px;
+    background-color: #dfdfdf; 
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    border-collapse: collapse;
+}
+th {
+    text-align: center;
+    font-weight: bold;
+	padding-left: 5px;
+	padding-right: 5px;
+	border-style: outset;
+	border-width: 2px;
+}
+tr:hover {
+	background-color: BlanchedAlmond;
+}
+td {
+    vertical-align: top;
+	padding-left: 5px;
+    padding-right: 5px;
+    background-color: white;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+td span {
+    float: right;
+}
+td span:first-child {
+    float:left;
+}
+.negative {
+    color: crimson;
+}
+.acct {
+    text-align: left;
+}
+.amt {
+    color: darkgreen;
+}
+.cname {
+    text-align: left;
+}
+.camt {
+    color: black;
+}
+.gray-title {
+    font-weight: bold;
+    background-color: #dfdfdf;
+}
+.ap, .apday {
+    background-color: #F5FFFA;
+}
+.heavy-top {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+.balance {
+    font-weight: bold;
+    color: darkgreen;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>New Account Data</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="description"
+        content="Rolling 4-month budget tracker" />
+    <meta name="author" content="Ken Cowles" />
+    <meta name="robots" content="nofollow" />
+    <link href="standards.css" type="text/css" rel="stylesheet" />
+    <link href="newBudget.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+<div id="page">
+     <span class="NormalHeading">Note: If you make changes,
+         make sure to 'Save All' before 'Done'</span><br /><br />
+    <button id="save">Save All</button> (Changes and New Data)
+    <span id="done"><button>Done</button> (Return to Budget Tracking)</span><br /><br />
+    <div id="old">
+        <span class="NormalHeading">This is the data you have currently entered:</span>
+        <br /><br />
+    </div>
+    <div id="new">
+        <span class="NormalHeading">Enter your new account information below.</span><br />
+        Note: When you select "Save All", the data you entered will be saved, and
+        the page will be refreshed with your entered data with room for more entries.
+        <br /><br />
+        <form id="form" action="saveAcctData.php" method="POST">
+            Account Name: <input class="acctname" type="text" name="acctname[]" />
+            Monthly Budget: <input class="bud" type="text" name="bud[]"/>
+            Current value: <input class="bal" type="text" name="bal[]" />
+            <br /><br />
+            Account Name: <input class="acctname" type="text" name="acctname[]" />
+            Monthly Budget: <input class="bud" type="text" name="bud[]"/>
+            Current value: <input class="bal" type="text" name="bal[]" />
+            <br /><br />
+            Account Name: <input class="acctname" type="text" name="acctname[]" />
+            Monthly Budget: <input class="bud" type="text" name="bud[]"/>
+            Current value: <input class="bal" type="text" name="bal[]" />
+            <br /><br />
+        </form>
+    </div>
+</div>
+<script src="jquery-1.12.1.js" type="text/javascript"></script>
+<script src="newBudget.js" type="text/javascript"></script>
+
+</body>
+
+</html>

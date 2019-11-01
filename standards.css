@@ -1,0 +1,58 @@
+/* fonts */
+body {
+    font-family: Arial, Tahoma, Verdana;
+    font-size: 16px;
+    font-weight: normal; 
+    background-color: #dfdfdf; 
+}
+.NormalText {
+    font-family: Arial, Tahoma, Verdana;
+    font-size: 16px;
+    font-weight: normal;
+}
+.BoldText {
+    font-family: Arial, Tahoma, Verdana;
+    font-size: 16px;
+    font-weight: bold;
+}
+.NormalHeading {
+    font-family: Arial, Tahoma, Verdana;
+    font-size: 24px;
+    font-weight: bold;
+}
+.LargeHeading {
+    font-family: Arial, Tahoma, Verdana;
+    font-size: 28px;
+    font-weight: bold;
+}
+.SmallHeading {
+    font-family: Arial, Tahoma, Verdana;
+    font-size: 18px;
+    font-weight: bold;
+}
+/* buttons & drop-downs */
+button {
+    height: 28px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: normal;
+    color: black;
+    background-color: white;
+    cursor: pointer;
+}
+button:hover {
+    font-size: 16px;
+    background-color: black;
+    color: white;
+    font-weight: normal;
+}
+select {
+    font-size: 16px;
+    font-weight: normal;
+    height: 28px;
+}
+/* jQuery UI Widgets */
+.spinner {
+	height: 12px;
+	width: 40px;
+}

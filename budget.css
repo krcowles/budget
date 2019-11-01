@@ -1,0 +1,15 @@
+table {
+    float: left;
+    margin-left: 16px;
+}
+#bttns {
+    float: left;
+    margin-left: 32px;
+    margin-top: 40px;
+}
+button {
+    margin-bottom: 32px;
+}
+#newbud, #chgaccts {
+    display: none;
+}
