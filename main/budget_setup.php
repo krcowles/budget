@@ -10,7 +10,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license
  */
-require "getBudgetData.php";
+require "../utilities/getBudgetData.php";
 
 // format the data for the table:
 $dsign = '<span>$</span><span>';
@@ -78,15 +78,14 @@ if (!$setup) {
     $card1 = [];
     $card2 = [];
     $card3 = [];
-    $card4 = [];
+    $card4 = [];  // assuming max of 4 Cr cards for now...
     $crbalances = [];
-    $cardno = 0;
     $cards = fopen($credit_data, "r");
     if ($cards !== false) {
-        $cdcards = 1;
+        $cdcards = 1; // notify budget.php that a file exists
         $card_names = [];
         $card_dat = fgetcsv($cards);
-        $crcards = 0;
+        $crcards = 0; // no of credit cards identified in file
         for ($q=0; $q<count($card_dat); $q+=2) {
             if ($card_dat[$q+1] === 'Credit') {
                 $card_names[$crcards] = $card_dat[$q];
@@ -94,6 +93,8 @@ if (!$setup) {
             }
         }
         $crbal = 0;
+        $cardno = 0;
+        // if there is data to accumulate for any card:
         while (($charges = fgetcsv($cards)) !== false) {
             if (strpos($charges[0], "next") !== false) {
                 // skip the line containing "next"
@@ -126,7 +127,16 @@ if (!$setup) {
         $dat = number_format($crbal, 2, '.', ',');
         $crbal = $dsign . $dat . '</span>';
         $crbalances[$cardno] = $crbal;
+        $cardno++;
+        if ($cardno < $crcards) {
+            for ($s=$cardno; $s<$crcards; $s++) {
+                $dat = number_format(0, 2, '.', ',');
+                $crbal = $dsign . $dat . '</span>';
+                $crbalances[$s] = $crbal;
+                $crbal = 0;
+            }
+        }
     } else {
-        $cdcards = "0";
+        $cdcards = "0"; // notify budget.php that no file exists
     }
 }

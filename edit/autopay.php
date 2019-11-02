@@ -7,7 +7,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "getBudgetData.php"; // includes cleanup function
+require "../utilities/getBudgetData.php"; // includes cleanup function
 
 if (file_exists($credit_data)) {
     $ccdat = fopen($credit_data, "r");
@@ -19,7 +19,7 @@ if (file_exists($credit_data)) {
         exit;
     } else {
         fclose($ccdat);
-        $options = '<option value="start">Select Method:</opton>';
+        $options = '<option value="start">Select Method:</option>';
         $no_of_opts = count($cards);
         for ($y=0; $y<count($cards); $y+=2) {
             $options .= '<option value="' . $cards[$y] . '">' . 
@@ -44,8 +44,8 @@ if (file_exists($credit_data)) {
         content="Rolling 4-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="standards.css" type="text/css" rel="stylesheet" />
-    <link href="charges.css" type="text/css" rel="stylesheet" >
+    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/charges.css" type="text/css" rel="stylesheet" >
     <style type="text/css">
         #ap {margin-left:24px;}
         .date {font-size:16px;padding-top:6px;padding-bottom:0px;}
@@ -53,7 +53,7 @@ if (file_exists($credit_data)) {
         textarea {height: 24px; width:46px;}
         select {width: 100%;}
     </style>
-    <script src="jquery-1.12.1.js"></script>
+    <script src="../scripts/jquery-1.12.1.js"></script>
 </head>
 
 <body>
@@ -116,6 +116,10 @@ if (file_exists($credit_data)) {
         } else {
             $(sid).val("start");
         }
+    });
+    $('#bud').on('click', function(ev) {
+        ev.preventDefault();
+        window.open("../main/budget.php", "_self");
     });
 </script>
 </body>

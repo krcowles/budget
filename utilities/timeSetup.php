@@ -12,7 +12,7 @@ date_default_timezone_set('America/Denver');
 $date = date("m/d/Y");
 $digits = explode("/", $date);
 // DEFINITIONS:
-$file_root = "bud" . $digits[2];
+$file_root = "../data/bud" . $digits[2];
 $budget_data = $file_root . "_data.csv";
 $credit_data = $file_root . "_charges.csv";
 $month_names = array('January', 'February', 'March', 'April', 'May', 'June',

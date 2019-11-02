@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Welcome to Budget Trackin</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="description"
+        content="Rolling 4-month budget tracker" />
+    <meta name="author" content="Ken Cowles" />
+    <meta name="robots" content="nofollow" />
+    <style type="text/css">
+        img {max-width:100%;max-height:100%}
+        #login {
+            position: absolute;
+            top: 160px;
+            left: 200px;
+            border-style: solid;
+            border-width: 2px;
+            border-color: darkgreen;
+            border-style: outset;
+            font-size: 32px;
+            padding: 6px;
+            background-color: rgb(231, 241, 220);
+            color: rgb(162, 27, 167);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="login" onclick="go()">Welcome: Login</div>
+    <div id="welcome">
+        <img src="images/BudgetHome.jpg" alt="Home Page for Site: Flowers" />
+    </div>
+<script type="text/javascript">
+    var winht = Math.floor(.9 * window.innerHeight);
+    var winwd = Math.floor(.9 * window.innerWidth);
+    document.getElementById('welcome').style.width = winwd;
+    document.getElementById('welcome').style.height = winht;
+    function go() {
+        window.open("main/budget.php", "_self");
+    }
+</script>
+</body>
+</html>

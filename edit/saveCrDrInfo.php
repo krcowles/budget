@@ -8,7 +8,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "timeSetup.php";
+require "../utilities/timeSetup.php";
 
 $cards = $_POST['card'];
 $types = $_POST['ctype'];

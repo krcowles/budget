@@ -7,7 +7,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "getBudgetData.php";
+require "../utilities/getBudgetData.php";
 $method = $_POST['amethod'];
 $dom = $_POST['day'];
 for ($i=0; $i<count($account_names); $i++) {

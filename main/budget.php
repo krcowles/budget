@@ -22,10 +22,10 @@ require "budget_setup.php";
         content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="standards.css" type="text/css" rel="stylesheet" />
-    <link href="budget.css" type="text/css" rel="stylesheet" />
-    <link href="charges.css" type="text/css" rel="stylesheet" />
-    <link href="modals.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/budget.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/charges.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript">
         var setup;
     </script>
@@ -154,9 +154,9 @@ require "budget_setup.php";
         </a>
     </p>
     -->
-    <script src="jquery-1.12.1.js" type="text/javascript"></script>
-    <script src="budget.js" type="text/javascript"></script>
-    <script src="modals.js" type="text/javascript"></script>
-    <script src="jQnumberFormat.js" type="text/javascript"></script>
+    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+    <script src="../scripts/budget.js" type="text/javascript"></script>
+    <script src="../scripts/modals.js" type="text/javascript"></script>
+    <script src="../scripts/jQnumberFormat.js" type="text/javascript"></script>
 </body>
 </html>

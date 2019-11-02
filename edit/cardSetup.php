@@ -1,16 +1,16 @@
 <?php
 /** 
  * This script presents a form in which the user can enter credit and/or 
- * debit card infomation. If there is currently no file, the user may choose
- * to not create one and also not be reminded every time the budget is opened.
- * In this latter case, the flag 'num' is checked in the query string.
+ * debit card infomation. If there is currently no file, the user was able
+ * to choose not to create one and also not be reminded every time the budget
+ * is opened. The flag 'num' is used to determine how to proceed.
  * PHP Version 7.1
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "timeSetup.php";
+require "../utilities/timeSetup.php";
 
 $create = filter_input(INPUT_GET, 'num');
 if ($create === '0') {
@@ -53,11 +53,11 @@ if ($create === '0') {
         content="Rolling 4-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="standards.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
     <style type="text/css">
-        input {height:18px;font-size:14px;}
+        input {height:18px; font-size:14px;}
     </style>
-    <script src="jquery-1.12.1.js"></script>
+    <script src="../scripts/jquery-1.12.1.js"></script>
 </head>
 
 <body>
@@ -94,7 +94,7 @@ if ($create === '0') {
         }
         $('#done').on('click', function(ev) {
             ev.preventDefault();
-            window.open("budget.php", "_self");
+            window.open("../main/budget.php", "_self");
         });
     </script>
 </body>

@@ -8,7 +8,8 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "timeSetup.php";
+require "../utilities/timeSetup.php";
+
 $accounts = fopen($budget_data, "r");
 if ($accounts === false) {
     echo 'nofile';

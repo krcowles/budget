@@ -1,6 +1,6 @@
 <?php
 /**
- * This script saves all entries for the new budget into the .csv file
+ * This script saves all entries on the new budget into the $budget_data file
  * and then returns to the entry form. No auto pay data is entered for new
  * budgets - that will come later.
  * PHP Version 7.1
@@ -9,46 +9,22 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "timeSetup.php";
+require "../utilities/timeSetup.php";
 
-// Always present data:
+// Always present data for new accounts:
 $headers = array("Account Name", "Budget", $month[0], $month[1], $month[2],
         "AutoPay", "Day");
+$undis = array("Undistributed Funds", 0, 0, 0, 0, "", "");
 $temp_accounts    = [];
-$temp_accounts[0] = array("Temporary Accounts", 0, 0, 0, 0);
-$temp_accounts[1] = array("Tmp1", 0, 0, 0, 0);
-$temp_accounts[2] = array("Tmp2", 0, 0, 0, 0);
-$temp_accounts[3] = array("Tmp3", 0, 0, 0, 0);
-$temp_accounts[4] = array("Tmp4", 0, 0, 0, 0);
-$temp_accounts[5] = array("Tmp5", 0, 0, 0, 0);
-/*
-if (file_exists($budget_data)) {
-    $acctdata = fopen($budget_data, "r+");
-    while (($line = fgetcsv($acctdata)) !== false) {
-        $fp = ftell($acctdata);
-        if ($line[0] === 'Temporary Accounts') {
-            fseek($acctdata, $fp);
-            break;
-        } else {
-            for ($i=0; $i<7; $i++) {
-                $csventry[$i] = $line[$i];
-            }
-            array_push($accounts, $csventry);
-            $csventry = [];
-        }
-    }
-    fseek($acctdata, 0);
-} else {
-    $acctdata = fopen($budget_data, "w");
-    $headers = array("Account Name", "Budget", $month[0], $month[1], $month[2],
-        "AutoPay", "Day");
-    fputcsv($acctdata, $headers);
-}
-// in either case, ready to write...
-*/
-$accounts         = []; // data to be written
+$temp_accounts[0] = array("Temporary Accounts", "", "", "", "", "", "");
+$temp_accounts[1] = array("Tmp1", 0, 0, 0, 0, "", "");
+$temp_accounts[2] = array("Tmp2", 0, 0, 0, 0, "", "");
+$temp_accounts[3] = array("Tmp3", 0, 0, 0, 0, "", "");
+$temp_accounts[4] = array("Tmp4", 0, 0, 0, 0, "", "");
+$temp_accounts[5] = array("Tmp5", 0, 0, 0, 0, "", "");
+$accounts = []; // data to be written
 array_push($accounts, $headers);
-$csventry         = []; // holds a new array to be pushed into $accounts
+$csventry = []; // holds a line of data (array) to be pushed onto $accounts
 // retrieve form data
 $new_accounts = $_POST['acctname'];
 $new_budgets  = $_POST['bud'];
@@ -61,7 +37,7 @@ if (isset($_POST['svdname'])) {
 } else {
     $chg_accounts = false;
 }
-// if there is previously saved data, update it (any changes or deletions)
+// if there is previously saved data, update it and add it to $accounts
 if ($chg_accounts) {
     $delcount = 0;
     for ($j=0; $j<count($chg_accounts); $j++) {
@@ -74,12 +50,17 @@ if ($chg_accounts) {
                 }
             }
         }
+        if ($chg_accounts[$j] == 'Undistributed Funds') {
+            $delete = true;
+        }
         if (!$delete) {
             $csventry[0] = filter_var($chg_accounts[$j]);
             $csventry[1] = filter_var($chg_budgets[$j]);
             $csventry[2] = 0;
             $csventry[3] = 0;
             $csventry[4] = filter_var($chg_balances[$j]);
+            $csventry[5] = "";
+            $csventry[6] = "";
             array_push($accounts, $csventry);
             $csventry = [];
         }
@@ -93,10 +74,15 @@ for ($k=0; $k<count($new_accounts); $k++) {
         $csventry[2] = 0;
         $csventry[3] = 0;
         $csventry[4] = filter_var($new_balances[$k]);
+        $csventry[5] = "";
+        $csventry[6] = "";
         array_push($accounts, $csventry);
         $csventry = [];
     }
 }
+// lastly, add the Undistributed Funds account
+array_push($accounts, $undis);
+// write it out
 $acctdata = fopen($budget_data, "w");
 for ($n=0; $n<count($accounts); $n++) {
     fputcsv($acctdata, $accounts[$n]);
@@ -104,5 +90,6 @@ for ($n=0; $n<count($accounts); $n++) {
 for ($p=0; $p<6; $p++) {
     fputcsv($acctdata, $temp_accounts[$p]);
 }
+fclose($acctdata);
 $newbud = "newBudget.php";
 header("Location: {$newbud}");

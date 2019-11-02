@@ -6,7 +6,7 @@ $('#save').on('click', function() {
 
 $('#done').on('click', function(ev) {
     ev.preventDefault();
-    window.open("budget.php", "_self");
+    window.open("../main/budget.php", "_self");
 });
     
 // check for pre-existing account data & form html for said data:
@@ -21,8 +21,8 @@ $.ajax({
         }
     },
     error: function(jqXHR, textStatus, errorThrown) {
-        var msg = "Failed to get existing account data: Error #" + errorThrown  +
-            "/n" + textStatus;
+        var msg = "In 'newBudget.js': Failed to get existing account data:\n" + 
+            "Error " + errorThrown  + "/n" + textStatus;
         alert(msg);
     }
 });
