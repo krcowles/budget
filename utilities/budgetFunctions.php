@@ -23,7 +23,7 @@ function cleanupExcel($excelDat)
         $item = filter_var($item, FILTER_SANITIZE_STRING);
         $item = trim($item);
         $item = utf8_decode($item);
-        $item = str_replace('??', '', $item); // after decode <feff> converts to '??'
+        $item = str_replace("?", "", $item); // after decode <feff> converts to '??'
     }
     return $excelDat;
 }

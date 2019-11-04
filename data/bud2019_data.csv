@@ -1,10 +1,10 @@
-﻿"?&#34;?&#34;?&#34;Account Name&#34;&#34;&#34;",Budget,September,October,November,AutoPay,Day
+﻿"Account Name",Budget,September,October,November,AutoPay,Day
 Sam,10,0,0,-23,,
 Fred,45,0,0,89.67,,
-Ted,17,0,0,23,Visa,8
+Ted,17,0,0,23,Visa,2
 Another,34,0,0,34,,
 Yessiree,89,0,0,-50,Citi,14
-"Undistributed Funds",0,0,0,0,"Wells Fargo",10
+"Undistributed Funds",0,0,0,0,"Wells Fargo",1
 "Temporary Accounts",0,0,0,0,,
 Tmp1,0,0,0,0,,
 Tmp2,0,0,0,0,New,30

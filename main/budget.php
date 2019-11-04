@@ -42,7 +42,7 @@ require "budget_setup.php";
                 <col style="width:140px" />
                 <col style="width:140px" />
                 <col style="width:140px" />
-                <col style="width:90px" />
+                <col style="width:110px" />
                 <col style="width:64px" />
             </colgroup>
             <thead>
@@ -57,6 +57,7 @@ require "budget_setup.php";
                 </tr>
             </thead>
             <tbody>
+                <!-- all but temporary accounts -->
                 <?php for($j=1; $j<count($lines)-6; $j++) : ?>
                 <tr>
                     <td class="acct"><?= $lines[$j][0];?></td>
@@ -78,6 +79,7 @@ require "budget_setup.php";
                     <td class="gray-title"></td>
                     <td class="gray-title"></td>
                 </tr>
+                <!-- temporary accounts -->
                 <?php for ($k=count($lines)-5; $k<count($lines); $k++) : ?>
                 <tr>
                     <td class="acct"><?= $lines[$k][0];?></td>
@@ -120,8 +122,9 @@ require "budget_setup.php";
             Account Management Tools:<br />
             <select id="mgmt">
                 <option value="none">Select From List:</option>
-                <option value="apsetup">Setup AutoPay</option>
+                <option value="apsetup">Setup/Change AutoPay</option>
                 <option value="cd_cards">Setup/Change Debit/Credit Info</option>
+                <option value="charges">Edit Credit Charges</option>
                 <option value="renameacct">Rename Account</option>
                 <option value="addacct">Add Account</option>
                 <option value="delacct">Delete Account</option>
@@ -132,7 +135,7 @@ require "budget_setup.php";
 
     <!-- This div holds all the modal formas -->
     <div id="allForms">
-        <div id="box" style="display:none">
+        <div id="box">
             <span id="modal_accts">Use account: </span>
             <span id="modal_cards">Charge to: </span>
             <select id="cc">
@@ -144,6 +147,11 @@ require "budget_setup.php";
             Enter the amount of the expense:<br />
             <input type="text" id="expamt"  /><br /><br />
             <button id="pay">Pay</button>
+        </div>
+        <div id="ap">
+            <span>Amount to pay:&nbsp;&nbsp;<input style="width:80px;"
+                type="text" /></span><br /><br />
+            <button style="margin-left:20px"; id="payit">Apply</button>
         </div>
     </div>
     <!-- after validation, place accordingly:

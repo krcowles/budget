@@ -11,7 +11,7 @@ $('#done').on('click', function(ev) {
     
 // check for pre-existing account data & form html for said data:
 $.ajax({
-    url: "getRawAccounts.php",
+    url: "../utilities/getRawAccounts.php",
     method: "GET",
     dataType: "html",
     success: function(results) {

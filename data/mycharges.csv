@@ -1,31 +1,32 @@
-﻿Visa,Cr,Citi,Cr
-26.77,13-Oct-19,Gas - Auto,Murphys
-222.7,13-Oct-19,Entertainment,Coyote Cafe
-50,13-Oct-19,Travel,RG Arts & Crafts
-32.35,15-Oct-19,Home Misc.,ClamXAV - AntiVirus
-29.13,17-Oct-19,Groceries,Moons Coffee
-21,17-Oct-19,Home Misc.,Lowe's - Salt
-134.74,17-Oct-19,Combined Accts,Kinetico - filters
-150.23,20-Oct-19,Chiro,HealthQuest
-64.62,21-Oct-19,Combined Accts,TLC -filters
-21.55,24-Oct-19,Home Misc.,
-57.58,24-Oct-19,Groceries,Olive Garden
-75.5,24-Oct-19,New Mac Pro,Best Buy
-168.99,24-Oct-19,New Mac Pro,Office 2016
-"2,714.14",24-Oct-19,New Mac Pro,Apple
-38,25-Oct-19,Pres. HMO,Presbyterian
-next,,,
-44.13,4-Oct-19,Groceries,Albertsons
-11.31,4-Oct-19,Groceries,PetCo
-30.25,13-Oct-19,Groceries,Albertsons
-58.34,13-Oct-19,Groceries,Sprouts
-20.08,13-Oct-19,Groceries,Albertsons
-10.78,15-Oct-19,Groceries,Albertsons
-56.6,15-Oct-19,Groceries,Sprouts
-30.87,17-Oct-19,Groceries,Albertsons
-30.76,17-Oct-19,Gas - Auto,Speedway
-37.93,21-Oct-19,Groceries,Sprouts
-39.25,21-Oct-19,Groceries,Albertsons
-46.38,24-Oct-19,Groceries,Albertsons
-51.71,24-Oct-19,Groceries,Albertsons
-80.37,24-Oct-19,Groceries,CoctCo
+﻿Visa,Credit,Citi,Credit,W Fargo,Debit,Newd,Debit,Fred,Credit
+Gas - Auto,13-Oct-19,Murphys,26.77,,,,,,
+Entertainment,13-Oct-19,Coyote Cafe,222.7,,,,,,
+Travel,13-Oct-19,RG Arts & Crafts,50,,,,,,
+Home Misc.,15-Oct-19,ClamXAV - AntiVirus,32.35,,,,,,
+Groceries,17-Oct-19,Moons Coffee,29.13,,,,,,
+Home Misc.,17-Oct-19,Lowe's - Salt,21,,,,,,
+Combined Accts,17-Oct-19,Kinetico - filters,134.74,,,,,,
+Chiro,20-Oct-19,HealthQuest,150.23,,,,,,
+Combined Accts,21-Oct-19,TLC -filters,64.62,,,,,,
+Home Misc.,24-Oct-19,,21.55,,,,,,
+Groceries,24-Oct-19,Olive Garden,57.58,,,,,,
+New Mac Pro,24-Oct-19,Best Buy,75.5,,,,,,
+New Mac Pro,24-Oct-19,Office 2016,168.99,,,,,,
+New Mac Pro,24-Oct-19,Apple,"2,714.14",,,,,,
+Pres. HMO,25-Oct-19,Presbyterian,38,,,,,,
+next,,,,,,,,,
+Groceries,4-Oct-19,Albertsons,44.13,,,,,,
+Groceries,4-Oct-19,PetCo,11.31,,,,,,
+Groceries,13-Oct-19,Albertsons,30.25,,,,,,
+Groceries,13-Oct-19,Sprouts,58.34,,,,,,
+Groceries,13-Oct-19,Albertsons,20.08,,,,,,
+Groceries,15-Oct-19,Albertsons,10.78,,,,,,
+Groceries,15-Oct-19,Sprouts,56.6,,,,,,
+Groceries,17-Oct-19,Albertsons,30.87,,,,,,
+Gas - Auto,17-Oct-19,Speedway,30.76,,,,,,
+Groceries,21-Oct-19,Sprouts,37.93,,,,,,
+Groceries,21-Oct-19,Albertsons,39.25,,,,,,
+Groceries,24-Oct-19,Albertsons,46.38,,,,,,
+Groceries,24-Oct-19,Albertsons,51.71,,,,,,
+Groceries,24-Oct-19,CoctCo,80.37,,,,,,
+next,,,,,,,,,

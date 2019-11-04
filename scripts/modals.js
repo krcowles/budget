@@ -14,9 +14,14 @@ var modal = (function() {
         modal.close();
     });
 
-    // functions processing forms
+    /**
+     * The following (private) functions are used to process form data, and
+     * are called by the (public) modal.open function, based on the modal id
+     * passed via settings.
+     */
+    // Add or subtract amounts in a cell
     function modifyData(jQloc, operand, operation, chgType) {
-        // jQloc is the jQuery object holding the row cells ('td')
+        // jQloc is the jQuery object holding the subject row to be modified
         cellData = parseFloat(jQloc.eq(4).children().eq(1).text());
         if (operation === 'sub') {
             cellData -= operand;
@@ -46,6 +51,7 @@ var modal = (function() {
         }  
         return;
     }
+    // modal function executed when settings.id == 'expense'
     function payExpense() {
         $content.append($close);
         $close.css('left', '220px');
@@ -86,8 +92,82 @@ var modal = (function() {
             });
         });
     }
+    // function executed when settings.id == 'deposit'
     function makeDeposit() {
 
+    }
+    // function executed when settings.id == 'edit_chg' (edit a Cr charge)
+    function editCredit(inputvals, locater, cardinfo, defobj) {
+        $('#svmodal').after($close);
+        $close.css('margin-left', '40px');
+        $close.css('margin-bottom', '12px');
+        var pos = locater.offset();
+        $modal.css({
+            top: pos.top,
+            left: 560
+        });
+        var $chargeto = $content.find('input[id=chg]');
+        var $date = $content.find('input[id=de]');
+        var $payee = $content.find('input[id=pay]');
+        var $amt = $content.find('input[id=namt]');
+        $chargeto.attr('value', inputvals[0]);
+        $date.attr('value', inputvals[1]);
+        $payee.attr('value', inputvals[2]);
+        $amt.attr('value', inputvals[3]);
+
+        $close.on('click', function() {
+            locater.children().each(function() {
+                $(this).css('background-color', 'white');
+            });
+            locater.find('input').prop('checked', false);
+            defobj.resolve();
+            modal.close;
+        });
+        $('#svmodal').on('click', function() {
+            // get all changes
+            var charge = $chargeto.val();
+            var date   = $date.val();
+            var payee  = $payee.val();
+            var amt    = $amt.val();
+            var ajaxdata = {cno: cardinfo.cdno, item: cardinfo.itemno, chg: charge,
+                date: date, payee: payee, amount: amt}
+            $.ajax({
+                url: 'saveEditedCharge.php',
+                data: ajaxdata,
+                dataType: "text",
+                method: "GET",
+                success: function(results) {
+                    if (results !== 'OK') {
+                        alert("Error saving edited charge:\n" + results);
+                    } else {
+                        $close.click();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    var msg = "modals.js ajax to saveEditedCharge.php failed\n" +
+                        textStatus + "Error code: " + errorThrown;
+                    alert(msg);
+                }
+            });
+        });
+    }
+    // function called when settings.id == 'autopay'
+    function autopay(aploc, acct, bal, defobj) {
+        $('#payit').after($close);
+        $close.css('margin-left', '40px');
+        var vert = aploc.offset();
+        var modtop = vert.top -6;
+        var horiz = $('#expense').offset();
+        var modleft = horiz.left;
+        $modal.css({
+            top: modtop,
+            left: modleft
+        });
+        $close.on('click', function () {
+            $content.empty();
+            $modal.detach();
+            defobj.resolve();
+        });
     }
     
     // public methods
@@ -114,13 +194,18 @@ var modal = (function() {
                 payExpense();
             } else if (modid === 'deposit') {
                 makeDeposit();
+            } else if (modid === 'edit_chg') {
+                editCredit(settings.ivals, settings.chgitem, 
+                        settings.chgid, settings.def);
+            } else if (modid === 'autopay') {
+                autopay(settings.loc, settings.acctbal,
+                    settings.cbkbal, settings.def);
             } else {
                 modal.center();
                 $(window).on('resize', modal.center);
             }
         },
         close: function() {
-            //$close.off('click');
             $content.empty();
             $modal.detach();
             $(window).off('resize', modal.center);

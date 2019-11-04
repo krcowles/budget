@@ -1,6 +1,11 @@
 $(function() { 
 
-// if setting up a new budget:
+var today = new Date();
+var dd = parseInt(String(today.getDate()).padStart(2, '0'));
+var mm = parseInt(String(today.getMonth() + 1).padStart(2, '0')); //January is 0!
+var yyyy = parseInt(today.getFullYear());
+
+// if no budget data:
 if (setup) {
     window.open("../edit/newBudget.html", "_self");
 }
@@ -18,6 +23,81 @@ if ($('#chgaccts').text() == '0') {
         }
     }
 }
+
+// check autopayment status
+var $apays = $('.apday');
+var payday = []; // day of the month
+var paywith = []; // method of payment
+var aname = []; // account name of ap candidate
+var $balance = []; // current month's balance (jQ object)
+var itemnos =[]; // which entry is affected?
+$apays.each(function(indx) {
+    if ($(this).text() !== "") {
+        itemnos.push(indx);
+        $rowtds = $(this).siblings();
+        var $paywith = $rowtds.eq(5);
+        var $acct = $rowtds.eq(0);
+        var $currmo = $rowtds.eq(4);
+        payday.push(parseInt($(this).text()));
+        paywith.push($paywith.text());
+        aname.push($acct.text());
+        $balance.push($currmo);
+    }
+});
+// present candidates for autopay to user
+var firstap = true;
+var nextDef = new $.Deferred();
+var payindx = 0;
+var payouts = [];
+if (payday.length > 0) {
+    for (var i=0; i<payday.length; i++) {
+        if (payday[i] <= dd) {
+            payouts.push(i);
+        }
+    }
+    // payouts[] holds the indices of items to potentially pay
+    if (firstap) {
+        nextDef.resolve();
+        firstap = false;
+    }
+    // recursion to call all items being paid (identified by payouts[])
+    $.when(nextDef).then(function() {
+        nextDef = new $.Deferred();
+        if (payindx < payouts.length) {
+            var ino = payouts[payindx];
+            autoPrompt(aname[ino], paywith[ino],
+                $balance[ino], itemnos[ino]);
+            payindx++;
+        } else {
+            nextDef.resolve();
+        }
+    });
+}
+
+function autoPrompt(acctname, paymethod, $balanceObj, row_number) {
+    var answer = confirm("Do you wish to pay " + acctname +
+        " with " + paymethod + "?");
+    if (answer) {
+            updateAP($balanceObj, row_number);
+    } else {
+        alert("Payment postponed");
+    }
+}
+// if to be paid
+function updateAP($bal, rowno) {
+    var old = parseFloat($bal.children().eq(1).text());
+    var $obal = $('tr[id=balances]').children().eq(4);
+    oldbal = parseFloat($obal.children().eq(1).text());
+    var $apwin = $('#ap').detach();
+    var apDef = new $.Deferred();
+    modal.open({id: 'autopay', height: '68px', width: '220px', 
+        content: $apwin, acctbal: old, cbkbal: oldbal, loc: $bal, def: apDef});
+    $.when(apDef).then(function() {
+        $apwin.appendTo('#allForms');
+        nextDef.resolve();
+    });
+}
+
 // account listing in select box
 var acct_list = [];
 var acct_select_box = '<select id="selacct">\n';
@@ -45,6 +125,8 @@ $('#mgmt').on('change', function() {
         case "cd_cards":
             window.open("../edit/cardSetup.php", "_self");
             break;
+        case "charges":
+            window.open("../edit/enterCardData.php", "_self");
         default:
             alert("Not yet implemented");
     }

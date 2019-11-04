@@ -13,3 +13,7 @@ button {
 #newbud, #chgaccts {
     display: none;
 }
+/* <div>s containing modal window content */
+#box, #ap {
+    display: none;
+}
