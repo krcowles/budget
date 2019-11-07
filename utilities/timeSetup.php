@@ -18,6 +18,7 @@ $credit_data = $file_root . "_charges.csv";
 $month_names = array('January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December');
 $thismo = intval($digits[0]) -1; // array index is zero-based
+$current_month = $month_names[$digits[0]];
 switch ($thismo) {
 case 1:
     $month_set = array(11, 12, 1);
@@ -36,3 +37,10 @@ $month = [];
 for ($i=0; $i<3; $i++) {
     $month[$i] = $month_names[$month_set[$i]];
 }
+/**
+ * This module produces the following data;
+ *  $budget_data    The filepath to the budget data
+ *  $credit_data    The filepath to the credit charge data
+ *  $current_month  The current month, regardless if the budget has rolled over
+ *  $month          The array of names to be applied for previous & current months
+ */

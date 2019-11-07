@@ -39,9 +39,11 @@ if ($status === 'OK') {
         if (empty($day[$j])) { // no autopay data yet
             $entries[5] = '';
             $entries[6] = '';
+            $entries[7] = '';
         } else {
             $entries[5] = $autopay[$j];
             $entries[6] = $day[$j];
+            $entries[7] = $paid[$j];
         }
         array_push($lines, $entries);
     } 
@@ -105,7 +107,7 @@ if (!$setup) {
                 $crbal = 0;
                 $cardno++;
             }
-            $crbal += floatVal($charges[0]);
+            $crbal += floatVal($charges[3]);
             switch ($cardno) {
             case 0: 
                 array_push($card1, $charges);

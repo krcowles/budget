@@ -60,12 +60,6 @@ var modal = (function() {
             top: locate.top + 40,
             left: locate.left - 100
         });
-        $(window).on('resize', function() {
-            $modal.css({
-                top: locate.top + 40,
-                left: locate.left - 100
-            });
-        });
         var account = $('#selacct option:selected').text();
         var $account = $('#selacct');
         var chargeto = $('#cc option:selected').text();
@@ -152,21 +146,41 @@ var modal = (function() {
         });
     }
     // function called when settings.id == 'autopay'
-    function autopay(aploc, acct, bal, defobj) {
-        $('#payit').after($close);
-        $close.css('margin-left', '40px');
-        var vert = aploc.offset();
-        var modtop = vert.top -6;
-        var horiz = $('#expense').offset();
-        var modleft = horiz.left;
+    function autopay( method, acct_name, row) {
+        $('#modal_table').after($close);
+        $close.css('margin-top', '12px');
+        $close.text("Finished");
         $modal.css({
-            top: modtop,
-            left: modleft
+            top: 40,
+            left: 600
+        });
+        var divht = $content.height() + 24 + 'px';
+        $modal.css({
+            height: divht
+        });
+        $('button[id^=paymt]').each(function() {
+            $(this).on('click', function() {
+                var idstr = this.id;
+                var idno = parseInt(idstr.substr(5));
+                var inpid = '#amt' + idno;
+                var payment = parseFloat($(inpid).val());
+                var payid = '#payee' + idno;
+                var payto = $(payid).val();
+                var elements = payto.split();
+                for (var n=0; n<elements.length; n++) {
+                    if (n !== elements.length - 1) {
+                        elements[n] += '%20';
+                    }
+                }
+                var payee = elements.join().trim();
+                window.open('../utilities/updateAP.php?row=' + row[idno] + 
+                    '&use=' + method[idno] + '&amt=' + payment +
+                    '&payto=' + payee + '&acct=' + acct_name[idno], "_self");
+            });
         });
         $close.on('click', function () {
             $content.empty();
             $modal.detach();
-            defobj.resolve();
         });
     }
     
@@ -189,6 +203,8 @@ var modal = (function() {
                 border: '2px solid',
                 padding: '8px'
             }).appendTo('body');
+            var modal_box = $modal[0];
+            dragElement(modal_box);
             // separate code for each form
             if (modid === 'expense') {
                 payExpense();
@@ -198,8 +214,7 @@ var modal = (function() {
                 editCredit(settings.ivals, settings.chgitem, 
                         settings.chgid, settings.def);
             } else if (modid === 'autopay') {
-                autopay(settings.loc, settings.acctbal,
-                    settings.cbkbal, settings.def);
+                autopay(settings.method, settings.acct_name, settings.row_no);
             } else {
                 modal.center();
                 $(window).on('resize', modal.center);
@@ -212,3 +227,41 @@ var modal = (function() {
         }
     };
 }());  // modal is an IIFE
+// autopay modal is draggable:
+function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById(elmnt.id + "header")) {
+      // if present, the header is where you move the DIV from:
+      document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    } else {
+      // otherwise, move the DIV from anywhere inside the DIV:
+      elmnt.onmousedown = dragMouseDown;
+    }
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // get the mouse cursor position at startup:
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
+      document.onmousemove = elementDrag;
+    }
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position:
+      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+    function closeDragElement() {
+      // stop moving when mouse button is released:
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+}

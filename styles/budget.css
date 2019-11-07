@@ -1,6 +1,5 @@
-table {
-    float: left;
-    margin-left: 16px;
+.noshow, #newbud, #chgaccts {
+    display: none;
 }
 #bttns {
     float: left;
@@ -10,10 +9,30 @@ table {
 button {
     margin-bottom: 32px;
 }
-#newbud, #chgaccts {
-    display: none;
-}
-/* <div>s containing modal window content */
+/* <div> containing modal window content */
 #box, #ap {
     display: none;
+}
+table:not(#modal_table) {
+    float: left;
+    margin-left: 16px;
+}
+.tdht {
+    height: 72px;
+    vertical-align: middle;
+}
+.modal_button {
+    width: 120px;
+    margin-bottom: 0px;
+    margin-top: 22px;
+}
+input[id^=amt] {
+    width: 60px;
+    border-width: 1px;
+    font-size: 14px;
+}
+input[id^=payee] {
+    border-width: 1px;
+    font-size: 14px;
+    margin-top: 6px;
 }

@@ -25,76 +25,47 @@ if ($('#chgaccts').text() == '0') {
 }
 
 // check autopayment status
-var $apays = $('.apday');
-var payday = []; // day of the month
+var payday = [];
 var paywith = []; // method of payment
-var aname = []; // account name of ap candidate
-var $balance = []; // current month's balance (jQ object)
-var itemnos =[]; // which entry is affected?
-$apays.each(function(indx) {
+var aname = []; // account name of autopay candidate
+var rowno = []; // budget rowno in which AP occurs
+var ap_candidates = false;
+// get all autopays having dates; find those that are due
+$('.apday').each(function(indx) {
     if ($(this).text() !== "") {
-        itemnos.push(indx);
-        $rowtds = $(this).siblings();
-        var $paywith = $rowtds.eq(5);
-        var $acct = $rowtds.eq(0);
-        var $currmo = $rowtds.eq(4);
-        payday.push(parseInt($(this).text()));
-        paywith.push($paywith.text());
-        aname.push($acct.text());
-        $balance.push($currmo);
+        var apday = parseInt($(this).text());
+        if (apday <= dd) {
+            $rowtds = $(this).siblings();
+            var pd = $rowtds.eq(6).text().trim();
+            if (pd === 'N') {
+                rowno.push(indx);
+                var $paywith = $rowtds.eq(5);
+                var $acct = $rowtds.eq(0);
+                payday.push(parseInt($(this).text()));
+                paywith.push($paywith.text().trim());
+                aname.push($acct.text());
+                ap_candidates = true;
+            }
+        }
     }
 });
-// present candidates for autopay to user
-var firstap = true;
-var nextDef = new $.Deferred();
-var payindx = 0;
-var payouts = [];
-if (payday.length > 0) {
-    for (var i=0; i<payday.length; i++) {
-        if (payday[i] <= dd) {
-            payouts.push(i);
-        }
+// user presentation of autopy candidates:
+if (ap_candidates) {
+    var $userlist = $('table#modal_table tbody');
+    // create the html list based on number of autopays due
+    for (var j=0; j<aname.length; j++) {
+        var item_html = '<tr><td><div class="tdht">' + aname[j] + '<br />Due day: ' +
+            payday[j] + '&nbsp;&nbsp;Payment $ <input id="amt' + j +
+            '" type="text" /><br />Payee: <input id="payee' + j +
+            '" type="text" /></div></td>';
+        item_html += '<td><div class="tdht"><button class="modal_button" ' +
+            'id="paymt' + j + '">Pay this</button></div></td></tr>';
+        $userlist.append(item_html);
     }
-    // payouts[] holds the indices of items to potentially pay
-    if (firstap) {
-        nextDef.resolve();
-        firstap = false;
-    }
-    // recursion to call all items being paid (identified by payouts[])
-    $.when(nextDef).then(function() {
-        nextDef = new $.Deferred();
-        if (payindx < payouts.length) {
-            var ino = payouts[payindx];
-            autoPrompt(aname[ino], paywith[ino],
-                $balance[ino], itemnos[ino]);
-            payindx++;
-        } else {
-            nextDef.resolve();
-        }
-    });
-}
-
-function autoPrompt(acctname, paymethod, $balanceObj, row_number) {
-    var answer = confirm("Do you wish to pay " + acctname +
-        " with " + paymethod + "?");
-    if (answer) {
-            updateAP($balanceObj, row_number);
-    } else {
-        alert("Payment postponed");
-    }
-}
-// if to be paid
-function updateAP($bal, rowno) {
-    var old = parseFloat($bal.children().eq(1).text());
-    var $obal = $('tr[id=balances]').children().eq(4);
-    oldbal = parseFloat($obal.children().eq(1).text());
-    var $apwin = $('#ap').detach();
-    var apDef = new $.Deferred();
-    modal.open({id: 'autopay', height: '68px', width: '220px', 
-        content: $apwin, acctbal: old, cbkbal: oldbal, loc: $bal, def: apDef});
-    $.when(apDef).then(function() {
-        $apwin.appendTo('#allForms');
-        nextDef.resolve();
+    var ap_object = $('#ap').detach();
+    modal.open({
+        id: 'autopay', height: '300px', width: '500px', content: ap_object,
+        day: payday, method: paywith, acct_name: aname, row_no: rowno, 
     });
 }
 

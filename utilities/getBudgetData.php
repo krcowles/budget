@@ -25,6 +25,7 @@ if ($handle === false) {
     $current = [];
     $autopay = [];
     $day = [];
+    $paid = [];
     $headers = fgetcsv($handle);
     $headers = cleanupExcel($headers);
     if ($headers[0] === 'None') {
@@ -41,6 +42,7 @@ if ($handle === false) {
                 $current[$recno] = 0;
                 $autopay[$recno] = '';
                 $day[$recno] = '';
+                $paid[$recno] = '';
                 $record = fgetcsv($handle);
                 $recno++;
             }
@@ -49,15 +51,18 @@ if ($handle === false) {
             $prev0[$recno] = $record[2];
             $prev1[$recno] = $record[3];
             $current[$recno] = $record[4];
-            if (count($record) < 7) {
+            if (count($record) < 8) {
                 $autopay[$recno] = '';
                 $day[$recno] = '';
+                $paid[$recno] = '';
             } else {
                 $autopay[$recno] = $record[5];
                 if (!empty($autopay[$recno])) {
                     $day[$recno] = intval($record[6]);
+                    $paid[$recno] = $record[7];
                 } else {
                     $day[$recno] = '';
+                    $paid[$recno] = '';
                 }
             }
             $recno++;
@@ -65,3 +70,17 @@ if ($handle === false) {
     }
 }
 fclose($handle);
+/** 
+ * The module produces the following data:
+ *  $status         'OK', if budget data file was successfully opened
+ *  $headers        the information appearing in the first line of the .csv data file
+ *  $account_names  array holding all account names:
+ *                  NOTE: an 'empty' line will exist for 'Temporary Accounts'
+ *  $budgets        array holding each monthly budget amount
+ *  $prev0          array holding balances from 2nd previous month
+ *  $prev1          array holding balances from previous month  
+ *  $current        array holding balancesfor current month  
+ *  $autopay        array holding Cr/Dr against which an autopayment will be made
+ *  $day            array holding correspondings days in the month the AP is due
+ *  $paid           array holding paid/not paid status for each autopay
+ */

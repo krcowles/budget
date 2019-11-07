@@ -1,3 +1,6 @@
+.modal {
+    cursor: pointer;
+}
 .modal-content {
     margin-bottom: 0px;
 }

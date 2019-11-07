@@ -44,6 +44,7 @@ require "budget_setup.php";
                 <col style="width:140px" />
                 <col style="width:110px" />
                 <col style="width:64px" />
+                <col style="width:10px" class="noshow" />
             </colgroup>
             <thead>
                 <tr>
@@ -54,11 +55,12 @@ require "budget_setup.php";
                     <th><?= $month[2];?></th>
                     <th>AutoPay</th>
                     <th>Day</th>
+                    <th class="noshow">Paid</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- all but temporary accounts -->
-                <?php for($j=1; $j<count($lines)-6; $j++) : ?>
+                <?php for($j=0; $j<count($lines)-6; $j++) : ?>
                 <tr>
                     <td class="acct"><?= $lines[$j][0];?></td>
                     <td class="amt"><?= $lines[$j][1];?></td>
@@ -67,17 +69,19 @@ require "budget_setup.php";
                     <td class="mo3"><?= $lines[$j][4];?></td>
                     <td class="ap"><?= $lines[$j][5];?></td>
                     <td class="apday"><?= $lines[$j][6];?></td>
+                    <td class="noshow"><?= $lines[$j][7];?></td>
                 </tr>
                 <?php endfor; ?>
                 <tr>
-                    <td class="gray-title"
+                    <td class="acct gray-title"
                         style="text-align:center;">Temporary Accounts</td>
-                    <td class="gray-title"></td>
-                    <td class="gray-title"></td>
-                    <td class="gray-title"></td>
-                    <td class="gray-title"></td>
-                    <td class="gray-title"></td>
-                    <td class="gray-title"></td>
+                    <td class="amt gray-title"></td>
+                    <td class="mo1 gray-title"></td>
+                    <td class="mo2 gray-title"></td>
+                    <td class="mo3 gray-title"></td>
+                    <td class="ap gray-title"></td>
+                    <td class="apday gray-title"></td>
+                    <td class="noshow"></td>
                 </tr>
                 <!-- temporary accounts -->
                 <?php for ($k=count($lines)-5; $k<count($lines); $k++) : ?>
@@ -89,6 +93,7 @@ require "budget_setup.php";
                     <td class="mo2"><?= $lines[$k][4];?></td>
                     <td class="ap"><?= $lines[$k][5];?></td>
                     <td class="apday"><?= $lines[$k][6];?></td>
+                    <td class="noshow"><?= $lines[$k][7];?></td>
                 </tr>
                 <?php endfor; ?>
                 <tr id="balances">
@@ -99,6 +104,7 @@ require "budget_setup.php";
                     <td class="balance heavy-top"><?= $bal3;?></td>
                     <td class="gray-title heavy-top"></td>
                     <td class="gray-title heavy-top"></td>
+                    <td class="noshow"></td>
                 </tr>
                 <tr>
                     <td class="gray-title">Credit Cards</td>
@@ -149,9 +155,11 @@ require "budget_setup.php";
             <button id="pay">Pay</button>
         </div>
         <div id="ap">
-            <span>Amount to pay:&nbsp;&nbsp;<input style="width:80px;"
-                type="text" /></span><br /><br />
-            <button style="margin-left:20px"; id="payit">Apply</button>
+           <p id="inst">The following items are due for auto payment. Select an item
+           to pay, and/or when done, select 'Finished'</p>
+           <table id="modal_table">
+               <tbody></tbody>
+           </table>
         </div>
     </div>
     <!-- after validation, place accordingly:

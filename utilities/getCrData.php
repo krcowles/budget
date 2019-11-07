@@ -38,7 +38,7 @@ if ($nodata) {
     }
     $card_cnt = count($cards);
     $cardno = 0;
-    // NOTE: the array size (# elements) is set by the $headers?
+    // NOTE: the array size (# elements) is set by the $headers
     while (($charge = fgetcsv($cd_file)) !== false) {
         if ($charge[0] !== 'next') {
             switch ($cardno) {
@@ -62,7 +62,7 @@ if ($nodata) {
     fclose($cd_file);
 }
 /**
- * Return to caller with the following data:
+ * This module produces the following data:
  *  $headers    card name and type info on line 1 of CSV file
  *  $cards      names of all current credit cards
  *  $card_cnt   no of credit cards specified in $headers
