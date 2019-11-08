@@ -15,9 +15,24 @@
  * 
  * @return array;
  */
+/**
+ * This function takes an item read from an Excel spreadsheet and assumes
+ * it may have extraneous data, such as formatting codes for UTF-16
+ * 
+ * @param string $excelDat item read from Excel spreadsheet
+ * 
+ * @return string
+ */
+/**
+ * This function will attempt to 'clean' up potential UTF-16 formatting from
+ * excel spreadsheet data.
+ * 
+ * @param array $excelDat an array of strings representing retrieved .csv data
+ * 
+ * @return array the 'cleaned' array returned
+ */
 function cleanupExcel($excelDat)
 {
-    //array_map("utf8_encode", $excelDat); // Excel is not strictly UTF-8
     foreach ($excelDat as &$item) {
         $len = strlen($item);
         $item = filter_var($item, FILTER_SANITIZE_STRING);

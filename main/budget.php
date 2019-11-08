@@ -45,6 +45,7 @@ require "budget_setup.php";
                 <col style="width:110px" />
                 <col style="width:64px" />
                 <col style="width:10px" class="noshow" />
+                <col style="width:16px" class="noshow" />
             </colgroup>
             <thead>
                 <tr>
@@ -56,6 +57,7 @@ require "budget_setup.php";
                     <th>AutoPay</th>
                     <th>Day</th>
                     <th class="noshow">Paid</th>
+                    <th class="noshow">Income</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,6 +72,7 @@ require "budget_setup.php";
                     <td class="ap"><?= $lines[$j][5];?></td>
                     <td class="apday"><?= $lines[$j][6];?></td>
                     <td class="noshow"><?= $lines[$j][7];?></td>
+                    <td class="noshow"><?= $lines[$j][8];?></td>
                 </tr>
                 <?php endfor; ?>
                 <tr>
@@ -81,6 +84,7 @@ require "budget_setup.php";
                     <td class="mo3 gray-title"></td>
                     <td class="ap gray-title"></td>
                     <td class="apday gray-title"></td>
+                    <td class="noshow"></td>
                     <td class="noshow"></td>
                 </tr>
                 <!-- temporary accounts -->
@@ -94,6 +98,7 @@ require "budget_setup.php";
                     <td class="ap"><?= $lines[$k][5];?></td>
                     <td class="apday"><?= $lines[$k][6];?></td>
                     <td class="noshow"><?= $lines[$k][7];?></td>
+                    <td class="noshow"><?= $lines[$k][8];?></td>
                 </tr>
                 <?php endfor; ?>
                 <tr id="balances">
@@ -105,38 +110,46 @@ require "budget_setup.php";
                     <td class="gray-title heavy-top"></td>
                     <td class="gray-title heavy-top"></td>
                     <td class="noshow"></td>
+                    <td class="noshow"></td>
                 </tr>
                 <tr>
                     <td class="gray-title">Credit Cards</td>
                     <td colspan="6" class="gray-title" style="text-align:left;">
                         &nbsp;&nbsp;-- Not deducted until reconciled --</td>
                 </tr>
-                <?php for($l=0; $l<$crcards; $l++) : ?>
+                <?php for($l=0; $l<$card_cnt; $l++) : ?>
                 <tr>
-                    <td class="cname"><?= $card_names[$l];?></td>
+                    <td class="cname"><?= $cards[$l];?></td>
+                    <td></td>
+                    <td id="past0" class="camt"><?= $old_card_balances[$l][0];?></td>
+                    <td id="past1" class="camt"><?= $old_card_balances[$l][1];?></td>
                     <td class="camt"><?= $crbalances[$l];?></td>
-                    <td colspan="5" class="gray-title"></td>
+                    <td colspan="3" class="gray-title"></td>
                 </tr>
                 <?php endfor; ?>
             </tbody>
         </table>
         <div id="bttns">
             <button id="expense">Make Payment</button><br />
-            <button id="deposit">Make Deposit</button><br />
-            <button id="income">Enter Income</button><br />
+            <button id="income">Enter Monthly Income</button><br />
+            <button id="deposit">Make One-time Deposit</button><br />
+            <button id="recon">Reconcile Card Statement</button><br />
             <button id="movefunds">Move Funds</button><br />
             Account Management Tools:<br />
             <select id="mgmt">
                 <option value="none">Select From List:</option>
+                <option value="charges">Edit Credit Charges</option>
                 <option value="apsetup">Setup/Change AutoPay</option>
                 <option value="cd_cards">Setup/Change Debit/Credit Info</option>
-                <option value="charges">Edit Credit Charges</option>
                 <option value="renameacct">Rename Account</option>
                 <option value="addacct">Add Account</option>
                 <option value="delacct">Delete Account</option>
                 <option value="mvacct">Move Account</option>
             </select>
         </div>
+    </div>
+    <div id="obal">
+        <p>Your opening balance is: $ <span id="obalance"><?= $obal;?></span></p>
     </div>
 
     <!-- This div holds all the modal formas -->
@@ -156,7 +169,7 @@ require "budget_setup.php";
         </div>
         <div id="ap">
            <p id="inst">The following items are due for auto payment. Select an item
-           to pay, and/or when done, select 'Finished'</p>
+           to pay, and/or when done, select 'Finished' [Note: this box moveable]</p>
            <table id="modal_table">
                <tbody></tbody>
            </table>

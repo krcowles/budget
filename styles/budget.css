@@ -9,13 +9,25 @@
 button {
     margin-bottom: 32px;
 }
-/* <div> containing modal window content */
-#box, #ap {
-    display: none;
+#obal {
+    clear: both;
+    font-size: 18px;
+    margin-left: 16px;
+    position: relative;
+    top: 12px;
+}
+#obalance {
+    margin: 0px;
+    color: brown;
+    padding-top: 4px;
 }
 table:not(#modal_table) {
     float: left;
     margin-left: 16px;
+}
+/* <div> containing modal window content */
+#box, #ap {
+    display: none;
 }
 .tdht {
     height: 72px;

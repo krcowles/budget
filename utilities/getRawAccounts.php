@@ -14,6 +14,7 @@ $accounts = fopen($budget_data, "r");
 if ($accounts === false) {
     echo 'nofile';
 } else {
+    // "constants" to create necessary html
     $html = '';
     $term = '">';
     $acct = 'Account Name: <textarea class="acctname" name="svdname[]" ' . 
@@ -35,10 +36,16 @@ if ($accounts === false) {
             if ($acctdat[0] === "Temporary Accounts") {
                 break;
             } else {
-                $html .= $acct . $rec_count . $term . $acctdat[0] .
+                if ($acctdat[0] === "Undistributed Funds") { // no checkbox
+                    $html .= $acct . $rec_count . $term . $acctdat[0] .
                     $bud . $rec_count . $term . $acctdat[1] .
-                    $bal . $rec_count . $term . $acctdat[4] . 
-                    $cbx . $rec_count . $eol;
+                    $bal . $rec_count . $term . $acctdat[4];
+                } else {
+                    $html .= $acct . $rec_count . $term . $acctdat[0] .
+                        $bud . $rec_count . $term . $acctdat[1] .
+                        $bal . $rec_count . $term . $acctdat[4] . 
+                        $cbx . $rec_count . $eol;
+                }
                 $rec_count++;
             }
         }

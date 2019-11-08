@@ -13,22 +13,23 @@ require "../utilities/timeSetup.php";
 
 // Always present data for new accounts:
 $headers = array("Account Name", "Budget", $month[0], $month[1], $month[2],
-        "AutoPay", "Day");
-$undis = array("Undistributed Funds", 0, 0, 0, 0, "", "");
+        "AutoPay", "Day", "Paid", "Income");
+$undis = array("Undistributed Funds", 0, 0, 0, 0, "", "", "", "");
 $temp_accounts    = [];
 $temp_accounts[0] = array("Temporary Accounts", "", "", "", "", "", "");
-$temp_accounts[1] = array("Tmp1", 0, 0, 0, 0, "", "");
-$temp_accounts[2] = array("Tmp2", 0, 0, 0, 0, "", "");
-$temp_accounts[3] = array("Tmp3", 0, 0, 0, 0, "", "");
-$temp_accounts[4] = array("Tmp4", 0, 0, 0, 0, "", "");
-$temp_accounts[5] = array("Tmp5", 0, 0, 0, 0, "", "");
+$temp_accounts[1] = array("Tmp1", 0, 0, 0, 0, "", "", "N", 0);
+$temp_accounts[2] = array("Tmp2", 0, 0, 0, 0, "", "", "N", 0);
+$temp_accounts[3] = array("Tmp3", 0, 0, 0, 0, "", "", "N", 0);
+$temp_accounts[4] = array("Tmp4", 0, 0, 0, 0, "", "", "N", 0);
+$temp_accounts[5] = array("Tmp5", 0, 0, 0, 0, "", "", "N", 0);
 $accounts = []; // data to be written
 array_push($accounts, $headers);
 $csventry = []; // holds a line of data (array) to be pushed onto $accounts
-// retrieve form data
+// retrieve new data from form
 $new_accounts = $_POST['acctname'];
 $new_budgets  = $_POST['bud'];
 $new_balances = $_POST['bal'];
+// if old data is present:
 if (isset($_POST['svdname'])) {
     $chg_accounts = $_POST['svdname'];
     $chg_budgets  = $_POST['svdbud'];
@@ -54,13 +55,16 @@ if ($chg_accounts) {
             $delete = true;
         }
         if (!$delete) {
+            // as a new budget is being created, no other attributes should exist:
             $csventry[0] = filter_var($chg_accounts[$j]);
             $csventry[1] = filter_var($chg_budgets[$j]);
-            $csventry[2] = 0;
-            $csventry[3] = 0;
+            $csventry[2] = 0; // prev0
+            $csventry[3] = 0; // prev1
             $csventry[4] = filter_var($chg_balances[$j]);
-            $csventry[5] = "";
-            $csventry[6] = "";
+            $csventry[5] = ""; // autopay
+            $csventry[6] = ""; // day
+            $csventry[7] = ""; // pay
+            $csventry[8] = 0;  // distributed income received
             array_push($accounts, $csventry);
             $csventry = [];
         }
@@ -76,6 +80,8 @@ for ($k=0; $k<count($new_accounts); $k++) {
         $csventry[4] = filter_var($new_balances[$k]);
         $csventry[5] = "";
         $csventry[6] = "";
+        $csventry[7] = "N";
+        $csventry[8] = 0;
         array_push($accounts, $csventry);
         $csventry = [];
     }
@@ -91,5 +97,5 @@ for ($p=0; $p<6; $p++) {
     fputcsv($acctdata, $temp_accounts[$p]);
 }
 fclose($acctdata);
-$newbud = "newBudget.php";
+$newbud = "newBudget.html";
 header("Location: {$newbud}");

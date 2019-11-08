@@ -80,24 +80,44 @@ var acct_select_box = '<select id="selacct">\n';
  acct_select_box += '</select>\n';
  $('#modal_accts').after(acct_select_box);
  
+ /**
+  * Button redirects
+  */
 $('#expense').on('click', function() {
     var exp_form = $('#box').detach();
     modal.open({id: 'expense', width: '340px', height: '160px', content: exp_form});
     $('#allForms').append(exp_form);
+});
+$('#income').on('click', function() {
+    window.open("../utilities/enterIncome.php", "_self");
+});
+$('#deposit').on('click', function() {
+    alert("Under Construction");
+});
+$('#recon').on('click', function() {
+    window.open("../utilities/reconcile.php", "_self");
+});
+$('#movefunds').on('click', function() {
+    alert("Under Construction");
 });
 
 // go to page corresponding to selected tool
 $('#mgmt').on('change', function() {
     var tool = $('#mgmt option:selected').val();
     switch(tool) {
+        case "charges":
+            window.open("../edit/enterCardData.php", "_self");
+            break;
         case "apsetup":
             window.open("../edit/autopay.php", "_self");
             break;
         case "cd_cards":
             window.open("../edit/cardSetup.php", "_self");
             break;
-        case "charges":
-            window.open("../edit/enterCardData.php", "_self");
+        case "renameacct" :
+        case "addacct" :
+        case "delacct" :
+        case "mvacct" :
         default:
             alert("Not yet implemented");
     }

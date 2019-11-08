@@ -9,30 +9,28 @@
  * @license No license to date
  */
 require_once "../utilities/timeSetup.php";
+require_once "budgetFunctions.php";
 
-$nodata = false;
+$crStatus = "OK";
 if (file_exists($credit_data)) {
     $cd_file = fopen($credit_data, "r");
-    $headers = fgetcsv($cd_file);
-    if ($headers[0] === 'None') {
-        $nodata = true;
+    $crHeaders = fgetcsv($cd_file);
+    $crHeaders = cleanupExcel($crHeaders);
+    if ($crHeaders[0] === 'None') {
+        $crStatus = "E6: No credit data entered yet";
     }
 } else {
-    $nodata = true;
+    $crStatus = "E7: File does not exist";
 }
-if ($nodata) {
-    echo '<script type="text/javascript">alert("No credit/debit cards have been ' .
-        'assigned: use "Account Management Tools" and select "Setup/Change ' .
-        'Debit/Credit Info");window.open("../main/budget.php", "_self");</script>';
-} else {
+if ($crStatus === "OK") {
     // allowing for up to 4 cards at present
     $credit_charges = array('card1' => array(), 'card2' => array(), 
         'card3' => array(), 'card4' => array());
     $cards = [];
     $cardno = 0;
-    for ($a=0; $a<count($headers); $a+=2) {
-        if ($headers[$a+1] === 'Credit') {
-            $cards[$cardno] = $headers[$a];
+    for ($a=0; $a<count($crHeaders); $a+=2) {
+        if ($crHeaders[$a+1] === 'Credit') {
+            $cards[$cardno] = $crHeaders[$a];
             $cardno++;
         }
     }
@@ -41,6 +39,8 @@ if ($nodata) {
     // NOTE: the array size (# elements) is set by the $headers
     while (($charge = fgetcsv($cd_file)) !== false) {
         if ($charge[0] !== 'next') {
+            $data = floatval($charge[3]);
+            $charge[3] = number_format($data, 2, '.', ',');
             switch ($cardno) {
             case 0:
                 array_push($credit_charges['card1'], $charge);
@@ -63,7 +63,8 @@ if ($nodata) {
 }
 /**
  * This module produces the following data:
- *  $headers    card name and type info on line 1 of CSV file
+ *  $crStatus   file status for credit data
+ *  $crHeaders  card name and type info on line 1 of CSV file
  *  $cards      names of all current credit cards
  *  $card_cnt   no of credit cards specified in $headers
  *  $credit_charges:
