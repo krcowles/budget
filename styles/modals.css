@@ -1,5 +1,12 @@
-.modal {
-    cursor: pointer;
+#header {
+    height: 24px;
+    width: 100%;
+    font-size: 18px;
+    border-style: outset;
+    border-width: 2px;
+    background-color: #ffeecc;
+    text-align: center;
+    margin-bottom: 6px;
 }
 .modal-content {
     margin-bottom: 0px;
@@ -11,10 +18,30 @@
 #acct, #cc {
     margin-bottom: 4px;
 }
+#cc {
+    margin-top: 6px;
+}
 #expamt {
     height: 18px;
-    width: 68px;
+    width: 70px;
+    font-size: 14px;
+    border-width: 1px;
+    margin-bottom: 8px;
 }
 #pay {
     margin-bottom: 0px;
 }
+#payee {
+    height: 18px;
+    width: 200px;
+    font-size: 14px;
+    border-width: 1px;
+    margin-bottom: 8px;
+}
+#incamt {
+    height: 22px;
+    width: 110px;
+    font-size: 16px;
+    border-width: 1px;
+}
+

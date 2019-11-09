@@ -1,11 +1,11 @@
 "Account Name",Budget,September,October,November,AutoPay,Day,Paid,Income
-Joebob,23,0,0,-10.45,,,,0
-Twoto,87,0,0,89.99,,,,0
-Sooje,14,0,0,-4,,,,0
-"Undistributed Funds",0,0,0,0,,,,
-"Temporary Accounts",,,,,,
-Tmp1,0,0,0,0,,,N,0
-Tmp2,0,0,0,0,,,N,0
-Tmp3,0,0,0,0,,,N,0
-Tmp4,0,0,0,0,,,N,0
-Tmp5,0,0,0,0,,,N,0
+Joebob,23,0,0,16.55,,,,23
+Twoto,87,0,0,85.99,,,,87
+Sooje,14,0,0,24,,,,14
+"Undistributed Funds",0,0,0,151,,,,-99
+"Temporary Accounts",0,0,0,0,,,,-99
+Tmp1,0,0,0,-10,,,,0
+Tmp2,0,0,0,-9.99,,,,0
+Tmp3,0,0,0,-9,,,,0
+Tmp4,0,0,0,0,,,,0
+Tmp5,0,0,0,0,,,,0

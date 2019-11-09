@@ -26,7 +26,7 @@ table:not(#modal_table) {
     margin-left: 16px;
 }
 /* <div> containing modal window content */
-#box, #ap {
+#box, #ap, #distinc {
     display: none;
 }
 .tdht {

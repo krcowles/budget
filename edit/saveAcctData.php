@@ -14,17 +14,18 @@ require "../utilities/timeSetup.php";
 // Always present data for new accounts:
 $headers = array("Account Name", "Budget", $month[0], $month[1], $month[2],
         "AutoPay", "Day", "Paid", "Income");
-$undis = array("Undistributed Funds", 0, 0, 0, 0, "", "", "", "");
+$undis = array("Undistributed Funds", 0, 0, 0, 0, "", "", "", "-99");
 $temp_accounts    = [];
-$temp_accounts[0] = array("Temporary Accounts", "", "", "", "", "", "");
+$temp_accounts[0] = array("Temporary Accounts", "", "", "", "", "", "-99");
 $temp_accounts[1] = array("Tmp1", 0, 0, 0, 0, "", "", "N", 0);
 $temp_accounts[2] = array("Tmp2", 0, 0, 0, 0, "", "", "N", 0);
 $temp_accounts[3] = array("Tmp3", 0, 0, 0, 0, "", "", "N", 0);
 $temp_accounts[4] = array("Tmp4", 0, 0, 0, 0, "", "", "N", 0);
 $temp_accounts[5] = array("Tmp5", 0, 0, 0, 0, "", "", "N", 0);
 $accounts = []; // data to be written
-array_push($accounts, $headers);
 $csventry = []; // holds a line of data (array) to be pushed onto $accounts
+array_push($accounts, $headers);
+
 // retrieve new data from form
 $new_accounts = $_POST['acctname'];
 $new_budgets  = $_POST['bud'];
@@ -39,6 +40,7 @@ if (isset($_POST['svdname'])) {
     $chg_accounts = false;
 }
 // if there is previously saved data, update it and add it to $accounts
+// NOTE: this is all new data, so still some fields will be empty
 if ($chg_accounts) {
     $delcount = 0;
     for ($j=0; $j<count($chg_accounts); $j++) {
@@ -97,5 +99,5 @@ for ($p=0; $p<6; $p++) {
     fputcsv($acctdata, $temp_accounts[$p]);
 }
 fclose($acctdata);
-$newbud = "newBudget.html";
-header("Location: {$newbud}");
+
+header("Location: newBudget.html");

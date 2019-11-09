@@ -75,9 +75,14 @@ var acct_select_box = '<select id="selacct">\n';
  $('.acct').each(function() {
     var aval = $(this).text();
     acct_list.push(aval);
-    acct_select_box += '<option value="' + aval + '">' + aval + '</option>\n';
+    if (aval === "Temporary Accounts") {
+        acct_select_box += '<option value="Temporary Accounts" disabled>' +
+            'Temporary Accounts</option>\n';
+    } else {
+        acct_select_box += '<option value="' + aval + '">' + aval + '</option>\n';
+    }
  });
- acct_select_box += '</select>\n';
+ acct_select_box += '</select><br />';
  $('#modal_accts').after(acct_select_box);
  
  /**
@@ -85,11 +90,13 @@ var acct_select_box = '<select id="selacct">\n';
   */
 $('#expense').on('click', function() {
     var exp_form = $('#box').detach();
-    modal.open({id: 'expense', width: '340px', height: '160px', content: exp_form});
+    modal.open({id: 'expense', width: '342px', height: '220px', content: exp_form});
     $('#allForms').append(exp_form);
 });
 $('#income').on('click', function() {
-    window.open("../utilities/enterIncome.php", "_self");
+    var income_form = $('#distinc').detach();
+    modal.open({id: 'income', height: '280px', width: '320px', content: income_form});
+    $('#allForms').append(income_form);
 });
 $('#deposit').on('click', function() {
     alert("Under Construction");

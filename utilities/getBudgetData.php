@@ -89,7 +89,7 @@ if ($status=== "OK") {
                 $autopay[$recno] = '';
                 $day[$recno] = '';
                 $paid[$recno] = '';
-                $income[$recno] = 0;
+                $income[$recno] = -99;
                 $record = fgetcsv($handle);
                 $record = cleanupExcel($record);
                 $recno++;

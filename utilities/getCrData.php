@@ -1,7 +1,8 @@
 <?php
 /**
- * This utility looks for the account's *_charges.csv file and uses it to 
- * populate the enterCardData.php page.
+ * This utility verifies then reads the $credit_data file. The credit charge data
+ * is entered into arrays (see bottom commented listing), as are the credit card
+ * names and debit card names.
  * PHP Version 7.1
  * 
  * @package Budget
@@ -27,11 +28,16 @@ if ($crStatus === "OK") {
     $credit_charges = array('card1' => array(), 'card2' => array(), 
         'card3' => array(), 'card4' => array());
     $cards = [];
+    $debits = [];
+    $debno = 0;
     $cardno = 0;
     for ($a=0; $a<count($crHeaders); $a+=2) {
         if ($crHeaders[$a+1] === 'Credit') {
             $cards[$cardno] = $crHeaders[$a];
             $cardno++;
+        } elseif ($crHeaders[$a+1] === 'Debit') {
+            $debits[$debno] = $crHeaders[$a];
+            $debno++;
         }
     }
     $card_cnt = count($cards);
@@ -69,4 +75,5 @@ if ($crStatus === "OK") {
  *  $card_cnt   no of credit cards specified in $headers
  *  $credit_charges:
  *              All card charges in an indexed array
+ *  $debits     An array holding any debit card names
  */ 

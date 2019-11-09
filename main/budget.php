@@ -158,13 +158,17 @@ require "budget_setup.php";
             <span id="modal_accts">Use account: </span>
             <span id="modal_cards">Charge to: </span>
             <select id="cc">
-                <option value="none">Account</option>
-                <option value="card1">Visa</option>
-                <option value="card2">Citi</option>
-                <option value="db1">Wells Fargo</option>
+                <option value="none">Check/Draft</option>
+                <?php for ($y=0; $y<count($cards); $y++) : ?>
+                <option value="card<?= $y+1;?>"><?= $cards[$y];?></option>
+                <?php endfor; ?>
+                <?php for ($z=0; $z<count($debits); $z++) : ?>
+                <option value="debit<?= $z+1;?>"><?= $debits[$z];?></option>
+                <?php endfor; ?>
             </select><br />
             Enter the amount of the expense:<br />
-            <input type="text" id="expamt"  /><br /><br />
+            $ <input type="text" id="expamt"  /><br />
+            Paid to: <input type="text" id="payee" /><br />
             <button id="pay">Pay</button>
         </div>
         <div id="ap">
@@ -173,6 +177,16 @@ require "budget_setup.php";
            <table id="modal_table">
                <tbody></tbody>
            </table>
+        </div>
+        <div id="distinc">
+            Please enter the amount of monthly income you wish to distribute:
+            Note that income will be added to accounts not already having
+            received the full budgeted amount, and will stop when the funds
+            run out. Any overages will be placed in 'Undistributed Funds',
+            which can later be moved to other accounts ('Move Funds' button).
+            <br /><br />
+            Enter income: $ <input id="incamt" type="text" /><br /><br />
+            <button id="dist">Distribute</button>
         </div>
     </div>
     <!-- after validation, place accordingly:

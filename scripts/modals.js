@@ -3,6 +3,7 @@ var modal = (function() {
     // Local/private to "modal"; invoked only on instantiation
     var $window = $(window);
     var $modal = $('<div class="modal" style="background-color:floralwhite;position:absolute"/>'); 
+    var $drag = $('<div id="header">Drag Here</div>');
     var $content = $('<div class="modal-content"/>');
     var closeHtml = '<button class="modal-close">Cancel</button>';
     var $close = $(closeHtml);
@@ -19,69 +20,73 @@ var modal = (function() {
      * are called by the (public) modal.open function, based on the modal id
      * passed via settings.
      */
-    // Add or subtract amounts in a cell
-    function modifyData(jQloc, operand, operation, chgType) {
-        // jQloc is the jQuery object holding the subject row to be modified
-        cellData = parseFloat(jQloc.eq(4).children().eq(1).text());
-        if (operation === 'sub') {
-            cellData -= operand;
-        } else { // presumably 'add'
-            cellData += operand;
-        }
-        if (cellData < 0) {
-            jQloc.eq(4).children().eq(1).addClass('negative');
-        }
-        cellData = $.number(cellData, 2);
-        jQloc.eq(4).children().eq(1).text(cellData);
-        if (chgType === 'Account' || chgType === 'Debit') {
-            // fix the balance
-            $balance = $('#balances').find('td').eq(4).children().eq(1);
-            var balance = $balance.text().replace(",", "");
-            balance = parseFloat(balance);
-            if (operation === 'sub') {
-                balance -= operand;
-            } else {
-                balance += operand;
-            }
-            var newbal = $.number(balance, 2);
-            if (newbal < 0) {
-                $balance.addClass('negative');
-            }
-            $balance.text(newbal);
-        }  
-        return;
-    }
     // modal function executed when settings.id == 'expense'
     function payExpense() {
         $content.append($close);
-        $close.css('left', '220px');
+        $close.css('left', '216px');
+        $close.text("Cancel");
         var locate = $('#expense').offset();
         $modal.css({
             top: locate.top + 40,
             left: locate.left - 100
         });
-        var account = $('#selacct option:selected').text();
+        // id the options present in the <select> box
+        var opts = [];
+        var selbox = document.getElementById('selacct');
+        for (var j=0; j<selacct.options.length; j++) {
+            opts[j] = selbox.options[j].value;
+        }
+        var acctrows = opts.length;
+        // objects to register user entries/changes
         var $account = $('#selacct');
-        var chargeto = $('#cc option:selected').text();
-        var $card = $('#cc');
-        var amount = 0;
+        var $chargeto = $('#cc');
         var $expensed = $('#expamt');
+        var $payee = $('#payee');
+        // initial values
+        var acctname = $('#selacct option:selected').text();
+        var editrow = 0;
+        var chargeto = $('#cc option:selected').text();
+        var amount = 0;
+        var payee = 'None specified';
         $account.on('change', function() {
-            account = this.value;
+            acctname = this.value;
+            for (var j=0; j<acctrows; j++) {
+                if (acctname === opts[j]) {
+                    editrow = j;
+                    return;
+                }
+            }
         });
-        $card.on('change', function() {
+        $chargeto.on('change', function() {
             chargeto = this.value;
         });
         $expensed.on('change', function() {
             amount = this.value;
         });
+        $payee.on('change', function() {
+            payee = this.value;
+        });
         $('#pay').on('click', function() {
-            //alert("Pay " + amount + ": Picked " + account + "; Charged " + chargeto);
-            $('#roll3 tbody tr').each(function() {
-                var $aname = $(this).find('td');
-                var aname = $aname.eq(0).text();
-                if (aname == account) {
-                    modifyData($aname, amount, 'sub','Account');
+            var ajaxdata = {acct_name: acctname, edit_row: editrow, 
+                chg_type: chargeto, amt: amount, payto: payee};
+            $.ajax({
+                url: "../edit/saveAcctEdits.php",
+                data: ajaxdata,
+                dataType: "text",
+                method: "GET",
+                success: function(results) {
+                    if (results == "OK") {
+                        modal.close;
+                        location.reload();
+                    } else {
+                        alert("Problem encountered executing payment");
+                    }
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    var msg = "Problem encountered; Code: " + errorThrown +
+                        "; " + txtStatus;
+                    alert(msg);
                 }
             });
         });
@@ -183,6 +188,42 @@ var modal = (function() {
             $modal.detach();
         });
     }
+    function distribute() {
+        $('#dist').after($close);
+        $close.css('margin-left', '148px');
+        $modal.css({
+            top: 60,
+            left: 200
+        });
+        var funds = 0;
+        $funds = $('#incamt').on('change', function() {
+            funds = this.value;
+        });
+        $('#dist').on('click', function() {
+            var ajaxdata = {funds: funds};
+            $.ajax({
+                url: "../utilities/enterIncome.php",
+                method: "GET",
+                data: ajaxdata,
+                dataType: "text",
+                success: function(results) {
+                   if (results == "OK") {
+                       alert("Good");
+                       location.reload();
+                   }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    var msg = "Problem encountered distributing income:" +
+                     " Error " + errorThrown + "; " + textStatus;
+                    alert(msg);
+                }
+            });
+            modal.close;
+        });
+        $close.on('click', function () {
+           modal.close;
+        });
+    }
     
     // public methods
     return {
@@ -196,7 +237,7 @@ var modal = (function() {
         },
         open: function(settings) {
             var modid = settings.id;
-            $content.empty().append(settings.content.html());
+            $content.empty().append($drag).append(settings.content.html());
             $modal.css({
                 width: settings.width || auto,
                 height: settings.height || auto,
@@ -215,6 +256,8 @@ var modal = (function() {
                         settings.chgid, settings.def);
             } else if (modid === 'autopay') {
                 autopay(settings.method, settings.acct_name, settings.row_no);
+            } else if (modid === 'income') {
+                distribute();
             } else {
                 modal.center();
                 $(window).on('resize', modal.center);
