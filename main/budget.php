@@ -134,7 +134,7 @@ require "budget_setup.php";
             <button id="income">Enter Monthly Income</button><br />
             <button id="deposit">Make One-time Deposit</button><br />
             <button id="recon">Reconcile Card Statement</button><br />
-            <button id="movefunds">Move Funds</button><br />
+            <button id="movefunds">Transfer Funds</button><br />
             Account Management Tools:<br />
             <select id="mgmt">
                 <option value="none">Select From List:</option>
@@ -203,6 +203,31 @@ require "budget_setup.php";
             Use account management tools to modify other features once created (e.g.
             'Change Autopay', 'Move Funds', etc.)<br /><br />
             <button id="addit">Add Account</button>
+        </div>
+        <div id="dep">
+            Enter the amount to be deposited (it will be placed in 'Undistributed
+            Funds')<br />
+            <input type="text" id="depo" /><br /><br />
+            <button id="depfunds">Deposit Funds</option>
+        </div>
+        <div id="xfr">
+            Transfer the following amount: <input type="text" id="xframt" /><br />
+            <span id="xfrfrom">From this account:</span><br />
+            <span id="xfrto">To this account: </span><br />
+            <button id="transfer">Transfer</button>
+        </div>
+        <div id="mv">
+            Note: you cannot move the 'Undistributed Funds' nor any 'Temporary
+            Account'<br /><br />
+            <span id="mvfrom">Place the following account: <br /></span><br />
+            <span id="mvto">Directly above: <br /></span><br /><br />
+            <button id="mvit">Move</button>
+        </div>
+        <div id="del">
+            Note: you can only delete accounts you create (e.g. not 'Undistributed
+            Funds' nor 'Temporary Accounts')<br /><br />
+            <span id="delacct">Delete: </span><br /><br />
+            <button id="delit">Delete Account</button>
         </div>
     </div>
     <!-- after validation, place accordingly:

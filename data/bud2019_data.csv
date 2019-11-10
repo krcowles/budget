@@ -1,14 +1,13 @@
 "Account Name",Budget,September,October,November,AutoPay,Day,Paid,Income
-Sam,10,0,0,-23,,,,0
-Fred,45,0,0,89.67,,,,0
-Ted,17,0,0,23,,,,0
-Another,34,0,0,34,,,,0
-Insert1,23,0,0,44.34,,,,0
-"BLOODY WELL",46,0,0,0,,,,0
-"Undistributed Funds",0,0,0,0,,,,-99
+Ted,17,0,0,40,,,,17
+Fred,45,0,0,134.67,,,,45
+Insert1,23,0,0,67.34,,,,23
+Another,34,0,0,68,,,,34
+"BLOODY WELL",46,0,0,27,,,,27
+"Undistributed Funds",0,0,0,130.01,,,,-99
 "Temporary Accounts",0,0,0,0,,,,-99
 Tmp1,0,0,0,0,,,,0
 Tmp2,0,0,0,0,,,,0
 Tmp3,0,0,0,0,,,,0
-Tmp4,0,0,0,0,,,,0
+Tmp4,0,0,0,2,,,,0
 Tmp5,0,0,0,0,,,,0

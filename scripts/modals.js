@@ -23,7 +23,7 @@ var modal = (function() {
     // modal function executed when settings.id == 'expense'
     function payExpense() {
         $content.append($close);
-        $close.css('left', '216px');
+        $close.css('margin-left', '216px');
         $close.text("Cancel");
         var locate = $('#expense').offset();
         $modal.css({
@@ -76,7 +76,7 @@ var modal = (function() {
                 method: "GET",
                 success: function(results) {
                     if (results == "OK") {
-                        modal.close;
+                        modal.close();
                         location.reload();
                     } else {
                         alert("Problem encountered executing payment");
@@ -90,10 +90,9 @@ var modal = (function() {
                 }
             });
         });
-    }
-    // function executed when settings.id == 'deposit'
-    function makeDeposit() {
-
+        $close.on('click', function() {
+            modal.close();
+        });
     }
     // function executed when settings.id == 'edit_chg' (edit a Cr charge)
     function editCredit(inputvals, locater, cardinfo, defobj) {
@@ -120,7 +119,7 @@ var modal = (function() {
             });
             locater.find('input').prop('checked', false);
             defobj.resolve();
-            modal.close;
+            modal.close();
         });
         $('#svmodal').on('click', function() {
             // get all changes
@@ -190,7 +189,7 @@ var modal = (function() {
     }
     function distribute() {
         $('#dist').after($close);
-        $close.css('margin-left', '148px');
+        $close.css('margin-left', '150px');
         $modal.css({
             top: 60,
             left: 200
@@ -217,10 +216,10 @@ var modal = (function() {
                     alert(msg);
                 }
             });
-            modal.close;
+            modal.close();
         });
         $close.on('click', function () {
-           modal.close;
+           modal.close();
         });
     }
     function nameit() {
@@ -248,23 +247,23 @@ var modal = (function() {
                 data: ajaxdata,
                 success: function(results) {
                     if (results === "OK") {
-                        modal.close;
+                        modal.close();
                         location.reload();
                     } else {
                         alert("Problem renaming account");
-                        modal.close;
+                        modal.close();
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     msg = "Problem encountered renaming account: " +
                         textStatus + "; Error: " + errorThrown;
                     alert(msg);
-                    modal.close;
+                    modal.close();
                 }
             });
         });
         $close.on('click', function () {
-            modal.close;
+            modal.close();
          });
     }
     function newacct() {
@@ -293,11 +292,11 @@ var modal = (function() {
                 dataType: "text",
                 success: function(results) {
                     if (results == "OK") {
-                        modal.close;
+                        modal.close();
                         location.reload();
                     } else {
                         alert("Problem encounted adding account");
-                        modal.close;
+                        modal.close();
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -308,7 +307,176 @@ var modal = (function() {
             })
         });
         $close.on('click', function() {
-            modal.close;
+            modal.close();
+        });
+    }
+    function makeDeposit() {
+        $('#depfunds').after($close);
+        $close.css('margin-left', '22px');
+        $modal.css({
+            top: 140,
+            left: 300
+        });
+        var deposit_funds = 0;
+        var $deposit = $('#depo');
+        $deposit.on('change', function() {
+            deposit_funds = this.value
+        });
+        $('#depfunds').on('click', function() {
+            ajaxdata = {newfunds: deposit_funds};
+            $.ajax({
+                url: "../edit/saveAcctEdits.php",
+                method: "GET",
+                dataType: "text",
+                data: ajaxdata,
+                success: function(results) {
+                    if (results === "OK") {
+                        modal.close();
+                        location.reload();
+                    } else {
+                        alert("Problem encountered making deposit");
+                        modal.close();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    msg = "Problem encountered making deposit: " +
+                        textStatus + "; Error: " + errorThrown;
+                    alert(msg);
+                    modal.close();
+                }
+            });
+        });
+        $close.on('click', function() {
+            modal.close();
+        });
+    }
+    function xfrfunds() {
+        $('#transfer').after($close);
+        $close.css('margin-left', '80px');
+        $modal.css({
+            top: 60,
+            left: 700
+        });
+        var acct_name = $('#selacct option:selected').text();
+        var to_acct = $('#second option:selected').text();
+        var xframt = 0;
+        $(document).on('change', '#selacct', function() {
+            acct_name = this.value;
+        });
+        $(document).on('change', '#second', function() {
+            to_acct = this.value;
+        });
+        $('#xframt').on('change', function() {
+            xframt = this.value;
+        });
+        $('#transfer').on('click', function() {
+            ajaxdata = {from: acct_name, to: to_acct, sum: xframt};
+            $.ajax({
+                url: '../edit/saveAcctEdits.php',
+                data: ajaxdata,
+                dataType: "text",
+                method: "GET",
+                success: function(results) {
+                    if (results === "OK") {
+                        modal.close();
+                        location.reload();
+                    } else {
+                        alert("Problem encountered transferring funds");
+                        modal.close();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    msg = "Problem encountered making deposit: " +
+                        textStatus + "; Error: " + errorThrown;
+                    alert(msg);
+                    modal.close();
+                }
+            });
+        });
+        $close.on('click', function() {
+            modal.close();
+        });
+    }
+    function mvacct() {
+        $('#mvit').after($close);
+        $close.css('margin-left', '200px');
+        $modal.css({
+            top: 60,
+            left: 700
+        });
+        var acct_name = $('#fromlist option:selected').text();
+        var above_acct = $('#tolist:selected').text();
+        $(document).on('change', '#fromlist', function() {
+            acct_name = this.value;
+        });
+        $(document).on('change', '#tolist', function() {
+            above_acct = this.value;
+        });
+        $('#mvit').on('click', function() {
+            var ajaxdata = {mvfrom: acct_name, mvto: above_acct};
+            $.ajax({
+                url: '../edit/saveAcctEdits.php',
+                method: "GET",
+                data: ajaxdata,
+                dataType: "text",
+                success: function(results) {
+                    if (results === "OK") {
+                        modal.close()
+                        location.reload();
+                    } else {
+                        alert("Problem encountered moving account");
+                        modal.close();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    msg = "Problem encountered moving account: " +
+                        textStatus + "; Error: " + errorThrown;
+                    alert(msg);
+                    modal.close();
+                }
+            });
+        });
+        $close.on('click', function() {
+            modal.close();
+        });
+    }
+    function delacct() {
+        $('#delit').after($close);
+        $close.css('margin-left', '128px');
+        $modal.css({
+            top: 60,
+            left: 700
+        });
+        var subj_acct = $('#fromlist:selected').text();
+        $(document).on('change', '#fromlist', function() {
+            subj_acct = this.value;
+        });
+        $('#delit').on('click', function() {
+            var ajaxdata = {deletion: subj_acct};
+            $.ajax({
+                url: '../edit/saveAcctEdits.php',
+                method: "GET",
+                data: ajaxdata,
+                dataType: "text",
+                success: function(results) {
+                    if (results === "OK") {
+                        modal.close()
+                        location.reload();
+                    } else {
+                        alert("Problem encountered deleting account");
+                        modal.close();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    msg = "Problem encountered deleting account: " +
+                        textStatus + "; Error: " + errorThrown;
+                    alert(msg);
+                    modal.close();
+                }
+            })
+        });
+        $close.on('click', function() {
+            modal.close();
         });
     }
     
@@ -349,9 +517,12 @@ var modal = (function() {
                 nameit();
             } else if (modid === 'addacct') {
                 newacct();
-            } else {
-                modal.center();
-                $(window).on('resize', modal.center);
+            }  else if (modid === 'xfr') {
+                xfrfunds();
+            }  else if (modid === 'mvacct') {
+                mvacct();
+            }  else if (modid === 'delacct') {
+                delacct();
             }
         },
         close: function() {
