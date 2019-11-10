@@ -17,6 +17,7 @@ $file_root = "../data/bud" . $digits[2];
 $prev_root = "../data/bud" . $last_yr;
 $budget_data = $file_root . "_data.csv";
 $credit_data = $file_root . "_charges.csv";
+$expense_log = $file_root . "_log.csv";
 $prev_bud    = $prev_root . "data.csv";
 $prev_cred   = $prev_root . "_charges.csv";
 $month_names = array('January', 'February', 'March', 'April', 'May', 'June',

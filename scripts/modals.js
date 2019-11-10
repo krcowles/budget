@@ -208,7 +208,6 @@ var modal = (function() {
                 dataType: "text",
                 success: function(results) {
                    if (results == "OK") {
-                       alert("Good");
                        location.reload();
                    }
                 },
@@ -222,6 +221,94 @@ var modal = (function() {
         });
         $close.on('click', function () {
            modal.close;
+        });
+    }
+    function nameit() {
+        $modal.css({
+            top: 140,
+            left: 300
+        });
+        $('#doit').after($close);
+        $close.css('margin-left', '120px');
+        var acct_name = $('#selacct option:selected').text();
+        $(document).on('change', '#selacct', function() {
+            acct_name = this.value;
+        });
+        $newname = $('#newname');
+        var newname = "None";
+        $newname.on('change', function() {
+            newname = this.value;
+        });
+        $('#doit').on('click', function() {
+            var ajaxdata = {newname: newname, acct_name: acct_name};
+            $.ajax({
+                url: "../edit/saveAcctEdits.php",
+                method: "GET",
+                dataType: "text",
+                data: ajaxdata,
+                success: function(results) {
+                    if (results === "OK") {
+                        modal.close;
+                        location.reload();
+                    } else {
+                        alert("Problem renaming account");
+                        modal.close;
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    msg = "Problem encountered renaming account: " +
+                        textStatus + "; Error: " + errorThrown;
+                    alert(msg);
+                    modal.close;
+                }
+            });
+        });
+        $close.on('click', function () {
+            modal.close;
+         });
+    }
+    function newacct() {
+        $('#addit').after($close);
+        $modal.css({
+            top: 140,
+            left: 300
+        });
+        $close.css('margin-left', '170px');
+        var newacct = "None";
+        $newacct = $('#newacct');
+        var monthly = 0;
+        $monthly = $('#mo');
+        $newacct.on('change', function() {
+            newacct = this.value;
+        });
+        $monthly.on('change', function() {
+            monthly = this.value;
+        });
+        $('#addit').on('click', function() {
+            var ajaxdata = {acct_name: newacct, monthly: monthly};
+            $.ajax({
+                url: '../edit/saveAcctEdits.php',
+                method: "GET",
+                data: ajaxdata,
+                dataType: "text",
+                success: function(results) {
+                    if (results == "OK") {
+                        modal.close;
+                        location.reload();
+                    } else {
+                        alert("Problem encounted adding account");
+                        modal.close;
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    msg = "Problem encountered adding account: " +
+                        textStatus + "; Error: " + errorThrown;
+                    alert(msg);
+                }
+            })
+        });
+        $close.on('click', function() {
+            modal.close;
         });
     }
     
@@ -258,6 +345,10 @@ var modal = (function() {
                 autopay(settings.method, settings.acct_name, settings.row_no);
             } else if (modid === 'income') {
                 distribute();
+            } else if (modid === 'rename') {
+                nameit();
+            } else if (modid === 'addacct') {
+                newacct();
             } else {
                 modal.center();
                 $(window).on('resize', modal.center);

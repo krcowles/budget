@@ -148,10 +148,11 @@ require "budget_setup.php";
             </select>
         </div>
     </div>
-    <div id="obal">
-        <p>Your opening balance is: $ <span id="obalance"><?= $obal;?></span></p>
-    </div>
-
+    <!--
+        <div id="obal">
+            <p>Your opening balance is: $ <span id="obalance"><?= $obal;?></span></p>
+        </div>
+    -->
     <!-- This div holds all the modal formas -->
     <div id="allForms">
         <div id="box">
@@ -187,6 +188,21 @@ require "budget_setup.php";
             <br /><br />
             Enter income: $ <input id="incamt" type="text" /><br /><br />
             <button id="dist">Distribute</button>
+        </div>
+        <div id="rename">
+            <span id="asel">Select the account you wish to rename: </span>
+            Supply the new name: <input id="newname" type="text" /><br />
+            <button id="doit">Change Name</button>
+        </div>
+        <div id="addacct">
+            Enter the account information for the new addition to the budget:
+            <br /><br />New Account Name:<br />
+            <input id="newacct" type="text" /><br /><br />
+            Enter the monthly amount to be budgeted to this account:<br />
+            $ <input id="mo" type="text" /><br /><br />
+            Use account management tools to modify other features once created (e.g.
+            'Change Autopay', 'Move Funds', etc.)<br /><br />
+            <button id="addit">Add Account</button>
         </div>
     </div>
     <!-- after validation, place accordingly:

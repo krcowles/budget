@@ -122,7 +122,18 @@ $('#mgmt').on('change', function() {
             window.open("../edit/cardSetup.php", "_self");
             break;
         case "renameacct" :
+            $('#asel').after(acct_select_box);
+            var namer = $('#rename').detach();
+            modal.open({id: 'rename', width: '320px', height: '140px',
+            content: namer});
+            $('allForms').append(namer);
+            break;
         case "addacct" :
+            var adder = $('#addacct').detach();
+            modal.open({id: 'addacct', width: '360px', height: '346px',
+                content: adder});
+            $('#allForms').append(adder);
+            break;
         case "delacct" :
         case "mvacct" :
         default:

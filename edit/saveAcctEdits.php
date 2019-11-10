@@ -11,6 +11,7 @@
 require "../utilities/getBudgetData.php";
 
 $newname   = isset($_GET['newname']) ? filter_input(INPUT_GET, 'newname') : false;
+$newbud    = isset($_GET['monthly']) ? filter_input(INPUT_GET, 'monthly') : false;
 $acct_name = isset($_GET['acct_name']) ?
     filter_input(INPUT_GET, 'acct_name') : false;
 $edit_row  = isset($_GET['edit_row']) ? 
@@ -26,6 +27,10 @@ if ($amt && $chg_type) {
     $exptype = substr($chg_type, 0, 3);
     if ($exptype === "deb" || $exptype === 'non') {
         // record debit expense
+        $dhandle = fopen($expense_log, "w");
+        $entry = array($date, $amt, $payee, $acct_name);
+        fputcsv($dhandle, $entry);
+        fclose($dhandle);
     } elseif ($exptype === "car") {
         // record credit expense
         include "../utilities/getCrData.php";
@@ -40,6 +45,32 @@ if ($amt && $chg_type) {
         }
         fclose($handle);
     }
+}
+if ($newname && $acct_name) {
+    for ($m=0; $m<count($account_names); $m++) {
+        if ($account_names[$m] == $acct_name) {
+            $account_names[$m] = $newname;
+            break;
+        }
+    }
+}
+if ($newbud && $acct_name) {
+    // find Undistribute Accounts, and add before that
+    for ($n=0; $n<count($account_names); $n++) {
+        if ($account_names[$n] === 'Undistributed Funds') {
+            $newindx = $n;
+            break;
+        }
+    }
+    array_splice($account_names, $newindx, 0, $acct_name);
+    array_splice($budgets, $newindx, 0, $newbud);
+    array_splice($prev0, $newindx, 0, 0);
+    array_splice($prev1, $newindx, 0, 0);
+    array_splice($current,  $newindx, 0, 0);
+    array_splice($autopay, $newindx, 0, "");
+    array_splice($day, $newindx, 0, "");
+    array_splice($paid, $newindx, 0, "");
+    array_splice($income, $newindx, 0, 0);
 }
 
 // write budget data back out
