@@ -16,7 +16,7 @@ if ($datadir) {
     file_put_contents($user_dir,  $datadir);
 }
 require "../utilities/getBudgetData.php"; // produces $status
-require "../utilities/getCrData.php";     // echos issue if no chages
+require "../utilities/getCrData.php";     // echos issue if no charges
 
 // format the dollar amounts for the table:
 $dsign = '<span>$</span><span>';

@@ -104,26 +104,29 @@ if ($status=== "OK") {
                 $prev1[$recno] = $record[3];    
             }
             $current[$recno] = $record[4];
-            if (count($record) < 9) {
+            if (empty($record[6])) {
                 $autopay[$recno] = '';
                 $day[$recno] = '';
                 $paid[$recno] = '';
-                $income[$recno] = 0;
+                if (empty($record[8])) {
+                    $income[$recno] = '';
+                } else {
+                    $income[$recno] = $record[8];
+                }
             } else {
                 $autopay[$recno] = $record[5];
-                if (!empty($autopay[$recno])) {
-                    $day[$recno] = intval($record[6]);
-                    if ($rollover) {
-                        $paid[$recno] = "N";
-                    } else { 
-                        $paid[$recno] = $record[7];
-                    }
-                } else {
-                    $day[$recno] = '';
+                $day[$recno] = $record[6];
+                if (empty($paid[$recno])) {
                     $paid[$recno] = '';
-                }  
+                } else {
+                    $paid[$recno] = $record[8];
+                }
+                if (empty($record[8])) {
+                    $income[$recno] = '';
+                } else {
+                    $income[$recno] = $record[8];
+                }
             }
-            $income[$recno] = $record[8];
             $recno++;
         }
         fclose($handle);
