@@ -27,22 +27,22 @@ $income = []; // not displayed
 if ($get_past && !file_exists($prev_bud)) { 
     $status = "E1: No budget data exists for previous year";
     // Don't go further
-} else {
-    // if $get_past (file does exits), data will be retrieved and updated below
-    if (!$get_past) {
-        if (!file_exists($budget_data)) {
-            $status = "E2: No budget data has been created";
-        } else {
-            $handle = fopen($budget_data, "r");
-            if ($handle === false) {
-                $status = "E3: Budget data file could not be opened";
-            } else {
-                $headers = fgetcsv($handle);
-                $headers = cleanupExcel($headers);
-            }
-        } 
-    }
 }
+// if $get_past (file does exits), data will be retrieved and updated below
+if (!$get_past) {
+    if (!file_exists($budget_data)) {
+        $status = "E2: No budget data has been created";
+    } else {
+        $handle = fopen($budget_data, "r");
+        if ($handle === false) {
+            $status = "E3: Budget data file could not be opened";
+        } else {
+            $headers = fgetcsv($handle);
+            $headers = cleanupExcel($headers);
+        }
+    } 
+}
+
 // proceed if OK
 if ($status=== "OK") {
     $rollyear = false; // starting assumption: rollyear forces use of previous yr.
@@ -127,19 +127,19 @@ if ($status=== "OK") {
             $recno++;
         }
         fclose($handle);
+        // If this is a rollover, then the new budget data needs to be written out
+        if ($rollover || $rollyear) {
+            $handle = fopen($budget_data, "w");
+            fputcsv($handle, $headers);
+            for ($i=0; $i<count($account_names); $i++) {
+                $output = array($account_names[$i], $budgets[$i], $prev0[$i], $prev1[$i],
+                    $current[$i], $autopay[$io], $day[$i], $paid[$i], $income[$i]);
+                fputcsv($handle, $output);
+            }
+            fclose($handle);
+        }
     }
-} // END OF STATUS OK
-// If this is a rollover, then the new budget data needs to be written out
-if ($rollover || $rollyear) {
-    $handle = fopen($budget_data, "w");
-    fputcsv($handle, $headers);
-    for ($i=0; $i<count($account_names); $i++) {
-        $output = array($account_names[$i], $budgets[$i], $prev0[$i], $prev1[$i],
-            $current[$i], $autopay[$io], $day[$i], $paid[$i], $income[$i]);
-        fputcsv($handle, $output);
-    }
-    fclose($handle);
-}
+} // end of STATUS OK
 /** 
  * The module produces the following data:
  * [Note that if a rollover month or year, new data will be written to $budget_data]

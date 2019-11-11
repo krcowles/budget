@@ -20,6 +20,18 @@ var modal = (function() {
      * are called by the (public) modal.open function, based on the modal id
      * passed via settings.
      */
+    // modal function used to get user's password
+    function getpass(usrname) {
+        var logpos = $('#login').offset();
+        var logtop = logpos.top;
+        var logwd = logpos.left + $modal.width() + 30;
+        $modal.css({
+            top: logtop,
+            left: logwd
+        });
+        $('#moduser').val(usrname);
+        //document.getElementById("moduser").focus(); 
+    }
     // modal function executed when settings.id == 'expense'
     function payExpense() {
         $content.append($close);
@@ -502,7 +514,9 @@ var modal = (function() {
             var modal_box = $modal[0];
             dragElement(modal_box);
             // separate code for each form
-            if (modid === 'expense') {
+            if (modid === 'login') {
+                getpass(settings.usr);
+            } else if (modid === 'expense') {
                 payExpense();
             } else if (modid === 'deposit') {
                 makeDeposit();

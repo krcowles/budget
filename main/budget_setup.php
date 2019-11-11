@@ -10,6 +10,11 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license
  */
+$datadir = isset($_GET['dir']) ? filter_input(INPUT_GET, 'dir') : false;
+if ($datadir) {
+    $user_dir = "../main/current_dir.txt";
+    file_put_contents($user_dir,  $datadir);
+}
 require "../utilities/getBudgetData.php"; // produces $status
 require "../utilities/getCrData.php";     // echos issue if no chages
 
@@ -89,20 +94,19 @@ if ($crStatus === "OK") {
         $dat = number_format($crbalances[$n], 2, '.', ',');
         $crbalances[$n] = $dsign . $dat . '</span>';
     }
-    // if a rollover, update the ../data/oldsums.txt file
+    // if a rollover, update the oldsums.txt file (in user dir)
     if ($rollover || $rollyear) {
-        $txtfile = "../data/oldsums.txt";
-        $olddat = file($txtfile, FILE_IGNORE_NEW_LINES);
+        $olddat = file($oldsumstxt, FILE_IGNORE_NEW_LINES);
         for ($t=0; $t<$card_cnt; $t++) {
             $line = explode(",", $olddat[$t]); // $Line[0] is card name
             $line[1] = $line[2];
             $line[2] = $crbalances[$t];
-            $olddat[$t] = implode(",", $line);
+            $olddat[$t] = implode(",", $line) . PHP_EOL;
         }
-        file_put_contents($txtfile, $olddat);
+        file_put_contents($oldsumstxt, $olddat);
     }
     // update monthly balances by adding in credit charges
-    $oldsums = file("../data/oldsums.txt", FILE_IGNORE_NEW_LINES);
+    $oldsums = file($oldsumstxt, FILE_IGNORE_NEW_LINES);
     // there should be one entry per charge card:
     if (count($oldsums) !== $card_cnt) {
         echo "Mismatched current card data vs old card data";
@@ -129,31 +133,35 @@ if ($crStatus === "OK") {
     $bal1 = $dsign . number_format($bal1, 2, '.', ',') . '</span>';
     $bal2 = $dsign . number_format($bal2, 2, '.', ',') . '</span>';
     $bal3 = $dsign . number_format($bal3, 2, '.', ',') . '</span>';
-} else {
-    $status = $crStatus;
-}
-if ($status !== "OK") {
+} 
+if ($status !== "OK" || $crStatus !== "OK") {
     // Take appropriate action based on message
-    $ecode = intval(substr($status, 1, 2));
-    switch ($ecode) {
-    case 1: // previous year budget data file not present
-        break;
-    case 2: //budget data file not present
-        echo '<script type="text/javascript">alert("No budget has been created;\n' .
-            'You will be redirected to the budget-creation page");' .
-            'window.open("../edit/newBudget.html", "_self");</script>';
-        break;
-    case 3: // couldn't open $budget_data
-        echo '<script type="text/javascript">alert("Budget data file couln not' .
-            ' be opened:\nContact administrator");';
-        break;
-    case 4: // no error msg at this time
-        break;
-    case 5: // previous year budget data file could not be opened
-        break;
-    case 6: // credit data has yet to be entered (file exists)
-        break;
-    case 7: // credit data file could not be opened
-        break;
+    if ($status !== "OK") {  // treat these first, as more serious
+        $ecode = intval(substr($status, 1, 2));
+        switch ($ecode) {
+        case 1: // previous year budget data file not present
+            break;
+        case 2: //budget data file not present
+            echo '<script type="text/javascript">alert("No budget has been ' .
+                'created;\nYou will be redirected to the budget-creation page");' .
+                'window.open("../edit/newBudget.html", "_self");</script>';
+            break;
+        case 3: // couldn't open $budget_data
+            echo '<script type="text/javascript">alert("Budget data file couln not' .
+                ' be opened:\nContact administrator");';
+            break;
+        case 4: // no error msg at this time
+            break;
+        case 5: // previous year budget data file could not be opened
+            break;
+        }
+    } else {
+        $ecode = intval(substr($crSetatus, 1, 2));
+        switch ($ecode) {
+        case 6: // credit data has yet to be entered (file exists)
+            break;
+        case 7: // credit data file could not be opened
+            break;
+        }
     }
 }

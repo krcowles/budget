@@ -12,12 +12,15 @@ date_default_timezone_set('America/Denver');
 $date = date("m/d/Y");
 $digits = explode("/", $date);
 $last_yr = intval($digits[2] - 1);
+$udir = file_get_contents("../main/current_dir.txt");
+$userdir = "../data/" . $udir . "/";
 // DEFINITIONS:
-$file_root = "../data/bud" . $digits[2];
-$prev_root = "../data/bud" . $last_yr;
+$file_root = $userdir . "bud" . $digits[2];
+$prev_root = $userdir . "bud" . $last_yr;
 $budget_data = $file_root . "_data.csv";
 $credit_data = $file_root . "_charges.csv";
 $expense_log = $file_root . "_log.csv";
+$oldsumstxt  = $userdir . "oldsums.txt";
 $prev_bud    = $prev_root . "data.csv";
 $prev_cred   = $prev_root . "_charges.csv";
 $month_names = array('January', 'February', 'March', 'April', 'May', 'June',
