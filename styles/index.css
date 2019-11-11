@@ -4,21 +4,42 @@ img {
 }
 #login {
     position: absolute;
-    top: 160px;
-    left: 200px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: darkgreen;
-    border-style: outset;
-    font-size: 24px;
+    top: 130px;
+    left: 180px;
     padding: 6px;
-    background-color: rgb(231, 241, 220);
-    color: rgb(162, 27, 167);
+}
+#intro {
+    padding: 8px 8px 0px 8px;
+    font-size: 24px;
+    border-bottom: solid;
+    border-color: darkgreen;
+    border-width: 1px;
+    background-color: floralwhite;
+}
+#subtext {
+    position: relative;
+    top: -4px;
+    font-size: 18px;
+}
+#free {
+    font-size: 18px;
+    position: relative;
+    top: -4px;
+}
+#userbox {
+    padding: 8px;
+    background-color: floralwhite;
+    font-size: 20px;
 }
 #user, #upass {
     height: 22px;
     border-width: 1px;
     font-size: 14px;
+}
+#link {
+    position: relative;
+    left: 38px;
+    top: 4px;
 }
 #log_modal {
     display: none;

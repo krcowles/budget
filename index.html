@@ -14,22 +14,19 @@
 </head>
 
 <body>
-<div id="login">
-    <table>
-        <tr>
-            <td>Login:</td>
-            <td><input id="user" type="text" name="user" /></td>
-        </tr>
-        <tr>
-            <td>or</td>
-            <td style="float:right"><a href="admin/register.php" target="_self">Sign me up!</a></td>
-        </tr>
-    </table>
-</div>
 <div id="welcome">
     <img src="images/BudgetHome.jpg" alt="Home Page for Site: Flowers" />
 </div>
-<!-- password modal -->
+<div id="login">
+    <div id="intro">
+    <em>Welcome to Budgetizer</em><br />
+    <span id="subtext">A budget creation & management tool</span>
+    </div>
+    <div id="userbox">
+        <em><span id="free">This site is totally free!</span></em><br />
+        Login: &nbsp;<input id="user" type="text" name="user" /><br />
+        No login?&nbsp;&nbsp;&nbsp;<a id="signup" href="admin/register.php" 
+            target="_self">Sign me up!</a>
 <div id="log_modal">
     <form id="passform" method="POST" action="admin/userdat.php">
         <span id="modpass">Password: </span><input id="passin" type="password" name="passwd" />
