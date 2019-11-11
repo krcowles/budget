@@ -138,6 +138,7 @@ require "budget_setup.php";
             Account Management Tools:<br />
             <select id="mgmt">
                 <option value="none">Select From List:</option>
+                <option value="edaccts">Edit Budget Items</option>
                 <option value="charges">Edit Credit Charges</option>
                 <option value="apsetup">Setup/Change AutoPay</option>
                 <option value="cd_cards">Setup/Change Debit/Credit Info</option>

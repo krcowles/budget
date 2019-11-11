@@ -145,6 +145,9 @@ $('#movefunds').on('click', function() {
 $('#mgmt').on('change', function() {
     var tool = $('#mgmt option:selected').val();
     switch(tool) {
+        case "edaccts":
+            window.open("../edit/newBudget.html", "_self");
+            break;
         case "charges":
             window.open("../edit/enterCardData.php", "_self");
             break;

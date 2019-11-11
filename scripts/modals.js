@@ -106,7 +106,7 @@ var modal = (function() {
             modal.close();
         });
     }
-    // function executed when settings.id == 'edit_chg' (edit a Cr charge)
+    // modal function executed when settings.id == 'edit_chg'
     function editCredit(inputvals, locater, cardinfo, defobj) {
         $('#svmodal').after($close);
         $close.css('margin-left', '40px');
@@ -199,6 +199,7 @@ var modal = (function() {
             $modal.detach();
         });
     }
+    // modal function executed when settings.id == 'income'
     function distribute() {
         $('#dist').after($close);
         $close.css('margin-left', '150px');
@@ -234,6 +235,7 @@ var modal = (function() {
            modal.close();
         });
     }
+    // modal function executed when settings.id == 'rename'
     function nameit() {
         $modal.css({
             top: 140,
@@ -278,6 +280,7 @@ var modal = (function() {
             modal.close();
          });
     }
+    // modal function executed when settings.id == 'addacct'
     function newacct() {
         $('#addit').after($close);
         $modal.css({
@@ -322,6 +325,7 @@ var modal = (function() {
             modal.close();
         });
     }
+    // modal function executed when settings.id == 'deposit'
     function makeDeposit() {
         $('#depfunds').after($close);
         $close.css('margin-left', '22px');
@@ -362,6 +366,7 @@ var modal = (function() {
             modal.close();
         });
     }
+    // modal function executed when settings.id == 'xfr'
     function xfrfunds() {
         $('#transfer').after($close);
         $close.css('margin-left', '80px');
@@ -409,6 +414,7 @@ var modal = (function() {
             modal.close();
         });
     }
+    // modal function executed when settings.id == 'mvacct'
     function mvacct() {
         $('#mvit').after($close);
         $close.css('margin-left', '200px');
@@ -452,6 +458,7 @@ var modal = (function() {
             modal.close();
         });
     }
+    // modal function executed when settings.id == 'delacct'
     function delacct() {
         $('#delit').after($close);
         $close.css('margin-left', '128px');
@@ -459,7 +466,7 @@ var modal = (function() {
             top: 60,
             left: 700
         });
-        var subj_acct = $('#fromlist:selected').text();
+        var subj_acct = $('#fromlist option:selected').text();
         $(document).on('change', '#fromlist', function() {
             subj_acct = this.value;
         });
