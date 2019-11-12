@@ -30,7 +30,7 @@ var modal = (function() {
             left: logwd
         });
         $('#moduser').val(usrname);
-        //document.getElementById("moduser").focus(); 
+        document.getElementById("passin").focus(); 
     }
     // modal function executed when settings.id == 'expense'
     function payExpense() {

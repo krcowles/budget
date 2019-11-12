@@ -19,19 +19,21 @@
 </div>
 <div id="login">
     <div id="intro">
-    <em>Welcome to Budgetizer</em><br />
-    <span id="subtext">A budget creation & management tool</span>
+        <em>Welcome to Budgetizer</em><br />
+        <span id="subtext">A budget creation & management tool</span>
     </div>
     <div id="userbox">
         <em><span id="free">This site is totally free!</span></em><br />
         Login: &nbsp;<input id="user" type="text" name="user" /><br />
         No login?&nbsp;&nbsp;&nbsp;<a id="signup" href="admin/register.php" 
             target="_self">Sign me up!</a>
-<div id="log_modal">
-    <form id="passform" method="POST" action="admin/userdat.php">
-        <span id="modpass">Password: </span><input id="passin" type="password" name="passwd" />
-        <input id="moduser" type="hidden" name="user" value="" />
-    </form>
+    </div>
+    <div id="log_modal">
+        <form id="passform" method="POST" action="admin/userdat.php">
+            <span id="modpass">Password: </span><input id="passin" type="password" name="passwd" />
+            <input id="moduser" type="hidden" name="user" value="" />
+        </form>
+    </div>
 </div>
 
 <script src="scripts/jquery-1.12.1.js" type="text/javascript"></script>
