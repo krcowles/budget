@@ -32,7 +32,6 @@ require "budget_setup.php";
 </head>
 
 <body>
-    <div id="newbud"><?= $new_budget;?></div>
     <div id="chgaccts"><?= $cdcards;?></div>
     <div id="budget">
         <table id="roll3">

@@ -5,10 +5,6 @@ var dd = parseInt(String(today.getDate()).padStart(2, '0'));
 var mm = parseInt(String(today.getMonth() + 1).padStart(2, '0')); //January is 0!
 var yyyy = parseInt(today.getFullYear());
 
-// if no budget data:
-if (setup) {
-    window.open("../edit/newBudget.html", "_self");
-}
 // if no credit card data:
 if ($('#chgaccts').text() == '0') {
     var ans = confirm("There is no credit/debit card data\n" + 
@@ -20,6 +16,8 @@ if ($('#chgaccts').text() == '0') {
             "(Use 'Account Management Tools' to change");
         if (cc) {
             window.open("../edit/cardSetup.php?num=0", "_self");
+        } else {
+            window.open("../main/budget.php");
         }
     }
 }
@@ -155,7 +153,7 @@ $('#mgmt').on('change', function() {
             window.open("../edit/autopay.php", "_self");
             break;
         case "cd_cards":
-            window.open("../edit/cardSetup.php", "_self");
+            window.open("../edit/cardSetup.php?num=1", "_self");
             break;
         case "renameacct" :
             $('#asel').after(acct_select_box);

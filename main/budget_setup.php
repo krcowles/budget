@@ -75,6 +75,7 @@ if ($status === 'OK') {
 } // end of $status = OK
 
 // get Credit Card info: requires formatting for budget.php
+$cdcards = 1; // assumes one or more cards exist, if not, see Error Codes below
 if ($crStatus === "OK") {
     $card_indx = array('card1', 'card2', 'card3', 'card4');
     $crbalances = [];
@@ -147,7 +148,7 @@ if ($status !== "OK" || $crStatus !== "OK") {
                 'window.open("../edit/newBudget.html", "_self");</script>';
             break;
         case 3: // couldn't open $budget_data
-            echo '<script type="text/javascript">alert("Budget data file couln not' .
+            echo '<script type="text/javascript">alert("Budget data file could not' .
                 ' be opened:\nContact administrator");';
             break;
         case 4: // no error msg at this time
@@ -156,11 +157,12 @@ if ($status !== "OK" || $crStatus !== "OK") {
             break;
         }
     } else {
-        $ecode = intval(substr($crSetatus, 1, 2));
+        $ecode = intval(substr($crStatus, 1, 2));
         switch ($ecode) {
         case 6: // credit data has yet to be entered (file exists)
             break;
-        case 7: // credit data file could not be opened
+        case 7: // credit data file does not exist
+            $cdcards = 0;
             break;
         }
     }

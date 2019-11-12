@@ -26,7 +26,7 @@ $income = []; // not displayed
 // file checking:
 if ($get_past && !file_exists($prev_bud)) { 
     $status = "E1: No budget data exists for previous year";
-    // Don't go further
+    // this may be ok for new budgets formed in January of any year
 }
 // if $get_past (file does exits), data will be retrieved and updated below
 if (!$get_past) {
@@ -135,8 +135,9 @@ if ($status=== "OK") {
             $handle = fopen($budget_data, "w");
             fputcsv($handle, $headers);
             for ($i=0; $i<count($account_names); $i++) {
-                $output = array($account_names[$i], $budgets[$i], $prev0[$i], $prev1[$i],
-                    $current[$i], $autopay[$io], $day[$i], $paid[$i], $income[$i]);
+                $output = array($account_names[$i], $budgets[$i], $prev0[$i],
+                    $prev1[$i], $current[$i], $autopay[$io], $day[$i], $paid[$i],
+                    $income[$i]);
                 fputcsv($handle, $output);
             }
             fclose($handle);

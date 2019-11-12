@@ -10,7 +10,7 @@
  * @license No license to date
  */
 require_once "../utilities/timeSetup.php";
-require_once "budgetFunctions.php";
+require_once "../utilities/budgetFunctions.php";
 
 $crStatus = "OK";
 if (file_exists($credit_data)) {
