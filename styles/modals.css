@@ -77,3 +77,10 @@
     font-size: 14px;
     border-width: 1px;
 }
+#de, #pay, #namt {
+    height: 20px;
+    font-size: 16px;
+}
+.mod {
+    padding-top: 6px;
+}

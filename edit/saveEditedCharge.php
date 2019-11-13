@@ -1,6 +1,6 @@
 <?php
 /**
- * This module is invoked from the modal window on enterCardData.php when a 
+ * This module is invoked from the modal window on editCreditCharges.php when a 
  * single, existing charge is called up for edits. It returns status 'OK' if
  * all is well.
  * PHP Version 7.1
@@ -37,7 +37,7 @@ $charges[$changed_item][3] = filter_input(INPUT_GET, 'amount');
 $credit_charges[$card] = $charges;
 
 $handle = fopen($credit_data, "w");
-fputcsv($handle, $headers);
+fputcsv($handle, $crHeaders);
 for ($i=0; $i<$card_cnt; $i++) {
     if (count($credit_charges[$indx[$i]]) > 0) {
         foreach ($credit_charges[$indx[$i]] as $line) {

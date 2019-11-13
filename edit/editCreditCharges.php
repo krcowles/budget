@@ -9,13 +9,22 @@
  */
 require "../utilities/getCrData.php";
 require "../utilities/selectCrCards.php";
+require "../utilities/getBudgetData.php";
+
+$acct_sel = '<select class="acctsel" name="acctsel[]">';
+$acct_sel .= '<option value="" selected>Unspecified</option>';
+for ($j=0; $j<count($account_names); $j++) {
+    $acct_sel .= '<option value="' . $account_names[$j] . '">' .
+        $account_names[$j] . '</option>';
+}
+$acct_sel .= '</select>';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>Credit/Debit Card Setup</title>
+    <title>Edit Credit Card Charges</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="description"
         content="Rolling 4-month budget tracker" />
@@ -23,15 +32,16 @@ require "../utilities/selectCrCards.php";
     <meta name="robots" content="nofollow" />
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
     <link href="../styles/charges.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <style type="text/css">
         #return { margin-left: 40px; }
         #existing { display: none }
         .left { text-align: left }
         .right { text-align: right }
-        #item_modal { display: none; }
-        .itmname { width: 140px; }
+        .itmname { width: 140px; vertical-align:middle; }
         .modwidth { width: 200px; }
         .modin { width: 190px; }
+        #modalforms { display: none; }
     </style>
 </head>
 
@@ -80,7 +90,11 @@ require "../utilities/selectCrCards.php";
             <tbody>
                 <?php for($j=0; $j<count($card_data); $j++) : ?>
                 <tr>
-                    <td class="left chgto"><?= $card_data[$j][0];?></td>
+                    <!-- NOTE: no linefeed before $card_data, lest js read it! -->
+                    <td><span id="oc<?= $i;?>item<?= $j;?>"
+                        style="display:none;"><?= $card_data[$j][0];?></span>
+                        <?= $acct_sel;?>
+                    </td>
                     <td class="chgdate"><?= $card_data[$j][1];?></td>
                     <td class="left chgpayee"><?= $card_data[$j][2];?></td>
                     <td class="right chgamt"><?= $card_data[$j][3];?></td>
@@ -94,8 +108,9 @@ require "../utilities/selectCrCards.php";
     </div>
     <form id="form" action="saveNewCharges.php" method="POST">
         <div id="new">
-            <span class="BoldText">Enter New Charges Here (Up to 5 per Save)<br />
-            For</span> <?= $selectHtml;?><br />
+            <span class="NormalHeading">Enter New Charges Here (Up to 5 per Save)
+            For</span> <?= $selectHtml;?>
+                <span class="NormalHeading">Card Only</span><br />
             <table>
                 <thead>
                     <tr>
@@ -108,7 +123,7 @@ require "../utilities/selectCrCards.php";
                 <tbody>
                     <?php for ($k=0; $k<5; $k++) : ?>
                     <tr>
-                        <td><input type="text" name="newcharge[]" /></td>
+                        <td><?= $acct_sel;?></td>
                         <td><input type="text" name="newdate[]" /></td>
                         <td><input type="text" name="newpayee[]" /></td>
                         <td><input type="text" name="newamt[]" /></td>
@@ -119,40 +134,42 @@ require "../utilities/selectCrCards.php";
         </div>
     </form>
 </div>
+<div id="modalforms">
+    <div id="item_edit">
+        You may edit the content for the following item. When done editing,
+        click on "Save", or "Cancel" if no changes are desired.<br />
+        <button id="svmodal" style="margin-top:8px;">Save</button>
+        <table id="modtbl">
+            <tbody>
+                <tr>
+                    <td class="left itmname" ><span class="mod">Deduct 
+                        From:</span></td>
+                    <td><?= $acct_sel;?></td>
+                </tr>
+                <tr>
+                    <td class="left itmname"><span 
+                        class="mod">Date Entered:</span></td>
+                    <td class="modwidth"><input id="de" class="modin"
+                        type="text" /></td>
+                </tr>
+                <tr>
+                    <td class="left itmname"><span class="mod">Payee:</span></td>
+                    <td class="modwidth"><input id="pay" class="modin"
+                        type="text" /></td>
+                </tr>
+                <tr>
+                    <td class="left itmname"><span class="mod">Amount:</span></td>
+                    <td class="modwidth"><input id="namt" class="modin"
+                        type="text" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/modals.js" type="text/javascript"></script>
-<script src="../scripts/enterCardData.js" type="text/javascript"></script>
-
-<div id="item_modal">
-    You may edit the content for the following item. When done editing,
-    click on "Save", or "Cancel" if no changes are desired.<br />
-    <button id="svmodal" style="margin-top:8px;">Save</button>
-    <table>
-        <tbody>
-            <tr>
-                <td class="left itmname" >Charge to:</td>
-                <td class="modwidth"><input id="chg" class="modin"
-                    type="text" value="" /></td>
-            </tr>
-            <tr>
-                <td class="left itmname">Date Entered:</td>
-                <td class="modwidth"><input id="de" class="modin"
-                    type="text" /></td>
-            </tr>
-            <tr>
-                <td class="left itmname">Payee:</td>
-                <td class="modwidth"><input id="pay" class="modin"
-                    type="text" /></td>
-            </tr>
-            <tr>
-                <td class="left itmname">Amount:</td>
-                <td class="modwidth"><input id="namt" class="modin"
-                    type="text" /></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<script src="../scripts/editCreditCharges.js" type="text/javascript"></script>
 
 </body>
 

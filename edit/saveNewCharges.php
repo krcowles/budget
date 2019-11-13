@@ -11,7 +11,7 @@
 require "../utilities/getCrData.php";
 
 $charge_card = filter_input(INPUT_POST, 'card_sel');
-$newcharges = $_POST['newcharge'];
+$newcharges = $_POST['acctsel'];
 $newdates   = $_POST['newdate'];
 $newpayees  = $_POST['newpayee'];
 $newamts    = $_POST['newamt'];
@@ -24,7 +24,7 @@ for ($k=0; $k<$card_cnt; $k++) {
         break;
     }
 }
-$card_indx = $indices[$indx];
+$card_indx = $indices[$indx]; // array selector in $credit_charges (getCrData.php)
 // add new information
 for ($j=0; $j<count($newcharges); $j++) {
     if (!empty($newcharges[$j])) {
@@ -39,7 +39,7 @@ for ($j=0; $j<count($newcharges); $j++) {
     }
 }
 $handle = fopen($credit_data, "w");
-fputcsv($handle, $headers);
+fputcsv($handle, $crHeaders);
 for ($i=0; $i<$card_cnt; $i++) {
     if (count($credit_charges[$indices[$i]]) > 0) {
         foreach ($credit_charges[$indices[$i]] as $line) {
@@ -51,4 +51,4 @@ for ($i=0; $i<$card_cnt; $i++) {
     }  
 }
 fclose($handle);
-header("Location: enterCardData.php");
+header("Location: editCreditCharges.php");

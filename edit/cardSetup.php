@@ -20,7 +20,8 @@ if ($create === '0') {
     $nodata = array('None');
     fputcsv($cdfile, $nodata);
     fclose($cdfile);
-    header("Location: budget.php");
+    $main = "../main/budget.php";
+    header("Location: {$main}");
 } else {
     $card_rec = 0;
     $oldcard = [];
@@ -42,8 +43,8 @@ if ($create === '0') {
             }
         }
         fclose($cdfile);
-        $new_cards = 6 - $card_rec;
     } // otherwise a new file will be created by this form
+    $new_cards = 6 - $card_rec;
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -66,6 +67,7 @@ if ($create === '0') {
 
 <body>
 
+<p id="card_cnt" style="display:none;"><?= $card_rec;?></p>
 <form style="margin-left:24px;" id="cards"
         action="saveCrDrInfo.php" method="POST">
     <span class="NormalHeading">Edit/Enter up to six credit and/or debit
@@ -88,7 +90,7 @@ if ($create === '0') {
         <?php for ($j=$card_rec; $j<6; $j++) : ?>
             Unique Card Name: <input type="text" name="card[]"
                 value="" />&nbsp;&nbsp;Card Type:
-            <select name="ctype[]">
+            <select id="sel<?= $j;?>" name="ctype[]">
                 <option value="Credit">Credit Card</option>
                 <option value="Debit">Debit Card</option>
             </select><br /><br />
@@ -101,21 +103,7 @@ if ($create === '0') {
             Tracking home page)</span>
 </form>
 
-<script type="text/javascript">
-    var no_of_cards = parseInt(<?= $card_rec;?>);
-    if (no_of_cards > 0) {
-        for(var i=0; i<no_of_cards; i++) {
-            var selid = "#sel" + i;
-            var cdtype = "#type" + i;
-            var content = $(cdtype).text();
-            $(selid).val(content);
-        }
-    }
-    $('#done').on('click', function(ev) {
-        ev.preventDefault();
-        window.open("../main/budget.php", "_self");
-    });
-</script>
+<script src="../scripts/cardSetup.js" type="text/javascript"></script>
 
 </body>
 

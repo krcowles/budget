@@ -23,7 +23,7 @@ var modal = (function() {
     // modal function used to get user's password
     function getpass(usrname) {
         var logpos = $('#login').offset();
-        var logtop = logpos.top;
+        var logtop = logpos.top - 4;
         var logwd = logpos.left + $modal.width() + 30;
         $modal.css({
             top: logtop,
@@ -116,15 +116,33 @@ var modal = (function() {
             top: pos.top,
             left: 560
         });
-        var $chargeto = $content.find('input[id=chg]');
+        // place the goods into the modal:
+        var $row = $content.find('table[id=modtbl] tr').eq(0);
+        var $dropdown = $row.find('td').eq(1).children().eq(0);
+        $dropdown.val(inputvals[0]);
         var $date = $content.find('input[id=de]');
         var $payee = $content.find('input[id=pay]');
         var $amt = $content.find('input[id=namt]');
-        $chargeto.attr('value', inputvals[0]);
         $date.attr('value', inputvals[1]);
         $payee.attr('value', inputvals[2]);
         $amt.attr('value', inputvals[3]);
-
+        var ajaxsel = inputvals[0];
+        var ajaxdte = inputvals[1];
+        var ajaxpay = inputvals[2];
+        var ajaxamt = inputvals[3];
+        // look for value changes
+        $('#modsel').on('change', function() {
+            ajaxsel = $('#modsel option:selected').val();
+        });
+        $date.on('change', function() {
+            ajaxdte = $(this).val();
+        });
+        $payee.on('change', function() {
+            ajaxpay = $(this).val();
+        });
+        $amt.on('change', function() {
+            ajaxamt = $(this).val()
+        });
         $close.on('click', function() {
             locater.children().each(function() {
                 $(this).css('background-color', 'white');
@@ -134,13 +152,8 @@ var modal = (function() {
             modal.close();
         });
         $('#svmodal').on('click', function() {
-            // get all changes
-            var charge = $chargeto.val();
-            var date   = $date.val();
-            var payee  = $payee.val();
-            var amt    = $amt.val();
-            var ajaxdata = {cno: cardinfo.cdno, item: cardinfo.itemno, chg: charge,
-                date: date, payee: payee, amount: amt}
+            var ajaxdata = {cno: cardinfo.cdno, item: cardinfo.itemno, 
+                chg: ajaxsel, date: ajaxdte, payee: ajaxpay, amount: ajaxamt}
             $.ajax({
                 url: 'saveEditedCharge.php',
                 data: ajaxdata,
@@ -151,6 +164,7 @@ var modal = (function() {
                         alert("Error saving edited charge:\n" + results);
                     } else {
                         $close.click();
+                        location.reload();
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {

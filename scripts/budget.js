@@ -139,7 +139,9 @@ $('#movefunds').on('click', function() {
     $('#allForms').append(xfr);
 });
 
-// go to page corresponding to selected tool
+/*
+ * Redirects from selection in "Account Management Tools"
+ */
 $('#mgmt').on('change', function() {
     var tool = $('#mgmt option:selected').val();
     switch(tool) {
@@ -147,7 +149,7 @@ $('#mgmt').on('change', function() {
             window.open("../edit/newBudget.html", "_self");
             break;
         case "charges":
-            window.open("../edit/enterCardData.php", "_self");
+            window.open("../edit/editCreditCharges.php", "_self");
             break;
         case "apsetup":
             window.open("../edit/autopay.php", "_self");
