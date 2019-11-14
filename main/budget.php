@@ -48,7 +48,7 @@ require "budget_setup.php";
             </colgroup>
             <thead>
                 <tr>
-                    <th>Account Name</th>
+                    <th>Budget Acct Name</th>
                     <th class="heavy-right">Budget</th>
                     <th><?= $month[0];?></th>
                     <th><?= $month[1];?></th>
