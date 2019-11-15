@@ -45,6 +45,12 @@ if ($create === '0') {
         fclose($cdfile);
     } // otherwise a new file will be created by this form
     $new_cards = 6 - $card_rec;
+    if (!file_exists($oldsumstxt)) {
+        // First time, create one...
+        
+    } else {
+        // Make sure it jives with current credit cards
+    }
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

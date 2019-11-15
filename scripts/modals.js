@@ -31,6 +31,11 @@ var modal = (function() {
         });
         $('#moduser').val(usrname);
         document.getElementById("passin").focus(); 
+        $('form').submit(function(ev) {
+            ev.preventDefault();
+            passwd = $('#passin').val();
+            validateUser(usrname, passwd);
+        });
     }
     // modal function executed when settings.id == 'expense'
     function payExpense() {

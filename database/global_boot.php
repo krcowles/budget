@@ -12,21 +12,14 @@
  * @author  Tom Sandberg and Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+// setup exception handler and database pdo
 $root = $_SERVER['DOCUMENT_ROOT'];
-
-//require "../vendor/autoload.php";
-require "settings.php";
-require "../utilities/budgetFunctions.php";
-require "../admin/set_sql_mode.php";
-/*
-require "../admin/mode_settings.php"; // Capture this code version's settings
-require $root . "/../settings.php";
-
-// Function definitions:
-require "../admin/adminFunctions.php";
-require "../build/buildFunctions.php";
-require "../php/errFunctions.php";
-*/
+$lead = getcwd() === $root ? '' : '../'; // boot may be called from $root
+require $lead . "vendor/autoload.php";
+require $lead . "database/settings.php";
+require $lead . "database/sql_modes.php";
+// general utility
+require_once $lead . "utilities/budgetFunctions.php";
 
 // PHP site recommends following value for future expansion of E_ALL
 error_reporting(-1);  // 2147483647 is also suggested on PHP site, both work
@@ -50,13 +43,14 @@ if ($appMode === 'production') {
     //ini_set('display_startup_errors', 1);  // should never be 'on' in production
     //ini_set('log_errors', 1);
 
-/*
-    // In effect, the default UNCAUGHT error/exception handler
-    $whoops = new \Whoops\Run;
-    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-    $whoops->register();
-*/
+// In effect, the default UNCAUGHT error/exception handler
+$whoops = new \Whoops\Run;
+$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+$whoops->register();
+
 //}
+
+
 
 // Establish session database connection
 $options = array(
@@ -66,7 +60,6 @@ $options = array(
     PDO::MYSQL_ATTR_INIT_COMMAND => $mode_str,
 );
 $dsn = sprintf(
-    'mysql:host=%s;dbname=%s;charset=%s', 'sql204.epizy.com', 
-    'epiz_2477663_BudgetData', 'UTF8'
+    'mysql:host=%s;dbname=%s;charset=%s', $HOSTNAME, $DATABASE, $CHARSET
 );
-$pdo = new PDO($dsn, 'epiz_2477663', 'qkakFybzKN9X', $options);
+$pdo = new PDO($dsn, $USERNAME, $PASSWORD, $options);

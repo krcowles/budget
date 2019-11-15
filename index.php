@@ -1,3 +1,16 @@
+<?php
+/**
+ * This page simply allows a user to login and proceed to the budget tracking
+ * program.
+ * PHP Version 7.1
+ * 
+ * @package Budget
+ * @author  Ken Cowles <krcowles29@gmail.com>
+ * @license No license to date
+ */
+require "database/global_boot.php";
+require "admin/getLogin.php";
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -25,20 +38,25 @@
     <div id="userbox">
         <em><span id="free">This site is totally free!</span></em><br />
         Login: &nbsp;<input id="user" type="text" name="user" /><br />
-        No login?&nbsp;&nbsp;&nbsp;<a id="signup" href="admin/register.php" 
+        No login?&nbsp;&nbsp;&nbsp;<a id="signup" href="admin/registration.php" 
             target="_self">Sign me up!</a>
     </div>
     <div id="log_modal">
-        <form id="passform" method="POST" action="admin/userdat.php">
-            <span id="modpass">Password: </span><input id="passin" type="password" name="passwd" />
+        <form id="passform" method="POST" action="#">
+            <span id="modpass">Password: </span>
+            <input id="passin" type="password" name="passwd" />
             <input id="moduser" type="hidden" name="user" value="" />
         </form>
     </div>
 </div>
+<div>
+    <p id="usrcookie" style="display:none"><?= $uname;?></p>
+    <p id="cookiestatus" style="display:none"><?= $cstat?></p>
+</div>
 
 <script src="scripts/jquery-1.12.1.js" type="text/javascript"></script>
-<script src="scripts/index.js" type="text/javascript"></script>
 <script src="scripts/modals.js" type="text/javascript"></script>
+<script src="scripts/getLogin.js" type="text/javascript"></script>
 
 </body>
 </html>

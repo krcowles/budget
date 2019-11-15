@@ -115,17 +115,20 @@ $.each(rawaccts, function (i, item) {
   */
 $('#expense').on('click', function() {
     var exp_form = $('#box').detach();
-    modal.open({id: 'expense', width: '342px', height: '220px', content: exp_form});
+    modal.open({id: 'expense', width: '342px', height: '220px', 
+        content: exp_form});
     $('#allForms').append(exp_form);
 });
 $('#income').on('click', function() {
     var income_form = $('#distinc').detach();
-    modal.open({id: 'income', height: '280px', width: '320px', content: income_form});
+    modal.open({id: 'income', height: '280px', width: '320px',
+        content: income_form});
     $('#allForms').append(income_form);
 });
 $('#deposit').on('click', function() {
     var funds = $('#dep').detach();
-    modal.open({id: 'deposit', height: '170px', width: '220px', content: funds});
+    modal.open({id: 'deposit', height: '170px', width: '220px',
+        content: funds});
     $('#allForms').append(funds);
 });
 $('#recon').on('click', function() {
@@ -135,7 +138,8 @@ $('#movefunds').on('click', function() {
     $('#xfrfrom').after(acct_select_box);
     $('#xfrto').after(secondary);
     var xfr = $('#xfr').detach();
-    modal.open({id: 'xfr', height: '234px', width: '240px', content: xfr});
+    modal.open({id: 'xfr', height: '234px', width: '240px',
+        content: xfr});
     $('#allForms').append(xfr);
 });
 
@@ -161,7 +165,7 @@ $('#mgmt').on('change', function() {
             $('#asel').after(acct_select_box);
             var namer = $('#rename').detach();
             modal.open({id: 'rename', width: '320px', height: '140px',
-            content: namer});
+                content: namer});
             $('allForms').append(namer);
             break;
         case "addacct" :
@@ -173,14 +177,16 @@ $('#mgmt').on('change', function() {
         case "delacct" :
             $('#delacct').after($fromlist);
             var deleter = $('#del').detach();
-            modal.open({id: 'delacct', height: '186px', width: '340px', content: deleter});
+            modal.open({id: 'delacct', height: '186px', width: '340px',
+                content: deleter});
             $('#allForms').append(adder);
             break;
         case "mvacct" :
             $('#mvfrom').after($fromlist);
             $('#mvto').after($tolist);
             var mover = $('#mv').detach();
-            modal.open({id: 'mvacct', height: '240px', width: '340px', content: mover});
+            modal.open({id: 'mvacct', height: '240px', width: '340px',
+                content: mover});
             $('#allForms').append(mover);
     }
     $("#mgmt option[value='none']").prop('selected', true);

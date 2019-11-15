@@ -1,0 +1,110 @@
+// are cookies enabled on this browser?
+var cookies = navigator.cookieEnabled ? true : false;
+// the next two variables are provided complements getLogin.php
+var login_name = document.getElementById('usrcookie').textContent;
+// if a login_name appears, cookies are already enabled:
+var user_cookie_state = document.getElementById('cookiestatus').textContent;
+// defaults to 'OK' unless a registered user is logged in with expiration issues
+if (cookies) {
+    if (user_cookie_state === 'NONE') {
+        alert("No user registration has been located for " + login_name);
+        login_name = 'none';
+    } else if (user_cookie_state === 'EXPIRED') {
+        var ans = confirm("Your password has expired\n" + 
+            "Would you like to renew?");
+        if (ans) {
+            renewPassword(login_name, 'renew', 'expired');
+        } else {
+            renewPassword(login_name, 'norenew', 'expired');
+            login_name = 'none';
+        }
+    } else if (user_cookie_state === 'RENEW') {
+        var ans = confirm("Your password is about to expire\n" + 
+            "Would you like to renew?");
+        if (ans) {
+            renewPassword(login_name, 'renew', 'valid');
+        } else {
+            renewPassword(login_name, 'norenew', 'valid');
+        }
+    } else if (user_cookie_state === 'MULTIPLE') {
+        alert("There are multiple accounts associated with " + login_name +
+            "\nPlease contact the site master");
+        login_name = 'none';
+    }
+    if (login_name !== 'none') {
+        window.open("../main/budget.php", "_self");
+    } else {
+        $('#user').on('change', function() {
+            var user = $(this).val();
+            var logdata = $('#log_modal').detach();
+            modal.open({id: 'login', height: '62px', width: '280px',
+                content: logdata, usr: user});
+        });
+    }
+} else {  // cookies disabled
+    alert("Cookies are disabled on this browser:\n" +
+        "You will not be able login, register, or edit/create hikes.\n" +
+        "Please enable cookies to overcome this limitation");
+}
+
+// login authentication
+function validateUser(usr_name, usr_pass) {
+    $.ajax( {
+        url: "admin/authenticate.php",
+        method: "POST",
+        data: {'usr_name': usr_name, 'usr_pass': usr_pass},
+        dataType: "text",
+        success: function(srchResults) {
+            var status = srchResults;
+            if (status.indexOf('LOCATED') >= 0) {
+                alert("You are logged in");
+                window.open("../main/budget.php");
+            } else if (status.indexOf('RENEW') >=0) {
+                // in this case, the old cookie has been set pending renewal
+                var renew = confirm("Your password is about to expire\n" + 
+                    "Would you like to renew?");
+                if (renew) {
+                    renewPassword(usr_name, 'renew', 'valid');
+                } else {
+                    renewPassword(usr_name, 'norenew', 'valid');
+                }
+            } else if (status.indexOf('EXPIRED') >= 0) {
+                var renew = confirm("Your password has expired\n" +
+                    "Would you like to renew?");
+                if (renew) {
+                    renewPassword(usr_name, 'renew', 'expired');
+                } else {
+                    renewPassword(usr_name, 'norenew', 'expired');
+                }
+            } else if (status.indexOf('BADPASSWD') >= 0) {
+                var msg = "The password you entered does not match " +
+                    "your registered password;\nPlease try again";
+                alert(msg);
+                $('#passin').val('');
+                textResult =  "bad_password";
+            } else { // no such user in USERS table
+                var msg = "Your registration info cannot be uniquely located:\n" +
+                    "Please click on the 'Sign me up!' link to register";
+                alert(msg);
+                $('#user').val('');
+                $('#passin').val('');
+                textResult =  "no_user";
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("Error encountered in validation: " +
+                textStatus + "; Error: " + errorThrown);
+        }
+    });
+}
+// for renewing password/cookie
+function renewPassword(user, update, status) {
+    if (update === 'renew') {
+       window.open('../admin/renew.php?user=' + user, '_self');
+    } else {
+        // if still valid, refresh will display login, otherwise do nothing
+        if (status === 'valid') {
+            window.open('../main/budget.php', '_self');
+        }
+    }
+}

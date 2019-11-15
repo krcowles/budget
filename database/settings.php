@@ -21,7 +21,7 @@ if ($devhost) { // LOCAL MACHINE
     
 } else { // WEB SERVER
     $HOSTNAME = "sql204.epizy.com";
-    $PASSWORD = "qkakFybzKN9X";
     $USERNAME = "epiz_2477663";
+    $PASSWORD = "qkakFybzKN9X";
     $DATABASE = "epiz_2477663_BudgetData";
 }

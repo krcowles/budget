@@ -1,8 +1,10 @@
 <?php
 /**
  * This is an effort to replace the broken and impossible to maintain (thanks
- * to Microsoft) 'budget.xlsm'. The latest insult is that Excel 2016 has no
- * Userform support!!!
+ * to Microsoft) 'budget.xlsm'. The latest insult is that MacOS Excel 2016 has
+ * no Userform support!! This program allows a user to create, setup, and manage
+ * his/her own personal budget online. Management tools are presented on the home 
+ * page ('main/budget.php').
  * PHP Version 7.1
  * 
  * @package Budget
@@ -37,11 +39,11 @@ require "budget_setup.php";
         <table id="roll3">
             <colgroup>
                 <col style="width:200px" />
-                <col style="width:108px" />
-                <col style="width:140px" />
-                <col style="width:140px" />
-                <col style="width:140px" />
-                <col style="width:110px" />
+                <col style="width:86px" />
+                <col style="width:100px" />
+                <col style="width:100px" />
+                <col style="width:100px" />
+                <col style="width:10s0px" />
                 <col style="width:64px" />
                 <col style="width:10px" class="noshow" />
                 <col style="width:16px" class="noshow" />
@@ -148,11 +150,6 @@ require "budget_setup.php";
             </select>
         </div>
     </div>
-    <!--
-        <div id="obal">
-            <p>Your opening balance is: $ <span id="obalance"><?= $obal;?></span></p>
-        </div>
-    -->
     <!-- This div holds all the modal formas -->
     <div id="allForms">
         <div id="box">
