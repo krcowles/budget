@@ -16,13 +16,8 @@ $password  = password_hash($user_pass, PASSWORD_DEFAULT);
 $today = getdate();
 $month = $today['mon'];
 $day = $today['mday'];
-if ($month > 6) {
-    $year = $today['year'] + 1;
-    $month -= 6;
-} else {
-    $year = $today['year'];
-    $month += 6;
-}
+$year = intval($today['year']);
+$year++;
 $exp_date = $year . "-" . $month . "-" . $day;
 $email     = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 if (!$email) {
@@ -38,11 +33,11 @@ if ($submitter == 'create') {
         ":pass_exp" => $exp_date)
     );
 } else { // update user
-    $updateuser = "UPDATE USERS SET `email`=?,`username`=?, `password`=?, " .
+    $updateuser = "UPDATE Users SET `password`=?, " .
         "`passwd_expire`=? WHERE username=?;";
     $update = $pdo->prepare($updateuser);
     $update->execute(
-        array($email,$username, $password, $exp_date)
+        array($password, $exp_date, $username)
     );
 }
 // always try to set a user cookie:

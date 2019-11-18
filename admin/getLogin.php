@@ -16,7 +16,7 @@ $uname = 'none';
 $cstat = 'OK'; // changed below based on user cookie expiration data
 if ($regusr) { // if no cookie, $uname remains 'none'
     $uname = $_COOKIE['epiz'];
-    $expirationReq = "SELECT passwd_expire FROM USERS WHERE username = ?;";
+    $expirationReq = "SELECT passwd_expire FROM Users WHERE username = ?;";
     $userExpire = $pdo->prepare($expirationReq);
     $userExpire->execute([$uname]);
     $rowcnt = $userExpire->rowCount();

@@ -3,13 +3,12 @@
  * To get it going...
  * PHP Version 7.1
  * 
- * @package Global_Boot
+ * @package Budget
  * @author  Tom Sandberg and Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "../database/test.php";
 // ------- CREATE  -------
-/*
+
 $req = <<<EOR
 CREATE TABLE `Users` (
     `uid` int(10) NOT NULL AUTO_INCREMENT,
@@ -19,7 +18,7 @@ CREATE TABLE `Users` (
     PRIMARY KEY (`uid`)
 );
 EOR;
-*/
+
 // ------- SHOW TABLE STRUCTURE -------
 /*
 $req = "SHOW CREATE TABLE Users";
@@ -30,10 +29,12 @@ $req = 'INSERT INTO Users VALUES (1, "krcowles29@gmail.com", "kenc", "quatzl"),'
        '(2, "abqgal13@icloud.com", "karen", "jimmy");';
 */
 // ------- ADD COLUMN(S) -------
+/*
 $req = <<<QUERY
 ALTER TABLE Users
 ADD COLUMN `passwd_expire` DATE NULL AFTER `password`;
 QUERY;
+*/
 $results = $pdo->query($req);
 
 ?>

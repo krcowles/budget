@@ -33,8 +33,9 @@ require "../database/global_boot.php";
 <h2 class="NormalHeading">
     Welcome to the Budgetizer Website!
 </h2>
-<p class="SmallHeading">Please fill out the form below to become a (free) registered user. Only the
-    minimum information is required to secure your login.</p>
+<p class="SmallHeading">Please fill out the form below to become a (free) 
+    registered user. Only the minimum information is required to secure your login.
+</p>
 <form id="form" method="POST" action="#">
 <fieldset>
     <legend>Required Information</legend>

@@ -1,3 +1,4 @@
+// timestamp: 7:00PM 11/17/2019
 // are cookies enabled on this browser?
 var cookies = navigator.cookieEnabled ? true : false;
 // the next two variables are provided complements getLogin.php
@@ -8,7 +9,6 @@ var user_cookie_state = document.getElementById('cookiestatus').textContent;
 if (cookies) {
     if (user_cookie_state === 'NONE') {
         alert("No user registration has been located for " + login_name);
-        login_name = 'none';
     } else if (user_cookie_state === 'EXPIRED') {
         var ans = confirm("Your password has expired\n" + 
             "Would you like to renew?");
@@ -16,7 +16,6 @@ if (cookies) {
             renewPassword(login_name, 'renew', 'expired');
         } else {
             renewPassword(login_name, 'norenew', 'expired');
-            login_name = 'none';
         }
     } else if (user_cookie_state === 'RENEW') {
         var ans = confirm("Your password is about to expire\n" + 
@@ -29,21 +28,21 @@ if (cookies) {
     } else if (user_cookie_state === 'MULTIPLE') {
         alert("There are multiple accounts associated with " + login_name +
             "\nPlease contact the site master");
-        login_name = 'none';
-    }
-    if (login_name !== 'none') {
-        window.open("../main/budget.php", "_self");
-    } else {
-        $('#user').on('change', function() {
-            var user = $(this).val();
-            var logdata = $('#log_modal').detach();
-            modal.open({id: 'login', height: '62px', width: '280px',
-                content: logdata, usr: user});
-        });
-    }
+    } else if (user_cookie_state === 'OK') {
+        if (login_name !== 'none') {
+            window.open("main/budget.php", "_self");
+        } else { // login process
+            $('#user').on('change', function() {
+                var user = $(this).val();
+                var logdata = $('#log_modal').detach();
+                modal.open({id: 'login', height: '62px', width: '280px',
+                    content: logdata, usr: user});
+            });
+        }
+    } 
 } else {  // cookies disabled
     alert("Cookies are disabled on this browser:\n" +
-        "You will not be able login, register, or edit/create hikes.\n" +
+        "You will not be able to login or register for this site.\n" +
         "Please enable cookies to overcome this limitation");
 }
 
@@ -58,7 +57,7 @@ function validateUser(usr_name, usr_pass) {
             var status = srchResults;
             if (status.indexOf('LOCATED') >= 0) {
                 alert("You are logged in");
-                window.open("../main/budget.php");
+                window.open("main/budget.php", "_self");
             } else if (status.indexOf('RENEW') >=0) {
                 // in this case, the old cookie has been set pending renewal
                 var renew = confirm("Your password is about to expire\n" + 
@@ -100,11 +99,11 @@ function validateUser(usr_name, usr_pass) {
 // for renewing password/cookie
 function renewPassword(user, update, status) {
     if (update === 'renew') {
-       window.open('../admin/renew.php?user=' + user, '_self');
+       window.open('admin/renew.php?user=' + user, '_self');
     } else {
         // if still valid, refresh will display login, otherwise do nothing
         if (status === 'valid') {
-            window.open('../main/budget.php', '_self');
+            window.open('main/budget.php', '_self');
         }
     }
 }

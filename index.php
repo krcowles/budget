@@ -1,13 +1,15 @@
 <?php
 /**
  * This page simply allows a user to login and proceed to the budget tracking
- * program.
+ * program. If user cookies are enabled and previous registration has occurred,
+ * this page will be by-passed and the user redirected to main/budget.php.
  * PHP Version 7.1
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+require "admin/onetimeSetup.php";
 require "database/global_boot.php";
 require "admin/getLogin.php";
 ?>

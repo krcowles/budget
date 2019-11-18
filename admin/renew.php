@@ -4,20 +4,11 @@
  * has opted to do so.
  * PHP Version 7.1
  * 
- * @package Main
- * @author  Tom Sandberg and Ken Cowles <krcowles29@gmail.com>
+ * @package Budget
+ * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-session_start();
-require "../database/global_boot.php";
 $user  = filter_input(INPUT_GET, 'user');
-$here = getcwd();
-
-$usr_req = "SELECT * FROM Users WHERE username = :usr;";
-$dbdata = $pdo->prepare($usr_req);
-$dbdata->execute(['usr' => $user]);
-$userdata = $dbdata->fetch(PDO::FETCH_ASSOC);
-$id = $userdata['userid'];
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
@@ -28,7 +19,8 @@ $id = $userdata['userid'];
     <meta name="author" content="Tom Sandberg and Ken Cowles" />
     <meta name="robots" content="nofollow" />
     <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
-    <link href="../style/standards.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/registration.css" type="text/css" rel="stylesheet" />
     <style type="text/css">
         body { margin: 0px;}
         #formsubmit {
@@ -53,9 +45,11 @@ $id = $userdata['userid'];
 <body>
 
 <div id="container">
-<p class="SmallHeading">Please update your password/p>
+<p class="SmallHeading">Please update your password</p>
+
 <form id="form" method="POST" action="create_user.php">
 <input type="hidden" name="submitter" value="renew" />
+<input type="hidden" name="username" value="<?= $user;?>" />
 <fieldset>
     <legend>Password Information</legend>
     <p id="pnote">Note: Passwords must be at least 8 characters long and 
@@ -82,6 +76,6 @@ $id = $userdata['userid'];
 <button id="formsubmit">Submit New Password</button>
 </form>
 </div>   <!-- end of container -->
-<script src="renew.js"></script>
+<script src="../scripts/renew.js"></script>
 </body>
 </html>
