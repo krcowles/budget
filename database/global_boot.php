@@ -63,4 +63,8 @@ $options = array(
 );
 $format = 'mysql:host=%s;dbname=%s';
 $dsn = sprintf($format, $HOSTNAME, $DATABASE);
-$pdo = new PDO($dsn, $USERNAME, $PASSWORD); // most basic form
+try {
+    $pdo = new PDO($dsn, $USERNAME, $PASSWORD); // most basic form
+} catch (PDOException $e) {
+    throw new Exception($e->getMessage(), (int)$e->getCode());
+}

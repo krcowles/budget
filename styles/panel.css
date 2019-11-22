@@ -1,0 +1,75 @@
+#panel {
+    display: inline-block;
+    width: 100%;
+}
+#navbar {
+    background-color: #004d00;
+    height: 48px;
+}
+/* <ul> has  default padding-left of 40px */
+#allMenus {
+    margin: 0;
+    height: 64px;
+    padding-left: 12px;
+}
+.menu-main {
+    display: inline-block;
+    margin-left: 32px;
+    margin-right: 8px;
+    height: 30px;
+}
+#expense {
+    margin-left: 16px;
+}
+.menu-item {
+    display: inline-block;
+    color: #fff5e6;
+    height: 30px;
+}
+.menu-text {
+    position: relative;
+    top: 5px;
+}
+.menu-open {
+    display: inline-block;
+    position: relative;
+    top: 8px;
+    left: 8px;
+    margin-right: 8px;
+    width: 0;
+    max-height: 8px;
+    border-top: 8px    solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid blanchedalmond;
+}
+.menu-close {
+    display: inline-block;
+    position: relative;
+    top: 5px;
+    left: 2px;
+    width: 0;
+    max-height: 8px;
+    border-left: 8px  solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid orange;
+}
+.menu-default {
+    display: none;
+}
+.menu-active {
+    display: block;
+    position: absolute;
+    top: 60px;
+    z-index: 1000;
+    font-size: 12px;
+}
+.menus {
+    position: relative;
+    top: -8px;
+}
+.subs {
+    width: 160px;
+}
+#expense, #moinc, #otd, #schedap, #movefnds, #recon {
+    cursor: pointer;
+}

@@ -1,32 +1,15 @@
 .noshow, #chgaccts {
     display: none;
 }
-#bttns {
-    float: left;
-    margin-left: 32px;
-    margin-top: 40px;
-}
 button {
     margin-bottom: 32px;
-}
-#obal {
-    clear: both;
-    font-size: 18px;
-    margin-left: 16px;
-    position: relative;
-    top: 12px;
-}
-#obalance {
-    margin: 0px;
-    color: brown;
-    padding-top: 4px;
 }
 table:not(#modal_table) {
     float: left;
     margin-left: 16px;
 }
 /* <div> containing modal window content */
-#box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv {
+#box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv, #cdadd {
     display: none;
 }
 .tdht {
@@ -47,4 +30,14 @@ input[id^=payee] {
     border-width: 1px;
     font-size: 14px;
     margin-top: 6px;
+}
+#xframt {
+    margin-bottom: 6px;
+}
+#xfrto {
+    position: relative;
+    top: -10px;
+}
+#cdprops {
+    margin-bottom: 8px;
 }

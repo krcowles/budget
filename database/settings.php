@@ -17,11 +17,11 @@ if ($devhost) { // LOCAL MACHINE
     $HOSTNAME = "127.0.0.1";
     $USERNAME = "root";
     $PASSWORD = "root";
-    $DATABASE = "epiz_24776673_BudgetData";
+    $DATABASE = "epiz_2477663_BudgetData"; // omitted "7" in epiz_name locally
     
-} else { // WEB SERVER: Note the mistyped db name during creation:
+} else {
     $HOSTNAME = "sql204.epizy.com";
     $PASSWORD = "qkakFybzKN9X";
     $USERNAME = "epiz_24776673";
-    $DATABASE = "epiz_24776673_BudgdetData";
+    $DATABASE = "epiz_24776673_BudgdetData"; // mistyped db name during creation:
 }

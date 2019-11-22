@@ -15,8 +15,10 @@ if ($datadir) {
     $user_dir = "../main/current_dir.txt";
     file_put_contents($user_dir,  $datadir);
 }
+//require_once "../database/global_boot.php";
 require "../utilities/getBudgetData.php"; // produces $status
 require "../utilities/getCrData.php";     // echos issue if no charges
+//require "../admin/onetimeSetup.php";
 
 // format the dollar amounts for the table:
 $dsign = '<span>$</span><span>';

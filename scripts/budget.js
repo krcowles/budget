@@ -67,85 +67,7 @@ if (ap_candidates) {
     });
 }
 
-// account listing in select box
-var acct_list = [];
-var acct_select_box = '<select id="selacct">\n';
-var secondary = '<select id="second">\n';
-var tempacct = '<option value="Temporary Accounts" disabled>Temporary Accounts</option>\n';
-$('.acct').each(function() {
-var aval = $(this).text();
-acct_list.push(aval);
-if (aval === "Temporary Accounts") {
-    acct_select_box += tempacct;
-    secondary += tempacct;
-} else {
-    acct_select_box += '<option value="' + aval + '">' + aval + '</option>\n';
-    secondary += '<option value="' + aval + '">' + aval + '</option>\n';
-}
-});
-acct_select_box += '</select><br />';
-secondary += '</select><br />';
-$('#modal_accts').after(acct_select_box);
-var rawaccts = [];
-for (var t=0; t<acct_list.length; t++) {
-    if (acct_list[t] == 'Undistributed Funds') {
-        break;
-    } else {
-        rawaccts.push(acct_list[t]);
-    }
-}
-var $fromlist = $('<select id="fromlist"></select>');
-var $tolist   = $('<select id="tolist"></select');
-// allow selecting only items prior to 'Undistributed Funds'
-$.each(rawaccts, function (i, item) {
-    $fromlist.append($('<option>', { 
-        value: item,
-        text : item
-    }));
-});
-$.each(rawaccts, function (i, item) {
-    $tolist.append($('<option>', { 
-        value: item,
-        text : item
-    }));
-});
- 
- /**
-  * Button redirects
-  */
-$('#expense').on('click', function() {
-    var exp_form = $('#box').detach();
-    modal.open({id: 'expense', width: '342px', height: '220px', 
-        content: exp_form});
-    $('#allForms').append(exp_form);
-});
-$('#income').on('click', function() {
-    var income_form = $('#distinc').detach();
-    modal.open({id: 'income', height: '280px', width: '320px',
-        content: income_form});
-    $('#allForms').append(income_form);
-});
-$('#deposit').on('click', function() {
-    var funds = $('#dep').detach();
-    modal.open({id: 'deposit', height: '170px', width: '220px',
-        content: funds});
-    $('#allForms').append(funds);
-});
-$('#recon').on('click', function() {
-    window.open("../utilities/reconcile.php", "_self");
-});
-$('#movefunds').on('click', function() {
-    $('#xfrfrom').after(acct_select_box);
-    $('#xfrto').after(secondary);
-    var xfr = $('#xfr').detach();
-    modal.open({id: 'xfr', height: '234px', width: '240px',
-        content: xfr});
-    $('#allForms').append(xfr);
-});
-
 /*
- * Redirects from selection in "Account Management Tools"
- */
 $('#mgmt').on('change', function() {
     var tool = $('#mgmt option:selected').val();
     switch(tool) {
@@ -168,12 +90,6 @@ $('#mgmt').on('change', function() {
                 content: namer});
             $('allForms').append(namer);
             break;
-        case "addacct" :
-            var adder = $('#addacct').detach();
-            modal.open({id: 'addacct', width: '360px', height: '346px',
-                content: adder});
-                $('#allForms').append(adder);
-            break;
         case "delacct" :
             $('#delacct').after($fromlist);
             var deleter = $('#del').detach();
@@ -191,5 +107,5 @@ $('#mgmt').on('change', function() {
     }
     $("#mgmt option[value='none']").prop('selected', true);
 });
-
+*/
 }); // end page loaded

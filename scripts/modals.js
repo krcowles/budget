@@ -37,16 +37,38 @@ var modal = (function() {
             validateUser(usrname, passwd);
         });
     }
+    // general purpose function to execute ajax on input arguments
+    function executeScript(url, ajaxdata, errtype, deferred) {
+            var msgtxt = "Problem encountered " + errtype;
+            $.ajax({
+                url: url,
+                method: "GET",
+                data: ajaxdata,
+                dataType: "text",
+                success: function(results) {
+                    if (results === "OK") {
+                        deferred.resolve();
+                        modal.close()
+                        location.reload();
+                    } else {
+                        deferred.resolve();
+                        alert(msgtxt);
+                        modal.close();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    deferred.resolve();
+                    msg = msgtxt + ":\n" + textStatus + "; Error: " + errorThrown;
+                    alert(msg);
+                    modal.close();
+                }
+            });
+    }
     // modal function executed when settings.id == 'expense'
-    function payExpense() {
+    function payExpense(deferred) {
         $content.append($close);
         $close.css('margin-left', '216px');
         $close.text("Cancel");
-        var locate = $('#expense').offset();
-        $modal.css({
-            top: locate.top + 40,
-            left: locate.left - 100
-        });
         // id the options present in the <select> box
         var opts = [];
         var selbox = document.getElementById('selacct');
@@ -86,28 +108,10 @@ var modal = (function() {
         $('#pay').on('click', function() {
             var ajaxdata = {acct_name: acctname, edit_row: editrow, 
                 chg_type: chargeto, amt: amount, payto: payee};
-            $.ajax({
-                url: "../edit/saveAcctEdits.php",
-                data: ajaxdata,
-                dataType: "text",
-                method: "GET",
-                success: function(results) {
-                    if (results == "OK") {
-                        modal.close();
-                        location.reload();
-                    } else {
-                        alert("Problem encountered executing payment");
-                    }
-                    
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    var msg = "Problem encountered; Code: " + errorThrown +
-                        "; " + txtStatus;
-                    alert(msg);
-                }
-            });
+            executeScript('../edit/saveAcctEdits.php', ajaxdata, 'making payment', deferred);
         });
         $close.on('click', function() {
+            deferred.resolve();
             modal.close();
         });
     }
@@ -219,13 +223,9 @@ var modal = (function() {
         });
     }
     // modal function executed when settings.id == 'income'
-    function distribute() {
+    function distribute(deferred) {
         $('#dist').after($close);
         $close.css('margin-left', '150px');
-        $modal.css({
-            top: 60,
-            left: 200
-        });
         var funds = 0;
         $funds = $('#incamt').on('change', function() {
             funds = this.value;
@@ -239,10 +239,12 @@ var modal = (function() {
                 dataType: "text",
                 success: function(results) {
                    if (results == "OK") {
+                       deferred.resolve();
                        location.reload();
                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
+                    deferred.resolve();
                     var msg = "Problem encountered distributing income:" +
                      " Error " + errorThrown + "; " + textStatus;
                     alert(msg);
@@ -251,7 +253,8 @@ var modal = (function() {
             modal.close();
         });
         $close.on('click', function () {
-           modal.close();
+            deferred.resolve();
+            modal.close();
         });
     }
     // modal function executed when settings.id == 'rename'
@@ -300,12 +303,8 @@ var modal = (function() {
          });
     }
     // modal function executed when settings.id == 'addacct'
-    function newacct() {
+    function newacct(deferred) {
         $('#addit').after($close);
-        $modal.css({
-            top: 140,
-            left: 300
-        });
         $close.css('margin-left', '170px');
         var newacct = "None";
         $newacct = $('#newacct');
@@ -326,10 +325,12 @@ var modal = (function() {
                 dataType: "text",
                 success: function(results) {
                     if (results == "OK") {
+                        deferred.resolve();
                         modal.close();
                         location.reload();
                     } else {
                         alert("Problem encounted adding account");
+                        deferred.resolve();
                         modal.close();
                     }
                 },
@@ -337,21 +338,19 @@ var modal = (function() {
                     msg = "Problem encountered adding account: " +
                         textStatus + "; Error: " + errorThrown;
                     alert(msg);
+                    deferred.resolve();
                 }
-            })
+            });
         });
         $close.on('click', function() {
+            deferred.resolve();
             modal.close();
         });
     }
     // modal function executed when settings.id == 'deposit'
-    function makeDeposit() {
+    function makeDeposit(deferred) {
         $('#depfunds').after($close);
         $close.css('margin-left', '22px');
-        $modal.css({
-            top: 140,
-            left: 300
-        });
         var deposit_funds = 0;
         var $deposit = $('#depo');
         $deposit.on('change', function() {
@@ -366,14 +365,17 @@ var modal = (function() {
                 data: ajaxdata,
                 success: function(results) {
                     if (results === "OK") {
+                        deferred.resolve();
                         modal.close();
                         location.reload();
                     } else {
+                        deferred.resolve();
                         alert("Problem encountered making deposit");
                         modal.close();
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
+                    deferred.resolve();
                     msg = "Problem encountered making deposit: " +
                         textStatus + "; Error: " + errorThrown;
                     alert(msg);
@@ -382,17 +384,16 @@ var modal = (function() {
             });
         });
         $close.on('click', function() {
+            deferred.resolve();
             modal.close();
         });
     }
     // modal function executed when settings.id == 'xfr'
-    function xfrfunds() {
+    function xfrfunds(from, to, deferred) {
+        $('#xfrfrom').append(from);
+        $('#xfrto').append(to);
         $('#transfer').after($close);
         $close.css('margin-left', '80px');
-        $modal.css({
-            top: 60,
-            left: 700
-        });
         var acct_name = $('#selacct option:selected').text();
         var to_acct = $('#second option:selected').text();
         var xframt = 0;
@@ -414,14 +415,17 @@ var modal = (function() {
                 method: "GET",
                 success: function(results) {
                     if (results === "OK") {
+                        deferred.resolve();
                         modal.close();
                         location.reload();
                     } else {
+                        deferred.resolve();
                         alert("Problem encountered transferring funds");
                         modal.close();
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
+                    deferred.resolve();
                     msg = "Problem encountered making deposit: " +
                         textStatus + "; Error: " + errorThrown;
                     alert(msg);
@@ -430,6 +434,7 @@ var modal = (function() {
             });
         });
         $close.on('click', function() {
+            deferred.resolve();
             modal.close();
         });
     }
@@ -517,6 +522,26 @@ var modal = (function() {
             modal.close();
         });
     }
+    function addcard(deferred) {
+        $('#newcd').after($close);
+        $close.css('margin-left', '100px');
+        var newcard = '';
+        var newtype = $('#cdprops option:selected').text();
+        $(document).on('change', '#cdprops', function() {
+            newtype = this.value;
+        });
+        $('#cda').on('change', function() {
+            newcard = this.value;
+        });
+        $('#newcd').on('click', function() {
+            var ajaxdata = {cdnme: newcard, cdtyp: newtype};
+            executeScript('../edit/cardEdits.php', ajaxdata, 'adding new card', deferred);
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
     
     // public methods
     return {
@@ -535,7 +560,9 @@ var modal = (function() {
                 width: settings.width || auto,
                 height: settings.height || auto,
                 border: '2px solid',
-                padding: '8px'
+                padding: '8px',
+                top: 140,
+                left: 640
             }).appendTo('body');
             var modal_box = $modal[0];
             dragElement(modal_box);
@@ -543,26 +570,28 @@ var modal = (function() {
             if (modid === 'login') {
                 getpass(settings.usr);
             } else if (modid === 'expense') {
-                payExpense();
+                payExpense(settings.deferred);
             } else if (modid === 'deposit') {
-                makeDeposit();
+                makeDeposit(settings.deferred);
             } else if (modid === 'edit_chg') {
                 editCredit(settings.ivals, settings.chgitem, 
                         settings.chgid, settings.def);
             } else if (modid === 'autopay') {
                 autopay(settings.method, settings.acct_name, settings.row_no);
             } else if (modid === 'income') {
-                distribute();
+                distribute(settings.deferred);
             } else if (modid === 'rename') {
                 nameit();
             } else if (modid === 'addacct') {
-                newacct();
-            }  else if (modid === 'xfr') {
-                xfrfunds();
-            }  else if (modid === 'mvacct') {
+                newacct(settings.deferred);
+            } else if (modid === 'xfr') {
+                xfrfunds(settings.from, settings.to, settings.deferred);
+            } else if (modid === 'mvacct') {
                 mvacct();
-            }  else if (modid === 'delacct') {
+            } else if (modid === 'delacct') {
                 delacct();
+            } else if (modid === 'addcd') {
+                addcard(settings.deferred);
             }
         },
         close: function() {

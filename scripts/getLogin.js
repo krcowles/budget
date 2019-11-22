@@ -30,7 +30,8 @@ if (cookies) {
             "\nPlease contact the site master");
     } else if (user_cookie_state === 'OK') {
         if (login_name !== 'none') {
-            window.open("main/budget.php", "_self");
+            var homepg = "main/displayBudget.php?user=" + login_name;
+            window.open(homepg, "_self");
         } else { // login process
             $('#user').on('change', function() {
                 var user = $(this).val();
@@ -57,7 +58,8 @@ function validateUser(usr_name, usr_pass) {
             var status = srchResults;
             if (status.indexOf('LOCATED') >= 0) {
                 alert("You are logged in");
-                window.open("main/budget.php", "_self");
+                var homepg = "main/displayBudget.php?user=" + usr_name;
+                window.open(homepg, "_self");
             } else if (status.indexOf('RENEW') >=0) {
                 // in this case, the old cookie has been set pending renewal
                 var renew = confirm("Your password is about to expire\n" + 
@@ -103,7 +105,8 @@ function renewPassword(user, update, status) {
     } else {
         // if still valid, refresh will display login, otherwise do nothing
         if (status === 'valid') {
-            window.open('main/budget.php', '_self');
+            var homepg = "main/displayBudget.php?user=" + user;
+            window.open(homepg, '_self');
         }
     }
 }

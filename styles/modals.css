@@ -38,6 +38,8 @@
 }
 #pay {
     margin-bottom: 0px;
+    height: 26px;
+    font-size: 16px;
 }
 #payee {
     height: 18px;
@@ -77,10 +79,13 @@
     font-size: 14px;
     border-width: 1px;
 }
-#de, #pay, #namt {
+#de, #namt, #strt {
     height: 20px;
     font-size: 16px;
 }
 .mod {
     padding-top: 6px;
+}
+#cda {
+    margin-bottom: 6px;
 }

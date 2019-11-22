@@ -7,48 +7,34 @@
  * @author  Tom Sandberg and Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-// ------- CREATE  -------
-
-$req = <<<EOR
-CREATE TABLE `Users` (
-    `uid` int(10) NOT NULL AUTO_INCREMENT,
-    `email` varchar(60) NOT NULL,
-    `username` varchar(40) NOT NULL,
-    `password` varchar(100) NOT NULL,
-    PRIMARY KEY (`uid`)
-);
-EOR;
-
-// ------- SHOW TABLE STRUCTURE -------
 /*
-$req = "SHOW CREATE TABLE Users";
+for ($i=0; $i<count($account_names); $i++) {
+    $pos = $i + 1;
+    $data = "INSERT INTO Budgets (`user`,`budname`,`budpos`,`status`,`budamt`)" .
+        "VALUES ('krc'," . "'" . $account_names[$i] . "',$pos,'A'," .
+        "$budgets[$i]);";
+    try {
+        $pdo->query($data);
+    } catch (PDOException $e) {
+        echo $e->getMessage() . "; " . (int)$e->getCode();
+    }
+}
+
+for ($j=0; $j<count($cards); $j++) {
+    $cdat = "INSERT INTO Cards (`user`,`cdname`,`type`) VALUES (" .
+        "'krc','" . $cards[$j] . "','Credit');";
+    $pdo->query($cdat);
+}
 */
-// ------- INSERT DATA INTO TABLE ------
 /*
-$req = 'INSERT INTO Users VALUES (1, "krcowles29@gmail.com", "kenc", "quatzl"),' .
-       '(2, "abqgal13@icloud.com", "karen", "jimmy");';
+$lead = "INSERT INTO Charges (`user`,`method`,`expdate`,`expamt`,`payee`,`recon`) ";
+$d1 = "VALUES ('krc','Credit','2019-01-10',24.12,'Fred','N');";
+$d2 = "VALUES ('krc','Credit','2019-04-04',16.55,'Timbob Potato','N');";
+$d3 = "VALUES ('krc','Check','2019-07-10',194,'Sweetpea','N');";
+$d4 = "VALUES ('krc','Credit','2019-10-10',86.44,'Nobody I know','N');";
+$d5 = "VALUES ('krc','Debit','2019-11-24',1.02,'Clyde C Beatty','N');";
+//$pdo->query($lead . $d2);
+$pdo->query($lead . $d3);
+$pdo->query($lead . $d4);
+$pdo->query($lead . $d5);
 */
-// ------- ADD COLUMN(S) -------
-/*
-$req = <<<QUERY
-ALTER TABLE Users
-ADD COLUMN `passwd_expire` DATE NULL AFTER `password`;
-QUERY;
-*/
-$results = $pdo->query($req);
-
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>Global Test</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="description"
-        content="Rolling 3-month budget tracker" />
-    <meta name="author" content="Ken Cowles" />
-    <meta name="robots" content="nofollow" />
-</head>
-
-<body>
