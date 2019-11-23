@@ -14,36 +14,52 @@
 </head>
 
 <body>
-<div id="page">
-     <span class="NormalHeading">Note: If you make changes,
-         make sure to 'Save All' before 'Done'</span><br /><br />
-    <button id="save">Save All</button> (Changes and New Data)
-    <span id="done"><button>Done</button> (Return to Budget Tracking)</span><br /><br />
-    <div id="old">
-        <span class="NormalHeading">This is the data you have currently entered:</span>
-        <br /><br />
+<div id="intro">
+    <p id="ready" class="LargeHeading">You're Ready To Start!</h2>
+    <h2>
+        Take these three simple steps, in order, to get going:
+    </h2>
+    <div id="one" class="steps">Create the basic budget</div>
+        <div id="budget">
+            <span class="NormalHeading">Note: If you make changes,
+                make sure to 'Save All' before 'Done'</span><br /><br />
+            <button id="save">Save All</button> (Changes and New Data)
+            <span id="done"><button>Done</button> (Return to Budget Tracking)</span><br /><br />
+            <div id="old">
+                <span class="NormalHeading">This is the data you have currently entered:</span>
+                <br /><br />
+            </div>
+            <div id="new">
+                <span class="NormalHeading">Enter your new account information below.</span><br />
+                Note: When you select "Save All", the data you entered will be saved, and
+                the page will be refreshed with your entered data with room for more entries.
+                <br /><br />
+                <form id="form" action="saveAcctData.php" method="POST">
+                    Budget Item: <input class="acctname" type="text" name="acctname[]" />
+                    Monthly Budget: <input class="bud" type="text" name="bud[]"/>
+                    Current value: <input class="bal" type="text" name="bal[]" />
+                    <br /><br />
+                    Budget Item: <input class="acctname" type="text" name="acctname[]" />
+                    Monthly Budget: <input class="bud" type="text" name="bud[]"/>
+                    Current value: <input class="bal" type="text" name="bal[]" />
+                    <br /><br />
+                    Budget Item: <input class="acctname" type="text" name="acctname[]" />
+                    Monthly Budget: <input class="bud" type="text" name="bud[]"/>
+                    Current value: <input class="bal" type="text" name="bal[]" />
+                    <br /><br />
+                </form>
+            </div>
+        </div>
+    <div id="two" class="steps">Add Credit/Debit Cards
+        <div id="cards"></div>
     </div>
-    <div id="new">
-        <span class="NormalHeading">Enter your new account information below.</span><br />
-        Note: When you select "Save All", the data you entered will be saved, and
-        the page will be refreshed with your entered data with room for more entries.
-        <br /><br />
-        <form id="form" action="saveAcctData.php" method="POST">
-            Budget Item: <input class="acctname" type="text" name="acctname[]" />
-            Monthly Budget: <input class="bud" type="text" name="bud[]"/>
-            Current value: <input class="bal" type="text" name="bal[]" />
-            <br /><br />
-            Budget Item: <input class="acctname" type="text" name="acctname[]" />
-            Monthly Budget: <input class="bud" type="text" name="bud[]"/>
-            Current value: <input class="bal" type="text" name="bal[]" />
-            <br /><br />
-            Budget Item: <input class="acctname" type="text" name="acctname[]" />
-            Monthly Budget: <input class="bud" type="text" name="bud[]"/>
-            Current value: <input class="bal" type="text" name="bal[]" />
-            <br /><br />
-        </form>
+    <div id="three" class="steps">Enter Current Expenses
+        <div id="expenses"></div>
     </div>
 </div>
+
+
+
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/newBudget.js" type="text/javascript"></script>
 

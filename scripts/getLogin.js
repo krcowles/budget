@@ -30,6 +30,7 @@ if (cookies) {
             "\nPlease contact the site master");
     } else if (user_cookie_state === 'OK') {
         if (login_name !== 'none') {
+            //alert("OK");
             var homepg = "main/displayBudget.php?user=" + login_name;
             window.open(homepg, "_self");
         } else { // login process

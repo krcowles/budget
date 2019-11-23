@@ -11,7 +11,12 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license
  */
-require "budget_setup.php";
+$user = isset($_GET['user']) ? filter_input(INPUT_GET, 'user') : false;
+if ($user) {
+    include "budgetSetup.php";
+} else {
+    echo "There has been no legitimate login";
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -176,6 +181,23 @@ require "budget_setup.php";
             Enter income: $ <input id="incamt" type="text" /><br /><br />
             <button id="dist">Distribute</button>
         </div>
+        <!-- one-time deposit -->
+        <div id="dep">
+            Enter the amount to be deposited (it will be placed in 'Undistributed
+            Funds')<br />
+            $ <input type="text" id="depo" /><br /><br />
+            <button id="depfunds">Deposit Funds</option>
+        </div>
+        <!-- transfer funds -->
+        <div id="xfr">
+            Transfer the following amount:<br />$ <input type="text" 
+                id="xframt" /><br />
+            <span id="xfrfrom">Take from:</span><br />
+            <span id="xfrto">Place in: </span>
+            <button id="transfer">Transfer</button>
+        </div>
+        <div id="auto">
+        </div>
         <!-- rename account -->
         <div id="rename">
             <span id="asel">Select the account you wish to rename: </span>
@@ -192,21 +214,6 @@ require "budget_setup.php";
             Use account management tools to modify other features once created (e.g.
             'Change Autopay', 'Move Funds', etc.)<br /><br />
             <button id="addit">Add Account</button>
-        </div>
-        <!-- one-time deposit -->
-        <div id="dep">
-            Enter the amount to be deposited (it will be placed in 'Undistributed
-            Funds')<br />
-            $ <input type="text" id="depo" /><br /><br />
-            <button id="depfunds">Deposit Funds</option>
-        </div>
-        <!-- transfer funds -->
-        <div id="xfr">
-            Transfer the following amount:<br />$ <input type="text" 
-                id="xframt" /><br />
-            <span id="xfrfrom">Take from:</span><br />
-            <span id="xfrto">Place in: </span>
-            <button id="transfer">Transfer</button>
         </div>
         <!-- move account -->
         <div id="mv">

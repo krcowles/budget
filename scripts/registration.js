@@ -56,7 +56,8 @@ function validateEmail(subjectEmail){
                     "Server returned status " + this.status);
             }
         }
-        window.open('../main/budget.php', '_self');
+        var homepg = "../main/displayBudget.php?user=" + usr;
+        window.open(homepg, '_self');
     }
     xhr.onerror = function() {
         alert("The request failed: registration did not occur\n" +

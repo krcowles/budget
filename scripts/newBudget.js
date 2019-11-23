@@ -1,5 +1,17 @@
 $(function() {
 
+// accordion panels
+$('#one').on('click', function() {
+    $('#budget').toggle();
+});
+$('#two').on('click', function() {
+    $('#cards').toggle();
+});
+$('#three').on('click', function() {
+    $('#expenses').toggle();
+});
+
+// form submittal
 $('#save').on('click', function() {
     $('#form').submit();
 });
