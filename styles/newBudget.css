@@ -4,6 +4,12 @@
 #ready {
     margin-top: 12px;
 }
+#done {
+    height: 32px;
+    font-size: 18px;
+    position: relative;
+    left: 120px;
+}
 .steps {
     background-color: #004a00;
     color: #fff5e6;
@@ -11,24 +17,40 @@
     padding: 12px;
     font-size: 20px;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 #budget, #cards, #expenses {
     display: none;
 }
-#page {
-    margin-left: 16px;
+.note {
+    margin-bottom: 8px;
 }
-#old {
-    display: none;
+#selnote {
+    position: relative;
+    top: 7px;
+}
+#save {
+    margin-top: 4px;
 }
 #new {
     position: relative;
-    top: 24px;
+    top: 10px;
 }
-.acctname, .bud, .bal {
+#buditems {
+    margin-top: 8px;
+}
+#form {
+    margin-top: 8px;
+}
+#entered, #centered {
+    position: relative;
+    top: -8px;
+}
+.acctname, .bud, .bal, .ocname {
     height: 18px;
     font-size: 14px;
+    padding-top: 4px;
+    padding-left: 4px;
 }
 .acctname {
     width: 180px;
@@ -39,11 +61,10 @@
 .bal {
     width: 100px;
 }
-#done {
-    position: relative;
-    left: 120px;
-}
 textarea {
     height: 22px;
     font-size: 16px;
+}
+input[type=checkbox] {
+    transform: scale(1.6);
 }

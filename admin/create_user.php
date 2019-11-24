@@ -47,5 +47,6 @@ setcookie("epiz", $username, $expire, "/");
 if ($submitter == 'create') {
     echo "DONE";
 } else {
-    header("Location: ../main/budget.php");
+    $newbud = "../edit/newBudget.php?new=y&user=" . $username;
+    header("Location: {$newbud}");
 }
