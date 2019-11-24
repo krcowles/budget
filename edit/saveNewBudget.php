@@ -1,7 +1,8 @@
 <?php
 /**
- * This script saves all entries on the new budget into the 'Budgets' table.
- * It then returns to the newBudget.html page with current data.
+ * This script saves all #budget entries into the 'Budgets' table.
+ * It collects any changes made to existing data, and inserts new data.
+ * It then returns to the newBudget.php page.
  * PHP Version 7.1
  * 
  * @package Budget

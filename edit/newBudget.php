@@ -1,16 +1,18 @@
 <?php
 /**
  * This page is invoked when a new user successfully signs up. It allows
- * the user to establish a preliminary budget to display and manipulate.
- * The budget is limited to basic data at this point. On first-time entry,
- * the default budget items are create automatically.
+ * the user to establish preliminary data for the new budget:
+ * 1. The user can enter preliminary account data to display and manipulate.
+ *    The budget is limited to basic data at this point. On first-time entry,
+ *    the default budget items are create automatically. 
+ * 2. The user can enter preliminary card data (simple name & type)
+ * 3. The user can enter current unpaid expenses
  * PHP Version 7.1
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-session_start();
 require "../database/global_boot.php";
 
 $user = filter_input(INPUT_GET, 'user');
@@ -69,9 +71,12 @@ if ($new) {
         array_push($aeBudamt, $old['budamt']);
         array_push($aeCurr, $old['current']);
     }
-    $lastpos = max($aePos);
+    if ($aedata) {
+        $lastpos = max($aePos);
+    }
 
     // get any card data already entered (if any)
+    $cdIds = [];
     $cdNames = [];
     $cdTypes = [];
     $cds = "SELECT * FROM `Cards` WHERE `user` = :user;";
@@ -80,6 +85,7 @@ if ($new) {
     $cards = $cddat->fetchALL(PDO::FETCH_ASSOC);
     $aecards = count($cards) > 0 ? true : false;
     foreach ($cards as $card) {
+        array_push($cdIds, $card['cdindx']);
         array_push($cdNames, $card['cdname']);
         array_push($cdTypes, $card['type']);
     }
@@ -90,12 +96,14 @@ if ($new) {
     $aeAmt = [];
     $aePayee = [];
     $aeRecon = [];
+    $exIds = [];
     $exp = "SELECT * FROM `Charges` WHERE `user` = :user;";
     $expdat = $pdo->prepare($exp);
     $expdat->execute(["user" => $user]);
     $expenses = $expdat->fetchALL(PDO::FETCH_ASSOC);
     $aeexp = count($expenses) > 0 ? true : false;
     foreach ($expenses as $expense) {
+        array_push($exIds, $expense['expid']);
         array_push($aeMethod, $expense['method']);
         array_push($aeDate, $expense['expdate']);
         array_push($aeAmt, $expense['expamt']);
@@ -195,7 +203,7 @@ if ($new) {
             <span class="note NormalHeading">Note: If you make changes,
                 be sure to 'Save All'</span><br />
             <form id="cdform" method="POST" action="saveNewCards.php">
-                <input type="hidden" name="user" />
+                <input type="hidden" name="user" value="<?= $user;?>" />
                 <button id="save">Save All</button> (Changes and New Data)<br />
                     <span id="selnote">Note: When you select "Save All",
                         the data you entered (and any edits) will be 
@@ -221,12 +229,14 @@ if ($new) {
                                 style="display:none;"><?= $cdTypes[$c];?></p>
                             Card name: <textarea class="ocname"
                             name="svdcard[]"><?= $cdNames[$c];?></textarea>
-                            Card type: <select id="seloc<?= $c;?>">
+                            Card type: <select name="svdtype[]" id="seloc<?= $c;?>">
                                 <option value="Credit">Credit</option>
                                 <option value="Debit">Debit</option>
                             </select>&nbsp;&nbsp;
                             Delete: <input type="checkbox" name="cdel[]" 
-                                value="<?= $c;?>" />
+                                value="<?= $cdIds[$c]?>" />
+                            <input type="hidden" name="cdids[]"
+                                value="<?= $cdIds[$c];?>" />
                             <br />
                             <?php endfor; ?>
                         </div>
@@ -234,12 +244,64 @@ if ($new) {
                 </div>
             </form>
         </div>
-    <div id="three" class="steps">Enter Current Expenses
-        <div id="expenses"></div>
-    </div>
+    <div id="three" class="steps">Enter/Edit Current Expenses</div>
+        <div id="expenses">
+            <span class="note NormalHeading">Note: If you make changes,
+                be sure to 'Save All'</span><br />
+            <form id="cdform" method="POST" action="saveNewCharges.php">
+                <input type="hidden" name="user" value="<?= $user;?>" />
+                <button id="save">Save All</button> (Changes and New Data)<br />
+                    <span id="selnote">Note: When you select "Save All",
+                        the data you entered (and any edits) will be 
+                        saved, and new entries will be available.</span><br /><br />
+                <div id="enew">
+                    <span class="NormalHeading">Enter your new expense information
+                        below. (No expenses already reconciled)</span><br />
+                    <?php for ($z=0; $z<4; $z++) : ?>
+                    Date Expense Entered (Use: yyyy-mm-dd) <input type="input"
+                        name="edate[]" /><br />
+                    <span class="emeth">Method of Payment:
+                    <select name="emeth[]">
+                        <option value="Credit">Credit</option>
+                        <option value="Debit">Debit</option>
+                        <option value="Check">Check or Draft</option>
+                    </select>&nbsp;&nbsp;
+                    Amount Paid: <input type="text" name="eamt[]" />&nbsp;&nbsp;
+                    Payee: <input type="text" name="epay[]" /></span><br /><br />
+                    <?php endfor; ?>
+                </div>
+                <div id="eold">
+                    <?php if ($aeexp) : ?>
+                    <span class="NormalHeading">You can edit the data you have 
+                        currently entered:</span><br /><br />
+                    <div id="eentered">
+                        <?php for ($e=0; $e<count($exIds); $e++) : ?>
+                        <p id="em<?= $e;?>" 
+                            style="display:none;"><?= $aeMethod[$e];?></p>
+                        Date Entered: <textarea class="exp"
+                            name="aeedate[]"><?= $aeDate[$e];?></textarea>
+                        Method: <select id="selem<?= $e;?>" name="esel[]">
+                            <option value="Credit">Credit</option>
+                            <option value="Debit">Debit</option>
+                            <option value="Check">Check or Draft</option>
+                        </select>
+                        Amount Paid: <textarea class="exp"
+                            name="aeeamt[]"><?= $aeAmt[$e];?></textarea>
+                        Payee: <textarea class="exp"
+                            name="aeepay[]"><?= $aePayee[$e];?></textarea>
+                        Delete: <input type="checkbox" name="edel[]" 
+                            value="<?= $exIds[$e]?>" />
+                        <input type="hidden" name="expids[]"
+                            value="<?= $exIds[$e];?>" />
+                        <br />
+                        <?php endfor; ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </form>
+        </div>
+<!-- end of data entry -->
 </div>
-
-
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/newBudget.js" type="text/javascript"></script>

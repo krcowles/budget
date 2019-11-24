@@ -3,6 +3,10 @@
 }
 #ready {
     margin-top: 12px;
+    margin-bottom: 8px;
+}
+h2 {
+    margin-top: 4px;
 }
 #done {
     height: 32px;
@@ -42,11 +46,11 @@
 #form {
     margin-top: 8px;
 }
-#entered, #centered {
+#entered, #centered, #eentered {
     position: relative;
     top: -8px;
 }
-.acctname, .bud, .bal, .ocname {
+.acctname, .bud, .bal, .ocname, .exp {
     height: 18px;
     font-size: 14px;
     padding-top: 4px;
@@ -60,6 +64,11 @@
 }
 .bal {
     width: 100px;
+}
+.emeth {
+    margin-left: 60px;
+    position: relative;
+    top: 4px;
 }
 textarea {
     height: 22px;

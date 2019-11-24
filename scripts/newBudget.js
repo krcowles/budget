@@ -37,6 +37,11 @@ $('p[id^=oc]').each(function() {
     var cardType = $(this).text();
     $(selid).val(cardType);
 });
+$('p[id^=em]').each(function() {
+    var selid = "#sel" + this.id;
+    var method = $(this).text();
+    $(selid).val(method);
+});
 
 // return to main
 $('#done').on('click', function(ev) {
