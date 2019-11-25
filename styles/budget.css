@@ -5,8 +5,9 @@ button {
     margin-bottom: 32px;
 }
 table:not(#modal_table) {
-    float: left;
-    margin-left: 16px;
+    table-layout: fixed;
+    margin-right: auto;
+    margin-left: auto;
 }
 /* <div> containing modal window content */
 #box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv, #cdadd {

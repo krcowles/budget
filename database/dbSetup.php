@@ -7,7 +7,7 @@
  * @author  Tom Sandberg and Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require_once "global_boot.php";
+//require_once "global_boot.php";
 // ------- CREATE  -------
 
 /*
@@ -68,18 +68,21 @@ CREATE TABLE Cards (
 );
 CDS;
 */
-/*
+$drop = "DROP TABLE `Charges`;";
+$pdo->query($drop);
+
 $req = <<<CHGS
 CREATE TABLE Charges (
     `expid` mediumint NOT NULL AUTO_INCREMENT,
     `user`  varchar(30) NOT NULL,
-    `method` varchar(30) NOT NULL,
+    `method` varchar(10) NOT NULL,
+    `cdname` varchar(30) NOT NULL,
     `expdate` date,
     `expamt` decimal(8,2) NOT NULL,
     `payee`  varchar(60),
-    `recon`  varchar(1),
+    `paid`  varchar(1),
     PRIMARY KEY (`expid`)
 );
 CHGS;
-*/
-//$results = $pdo->query($req);
+
+$results = $pdo->query($req);

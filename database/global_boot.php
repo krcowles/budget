@@ -15,19 +15,16 @@
 $root = $_SERVER['DOCUMENT_ROOT'];
 // boot can be called from two diff. directory scenarios
 $lead = getcwd() === $root ? '' : '../';
+
 require $lead . "vendor/autoload.php";
 require $lead . "database/settings.php";
 require $lead . "database/sql_modes.php";
-require $lead . "database/errFunctions.php";
-// general utility
-require $lead . "utilities/budgetFunctions.php";
-
+//require $lead . "database/errFunctions.php";
 // PHP site recommends following value for future expansion of E_ALL
 error_reporting(-1);  // 2147483647 is also suggested on PHP site, both work
-/*
-if ($appMode === 'production') {
+/*if ($appMode === 'production') {
     ini_set('log_errors', 1); // (this may be the default anyway)
-    ini_set('error_log', '../ktesa.log'); */
+    ini_set('error_log', '../ktesa.log');
 
 // UNCAUGHT error/exception handling:
 set_error_handler('ktesaErrors'); // errors not using Throwable interface

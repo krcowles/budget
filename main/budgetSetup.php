@@ -9,67 +9,80 @@
  * @license No license
  */
 require "../utilities/getAccountData.php";
+require "../utilities/getCards.php";
+require "../utilities/getExpenses.php";
+require "../utilities/timeSetup.php";
 
-
-
-require "../utilities/getCrData.php";     // echos issue if no charges
-//require "../admin/onetimeSetup.php";
-
-// format the dollar amounts for the table:
-$dsign = '<span>$</span><span>';
-$negdollar = '<span class="negative">$</span><span class="negative">';
-
-// account names and current month data
-$entries = []; // the array representing the .csv data
-$lines = []; // a line of data in the budget
-$bbal = 0; // sum of budgeted amounts
-$bal1 = 0; // sum of $prev0
-$bal2 = 0; // sum of $prev1
-$bal3 = 0; // sum of $current
-$setup = false; // true indicates new data needs to be entered before proceeding
-$new_budget = '';
-$record_count = 0;
-
-// proceed with values for main budget items:
-if ($status === 'OK') {
-    for ($j=0; $j<count($account_names); $j++) {
-        $bbal += intval($budgets[$j]);
-        $bal1 += floatval($prev0[$j]);
-        $bal2 += floatval($prev1[$j]);
-        $bal3 += floatval($current[$j]);
-        $entries[0] = $account_names[$j];
-        $entries[1] = $budgets[$j];
-        $entries[2] = $prev0[$j];
-        $entries[3] = $prev1[$j];
-        $entries[4] = $current[$j];
-        if (empty($day[$j])) { // no autopay data yet
-            $entries[5] = '';
-            $entries[6] = '';
-            $entries[7] = '';
+/**
+ * This function takes an amount derived from the Budgets table and
+ * formats it in the accounting style.
+ * 
+ * @param float  $amt  The amount to be formatted
+ * @param string $type If budget, don't use decimals
+ * 
+ * @return string $prepped The input data formatted
+ */
+function dataPrep($amt, $type) 
+{
+    // account formatting
+    $dsign = '<span>$</span><span>';
+    $negdollar = '<span class="negative">$</span><span class="negative">';
+    if ($type === "budget") {
+        $prepped = number_format($amt, 0, '.', ',');
+        $prepped = $dsign . $prepped . '</span>';
+    } else {
+        $prepped = number_format($amt, 2, '.', ',');
+        if ($prepped < 0) {
+            $prepped = $negdollar . $prepped . '</span>';
         } else {
-            $entries[5] = $autopay[$j];
-            $entries[6] = $day[$j];
-            $entries[7] = $paid[$j];
-        }
-        $entries[8] = $income[$j];
-        array_push($lines, $entries);
-    }  
-    foreach ($lines as &$line) { // assumes budget data is never negative
-        for ($m=1; $m<5; $m++) {
-            $bud = number_format($line[$m], 0, '.', ',');
-            $dat = number_format($line[$m], 2, '.', ',');
-            if ($line[$m] < 0) {
-                $line[$m] = $negdollar . $dat . '</span>';
-            } else {
-                if ($m === 1) {
-                    $line[1] = $dsign . $bud . '</span>';
-                } else {
-                    $line[$m] = $dsign . $dat . '</span>';
-                }   
-            }
+            $prepped = $dsign . $prepped . '</span>';  
         }
     }
-} // end of $status = OK
+    return $prepped;
+}
+// format dollar items
+for ($a=0; $a<count($account_names); $a++) {
+    $budgets[$a] = dataPrep($budgets[$a], 'budget');
+    $prev0[$a] = dataPrep($prev0[$a], 'prev0');
+    $prev1[$a] = dataPrep($prev1[$a], 'prev1');
+    $current[$a] = dataPrep($current[$a], 'current');
+}
+
+/*
+// proceed with values for main budget items:
+for ($j=0; $j<count($account_names); $j++) {
+    $entries[0] = $account_names[$j];
+    $entries[1] = $budgets[$j];
+    $entries[2] = $prev0[$j];
+    $entries[3] = $prev1[$j];
+    $entries[4] = $current[$j];
+    if (empty($day[$j])) { // no autopay data yet
+        $entries[5] = '';
+        $entries[6] = '';
+        $entries[7] = '';
+    } else {
+        $entries[5] = $autopay[$j];
+        $entries[6] = $day[$j];
+        $entries[7] = $paid[$j];
+    }
+    $entries[8] = $income[$j];
+    array_push($lines, $entries);
+}  
+foreach ($lines as &$line) { // assumes budget data is never negative
+    for ($m=1; $m<5; $m++) {
+        $bud = number_format($line[$m], 0, '.', ',');
+        $dat = number_format($line[$m], 2, '.', ',');
+        if ($line[$m] < 0) {
+            $line[$m] = $negdollar . $dat . '</span>';
+        } else {
+            if ($m === 1) {
+                $line[1] = $dsign . $bud . '</span>';
+            } else {
+                $line[$m] = $dsign . $dat . '</span>';
+            }   
+        }
+    }
+}
 
 // get Credit Card info: requires formatting for budget.php
 $cdcards = 1; // assumes one or more cards exist, if not, see Error Codes below
@@ -164,3 +177,4 @@ if ($status !== "OK" || $crStatus !== "OK") {
         }
     }
 }
+*/

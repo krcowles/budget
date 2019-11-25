@@ -12,17 +12,6 @@ date_default_timezone_set('America/Denver');
 $date = date("m/d/Y");
 $digits = explode("/", $date);
 $last_yr = intval($digits[2] - 1);
-$udir = file_get_contents("../main/current_dir.txt");
-$userdir = "../data/" . $udir . "/";
-// DEFINITIONS:
-$file_root = $userdir . "bud" . $digits[2];
-$prev_root = $userdir . "bud" . $last_yr;
-$budget_data = $file_root . "_data.csv";
-$credit_data = $file_root . "_charges.csv";
-$expense_log = $file_root . "_log.csv";
-$oldsumstxt  = $userdir . "oldsums.txt";
-$prev_bud    = $prev_root . "data.csv";
-$prev_cred   = $prev_root . "_charges.csv";
 $month_names = array('January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December');
 $thismo = intval($digits[0]) -1; // array index is zero-based
@@ -46,13 +35,3 @@ $month = [];
 for ($i=0; $i<3; $i++) {
     $month[$i] = $month_names[$month_set[$i]];
 }
-/**
- * This module produces the following data;
- *  $budget_data    The filepath to the budget data
- *  $credit_data    The filepath to the credit charge data
- *  $prev_bud       The filepath to the previous year budget data
- *  $prev_cred       The filepath to the previous year crediti data
- *  $current_month  The current month, regardless if the budget has rolled over
- *  $month          The array of names to be applied for previous & current months
- *  $get_past       T/F - year has rolled over
- */

@@ -45,16 +45,15 @@ if ($user) {
 <body>
     <?php require "panel.php"; ?>
 
-    <div id="chgaccts"><?= $cdcards;?></div>
     <div id="budget">
         <table id="roll3">
             <colgroup>
-                <col style="width:200px" />
-                <col style="width:86px" />
+                <col style="width:260px" />
                 <col style="width:100px" />
+                <col style="width:120px" />
+                <col style="width:120px" />
+                <col style="width:120px" />
                 <col style="width:100px" />
-                <col style="width:100px" />
-                <col style="width:10s0px" />
                 <col style="width:64px" />
                 <col style="width:10px" class="noshow" />
                 <col style="width:16px" class="noshow" />
@@ -62,7 +61,7 @@ if ($user) {
             <thead>
                 <tr>
                     <th>Budget Acct Name</th>
-                    <th class="heavy-right">Budget</th>
+                    <th class="heavy-right">Monthly Budget</th>
                     <th><?= $month[0];?></th>
                     <th><?= $month[1];?></th>
                     <th><?= $month[2];?></th>
@@ -73,72 +72,62 @@ if ($user) {
                 </tr>
             </thead>
             <tbody>
-                <!-- all but temporary accounts -->
-                <?php for($j=0; $j<count($lines)-6; $j++) : ?>
-                <tr>
-                    <td class="acct"><?= $lines[$j][0];?></td>
-                    <td class="amt"><?= $lines[$j][1];?></td>
-                    <td class="mo1"><?= $lines[$j][2];?></td>
-                    <td class="mo2"><?= $lines[$j][3];?></td>
-                    <td class="mo3"><?= $lines[$j][4];?></td>
-                    <td class="ap"><?= $lines[$j][5];?></td>
-                    <td class="apday"><?= $lines[$j][6];?></td>
-                    <td class="noshow"><?= $lines[$j][7];?></td>
-                    <td class="noshow"><?= $lines[$j][8];?></td>
-                </tr>
+                <?php for($j=0; $j<count($account_names); $j++) : ?>
+                    <?php if ($j === $user_cnt + 1) : ?>
+                    <tr id="tmphd">
+                        <td class="BoldText grayCell"
+                            style="text-align:center;">Temporary Accounts</td>
+                        <td class="amt grayCell"></td>
+                        <td class="mo1 grayCell"></td>
+                        <td class="mo2 grayCell"></td>
+                        <td class="mo3 grayCell"></td>
+                        <td class="ap grayCell"></td>
+                        <td class="apday grayCell"></td>
+                        <td class="noshow"></td>
+                        <td class="noshow"></td>
+                    </tr>
+                    <?php endif; ?>
+                    <tr>
+                        <td class="acct"><?= $account_names[$j];?></td>
+                        <td class="amt"><?= $budgets[$j];?></td>
+                        <td class="mo1"><?= $prev0[$j];?></td>
+                        <td class="mo2"><?= $prev1[$j];?></td>
+                        <td class="mo3"><?= $current[$j];?></td>
+                        <td class="ap apcolor"><?= $autopay[$j];?></td>
+                        <?php if ($day[$j] == 0) : ?>
+                            <td class="apcolor"></td>
+                        <?php else : ?>
+                            <td class="apday apcolor"><?= $day[$j];?></td>
+                        <?php endif; ?>
+                        <td class="noshow"><?= $paid[$j];?></td>
+                        <td class="noshow"><?= $income[$j];?></td>
+                    </tr>
                 <?php endfor; ?>
-                <tr>
-                    <td class="acct gray-title"
-                        style="text-align:center;">Temporary Accounts</td>
-                    <td class="amt gray-title"></td>
-                    <td class="mo1 gray-title"></td>
-                    <td class="mo2 gray-title"></td>
-                    <td class="mo3 gray-title"></td>
-                    <td class="ap gray-title"></td>
-                    <td class="apday gray-title"></td>
-                    <td class="noshow"></td>
-                    <td class="noshow"></td>
-                </tr>
-                <!-- temporary accounts -->
-                <?php for ($k=count($lines)-5; $k<count($lines); $k++) : ?>
-                <tr>
-                    <td class="acct"><?= $lines[$k][0];?></td>
-                    <td class="amt"><?= $lines[$k][1];?></td>
-                    <td class="mo0"><?= $lines[$k][2];?></td>
-                    <td class="mo1"><?= $lines[$k][3];?></td>
-                    <td class="mo2"><?= $lines[$k][4];?></td>
-                    <td class="ap"><?= $lines[$k][5];?></td>
-                    <td class="apday"><?= $lines[$k][6];?></td>
-                    <td class="noshow"><?= $lines[$k][7];?></td>
-                    <td class="noshow"><?= $lines[$k][8];?></td>
-                </tr>
-                <?php endfor; ?>
-                <tr id="balances">
-                    <td class="BoldText heavy-top">Checkbook Balance</td>
-                    <td class="balance heavy-top"><?= $bbal;?></td>
-                    <td class="balance heavy-top"><?= $bal1;?></td>
-                    <td class="balance heavy-top"><?= $bal2;?></td>
-                    <td class="balance heavy-top"><?= $bal3;?></td>
-                    <td class="gray-title heavy-top"></td>
-                    <td class="gray-title heavy-top"></td>
-                    <td class="noshow"></td>
-                    <td class="noshow"></td>
-                </tr>
-                <tr>
-                    <td class="gray-title">Credit Cards</td>
-                    <td colspan="6" class="gray-title" style="text-align:left;">
+                <tr id="cchd">
+                    <td class="BoldText grayCell">Credit Cards</td>
+                    <td colspan="6" class="grayCell" style="text-align:left;">
                         &nbsp;&nbsp;-- Not deducted until reconciled --</td>
                 </tr>
-                <?php for($l=0; $l<$card_cnt; $l++) : ?>
-                <tr>
-                    <td class="cname"><?= $cards[$l];?></td>
-                    <td></td>
-                    <td id="past0" class="camt"><?= $old_card_balances[$l][0];?></td>
-                    <td id="past1" class="camt"><?= $old_card_balances[$l][1];?></td>
-                    <td class="camt"><?= $crbalances[$l];?></td>
-                    <td colspan="3" class="gray-title"></td>
-                </tr>
+                <?php for ($cc=0; $cc<count($cr); $cc++) : ?>
+                    <tr>
+                        <td class="acct"><?= $cr[$cc];?></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>bal</td>
+                        <td colspan="2"></td>
+                    </tr>
                 <?php endfor; ?>
+                <tr id="balances">
+                    <td class="BoldText heavyTop grayCell">Checkbook Balance</td>
+                    <td class="balance heavyTop">0</td>
+                    <td class="balance heavyTop">100</td>
+                    <td class="balance heavyTop">200</td>
+                    <td class="balance heavyTop">3000</td>
+                    <td class="grayCell heavyTop" colspan="2"></td>
+                    <td class="noshow grayCell"></td>
+                    <td class="noshow grayCell"></td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -158,11 +147,11 @@ if ($user) {
             <span id="modal_cards">Pay with: </span>
             <select id="cc">
                 <option value="none">Check/Draft</option>
-                <?php for ($y=0; $y<count($cards); $y++) : ?>
-                <option value="card<?= $y+1;?>"><?= $cards[$y];?></option>
+                <?php for ($y=0; $y<count($cr); $y++) : ?>
+                <option value="card<?= $y+1;?>"><?= $cr[$y];?></option>
                 <?php endfor; ?>
-                <?php for ($z=0; $z<count($debits); $z++) : ?>
-                <option value="debit<?= $z+1;?>"><?= $debits[$z];?></option>
+                <?php for ($z=0; $z<count($dr); $z++) : ?>
+                <option value="debit<?= $z+1;?>"><?= $dr[$z];?></option>
                 <?php endfor; ?>
             </select><br />
             Enter the amount of the expense:<br />

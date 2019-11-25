@@ -43,18 +43,18 @@ td span:first-child {
 .camt {
     color: black;
 }
-.gray-title {
+#tmphd .grayCell, #cchd .grayCell, #balances .grayCell {
     font-weight: bold;
     background-color: #dfdfdf;
 }
-.ap, .apday {
-    background-color: #F5FFFA;
+#balances .balance {
+    font-weight: bold;
+    color: darkgreen;
 }
-.heavy-top {
+#balances .heavyTop {
     border-top-width: 2px;
     border-bottom-width: 2px;
 }
-.balance {
-    font-weight: bold;
-    color: darkgreen;
+#roll3 tbody .apcolor, .apdaycolor {
+    background-color: #F5FFFA;
 }
