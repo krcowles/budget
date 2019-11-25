@@ -49,12 +49,12 @@ td span:first-child {
 }
 #balances .balance {
     font-weight: bold;
-    color: darkgreen;
+    color:#004a00;
 }
 #balances .heavyTop {
     border-top-width: 2px;
     border-bottom-width: 2px;
 }
 #roll3 tbody .apcolor, .apdaycolor {
-    background-color: #F5FFFA;
+    background-color: #F8FFFA;
 }

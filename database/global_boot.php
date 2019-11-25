@@ -19,6 +19,7 @@ $lead = getcwd() === $root ? '' : '../';
 require $lead . "vendor/autoload.php";
 require $lead . "database/settings.php";
 require $lead . "database/sql_modes.php";
+require $lead . "utilities/budgetFunctions.php";
 //require $lead . "database/errFunctions.php";
 // PHP site recommends following value for future expansion of E_ALL
 error_reporting(-1);  // 2147483647 is also suggested on PHP site, both work

@@ -106,7 +106,8 @@ if ($user) {
                 <tr id="cchd">
                     <td class="BoldText grayCell">Credit Cards</td>
                     <td colspan="6" class="grayCell" style="text-align:left;">
-                        &nbsp;&nbsp;-- Not deducted until reconciled --</td>
+                        &nbsp;&nbsp;-- Not deducted from Balance until
+                        reconciled --</td>
                 </tr>
                 <?php for ($cc=0; $cc<count($cr); $cc++) : ?>
                     <tr>
@@ -114,16 +115,16 @@ if ($user) {
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>bal</td>
+                        <td><?= $cardbal[$cc]['bal'];?></td>
                         <td colspan="2"></td>
                     </tr>
                 <?php endfor; ?>
                 <tr id="balances">
                     <td class="BoldText heavyTop grayCell">Checkbook Balance</td>
-                    <td class="balance heavyTop">0</td>
-                    <td class="balance heavyTop">100</td>
-                    <td class="balance heavyTop">200</td>
-                    <td class="balance heavyTop">3000</td>
+                    <td class="balance heavyTop"><?= $balBudget;?></td>
+                    <td class="balance heavyTop"><?= $balPrev0;?></td>
+                    <td class="balance heavyTop"><?= $balPrev1;?></td>
+                    <td class="balance heavyTop"><?= $balCurrent;?></td>
                     <td class="grayCell heavyTop" colspan="2"></td>
                     <td class="noshow grayCell"></td>
                     <td class="noshow grayCell"></td>
