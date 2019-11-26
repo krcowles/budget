@@ -54,6 +54,7 @@ $(function() {
 
     // It is expected to replace the following w/php:
     // account listing in select box
+    /*
     var acct_list = [];
     var acct_select_box = '<select id="selacct">\n';
     var secondary = '<select id="second">\n';
@@ -95,6 +96,8 @@ $(function() {
             text : item
         }));
     });
+    */
+   
     /**
      * Menu Actions (when user chooses menu item or sub-menu item)
      */

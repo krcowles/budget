@@ -42,7 +42,7 @@ var modal = (function() {
             var msgtxt = "Problem encountered " + errtype;
             $.ajax({
                 url: url,
-                method: "GET",
+                method: "POST",
                 data: ajaxdata,
                 dataType: "text",
                 success: function(results) {
@@ -64,40 +64,30 @@ var modal = (function() {
                 }
             });
     }
+    function getSelectValue(domId) {
+        var value = domId[domId.selectedIndex].value;
+        return value;
+    }
     // modal function executed when settings.id == 'expense'
     function payExpense(deferred) {
         $content.append($close);
         $close.css('margin-left', '216px');
         $close.text("Cancel");
-        // id the options present in the <select> box
-        var opts = [];
-        var selbox = document.getElementById('selacct');
-        for (var j=0; j<selacct.options.length; j++) {
-            opts[j] = selbox.options[j].value;
-        }
-        var acctrows = opts.length;
-        // objects to register user entries/changes
-        var $account = $('#selacct');
-        var $chargeto = $('#cc');
+        var $selacct = $('.fullsel');
+        var $selcd = $('.allsel');
         var $expensed = $('#expamt');
         var $payee = $('#payee');
         // initial values
-        var acctname = $('#selacct option:selected').text();
-        var editrow = 0;
-        var chargeto = $('#cc option:selected').text();
+        var acctname = getSelectValue($selacct[0]);
+        var charge = getSelectValue($selcd[0]);
         var amount = 0;
         var payee = 'None specified';
-        $account.on('change', function() {
+        // updated values
+        $selacct.on('change', function() {
             acctname = this.value;
-            for (var j=0; j<acctrows; j++) {
-                if (acctname === opts[j]) {
-                    editrow = j;
-                    return;
-                }
-            }
         });
-        $chargeto.on('change', function() {
-            chargeto = this.value;
+        $selcd.on('change', function() {
+            charge = this.value;
         });
         $expensed.on('change', function() {
             amount = this.value;
@@ -106,8 +96,8 @@ var modal = (function() {
             payee = this.value;
         });
         $('#pay').on('click', function() {
-            var ajaxdata = {acct_name: acctname, edit_row: editrow, 
-                chg_type: chargeto, amt: amount, payto: payee};
+            var ajaxdata = {id: 'payexp', user: g_user, acct_name: acctname,
+                method: charge, amt: amount, payto: payee};
             executeScript('../edit/saveAcctEdits.php', ajaxdata, 'making payment', deferred);
         });
         $close.on('click', function() {

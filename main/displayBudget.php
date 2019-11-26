@@ -37,14 +37,12 @@ if ($user) {
     <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
     <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        var setup;
-    </script>
 </head>
 
 <body>
     <?php require "panel.php"; ?>
 
+    <p id="user" style="display:none"><?= $user;?></p>
     <div id="budget">
         <table id="roll3">
             <colgroup>
@@ -145,16 +143,10 @@ if ($user) {
         <!-- pay expense -->
         <div id="box">
             <span id="modal_accts">Deduct from: </span>
+            <?= $fullsel;?><br />
             <span id="modal_cards">Pay with: </span>
-            <select id="cc">
-                <option value="none">Check/Draft</option>
-                <?php for ($y=0; $y<count($cr); $y++) : ?>
-                <option value="card<?= $y+1;?>"><?= $cr[$y];?></option>
-                <?php endfor; ?>
-                <?php for ($z=0; $z<count($dr); $z++) : ?>
-                <option value="debit<?= $z+1;?>"><?= $dr[$z];?></option>
-                <?php endfor; ?>
-            </select><br />
+            <?= $allCardsHtml;?>
+            <br /><br />
             Enter the amount of the expense:<br />
             $ <input type="text" id="expamt"  /><br />
             Paid to: <input type="text" id="payee" /><br />
@@ -240,6 +232,7 @@ if ($user) {
         </a>
     </p>
     -->
+    <script type="text/javascript">var g_user = $('#user').text();</script>
     <script src="../scripts/budget.js" type="text/javascript"></script>
     <script src="../scripts/modals.js" type="text/javascript"></script>
     <script src="../scripts/panel.js" type="text/javascript"></script>

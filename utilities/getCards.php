@@ -26,3 +26,22 @@ if ($credit_cards) {
         }
     }
 }
+
+$ccHtml = '<select class="ccsel">';
+for ($c=0; $c<count($cr); $c++) {
+    $ccHtml .= '<option value="' . $cr[$c] . '">' . $cr[$c] . '</option>';
+}
+$ccHtml .= "</select>";
+$dcHtml = '<select class="dcsel">';
+for ($d=0; $d<count($dr); $d++) {
+    $dcHtml .= '<option value="' . $dr[$d] . '">' . $dr[$d] . '</option>';
+}
+$dcHtml .= '</select>';
+$allCds = array_merge($cr, $dr);
+$allCardsHtml = '<select class="allsel">' .
+    '<option value="check">Check or Draft</option>';
+for ($a=0; $a<count($allCds); $a++) {
+    $allCardsHtml .= '<option value="' . $allCds[$a] . '">' .
+        $allCds[$a] . '</option>';
+}
+$allCardsHtml .= '</select>';

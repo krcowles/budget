@@ -1,6 +1,7 @@
 <?php
 /**
- * This script extracts the user's budget data from the 'Budgets' table
+ * This script extracts the user's budget data from the 'Budgets' table.
+ * In order to do so, the variable $user MUST BE DEFINED BY THE CALLER.
  * The data is compiled in arrays for consumption by the caller. Also, 
  * html select drop-downs are formed for use in some of the modals which
  * request user input.

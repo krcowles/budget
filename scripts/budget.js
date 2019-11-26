@@ -47,7 +47,7 @@ $('.apday').each(function(indx) {
         }
     }
 });
-// user presentation of autopy candidates:
+// user presentation of autopay candidates:
 if (ap_candidates) {
     var $userlist = $('table#modal_table tbody');
     // create the html list based on number of autopays due

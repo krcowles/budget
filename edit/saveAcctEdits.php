@@ -1,14 +1,50 @@
 <?php
 /**
- * This module will make changes to the $budget_data file based on user input:
- * expense items, name change, etc.
+ * This module will make changes to the data in the 'Budgets' table,
+ * file based on user input: expense items, name change, etc.
  * PHP Version 7.1
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "../utilities/getBudgetData.php";
+date_default_timezone_set('America/Denver');
+$dbdate = date("Y-m-d");
+$user = filter_input(INPUT_POST, 'user'); // mandatory for the following 'requires'
+require "../utilities/getAccountData.php";
+require "../utilities/getCards.php";
+
+$id = filter_input(INPUT_POST, 'id');
+
+switch ($id) {
+case 'payexp':
+    $acct = filter_input(INPUT_POST, 'acct_name');
+    $method = filter_input(INPUT_POST, 'method');
+    $amt = filter_input(INPUT_POST, 'amt');
+    $payto = filter_input(INPUT_POST, 'payto');
+    $item = array_search($acct, $account_names);
+    $bal = floatval($current[$item]) - floatval($amt);
+    $budupdte = "UPDATE `Budgets` SET `current` = :bal WHERE `user` = :user " .
+        "AND `budname` = :acct;";
+    $bud = $pdo->prepare($budupdte);
+    $bud->execute(["bal" => $bal, "user" => $user, "acct" => $acct]);
+    // examine method for Cr/Dr
+    if (in_array($method, $cr)) {
+        $dbmethod = "Credit";
+    } elseif (in_array($method, $dr)) {
+        $dbmethod = "Debit";
+    } else {
+        $dbmethod = "Check";
+    }
+    $addchg = "INSERT INTO `Charges` (`user`, `method`, `cdname`," .
+        "`expdate`, `expamt`, `payee`) VALUES (?,?,?,?,?,?);";
+    $pdo->prepare($addchg)->execute(
+        [$user, $dbmethod, $method, $dbdate, $amt, $payto]
+    );
+    break;
+}
+// make a payment from a 'Budgets' account; record the data in 'Charges'
+
 
 // transfer funds:
 $xfrfrom   = isset($_GET['from']) ? filter_input(INPUT_GET, 'from') : false;
