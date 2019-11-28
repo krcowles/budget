@@ -13,7 +13,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "../database/global_boot.php";
+require_once "../database/global_boot.php";
 
 $user = filter_input(INPUT_GET, 'user');
 $new  = isset($_GET['new']) ? true : false;

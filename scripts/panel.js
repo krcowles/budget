@@ -52,52 +52,6 @@ $(function() {
         });
     });
 
-    // It is expected to replace the following w/php:
-    // account listing in select box
-    /*
-    var acct_list = [];
-    var acct_select_box = '<select id="selacct">\n';
-    var secondary = '<select id="second">\n';
-    var tempacct = '<option value="Temporary Accounts" disabled>Temporary Accounts</option>\n';
-    $('.acct').each(function() {
-    var aval = $(this).text();
-    acct_list.push(aval);
-    if (aval === "Temporary Accounts") {
-        acct_select_box += tempacct;
-        secondary += tempacct;
-    } else {
-        acct_select_box += '<option value="' + aval + '">' + aval + '</option>\n';
-        secondary += '<option value="' + aval + '">' + aval + '</option>\n';
-    }
-    });
-    acct_select_box += '</select><br />';
-    secondary += '</select><br />';
-    $('#modal_accts').after(acct_select_box);
-    var rawaccts = [];
-    for (var t=0; t<acct_list.length; t++) {
-        if (acct_list[t] == 'Undistributed Funds') {
-            break;
-        } else {
-            rawaccts.push(acct_list[t]);
-        }
-    }
-    var $fromlist = $('<select id="fromlist"></select>');
-    var $tolist   = $('<select id="tolist"></select');
-    // allow selecting only items prior to 'Undistributed Funds'
-    $.each(rawaccts, function (i, item) {
-        $fromlist.append($('<option>', { 
-            value: item,
-            text : item
-        }));
-    });
-    $.each(rawaccts, function (i, item) {
-        $tolist.append($('<option>', { 
-            value: item,
-            text : item
-        }));
-    });
-    */
-   
     /**
      * Menu Actions (when user chooses menu item or sub-menu item)
      */
@@ -130,17 +84,30 @@ $(function() {
     });
     $('#movefnds').on('click', function() {
         var def = new $.Deferred();
-        var xfrfrom = acct_select_box;
-        var xfrto   = secondary;
         var xfr = $('#xfr').detach();
-        modal.open({id: 'xfr', height: '226px', width: '240px', from: xfrfrom, to: xfrto,
+        modal.open({id: 'xfr', height: '226px', width: '240px',
             content: xfr, deferred: def});
         $.when( def ).then(function() {
             $('#allForms').append(xfr);
         });  
     });
     $('#recon').on('click', function() {
-        window.open("../utilities/reconcile.php", "_self");
+        var def = new $.Deferred();
+        var rec = $('#reconcile').detach();
+        modal.open({id: 'recon', height: '160px', width: '240px',
+            content: rec, deferred: def});
+        $.when( def ).then(function() {
+            $('#allForms').append(rec);
+        });  
+    });
+    $('#schedap').on('click', function() {
+        var def = new $.Deferred;
+        var apbox = $('#auto').detach();
+        modal.open({id: 'setup_ap', height: '150px', width: '280px',
+            content: apbox, deferred: def});
+        $.when( def ).then(function() {
+            $('#allForms').append(apbox);
+        });  
     });
     function executeItem(item) {
         switch(item) {

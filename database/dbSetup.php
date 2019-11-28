@@ -80,6 +80,7 @@ CREATE TABLE Charges (
     `expdate` date,
     `expamt` decimal(8,2) NOT NULL,
     `payee`  varchar(60),
+    `acctchgd` varchar(60) NOT NULL,
     `paid`  varchar(1),
     PRIMARY KEY (`expid`)
 );

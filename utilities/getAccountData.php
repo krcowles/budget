@@ -13,6 +13,7 @@
  */
 require_once "../database/global_boot.php";
 // output arrays:
+$acctid = [];
 $account_names = [];
 $positions = [];
 $budgets = [];
@@ -31,6 +32,7 @@ if (count($bud_dat) === 0) {
     // go to budget setup
 } else {
     foreach ($bud_dat as $acct) {
+        array_push($acctid, $acct['id']);
         array_push($account_names, $acct['budname']);
         array_push($positions, $acct['budpos']);
         $amt = empty($acct['budamt']) ? 0 : $acct['budamt'];
@@ -52,6 +54,7 @@ if (count($bud_dat) === 0) {
     }
 }
 // copy the arrays so that they can be re-sequenced according to $positions
+$idArray  = new ArrayObject($acctid);
 $nmeArray = new ArrayObject($account_names);
 $budArray = new ArrayObject($budgets);
 $p0Array  = new ArrayObject($prev0);
@@ -64,6 +67,7 @@ $incArray = new ArrayObject($income);
 for ($i=0; $i<count($account_names); $i++) {
     $posval = $i + 1; // there is no 0 position
     $pos = array_search($posval, $positions); // find the key for each consec. item
+    $acctid[$i] = $idArray[$pos];
     $account_names[$i] = $nmeArray[$pos];
     $budgets[$i] = $budArray[$pos];
     $prev0[$i] = $p0Array[$pos];
@@ -76,6 +80,7 @@ for ($i=0; $i<count($account_names); $i++) {
 }
 $user_cnt = count($account_names);
 // get the temporary accounts (includes Undistributed Funds)
+$tid = [];
 $tnmes = [];
 $tbud = [];
 $tp0 = [];
@@ -90,6 +95,7 @@ $tdat = $pdo->prepare($treq);
 $tdat->execute(["user" => $user]);
 $temps = $tdat->fetchALL(PDO::FETCH_ASSOC);
 foreach ($temps as $tacct) {
+    array_push($tid, $tacct['id']);
     array_push($tnmes, $tacct['budname']);
     $tb = empty($tacct['budamt']) ? 0 : $tacct['budamt'];
     array_push($tbud, $tb);
@@ -108,6 +114,7 @@ foreach ($temps as $tacct) {
     $ti = empty($tacct['funded']) ? 0 : $tacct['funded'];
     array_push($tinc, $ti);
 }
+$acctid        = array_merge($acctid, $tid);
 $account_names = array_merge($account_names, $tnmes);
 $budgets       = array_merge($budgets, $tbud);
 $prev0         = array_merge($prev0, $tp0);

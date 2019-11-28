@@ -8,7 +8,7 @@
  * @author  Tom Sandberg and Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "../database/global_boot.php";
+require_once "../database/global_boot.php";
 $submitter = filter_input(INPUT_POST, 'submitter');
 $username  = filter_input(INPUT_POST, 'username');
 $user_pass = filter_input(INPUT_POST, 'password');

@@ -93,9 +93,9 @@ if ($user) {
                         <td class="mo3"><?= $current[$j];?></td>
                         <td class="ap apcolor"><?= $autopay[$j];?></td>
                         <?php if ($day[$j] == 0) : ?>
-                            <td class="apcolor"></td>
+                            <td class="apcolor apday"></td>
                         <?php else : ?>
-                            <td class="apday apcolor"><?= $day[$j];?></td>
+                            <td class="apcolor apday"><?= $day[$j];?></td>
                         <?php endif; ?>
                         <td class="noshow"><?= $paid[$j];?></td>
                         <td class="noshow"><?= $income[$j];?></td>
@@ -174,11 +174,23 @@ if ($user) {
         <div id="xfr">
             Transfer the following amount:<br />$ <input type="text" 
                 id="xframt" /><br />
-            <span id="xfrfrom">Take from:</span><br />
-            <span id="xfrto">Place in: </span>
+            <span id="xfrfrom">Take from:
+            <?= $fullsel;?></span><br /><br />
+            <span id="xfrto">Place in: 
+            <?= $fullsel;?></span>
             <button id="transfer">Transfer</button>
         </div>
+        <!-- reconcile credit card statement -->
+        <div id="reconcile">
+            Please select the card you wish to reconcile:<br />
+            <?= $ccHtml;?><br /><br />
+            <button id="usecard">Reconcile</button>
+        </div>
+        <!-- schedule an autopay -->
         <div id="auto">
+            Prompt for automatic payment using:<br /><?= $allCardsHtml;?> on day
+            <input id="useday" type="text" /><br />each month.<br /><br />
+            <button id="perfauto">Set up</button>
         </div>
         <!-- rename account -->
         <div id="rename">

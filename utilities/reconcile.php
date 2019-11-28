@@ -1,15 +1,28 @@
 <?php
 /**
- * This module allows the user to select a credit card to be reconciled against
- * the corresponding monthly statement. 
+ * This module allows the user to reconcile a credit card statement against
+ * the chosen credit card.
  * PHP Version 7.1
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "selectCrCards.php";
-require "getCrData.php";
+$user = filter_input(INPUT_GET, 'user'); // mandatory to appear prior to 'requires'
+$rec_cd = filter_input(INPUT_GET, 'card');
+
+require "getCards.php";
+require "getExpenses.php";
+ // get expenses for the chosen card:
+$card_data = [];
+for ($i=0; $i<count($expamt); $i++) {
+    if ($expcdname[$i] === $rec_cd) {
+        $info = array('date' => $expdate[$i], 'amt' => $expamt[$i],
+            'acct' => $expcharged[$i], 'payee' => $exppayee[$i],
+            'tblid' => $expid[$i]);
+        array_push($card_data, $info);
+    }
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -30,62 +43,45 @@ require "getCrData.php";
 <body>
 
 <div style="margin-left:16px;" id="container">
-    <p class="NormalHeading">This form will allow you to select from your current
-        credit cards and reconcile that card against your monthly statement.
+    <p class="NormalHeading">This form will allow you to reconcile  
+        your "<?= $rec_cd;?>" card against your monthly statement.
         Your budget will be automatically updated to show payment of those
         charges.</p>
-    <button id="rtb">Return to Budget</button>
-
     <form id="form" method="POST" action="saveReconciledCharges.php">
-    <p class="NormalHeading">Select the card to be reconciled: <?= $selectHtml;?>
-        &nbsp;&nbsp;&nbsp;<button id="reconcile">Reconcile</button></p>
-    <div id="statement">
-    <?php for ($i=0; $i<$card_cnt; $i++) : ?>
-        <?php
-        $cardlist = 'card' . $i;
-        switch($i) {
-        case 0:
-            $card_data = $credit_charges['card1'];
-            break;
-        case 1:
-            $card_data = $credit_charges['card2'];
-            break;
-        case 2:
-            $card_data = $credit_charges['card3'];
-            break;
-        case 3:
-            $card_data = $credit_charges['card4'];
-            break;
-        }
-        ?>
-        <div id="list<?= $i;?>">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Charged To:</th>
-                        <th>Date:</th>
-                        <th>Payee:</th>
-                        <th>Amount</th>
-                        <th>Pay</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php for($j=0; $j<count($card_data); $j++) : ?>
-                    <tr>
-                        <td class="left chgto"><?= $card_data[$j][0];?></td>
-                        <td class="chgdate"><?= $card_data[$j][1];?></td>
-                        <td class="left chgpayee"><?= $card_data[$j][2];?></td>
-                        <td class="right chgamt"><?= $card_data[$j][3];?></td>
-                        <td><input type="checkbox" name="del[]"
-                            id="<?= $cardlist;?>rec<?= $j;?>"
-                            value="<?= $cardlist;?>rec<?= $j;?>" /></td>
-                    </tr>
-                    <?php endfor; ?>
-                </tbody>
-            </table><br />
-        </div>
-    <?php endfor; ?>
-    </div>
+        <button id="reconcile">Reconcile</button>
+        <button id="rtb">Return to Budget</button><br /><br />
+        <span id="inst">Check the items to be reconciled; when done, select
+            'Reconcile' above. These items will be automatically deducted
+            from your checkbook balance as if the charges have been paid.<br /><br />
+        </span>
+        <input type="hidden" name="user" value="<?= $user;?>" />
+        <input type="hidden" name="card" value="<?= $rec_cd;?>" />
+        <table>
+            <thead>
+                <tr>
+                    <th>Date:</th>
+                    <th>Amount</th>
+                    <th>Deducted From:</th>
+                    <th>Payee:</th>
+                </tr>
+            </thead>
+            <?php if (count($card_data) === 0) : ?>
+                <p>All charges on this card have been reconciled</p>
+            <?php else : ?>
+            <tbody>
+                <?php for($j=0; $j<count($card_data); $j++) : ?>
+                <tr>
+                    <td class="chgdate"><?= $card_data[$j]['date'];?></td>
+                    <td class="right chgamt"><?= $card_data[$j]['amt'];?></td>
+                    <td class="left cgto"><?= $card_data[$j]['acct'];?></td>
+                    <td class="left chgpayee"><?= $card_data[$j]['payee'];?></td>
+                    <td><input type="checkbox" name="del[]" id="chg<?= $j;?>"
+                        value="<?= $card_data[$j]['tblid'];?>" /></td>
+                </tr>
+                <?php endfor; ?>
+            </tbody>
+            <?php endif; ?>
+        </table><br />
     </form>
 </div>
 

@@ -10,7 +10,8 @@ table:not(#modal_table) {
     margin-left: auto;
 }
 /* <div> containing modal window content */
-#box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv, #cdadd {
+#box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv,
+        #cdadd, #reconcile, #auto {
     display: none;
 }
 .tdht {
@@ -41,4 +42,7 @@ input[id^=payee] {
 }
 #cdprops {
     margin-bottom: 8px;
+}
+#useday {
+    width: 20px;
 }

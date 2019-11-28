@@ -37,13 +37,111 @@ case 'payexp':
         $dbmethod = "Check";
     }
     $addchg = "INSERT INTO `Charges` (`user`, `method`, `cdname`," .
-        "`expdate`, `expamt`, `payee`) VALUES (?,?,?,?,?,?);";
+        "`expdate`, `expamt`, `payee`, `acctchgd`, `paid`) " .
+        "VALUES (?,?,?,?,?,?,?,'N');";
     $pdo->prepare($addchg)->execute(
-        [$user, $dbmethod, $method, $dbdate, $amt, $payto]
+        [$user, $dbmethod, $method, $dbdate, $amt, $payto, $acct]
     );
+    echo "OK";
+    break;
+case 'income':
+    $newcur = [];
+    $newfnd = [];
+    $adj = 0;
+    $funds = floatval(filter_input(INPUT_POST, 'funds'));
+    for ($j=0; $j<count($account_names); $j++) {
+        if ($account_names === 'Undistributed Funds') {
+            $indx = $j;
+            break;
+        } else {
+            $funded = floatval($income[$j]);
+            $budval = floatval($budgets[$j]);
+            $curbal = floatval($current[$j]);
+            if ($funded < $budval) {
+                $delta = $budval - $funded;
+                if ($funds >= $delta) {
+                    $fnd = array((string) $acctid[$j] => (string) $budval);
+                    array_push($newfnd, $fnd);
+                    $bal = $curbal + $delta;
+                    array_push($newcur, (string) $bal);
+                    $funds -= $delta;
+                    $adj++;
+                } else {
+                    $newbucks = $funded + $funds;
+                    $fnd = array((string) $acctid[$j] => (string) $newbucks);
+                    array_push($newfnd, $fnd);
+                    $bal = $curbal + $funds;
+                    array_push($newcur, (string) $bal);
+                    $funds = 0;
+                    $adj++;
+                    break;
+                }
+            }
+        }
+    }
+    // since $newfnd is an array of arrays, thus cannot use fct array_values()
+    $fndval = [];
+    $fndkey = [];
+    for ($q=0; $q<count($newfnd); $q++) {
+        // this is the item's unique table `id`
+        $fndkey[$q] = (string) key($newfnd[$q]); 
+        // this is the new value for `funded`
+        $fndval[$q] = $newfnd[$q][$fndkey[$q]];  
+    }
+    // Note: $newbal has the same indices and does not need to be an array of arrays
+    if ($funds > 0) {
+        $uinc = floatval($income[$indx]) + $funds;
+        array_push($newcur, (string) $uinc);
+        array_push($fndval, '0');
+        array_push($fndkey, $acctid[$indx]); // unique id for this Undist acct
+    }
+    for ($l=0; $l<count($fndkey); $l++) {
+        $adjinc = "UPDATE `Budgets` SET `current` = :bal," .
+            "`funded` = :newfund WHERE `id` = :id;";
+        $adjmt = $pdo->prepare($adjinc);
+        $adjmt->execute(
+            ["bal" => $newcur[$l], "newfund" => $fndval[$l], "id" => $fndkey[$l]]
+        );
+    }
+    echo "OK";
+    break;
+case 'otdeposit':
+    $funds = filter_input(INPUT_POST, 'newfunds');
+    $key = array_search('Undistributed Funds', $account_names);
+    $newval = floatval($current[$key]) + floatval($funds);
+    $undis = (string) $newval;
+    $loc = (string) $acctid[$key];
+    $updte = "UPDATE `Budgets` SET `current` = :undis WHERE `id` = :tblid;";
+    $newundis = $pdo->prepare($updte);
+    $newundis->execute(["undis" => $undis, "tblid" => $loc]);
+    echo "OK";
+    break;
+case 'xfr':
+    $from = filter_input(INPUT_POST, 'from');
+    $to   = filter_input(INPUT_POST, 'to');
+    $amt  = filter_input(INPUT_POST, 'sum');
+    $fromkey = array_search($from, $account_names);
+    $frmid = $acctid[$fromkey];
+    $tokey   = array_search($to, $account_names);
+    $toid  = $acctid[$tokey]; 
+    $xfrout = floatval($current[$fromkey]) - floatval($amt);
+    $current[$fromkey] = (string) $xfrout; 
+    $xfrin  = floatval($current[$tokey]) + floatval($amt);
+    $current[$tokey]   = (string) $xfrin;
+    $frmreq = "UPDATE `Budgets` SET `current` = :frm WHERE `id` = :frmid;";
+    $frmq = $pdo->prepare($frmreq);
+    $frmq->execute(["frm" => $xfrout, "frmid" => $frmid]);
+    $toreq = "UPDATE `Budgets` SET `current` = :toc WHERE `id` = :toid;";
+    $toq  = $pdo->prepare($toreq);
+    $toq->execute(["toc" => $xfrin, "toid" => $toid]);
+    echo "OK";
     break;
 }
+
 // make a payment from a 'Budgets' account; record the data in 'Charges'
+
+
+exit;
 
 
 // transfer funds:

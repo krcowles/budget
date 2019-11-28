@@ -30,6 +30,11 @@ foreach ($prev1 as $item) {
 foreach ($current as $item) {
     $balCurrent += floatval($item);
 }
+// add credit card charges to $balCurrent (which only has account balance so far)
+
+foreach ($cardbal as $cdarray) {
+    $balCurrent += floatval($cdarray['bal']);
+}
 
 // format dollar items for the table
 for ($a=0; $a<count($account_names); $a++) {
@@ -45,4 +50,3 @@ $balBudget  = dataPrep($balBudget, 'budget');
 $balPrev0   = dataPrep($balPrev0, 'prev0');
 $balPrev1   = dataPrep($balPrev1, 'prev1');
 $balCurrent = dataPrep($balCurrent, 'current');
-$end =1;

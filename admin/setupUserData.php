@@ -8,7 +8,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "../database/global_boot.php";
+require_once "../database/global_boot.php";
 
 $cards = <<<CD
 CREATE TABLE Cards (

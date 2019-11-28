@@ -9,7 +9,7 @@
  * @author  Tom Sandberg and Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "../database/global_boot.php";
+require_once "../database/global_boot.php";
 ?>
 <!DOCTYPE html>
 <html lang="en-us">

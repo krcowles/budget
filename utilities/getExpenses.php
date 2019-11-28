@@ -10,12 +10,13 @@
  * @license No license to date
  */
 require_once "../database/global_boot.php";
-
+$expid = [];
 $expdate = [];
 $expamt = [];
 $expmethod = [];
 $expcdname = [];
 $exppayee = [];
+$expcharged = [];
 $chgreq = "SELECT * FROM `Charges` WHERE `user` = :user AND `paid` = 'N';";
 $chgdat = $pdo->prepare($chgreq);
 $chgdat->execute(["user" => $user]);
@@ -23,11 +24,13 @@ $charges = $chgdat->fetchALL(PDO::FETCH_ASSOC);
 $expenses = count($charges) > 0 ? true : false;
 if ($expenses) {
     foreach ($charges as $expense) {
+        array_push($expid, $expense['expid']);
         array_push($expamt, $expense['expamt']);
         array_push($expdate, $expense['expdate']);
         array_push($expmethod, $expense['method']);
         array_push($expcdname, $expense['cdname']);
         array_push($exppayee, $expense['payee']);
+        array_push($expcharged, $expense['acctchgd']);
     }
 }
 

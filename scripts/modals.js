@@ -68,6 +68,44 @@ var modal = (function() {
         var value = domId[domId.selectedIndex].value;
         return value;
     }
+    // function called when settings.id == 'autopay'
+    function autopay( method, acct_name, row) {
+        $('#modal_table').after($close);
+        $close.css('margin-top', '12px');
+        $close.text("Finished");
+        $modal.css({
+            top: 40,
+            left: 600
+        });
+        var divht = $content.height() + 24 + 'px';
+        $modal.css({
+            height: divht
+        });
+        $('button[id^=paymt]').each(function() {
+            $(this).on('click', function() {
+                var idstr = this.id;
+                var idno = parseInt(idstr.substr(5));
+                var inpid = '#amt' + idno;
+                var payment = parseFloat($(inpid).val());
+                var payid = '#payee' + idno;
+                var payto = $(payid).val();
+                var elements = payto.split();
+                for (var n=0; n<elements.length; n++) {
+                    if (n !== elements.length - 1) {
+                        elements[n] += '%20';
+                    }
+                }
+                var payee = elements.join().trim();
+                window.open('../utilities/updateAP.php?row=' + row[idno] + 
+                    '&use=' + method[idno] + '&amt=' + payment +
+                    '&payto=' + payee + '&acct=' + acct_name[idno], "_self");
+            });
+        });
+        $close.on('click', function () {
+            $content.empty();
+            $modal.detach();
+        });
+    }
     // modal function executed when settings.id == 'expense'
     function payExpense(deferred) {
         $content.append($close);
@@ -98,7 +136,122 @@ var modal = (function() {
         $('#pay').on('click', function() {
             var ajaxdata = {id: 'payexp', user: g_user, acct_name: acctname,
                 method: charge, amt: amount, payto: payee};
-            executeScript('../edit/saveAcctEdits.php', ajaxdata, 'making payment', deferred);
+            executeScript('../edit/saveAcctEdits.php', ajaxdata,
+                'making payment', deferred);
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    // modal function executed when settings.id == 'income'
+    function distribute(deferred) {
+        $('#dist').after($close);
+        $close.css('margin-left', '150px');
+        var funds = 0;
+        $funds = $('#incamt').on('change', function() {
+            funds = this.value;
+        });
+        $('#dist').on('click', function() {
+            var ajaxdata = {id: 'income', user: g_user, funds: funds};
+            executeScript('../edit/saveAcctEdits.php', ajaxdata,
+                "distributing income", deferred);
+            modal.close();
+        });
+        $close.on('click', function () {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    // modal function executed when settings.id == 'deposit'
+    function makeDeposit(deferred) {
+        $('#depfunds').after($close);
+        $close.css('margin-left', '22px');
+        var deposit_funds = 0;
+        var $deposit = $('#depo');
+        $deposit.on('change', function() {
+            deposit_funds = this.value
+        });
+        $('#depfunds').on('click', function() {
+            ajaxdata = {id: 'otdeposit', user: g_user, newfunds: deposit_funds};
+            executeScript('../edit/saveAcctEdits.php', ajaxdata,
+                "making deposit", deferred);
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    // modal function executed when settings.id == 'xfr'
+    function xfrfunds(deferred) {
+        $('#transfer').after($close);
+        $close.css('margin-left', '80px');
+        var $accounts = $('.fullsel'); // all on page! Pay Expense has [0]
+        $accounts[1].id = 'from';
+        $accounts[2].id = 'to';
+        var fromacct = getSelectValue($accounts[1]);
+        var toacct = getSelectValue($accounts[2]);
+        var xframt = 0;
+        $(document).on('change', '#from', function() {
+            fromacct = this.value;
+        });
+        $(document).on('change', '#to', function() {
+            toacct = this.value;
+        });
+        $('#xframt').on('change', function() {
+            xframt = this.value;
+        });
+        $('#transfer').on('click', function() {
+            ajaxdata = {id: 'xfr', user: g_user, 
+                from: fromacct, to: toacct, sum: xframt};
+            executeScript("../edit/saveAcctEdits.php", ajaxdata,
+                "transferring funds", deferred);
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    // modal function executed when settings.id == 'recon'
+    function reconcile(deferred) {
+        $('#usecard').after($close);
+        var $ccbox = $('.ccsel');
+        $ccbox[0].id = 'reccd';
+        $close.css('margin-left', '76px');
+        var usecd = getSelectValue($ccbox[0]);
+        $('#reccd').on('change', function() {
+            usecd = this.value;
+        });
+        $('#usecard').on('click', function() {
+            deferred.resolve();
+            var recloc = "../utilities/reconcile.php?user=" + g_user 
+                + "&card=" + usecd;
+            window.open(recloc, "_self");
+            modal.close();
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    // modal function executed when settings.id == 'setup_ap'
+    function setupAutopay(deferred) {
+        $('#perfauto').after($close);
+        $close.css('margin-left', '80px');
+        var $cardsel = $('.allsel');  // also used in Pay Expense
+        var use = getSelectValue($cardsel[1]);
+        $cardsel[1].id = 'forap';
+        $('#forap').on('change', function() {
+            use = this.value;
+        });
+        var dom = $('#useday').text();
+        $('#useday').on('change', function() {
+            dom = this.value;
+        });
+        $('#perfauto').on('click', function() {
+            ajaxdata = {id: 'apset', user: g_user, method: use, day: dom};
+            executeScript('../edit/saveAcctEdits.php', ajaxdata,
+                'setting up autopay', deferred);
         });
         $close.on('click', function() {
             deferred.resolve();
@@ -172,79 +325,6 @@ var modal = (function() {
                     alert(msg);
                 }
             });
-        });
-    }
-    // function called when settings.id == 'autopay'
-    function autopay( method, acct_name, row) {
-        $('#modal_table').after($close);
-        $close.css('margin-top', '12px');
-        $close.text("Finished");
-        $modal.css({
-            top: 40,
-            left: 600
-        });
-        var divht = $content.height() + 24 + 'px';
-        $modal.css({
-            height: divht
-        });
-        $('button[id^=paymt]').each(function() {
-            $(this).on('click', function() {
-                var idstr = this.id;
-                var idno = parseInt(idstr.substr(5));
-                var inpid = '#amt' + idno;
-                var payment = parseFloat($(inpid).val());
-                var payid = '#payee' + idno;
-                var payto = $(payid).val();
-                var elements = payto.split();
-                for (var n=0; n<elements.length; n++) {
-                    if (n !== elements.length - 1) {
-                        elements[n] += '%20';
-                    }
-                }
-                var payee = elements.join().trim();
-                window.open('../utilities/updateAP.php?row=' + row[idno] + 
-                    '&use=' + method[idno] + '&amt=' + payment +
-                    '&payto=' + payee + '&acct=' + acct_name[idno], "_self");
-            });
-        });
-        $close.on('click', function () {
-            $content.empty();
-            $modal.detach();
-        });
-    }
-    // modal function executed when settings.id == 'income'
-    function distribute(deferred) {
-        $('#dist').after($close);
-        $close.css('margin-left', '150px');
-        var funds = 0;
-        $funds = $('#incamt').on('change', function() {
-            funds = this.value;
-        });
-        $('#dist').on('click', function() {
-            var ajaxdata = {funds: funds};
-            $.ajax({
-                url: "../utilities/enterIncome.php",
-                method: "GET",
-                data: ajaxdata,
-                dataType: "text",
-                success: function(results) {
-                   if (results == "OK") {
-                       deferred.resolve();
-                       location.reload();
-                   }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    deferred.resolve();
-                    var msg = "Problem encountered distributing income:" +
-                     " Error " + errorThrown + "; " + textStatus;
-                    alert(msg);
-                }
-            });
-            modal.close();
-        });
-        $close.on('click', function () {
-            deferred.resolve();
-            modal.close();
         });
     }
     // modal function executed when settings.id == 'rename'
@@ -329,97 +409,6 @@ var modal = (function() {
                         textStatus + "; Error: " + errorThrown;
                     alert(msg);
                     deferred.resolve();
-                }
-            });
-        });
-        $close.on('click', function() {
-            deferred.resolve();
-            modal.close();
-        });
-    }
-    // modal function executed when settings.id == 'deposit'
-    function makeDeposit(deferred) {
-        $('#depfunds').after($close);
-        $close.css('margin-left', '22px');
-        var deposit_funds = 0;
-        var $deposit = $('#depo');
-        $deposit.on('change', function() {
-            deposit_funds = this.value
-        });
-        $('#depfunds').on('click', function() {
-            ajaxdata = {newfunds: deposit_funds};
-            $.ajax({
-                url: "../edit/saveAcctEdits.php",
-                method: "GET",
-                dataType: "text",
-                data: ajaxdata,
-                success: function(results) {
-                    if (results === "OK") {
-                        deferred.resolve();
-                        modal.close();
-                        location.reload();
-                    } else {
-                        deferred.resolve();
-                        alert("Problem encountered making deposit");
-                        modal.close();
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    deferred.resolve();
-                    msg = "Problem encountered making deposit: " +
-                        textStatus + "; Error: " + errorThrown;
-                    alert(msg);
-                    modal.close();
-                }
-            });
-        });
-        $close.on('click', function() {
-            deferred.resolve();
-            modal.close();
-        });
-    }
-    // modal function executed when settings.id == 'xfr'
-    function xfrfunds(from, to, deferred) {
-        $('#xfrfrom').append(from);
-        $('#xfrto').append(to);
-        $('#transfer').after($close);
-        $close.css('margin-left', '80px');
-        var acct_name = $('#selacct option:selected').text();
-        var to_acct = $('#second option:selected').text();
-        var xframt = 0;
-        $(document).on('change', '#selacct', function() {
-            acct_name = this.value;
-        });
-        $(document).on('change', '#second', function() {
-            to_acct = this.value;
-        });
-        $('#xframt').on('change', function() {
-            xframt = this.value;
-        });
-        $('#transfer').on('click', function() {
-            ajaxdata = {from: acct_name, to: to_acct, sum: xframt};
-            $.ajax({
-                url: '../edit/saveAcctEdits.php',
-                data: ajaxdata,
-                dataType: "text",
-                method: "GET",
-                success: function(results) {
-                    if (results === "OK") {
-                        deferred.resolve();
-                        modal.close();
-                        location.reload();
-                    } else {
-                        deferred.resolve();
-                        alert("Problem encountered transferring funds");
-                        modal.close();
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    deferred.resolve();
-                    msg = "Problem encountered making deposit: " +
-                        textStatus + "; Error: " + errorThrown;
-                    alert(msg);
-                    modal.close();
                 }
             });
         });
@@ -561,21 +550,25 @@ var modal = (function() {
                 getpass(settings.usr);
             } else if (modid === 'expense') {
                 payExpense(settings.deferred);
+            } else if (modid === 'income') {
+                distribute(settings.deferred);
             } else if (modid === 'deposit') {
                 makeDeposit(settings.deferred);
+            } else if (modid === 'xfr') {
+                xfrfunds(settings.deferred);
+            } else if (modid === 'recon') {
+                reconcile(settings.deferred);
+            } else if (modid === 'setup_ap') {
+                setupAutopay(settings.deferred);
             } else if (modid === 'edit_chg') {
                 editCredit(settings.ivals, settings.chgitem, 
                         settings.chgid, settings.def);
             } else if (modid === 'autopay') {
-                autopay(settings.method, settings.acct_name, settings.row_no);
-            } else if (modid === 'income') {
-                distribute(settings.deferred);
+                autopay(settings.deferred);
             } else if (modid === 'rename') {
                 nameit();
             } else if (modid === 'addacct') {
                 newacct(settings.deferred);
-            } else if (modid === 'xfr') {
-                xfrfunds(settings.from, settings.to, settings.deferred);
             } else if (modid === 'mvacct') {
                 mvacct();
             } else if (modid === 'delacct') {
@@ -591,7 +584,7 @@ var modal = (function() {
         }
     };
 }());  // modal is an IIFE
-// autopay modal is draggable:
+// all modals are draggable:
 function dragElement(elmnt) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     if (document.getElementById(elmnt.id + "header")) {

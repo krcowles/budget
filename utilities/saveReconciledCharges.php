@@ -8,49 +8,34 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "getCrData.php";
+$user = filter_input(INPUT_POST, 'user'); // mandatory prior to 'requires'
+$subj = filter_input(INPUT_POST, 'card');
 
-$selected = filter_input(INPUT_POST, 'card_sel');
-$deletions = isset($_POST['del']) ? $_POST['del'] : false;
+require "../utilities/getCards.php";
+require "../utilities/getExpenses.php";
 
-for ($j=0; $j<$card_cnt; $j++) {
-    if ($selected === $cards[$j]) {
-        $cardid = $j;
-        break;
+$cardset = [];
+for ($i=0; $i<count($expamt); $i++) {
+    if ($expcdname[$i] === $subj) {
+        array_push($cardset, $expid[$i]);
     }
 }
-$delid = 'card' . $cardid;
-// index for $credit_charges:
-switch ($cardid) {
-case 0: 
-    $chargeid = 'card1';
-    break;
-case 1:
-    $chargeid = 'card2';
-    break;
-case 2:
-    $chargeid = 'card3';
-    break;
-case 3:
-    $chargeid = 'card4';
-}
-$updated = [];
-for ($q=0; $q<count($credit_charges[$chargeid]); $q++) {
-    $did = $delid . 'rec' . $q;
-    if (!in_array($did, $deletions)) {
-        array_push($updated, $credit_charges[$chargeid][$q]);
+$paid = isset($_POST['del']) ? $_POST['del'] : false;
+if ($paid) {
+    $pdindx = 0;
+    for ($j=0; $j<count($cardset); $j++) {
+        if ($paid[$pdindx] == $cardset[$j]) {
+            $payit = "UPDATE `Charges` SET `paid` = 'Y' WHERE `expid` = :id;";
+            $updte = $pdo->prepare($payit);
+            $updte->execute(["id" => $paid[$pdindx]]);
+            $pdindx++;
+            if ($pdindx >= count($paid)) {
+                break;
+            }
+        }
     }
 }
-$credit_charges[$chargeid] = $updated;
-// write out updated charges
-$handle = fopen($credit_data, "w");
-fputcsv($handle, $crHeaders);
-foreach ($credit_charges as $cardset) {
-    foreach ($cardset as $entry) {
-        fputcsv($handle, $entry);
-    }
-    fputcsv($handle, array("next"));
-}
-fclose($handle);
 
-header("Location: reconcile.php");
+// encode card name as it may contain spaces
+$return = "reconcile.php?user=" . $user . "&card=" . urlencode($subj);
+header("Location: {$return}");

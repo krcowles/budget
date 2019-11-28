@@ -9,8 +9,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "admin/onetimeSetup.php";
-require "database/global_boot.php";
+require_once "database/global_boot.php";
 require "admin/getLogin.php";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
