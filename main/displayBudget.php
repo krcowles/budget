@@ -142,11 +142,10 @@ if ($user) {
         </div>
         <!-- pay expense -->
         <div id="box">
-            <span id="modal_accts">Deduct from: </span>
-            <?= $fullsel;?><br />
-            <span id="modal_cards">Pay with: </span>
-            <?= $allCardsHtml;?>
-            <br /><br />
+            Deduct from:
+            <div id="fsel0"><?= $fullsel;?></div>
+            Pay with:
+            <div id="csel0"><?= $allCardsHtml;?></div>
             Enter the amount of the expense:<br />
             $ <input type="text" id="expamt"  /><br />
             Paid to: <input type="text" id="payee" /><br />
@@ -174,55 +173,33 @@ if ($user) {
         <div id="xfr">
             Transfer the following amount:<br />$ <input type="text" 
                 id="xframt" /><br />
-            <span id="xfrfrom">Take from:
-            <?= $fullsel;?></span><br /><br />
-            <span id="xfrto">Place in: 
-            <?= $fullsel;?></span>
+            Take from:
+            <div id="xfrfrom"><?= $fullsel;?></div>
+            Place in:<br />
+            <div id="xfrto"><?= $fullsel;?></div><br />
             <button id="transfer">Transfer</button>
         </div>
         <!-- reconcile credit card statement -->
         <div id="reconcile">
             Please select the card you wish to reconcile:<br />
-            <?= $ccHtml;?><br /><br />
+            <div id="ccsel0"><?= $ccHtml;?></div><br />
             <button id="usecard">Reconcile</button>
         </div>
         <!-- schedule an autopay -->
         <div id="auto">
-            Prompt for automatic payment using:<br /><?= $allCardsHtml;?> on day
-            <input id="useday" type="text" /><br />each month.<br /><br />
+            Prompt for automatic payment of:<br />
+            <div id="apsel"><?= $fullsel;?></div>
+            Method to be applied:<br />
+            <div id="ccselap"><?= $allCardsHtml;?> on day
+            <input id="useday" type="text" /><br />
+            of each month.</div><br />
             <button id="perfauto">Set up</button>
         </div>
-        <!-- rename account -->
-        <div id="rename">
-            <span id="asel">Select the account you wish to rename: </span>
-            Supply the new name: <input id="newname" type="text" /><br />
-            <button id="doit">Change Name</button>
-        </div>
-        <!-- add account -->
-        <div id="addacct">
-            Enter the account information for the new addition to the budget:
-            <br /><br />New Account Name:<br />
-            <input id="newacct" type="text" /><br /><br />
-            Enter the monthly amount to be budgeted to this account:<br />
-            $ <input id="mo" type="text" /><br /><br />
-            Use account management tools to modify other features once created (e.g.
-            'Change Autopay', 'Move Funds', etc.)<br /><br />
-            <button id="addit">Add Account</button>
-        </div>
-        <!-- move account -->
-        <div id="mv">
-            Note: you cannot move the 'Undistributed Funds' nor any 'Temporary
-            Account'<br /><br />
-            <span id="mvfrom">Place the following account: <br /></span><br />
-            <span id="mvto">Directly above: <br /></span><br /><br />
-            <button id="mvit">Move</button>
-        </div>
-        <!-- move account -->
-        <div id="del">
-            Note: you can only delete accounts you create (e.g. not 'Undistributed
-            Funds' nor 'Temporary Accounts')<br /><br />
-            <span id="delacct">Delete: </span><br /><br />
-            <button id="delit">Delete Account</button>
+        <!-- delete autopay -->
+        <div id="delauto">
+            Select the account for which you wish to delete prompted autopay:<br />
+            <div id="delapacct"><?= $fullsel;?></div><br />
+            <button id="remap">Delete Autopay</button>
         </div>
         <!-- add new Cr/Dr card -->
         <div id="cdadd">
@@ -235,6 +212,50 @@ if ($user) {
             </select><br />
             <button id="newcd">Submit</button>
         </div>
+        <!-- delete Cr/Dr card -->
+        <div id="delcrdr">
+            Select the card you wish to delete:<br />
+            <div id="deletecard"><?= $allCardsHtml;?></div><br />
+            <button id="godel">Delete Card</button>
+        </div>
+        <!-- add account -->
+        <div id="addacct">
+            Enter the account information for the new addition to the budget:
+            <br /><br />New Account Name:<br />
+            <input id="newacct" type="text" /><br /><br />
+            Enter the monthly amount to be budgeted to this account:<br />
+            $ <input id="mo" type="text" /><br />(Use 'Transfer Funds' to establish
+            this month's balance, or other tools to modify
+            other features.<br /><br />
+            <button id="addit">Add Account</button>
+        </div>
+        <!-- delete account -->
+        <div id="delexisting">
+            Note: you can only delete accounts you create (i.e. not 'Undistributed
+            Funds' or 'Temporary Accounts')
+            <span style="color:brown;">NOTE: Please Ensure the budget-to-delete
+            has a balance of $0.</span><br /><br />
+            <div id="delacct">Delete: <?= $partsel;?></div><br />
+            <button id="delit">Delete Account</button>
+        </div>
+        <!-- move account -->
+        <div id="mv">
+            Note: you cannot move the 'Undistributed Funds' nor any 'Temporary
+            Account'<br /><br />
+            <div id="mvfrom">Place the following account: <br />
+            <?= $partsel;?></div>
+            <div id="mvto">Directly above: <br />
+            <?= $partsel;?></div><br />
+            <button id="mvit">Move</button>
+        </div>
+        <!-- rename account -->
+        <div id="rename">
+            <span id="asel">Select the account you wish to rename: 
+            <?= $partsel;?></span><br /><br />
+            Supply the new name: <input id="newname" type="text" /><br /><br />
+            <button id="ren">Change Name</button>
+        </div>
+        
     </div>
     <!-- after validation, place accordingly:
     <p style="clear:left;">

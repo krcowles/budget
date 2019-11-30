@@ -11,7 +11,7 @@ table:not(#modal_table) {
 }
 /* <div> containing modal window content */
 #box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv,
-        #cdadd, #reconcile, #auto {
+        #cdadd, #reconcile, #auto, #delauto, #delcrdr, #delexisting {
     display: none;
 }
 .tdht {
@@ -33,16 +33,17 @@ input[id^=payee] {
     font-size: 14px;
     margin-top: 6px;
 }
-#xframt {
+#xframt, #apsel {
     margin-bottom: 6px;
 }
-#xfrto {
-    position: relative;
-    top: -10px;
+#ccsel0 {
+    margin-top: 6px;
 }
 #cdprops {
     margin-bottom: 8px;
 }
 #useday {
     width: 20px;
+    border-color: black;
+    border-width: 1px;
 }

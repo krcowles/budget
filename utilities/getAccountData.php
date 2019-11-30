@@ -56,6 +56,7 @@ if (count($bud_dat) === 0) {
 // copy the arrays so that they can be re-sequenced according to $positions
 $idArray  = new ArrayObject($acctid);
 $nmeArray = new ArrayObject($account_names);
+$posArray = new ArrayObject($positions);
 $budArray = new ArrayObject($budgets);
 $p0Array  = new ArrayObject($prev0);
 $p1Array  = new ArrayObject($prev1);
@@ -64,10 +65,15 @@ $apArray  = new ArrayObject($autopay);
 $dayArray = new ArrayObject($day);
 $pdArray  = new ArrayObject($paid);
 $incArray = new ArrayObject($income);
+$orgpos = [];
+for ($j=0; $j<count($account_names); $j++) {
+    $orgpos[$j] = $positions[$j];
+} // necessary because 'array_search' treats ArrayObject as *not* an array!
 for ($i=0; $i<count($account_names); $i++) {
     $posval = $i + 1; // there is no 0 position
-    $pos = array_search($posval, $positions); // find the key for each consec. item
+    $pos = array_search($posval, $orgpos); // find the key for each consec. item
     $acctid[$i] = $idArray[$pos];
+    $positions[$i] = $posArray[$pos];
     $account_names[$i] = $nmeArray[$pos];
     $budgets[$i] = $budArray[$pos];
     $prev0[$i] = $p0Array[$pos];

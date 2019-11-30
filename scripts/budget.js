@@ -50,4 +50,13 @@ if (ap_candidates) {
     });
 }
 
+// disable first option in Delete Card box
+var $moddc = $('#deletecard .allsel');
+$moddc[0].options[0].disabled = 'disabled';
+// Add option for moving account
+var $mvlist = $('#mvto .partsel');
+var undisopt = document.createElement('option');
+undisopt.text = "Undistributed Funds";
+$mvlist[0].add(undisopt);
+
 }); // end page loaded

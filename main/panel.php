@@ -40,7 +40,14 @@
             </li>
             <li id="schedap" class="menu-main">
                 <div class="menu-item">
-                    <span class="menu-text">Schedule<br />Autopay</span>
+                    <span class="menu-text">Autopay</span>
+                    <div class="menuIcons menu-open"></div>
+                </div>
+                <div id="menu-schedap" class="menu-default">
+                    <ul class="menus">
+                        <li><div id="sched">Schedule Autopay</div></li>
+                        <li><div id="delap">Delete Autopay</div></li>
+                    </ul>
                 </div>
             </li>
             <li id="edcds" class="menu-main">
@@ -52,7 +59,6 @@
                     <ul class="menus">
                         <li><div id="adcd">Add Card</div></li>
                         <li><div id="decd">Delete Card</div></li>
-                        <li><div id="edcd">Edit Card</div></li>
                     </ul>
                 </div>
             </li>
@@ -63,8 +69,7 @@
                 </div>
                 <div id="menu-edbud" class="menu-default">
                     <ul class="menus">
-                        <li><div id="edbud">Edit Budget Amt</div></li>
-                        <li><div id="edmob">Edit Current Balance</div></li>
+                        <li><div id="edbud">Edit Budget Entries</div></li>
                         <li><div id="edadd">Add Account</div></li>
                         <li><div id="eddel">Delete Account</div></li>
                         <li><div id="edmov">Move Account</div></li>

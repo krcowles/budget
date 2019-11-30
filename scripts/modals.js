@@ -111,8 +111,8 @@ var modal = (function() {
         $content.append($close);
         $close.css('margin-left', '216px');
         $close.text("Cancel");
-        var $selacct = $('.fullsel');
-        var $selcd = $('.allsel');
+        var $selacct = $('#fsel0 .fullsel');
+        var $selcd = $('#csel0 .allsel');
         var $expensed = $('#expamt');
         var $payee = $('#payee');
         // initial values
@@ -186,11 +186,12 @@ var modal = (function() {
     function xfrfunds(deferred) {
         $('#transfer').after($close);
         $close.css('margin-left', '80px');
-        var $accounts = $('.fullsel'); // all on page! Pay Expense has [0]
-        $accounts[1].id = 'from';
-        $accounts[2].id = 'to';
-        var fromacct = getSelectValue($accounts[1]);
-        var toacct = getSelectValue($accounts[2]);
+        var $from = $('#xfrfrom .fullsel');
+        $from[0].id = 'from'
+        var $to = $('#xfrto .fullsel');
+        $to[0].id = 'to';
+        var fromacct = getSelectValue($from[0]);
+        var toacct = getSelectValue($to[0]);
         var xframt = 0;
         $(document).on('change', '#from', function() {
             fromacct = this.value;
@@ -215,7 +216,7 @@ var modal = (function() {
     // modal function executed when settings.id == 'recon'
     function reconcile(deferred) {
         $('#usecard').after($close);
-        var $ccbox = $('.ccsel');
+        var $ccbox = $('#ccsel0 .ccsel');
         $ccbox[0].id = 'reccd';
         $close.css('margin-left', '76px');
         var usecd = getSelectValue($ccbox[0]);
@@ -237,10 +238,16 @@ var modal = (function() {
     // modal function executed when settings.id == 'setup_ap'
     function setupAutopay(deferred) {
         $('#perfauto').after($close);
-        $close.css('margin-left', '80px');
-        var $cardsel = $('.allsel');  // also used in Pay Expense
-        var use = getSelectValue($cardsel[1]);
-        $cardsel[1].id = 'forap';
+        $close.css('margin-left', '130px');
+        var $acctsel = $('#apsel .fullsel')  // used on three previous occasions
+        var against = getSelectValue($acctsel[0]);
+        $acctsel[0].id = 'sapacct';
+        $('#sapacct').on('change', function() {
+            against = this.value;
+        });
+        var $cardsel = $('#ccselap .allsel');  // also used in Pay Expense
+        var use = getSelectValue($cardsel[0]);
+        $cardsel[0].id = 'forap';
         $('#forap').on('change', function() {
             use = this.value;
         });
@@ -249,7 +256,8 @@ var modal = (function() {
             dom = this.value;
         });
         $('#perfauto').on('click', function() {
-            ajaxdata = {id: 'apset', user: g_user, method: use, day: dom};
+            ajaxdata = {id: 'apset', user: g_user, acct: against,
+                method: use, day: dom};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'setting up autopay', deferred);
         });
@@ -257,6 +265,175 @@ var modal = (function() {
             deferred.resolve();
             modal.close();
         });
+    }
+    // modal function executed when settings.id == 'del_ap'
+    function deleteAutopay(deferred) {
+        $('#remap').after($close);
+        $close.css('margin-left', '30px');
+        var $delacct = $('#delapacct .fullsel'); // four previous on page
+        var dacct = getSelectValue($delacct[0]);
+        $delacct[0].id = "dapay";
+        $('#dapay').on('change', function() {
+            dacct = this.value;
+        });
+        $('#remap').on('click', function() {
+            ajaxdata = {id: 'delapay', user: g_user, acct: dacct};
+            executeScript('../edit/saveAcctEdits.php', ajaxdata, 
+                'deleting autopay', deferred);
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    // modal function executed when settings.id = 'aadcd'
+    function addcard(deferred) {
+        $('#newcd').after($close);
+        $close.css('margin-left', '100px');
+        var newcard = '';
+        var newtype = $('#cdprops option:selected').text();
+        $(document).on('change', '#cdprops', function() {
+            newtype = this.value;
+        });
+        $('#cda').on('change', function() {
+            newcard = this.value;
+        });
+        $('#newcd').on('click', function() {
+            var ajaxdata = {id: 'addcd', user: g_user, 
+                cdname: newcard, cdtype: newtype};
+            executeScript('../edit/saveAcctEdits.php', ajaxdata, 
+                'adding new card', deferred);
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    function deleteCrDr(deferred) {
+        $('#godel').after($close);
+        $close.css('margin-left', '54px');
+        var $dc = $('#deletecard .allsel');
+        var dc = getSelectValue($dc[0]);
+        $dc[0].id = "dcid";
+        $('#dcid').on('change', function() {
+            dc = this.value;
+        });
+        $('#godel').on('click', function() {
+            ajaxdata = {id: 'decard', user: g_user, target: dc};
+            executeScript('../edit/saveAcctEdits.php', ajaxdata,
+                'deleting Cr/Dr card', deferred);
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close()
+        });
+    }
+    // modal function executed when settings.id == 'addacct'
+    function newacct(deferred) {
+        $('#addit').after($close);
+        $close.css('margin-left', '170px');
+        var newacct = "None";
+        $newacct = $('#newacct');
+        var monthly = 0;
+        $monthly = $('#mo');
+        $newacct.on('change', function() {
+            newacct = this.value;
+        });
+        $monthly.on('change', function() {
+            monthly = this.value;
+        });
+        $('#addit').on('click', function() {
+            var ajaxdata = {id: 'addacct', user: g_user,
+                    acct_name: newacct, monthly: monthly};
+            executeScript('../edit/saveAcctEdits.php', ajaxdata,
+                'adding new account', deferred);
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    // modal function executed when settings.id == 'delacct'
+    function delacct(deferred) {
+        $('#delit').after($close);
+        $close.css('margin-left', '48px');
+        var $acct = $('#delacct .partsel');
+        $acct[0].id = 'dacct';
+        var todelete = getSelectValue($acct[0]);
+        $('#dacct').on('change', function() {
+            todelete = this.value;
+        });
+        $('#delit').on('click', function() {
+            var ans = confirm("Are you sure (is balance $0)?");
+            if (ans) { 
+                var ajaxdata = {id: 'acctdel', user: g_user,
+                    acct: todelete};
+                executeScript('../edit/saveAcctEdits.php', ajaxdata,
+                    'deleting account', deferred);
+            } else {
+                alert("No action taken");
+            }
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    // modal function executed when settings.id == 'mvacct'
+    function mvacct(deferred) {
+        $('#mvit').after($close);
+        $close.css('margin-left', '120px');
+        var $mv = $('#mvfrom .partsel');
+        $mv[0].id = 'takeacct';
+        var mover = getSelectValue($mv[0]);
+        var $above = $('#mvto .partsel');
+        $above[0].id = 'above';
+        var ontopof = getSelectValue($above[0]);
+        $('#takeacct').on('change', function() {
+            mover = this.value;
+        });
+        $('#above').on('change', function() {
+            ontopof = this.value;
+        });
+        $('#mvit').on('click', function() {
+            if (mover == ontopof) {
+                alert("From and To are the same - no action taken");
+            } else {
+                var ajaxdata = {id: 'move', user: g_user, mvfrom: mover,
+                    mvto: ontopof};
+                executeScript('../edit/saveAcctEdits.php', ajaxdata,
+                    'moving account', deferred);
+            }
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+    // modal function executed when settings.id == 'rename'
+    function rename(deferred) {
+        $('#ren').after($close);
+        $close.css('margin-left', '40px');
+        var $raccts = $('#asel .partsel');
+        $raccts[0].id = 'racct';
+        var racct = getSelectValue($raccts[0]);
+        $('#racct').on('change', function() {
+            racct = this.value
+        });
+        var rname = $('#newname').val();
+        $('#newname').on('change', function() {
+            rname = this.value;
+        });
+        $('#ren').on('click', function() {
+            var ajaxdata = {id: 'rename', user: g_user,
+            newname: rname, acct: racct};
+            executeScript('../edit/saveAcctEdits.php', ajaxdata,
+                'renaming account', deferred);   
+        });
+        $close.on('click', function () {
+            deferred.resolve();
+            modal.close();
+         });
     }
     // modal function executed when settings.id == 'edit_chg'
     function editCredit(inputvals, locater, cardinfo, defobj) {
@@ -327,200 +504,6 @@ var modal = (function() {
             });
         });
     }
-    // modal function executed when settings.id == 'rename'
-    function nameit() {
-        $modal.css({
-            top: 140,
-            left: 300
-        });
-        $('#doit').after($close);
-        $close.css('margin-left', '120px');
-        var acct_name = $('#selacct option:selected').text();
-        $(document).on('change', '#selacct', function() {
-            acct_name = this.value;
-        });
-        $newname = $('#newname');
-        var newname = "None";
-        $newname.on('change', function() {
-            newname = this.value;
-        });
-        $('#doit').on('click', function() {
-            var ajaxdata = {newname: newname, acct_name: acct_name};
-            $.ajax({
-                url: "../edit/saveAcctEdits.php",
-                method: "GET",
-                dataType: "text",
-                data: ajaxdata,
-                success: function(results) {
-                    if (results === "OK") {
-                        modal.close();
-                        location.reload();
-                    } else {
-                        alert("Problem renaming account");
-                        modal.close();
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    msg = "Problem encountered renaming account: " +
-                        textStatus + "; Error: " + errorThrown;
-                    alert(msg);
-                    modal.close();
-                }
-            });
-        });
-        $close.on('click', function () {
-            modal.close();
-         });
-    }
-    // modal function executed when settings.id == 'addacct'
-    function newacct(deferred) {
-        $('#addit').after($close);
-        $close.css('margin-left', '170px');
-        var newacct = "None";
-        $newacct = $('#newacct');
-        var monthly = 0;
-        $monthly = $('#mo');
-        $newacct.on('change', function() {
-            newacct = this.value;
-        });
-        $monthly.on('change', function() {
-            monthly = this.value;
-        });
-        $('#addit').on('click', function() {
-            var ajaxdata = {acct_name: newacct, monthly: monthly};
-            $.ajax({
-                url: '../edit/saveAcctEdits.php',
-                method: "GET",
-                data: ajaxdata,
-                dataType: "text",
-                success: function(results) {
-                    if (results == "OK") {
-                        deferred.resolve();
-                        modal.close();
-                        location.reload();
-                    } else {
-                        alert("Problem encounted adding account");
-                        deferred.resolve();
-                        modal.close();
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    msg = "Problem encountered adding account: " +
-                        textStatus + "; Error: " + errorThrown;
-                    alert(msg);
-                    deferred.resolve();
-                }
-            });
-        });
-        $close.on('click', function() {
-            deferred.resolve();
-            modal.close();
-        });
-    }
-    // modal function executed when settings.id == 'mvacct'
-    function mvacct() {
-        $('#mvit').after($close);
-        $close.css('margin-left', '200px');
-        $modal.css({
-            top: 60,
-            left: 700
-        });
-        var acct_name = $('#fromlist option:selected').text();
-        var above_acct = $('#tolist:selected').text();
-        $(document).on('change', '#fromlist', function() {
-            acct_name = this.value;
-        });
-        $(document).on('change', '#tolist', function() {
-            above_acct = this.value;
-        });
-        $('#mvit').on('click', function() {
-            var ajaxdata = {mvfrom: acct_name, mvto: above_acct};
-            $.ajax({
-                url: '../edit/saveAcctEdits.php',
-                method: "GET",
-                data: ajaxdata,
-                dataType: "text",
-                success: function(results) {
-                    if (results === "OK") {
-                        modal.close()
-                        location.reload();
-                    } else {
-                        alert("Problem encountered moving account");
-                        modal.close();
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    msg = "Problem encountered moving account: " +
-                        textStatus + "; Error: " + errorThrown;
-                    alert(msg);
-                    modal.close();
-                }
-            });
-        });
-        $close.on('click', function() {
-            modal.close();
-        });
-    }
-    // modal function executed when settings.id == 'delacct'
-    function delacct() {
-        $('#delit').after($close);
-        $close.css('margin-left', '128px');
-        $modal.css({
-            top: 60,
-            left: 700
-        });
-        var subj_acct = $('#fromlist option:selected').text();
-        $(document).on('change', '#fromlist', function() {
-            subj_acct = this.value;
-        });
-        $('#delit').on('click', function() {
-            var ajaxdata = {deletion: subj_acct};
-            $.ajax({
-                url: '../edit/saveAcctEdits.php',
-                method: "GET",
-                data: ajaxdata,
-                dataType: "text",
-                success: function(results) {
-                    if (results === "OK") {
-                        modal.close()
-                        location.reload();
-                    } else {
-                        alert("Problem encountered deleting account");
-                        modal.close();
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    msg = "Problem encountered deleting account: " +
-                        textStatus + "; Error: " + errorThrown;
-                    alert(msg);
-                    modal.close();
-                }
-            })
-        });
-        $close.on('click', function() {
-            modal.close();
-        });
-    }
-    function addcard(deferred) {
-        $('#newcd').after($close);
-        $close.css('margin-left', '100px');
-        var newcard = '';
-        var newtype = $('#cdprops option:selected').text();
-        $(document).on('change', '#cdprops', function() {
-            newtype = this.value;
-        });
-        $('#cda').on('change', function() {
-            newcard = this.value;
-        });
-        $('#newcd').on('click', function() {
-            var ajaxdata = {cdnme: newcard, cdtyp: newtype};
-            executeScript('../edit/cardEdits.php', ajaxdata, 'adding new card', deferred);
-        });
-        $close.on('click', function() {
-            deferred.resolve();
-            modal.close();
-        });
-    }
     
     // public methods
     return {
@@ -560,21 +543,25 @@ var modal = (function() {
                 reconcile(settings.deferred);
             } else if (modid === 'setup_ap') {
                 setupAutopay(settings.deferred);
+            } else if (modid === 'del_ap') {
+                deleteAutopay(settings.deferred);
+            } else if (modid === 'addcd') {
+                addcard(settings.deferred);
+            } else if (modid === 'delcard') {
+                deleteCrDr(settings.deferred);
+            } else if (modid === 'addacct') {
+                newacct(settings.deferred);
+            } else if (modid === 'delacct') {
+                delacct(settings.deferred);
+            } else if (modid === 'mvacct') {
+                mvacct(settings.deferred);
+            } else if (modid === 'rename') {
+                rename(settings.deferred);
             } else if (modid === 'edit_chg') {
                 editCredit(settings.ivals, settings.chgitem, 
                         settings.chgid, settings.def);
-            } else if (modid === 'autopay') {
+            }  else if (modid === 'autopay') {
                 autopay(settings.deferred);
-            } else if (modid === 'rename') {
-                nameit();
-            } else if (modid === 'addacct') {
-                newacct(settings.deferred);
-            } else if (modid === 'mvacct') {
-                mvacct();
-            } else if (modid === 'delacct') {
-                delacct();
-            } else if (modid === 'addcd') {
-                addcard(settings.deferred);
             }
         },
         close: function() {

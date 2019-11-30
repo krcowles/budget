@@ -2,7 +2,7 @@ $(function() {
     // establish menu/sub-menu widths, sub-menu positions and menu icons
     var menuWidth = ['120', '120', '120', '140', 
         '120', '120', '120', '120']; // 8 main menu items
-    var subWidth = ['90', '130', '110', '130'];  // 4 sub-menus
+    var subWidth = ['120', '90', '130', '110', '130'];  // 4 sub-menus
     var $mainMenus = $('.menu-main');
     var navPos = $('#navbar').offset();
     var navBottom = navPos.top + $('#navbar').height() + 5 + 'px';
@@ -53,12 +53,16 @@ $(function() {
     });
 
     /**
-     * Menu Actions (when user chooses menu item or sub-menu item)
+     *                ----- Menu Actions -----
+     * Menus without submenus are clicked on to invoke (code follows);
+     * Submenus utilize 'executeItem()' (listed after the above)
      */
+    var user = $('#user').text();
+    
     $('#expense').on('click', function() {
         var def = new $.Deferred();
         var exp_form = $('#box').detach();
-        modal.open({id: 'expense', width: '342px', height: '220px', 
+        modal.open({id: 'expense', width: '342px', height: '240px', 
             content: exp_form, deferred: def});
         $.when( def ).then(function() {
             $('#allForms').append(exp_form);
@@ -100,17 +104,26 @@ $(function() {
             $('#allForms').append(rec);
         });  
     });
-    $('#schedap').on('click', function() {
-        var def = new $.Deferred;
-        var apbox = $('#auto').detach();
-        modal.open({id: 'setup_ap', height: '150px', width: '280px',
-            content: apbox, deferred: def});
-        $.when( def ).then(function() {
-            $('#allForms').append(apbox);
-        });  
-    });
     function executeItem(item) {
         switch(item) {
+            case "Schedule Autopay":
+                var def = new $.Deferred;
+                var apbox = $('#auto').detach();
+                modal.open({id: 'setup_ap', height: '196px', width: '280px',
+                    content: apbox, deferred: def});
+                $.when( def ).then(function() {
+                    $('#allForms').append(apbox);
+                });  
+                break;
+            case "Delete Autopay":
+                var def = new $.Deferred();
+                var dapbox = $('#delauto').detach();
+                modal.open({id: 'del_ap', height: '146px', width: '240px',
+                    content: dapbox, deferred: def});
+                $.when( def ).then(function() {
+                    $('#allForms').append(dapbox);
+                });
+                break;
             case "Add Card":
                 var def = new $.Deferred();
                 var cdbox = $('#cdadd').detach();
@@ -121,27 +134,53 @@ $(function() {
                 });
                 break;
             case "Delete Card":
+                var def = new $.Deferred();
+                var crdrbox = $('#delcrdr').detach();
+                modal.open({id: 'delcard', width: '240px', height: '148px',
+                    content: crdrbox, deferred: def});
+                $.when( def ).then(function() {
+                    $('#allForms').append(crdrbox)
+                });
                 break;
-            case "Edit Card":
-                break;
-            case "Edit Budget Amt":
-                break;
-            case "Edit Current Balance":
+            case "Edit Budget Entries":
+                var editor = "../edit/budgetEditor.php?user=" + user;
+                window.open(editor, "_self");
                 break;
             case "Add Account":
                 var def = new $.Deferred();
                 var adder = $('#addacct').detach();
-                modal.open({id: 'addacct', width: '360px', height: '360px',
+                modal.open({id: 'addacct', width: '360px', height: '320px',
                     content: adder, deferred: def});
                 $.when( def ).then(function() {
                     $('#allForms').append(adder);
                 }); 
                 break;
             case "Delete Account":
+                var def = new $.Deferred();
+                var delbox = $('#delexisting').detach();
+                modal.open({id: 'delacct', width: '260px', height: '220px',
+                    content: delbox, deferred: def});
+                $.when( def ).then(function() {
+                    $('#allForms').append(delbox);
+                });
                 break;
             case "Move Account":
+                var def = new $.Deferred();
+                var mvbox = $('#mv').detach();
+                modal.open({id: 'mvacct', width: '260px', height: '250px',
+                    content: mvbox, deferred: def});
+                $.when( def ).then(function() {
+                    $('#allForms').append(mvbox);
+                });
                 break;
             case "Rename Account":
+                var def = new $.Deferred();
+                var rebox = $('#rename').detach();
+                modal.open({id: 'rename', width: '240px', height: '188px',
+                    content: rebox, deferred: def});
+                $.when( def ).then(function() {
+                    $('#allForms').append(rebox);
+                });
                 break;
             case "Edit Expenses":
                 break;
