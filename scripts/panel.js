@@ -104,6 +104,7 @@ $(function() {
             $('#allForms').append(rec);
         });  
     });
+    // Submenu actions
     function executeItem(item) {
         switch(item) {
             case "Schedule Autopay":
@@ -183,11 +184,15 @@ $(function() {
                 });
                 break;
             case "Edit Expenses":
+                var editexpense = "../edit/editCreditCharges.php?user=" + user;
+                window.open(editexpense, "_self");
                 break;
+            /*
             case "Monthly Report":
                 break;
             case "Annual Report":
                 break;
+            */
             default:
                 alert(item + " is not yet implemented");
         }

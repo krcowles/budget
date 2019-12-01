@@ -50,6 +50,7 @@ for ($i=0; $i<count($expamt); $i++) {
     <form id="form" method="POST" action="saveReconciledCharges.php">
         <button id="reconcile">Reconcile</button>
         <button id="rtb">Return to Budget</button><br /><br />
+        <p id="user" style="display:none;"><?= $user;?></p>
         <span id="inst">Check the items to be reconciled; when done, select
             'Reconcile' above. These items will be automatically deducted
             from your checkbook balance as if the charges have been paid.<br /><br />

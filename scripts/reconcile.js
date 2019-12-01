@@ -18,9 +18,11 @@ $chkbox.each(function() {
     });
 });
 
+var user = $('#user').text();
 $('#rtb').on('click', function(ev) {
     ev.preventDefault();
-    window.open('../main/budget.php', '_self');
+    var backpg = "../main/displayBudget.php?user=" + user;
+    window.open(backpg, '_self');
 });
 
 });

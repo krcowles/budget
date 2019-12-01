@@ -255,7 +255,6 @@ if ($user) {
             Supply the new name: <input id="newname" type="text" /><br /><br />
             <button id="ren">Change Name</button>
         </div>
-        
     </div>
     <!-- after validation, place accordingly:
     <p style="clear:left;">

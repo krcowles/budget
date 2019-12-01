@@ -1,53 +1,49 @@
 <?php
 /**
- * This module is invoked from the modal window on editCreditCharges.php when a 
- * single, existing charge is called up for edits. It returns status 'OK' if
- * all is well.
+ * This module saves the data presented to the user on editCreditCharges.php,
+ * whether edited or not.
  * PHP Version 7.1
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "../utilities/getCrData.php";
-$status = 'NOT_FINISHED';
-$changed_cardno = filter_input(INPUT_GET, 'cno', FILTER_SANITIZE_NUMBER_INT);
-$changed_item   = filter_input(INPUT_GET, 'item', FILTER_SANITIZE_NUMBER_INT);
+$user = filter_input(INPUT_POST, 'user');
 
-$indx = array('card1', 'card2', 'card3', 'card4');
-switch($changed_cardno) {
-case 0:
-    $card = $indx[0];
-    break;
-case 1:
-    $card = $indx[1];
-    break;
-case 2:
-    $card = $indx[2];
-    break;
-case 3:
-    $card = $indx[3];
-}
-$charges = $credit_charges[$card];
-$amount = filter_input(INPUT_GET, 'amount');
-$charges[$changed_item][0] = filter_input(INPUT_GET, 'chg');
-$charges[$changed_item][1] = filter_input(INPUT_GET, 'date');
-$charges[$changed_item][2] = filter_input(INPUT_GET, 'payee');
-$charges[$changed_item][3] = filter_input(INPUT_GET, 'amount');
-$credit_charges[$card] = $charges;
+require "../utilities/getCards.php";
+require "../utilities/getExpenses.php";
 
-$handle = fopen($credit_data, "w");
-fputcsv($handle, $crHeaders);
-for ($i=0; $i<$card_cnt; $i++) {
-    if (count($credit_charges[$indx[$i]]) > 0) {
-        foreach ($credit_charges[$indx[$i]] as $line) {
-            fputcsv($handle, $line);
+$card_items = $_POST['cnt'];
+// get each card's data set and update it:
+for ($k=0; $k<count($cr); $k++) {
+    if ($card_items[$k] > 0) {
+        $dateset = 'cr' . $k . 'date';
+        $amtset  = 'cr' . $k . 'amt';
+        $chgdset = 'cr' . $k . 'chgd';
+        $payset  = 'cr' . $k . 'pay';
+        $carddates = $_POST[$dateset];
+        $cardamts  = $_POST[$amtset];
+        $cardchgs  = $_POST[$chgdset];
+        $cardpays  = $_POST[$payset];
+        $indx = 0;
+        for ($n=0; $n<count($expmethod); $n++) {
+            if ($expmethod[$n] === 'Credit' && $expcdname[$n] === $cr[$k]) {
+                $tblid = $expid[$n];
+                $newdate = trim(filter_var($carddates[$indx]));
+                $newamt  = trim(filter_var($cardamts[$indx]));
+                $newchg  = trim(filter_var($cardchgs[$indx]));
+                $newpay  = trim(filter_var($cardpays[$indx]));
+                $indx++;
+                $update = "UPDATE `Charges` SET `expdate` = :dte,`expamt` = :amt," .
+                    "`payee` = :payee, `acctchgd` = :chgto WHERE `expid` = :tbl;";
+                $updtchg = $pdo->prepare($update);
+                $updtchg->execute(
+                    ["dte" => $newdate, "amt" => $newamt, "payee" => $newpay,
+                    "chgto" => $newchg, "tbl" => $tblid]
+                );
+            }
         }
     }
-    if ($i < $card_cnt-1) {
-        fputcsv($handle, array("next"));
-    }  
 }
-fclose($handle);
-$status = "OK";
-echo $status;
+$back = "editCreditCharges.php?user=" . $user;
+header("Location: {$back}");
