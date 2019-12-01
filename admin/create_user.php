@@ -45,8 +45,9 @@ $days = 365; // Number of days before cookie expires
 $expire = time()+60*60*24*$days;
 setcookie("epiz", $username, $expire, "/");
 if ($submitter == 'create') {
-    echo "DONE";
+    echo "DONE"; // xhr request successful will redirect to newBudget.php
 } else {
-    $newbud = "../edit/newBudget.php?new=y&user=" . $username;
-    header("Location: {$newbud}");
+    // 'renew' form submit request will redirect to budget
+    $bud = "../main/displayBudget.php?user=" . $user;
+    header("Location: {$bud}");
 }

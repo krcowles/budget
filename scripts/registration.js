@@ -55,9 +55,10 @@ function validateEmail(subjectEmail){
                     "The following unexpected result occurred:\n" +
                     "Server returned status " + this.status);
             }
+        } else {
+            var homepg = "../edit/newBudget.php?user=" + usr;
+            window.open(homepg, '_self');
         }
-        var homepg = "../main/displayBudget.php?user=" + usr;
-        window.open(homepg, '_self');
     }
     xhr.onerror = function() {
         alert("The request failed: registration did not occur\n" +

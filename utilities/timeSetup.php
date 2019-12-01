@@ -15,7 +15,7 @@ $last_yr = intval($digits[2] - 1);
 $month_names = array('January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December');
 $thismo = intval($digits[0]) -1; // array index is zero-based
-$current_month = $month_names[$digits[0]];
+$current_month = $month_names[$thismo];
 switch ($thismo) {
 case 1:
     $month_set = array(11, 12, 1);

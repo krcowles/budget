@@ -73,6 +73,8 @@ if ($new) {
     }
     if ($aedata) {
         $lastpos = max($aePos);
+    } else {
+        $lastpos = 0;
     }
 
     // get any card data already entered (if any)
