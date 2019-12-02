@@ -78,6 +78,7 @@ if ($new) {
     }
 
     // get any card data already entered (if any)
+    include "../utilities/getCards.php";
     $cdIds = [];
     $cdNames = [];
     $cdTypes = [];
@@ -93,12 +94,11 @@ if ($new) {
     }
 
     // get any expenses data already entered (if any)
-    $aeMethod = [];
+    $exIds = [];
+    $aeCard = [];
     $aeDate = [];
     $aeAmt = [];
     $aePayee = [];
-    $aeRecon = [];
-    $exIds = [];
     $exp = "SELECT * FROM `Charges` WHERE `user` = :user;";
     $expdat = $pdo->prepare($exp);
     $expdat->execute(["user" => $user]);
@@ -106,11 +106,10 @@ if ($new) {
     $aeexp = count($expenses) > 0 ? true : false;
     foreach ($expenses as $expense) {
         array_push($exIds, $expense['expid']);
-        array_push($aeMethod, $expense['method']);
+        array_push($aeCard, $expense['cdname']);
         array_push($aeDate, $expense['expdate']);
         array_push($aeAmt, $expense['expamt']);
         array_push($aePayee, $expense['payee']);
-        array_push($aeRecon, $expense['recon']);
     }
 }
 ?>
@@ -246,7 +245,7 @@ if ($new) {
                 </div>
             </form>
         </div>
-    <div id="three" class="steps">Enter/Edit Current Expenses</div>
+    <div id="three" class="steps">Enter/Edit Outstanding/Unpaid Charges</div>
         <div id="expenses">
             <span class="note NormalHeading">Note: If you make changes,
                 be sure to 'Save All'</span><br />
@@ -258,16 +257,12 @@ if ($new) {
                         saved, and new entries will be available.</span><br /><br />
                 <div id="enew">
                     <span class="NormalHeading">Enter your new expense information
-                        below. (No expenses already reconciled)</span><br />
+                        below. (Outstanding/unpaid charges only)</span><br />
                     <?php for ($z=0; $z<4; $z++) : ?>
                     Date Expense Entered (Use: yyyy-mm-dd) <input type="input"
                         name="edate[]" /><br />
-                    <span class="emeth">Method of Payment:
-                    <select name="emeth[]">
-                        <option value="Credit">Credit</option>
-                        <option value="Debit">Debit</option>
-                        <option value="Check">Check or Draft</option>
-                    </select>&nbsp;&nbsp;
+                    Credit Card Used:
+                    <span id="ncd<?= $z;?>"><?= $ccHtml;?></span>&nbsp;&nbsp;
                     Amount Paid: <input type="text" name="eamt[]" />&nbsp;&nbsp;
                     Payee: <input type="text" name="epay[]" /></span><br /><br />
                     <?php endfor; ?>
@@ -278,16 +273,13 @@ if ($new) {
                         currently entered:</span><br /><br />
                     <div id="eentered">
                         <?php for ($e=0; $e<count($exIds); $e++) : ?>
-                        <p id="em<?= $e;?>" 
-                            style="display:none;"><?= $aeMethod[$e];?></p>
-                        Date Entered: <textarea class="exp"
+                        <p id="cd<?= $e;?>" 
+                            style="display:none;"><?= $aeCard[$e];?></p>
+                        Date Entered: <textarea class="exp dates"
                             name="aeedate[]"><?= $aeDate[$e];?></textarea>
-                        Method: <select id="selem<?= $e;?>" name="esel[]">
-                            <option value="Credit">Credit</option>
-                            <option value="Debit">Debit</option>
-                            <option value="Check">Check or Draft</option>
-                        </select>
-                        Amount Paid: <textarea class="exp"
+                        Credit Card Used:
+                        <span id="crcd<?= $e?>"><?= $ccHtml;?></span>
+                        Amount Paid: <textarea class="exp amts"
                             name="aeeamt[]"><?= $aeAmt[$e];?></textarea>
                         Payee: <textarea class="exp"
                             name="aeepay[]"><?= $aePayee[$e];?></textarea>

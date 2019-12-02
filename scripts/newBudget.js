@@ -31,19 +31,31 @@ $('#three').on('click', function() {
     $('#cards').hide();
 });
 
-// initializartion of select boxes
+// initialization of select boxes: 1st is 'old cards'
 $('p[id^=oc]').each(function() {
     var selid = "#sel" + this.id;
     var cardType = $(this).text();
     $(selid).val(cardType);
 });
-$('p[id^=em]').each(function() {
-    var selid = "#sel" + this.id;
-    var method = $(this).text();
-    $(selid).val(method);
+// next step is to add the 'name' attribute to the card selects in Expenses tab
+$('span[id^=ncd]').each(function() {
+    $(this).children().eq(0).attr('name', 'newcds[]');
+});
+// ditto for the 'old' card selects
+$('span[id^=crcd]').each(function() {
+    $(this).children().eq(0).attr('name', 'oldcds[]');
+});
+// now get the initial values for 'old cards' in Expenses tab
+var cdvals = [];
+$('p[id^=cd]').each(function(indx) {
+    cdvals[indx] = $(this).text();
+});
+// set the select display per values above
+$('span[id^=crcd]').each(function(i) {
+    $(this).children().eq(0).val(cdvals[i]);
 });
 
-// return to main
+// return to main button
 $('#done').on('click', function(ev) {
     ev.preventDefault();
     window.open("../main/displayBudget.php?user=" + user, "_self");
