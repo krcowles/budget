@@ -53,6 +53,7 @@ if ($new) {
         $addTemp = $pdo->query($sql);
     }
 } else {
+    include "../utilities/getCards.php";
     // get any budget data already entered (if any)
     $aeIds = [];
     $aeNames = [];
@@ -155,25 +156,13 @@ if ($new) {
                     <span class="NormalHeading">Enter your new budget information
                         below.</span><br />
                     <div id="buditems">
+                        <?php for ($q=0; $q<5; $q++) : ?>
                         Budget Item: <input class="acctname" type="text" 
                         name="acctname[]" />
                         Monthly Budget: <input class="bud" type="text" name="bud[]"/>
                         Current value: <input class="bal" type="text" name="bal[]" />
                         <br /><br />
-                        Budget Item: <input class="acctname" type="text"
-                            name="acctname[]" />
-                        Monthly Budget: <input class="bud" type="text" name="bud[]"/>
-                        Current value: <input class="bal" type="text" name="bal[]" />
-                        <br /><br />
-                        Budget Item: <input class="acctname" type="text"
-                            name="acctname[]" />
-                        Monthly Budget: <input class="bud" type="text" name="bud[]"/>
-                        Current value: <input class="bal" type="text" name="bal[]" />
-                        <br /><br />
-                        Budget Item: <input class="acctname" type="text"
-                            name="acctname[]" />
-                        Monthly Budget: <input class="bud" type="text" name="bud[]"/>
-                        Current value: <input class="bal" type="text" name="bal[]" />
+                        <?php endfor; ?>
                     </div>
                     <br />
                 </div>
@@ -267,6 +256,8 @@ if ($new) {
                     Payee: <input type="text" name="epay[]" /></span><br /><br />
                     <?php endfor; ?>
                 </div>
+
+                
                 <div id="eold">
                     <?php if ($aeexp) : ?>
                     <span class="NormalHeading">You can edit the data you have 
