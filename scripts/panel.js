@@ -2,7 +2,7 @@ $(function() {
     // establish menu/sub-menu widths, sub-menu positions and menu icons
     var menuWidth = ['120', '120', '120', '140', 
         '120', '120', '120', '120']; // 8 main menu items
-    var subWidth = ['120', '90', '130', '110', '130'];  // 4 sub-menus
+    var subWidth = ['120', '90', '130', '120', '130'];  // 4 sub-menus
     var $mainMenus = $('.menu-main');
     var navPos = $('#navbar').offset();
     var navBottom = navPos.top + $('#navbar').height() + 5 + 'px';
@@ -183,7 +183,11 @@ $(function() {
                     $('#allForms').append(rebox);
                 });
                 break;
-            case "Edit Expenses":
+            case "Add New Charges":
+                var addnew = "../edit/addCreditCharges.php?user=" + user;
+                window.open(addnew, "_self");
+                break;
+            case "Edit Charges":
                 var editexpense = "../edit/editCreditCharges.php?user=" + user;
                 window.open(editexpense, "_self");
                 break;

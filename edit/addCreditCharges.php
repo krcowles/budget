@@ -11,6 +11,7 @@
  */
 $user = filter_input(INPUT_GET, 'user');
 require "../utilities/getCards.php";
+require "../utilities/getAccountData.php";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -38,48 +39,45 @@ require "../utilities/getCards.php";
 <body>
 <div id="mainpg">
     <p id="user" style="display:none;"><?= $user;?></p>
+    <p id="cdcnt" style="display:none;"><?= count($cr);?></p>
     <span class="LargeHeading">You may add credit card charges that were
-        forgotten or skipped during creation of your budget. Enter any
-        outstanding/unpaid charges below.</span><br /><br />
-    <form id="cdform" method="POST" action="saveNewCharges.php">
+        forgotten or skipped during creation of your budget.</span><br />
+        <span class="SmallHeading">When you
+        'Save Charges', new charge entry boxes will appear. Enter any
+        outstanding/unpaid charges below. Note: you may review/edit
+        your new charges from the main budget page - they will not be
+        shown here after saving.</span><br /><br />
+    <form id="cdform" method="POST" action="saveCreditAdds.php">
         <input type="hidden" name="user" value="<?= $user;?>" />
-        <input type="hidden" name="addons" value="Y" />
         <button id="save">Save Charges</button>
         <button id="back">Return to Budget</button><br />
         <span class="SmallHeading">Note: When you select "Save Charges",
             the data you entered will be saved, and new entries will be
-            available.</span><br /><br />
-        <div id="enew">
-            <span class="NormalHeading">Enter your new expense information
-                below. (Outstanding/Unpaid Charges Only)</span><br /><br />
+            available (saved entries will not be displayed).</span><br /><br />
+        <div>
             <?php for ($y=0; $y<count($cr); $y++) : ?>
-            <span class="SmallHeading">Add outstanding charges 
-                for <span style="color:brown;"><?= $cr[$y];?></span>:</span>
-                <input type="hidden" name="cname[]" value="<?= $cr[$y];?>" />
-                <div id="data">
+                <span class="SmallHeading">Add outstanding charges for
+                    <span style="color:brown;"><?= $cr[$y];?></span>
+                </span>:
+                <div class="data">
                 <?php for ($z=0; $z<4; $z++) : ?>
-                Date Expense Entered (Use: yyyy-mm-dd) <input class="dates" 
-                    type="input" name="edate[]" />
-                Amount Paid: <input class="amt" type="text"
-                    name="eamt[]" />&nbsp;&nbsp;
-                Payee: <input class="pay" type="text" name="epay[]" /><br />
+                    Date of Charge (yyyy-mm-dd): <input class="dates" 
+                        type="input" name="ndate[]" />
+                    Amount Paid: <input class="amt" type="text"
+                        name="namt[]" />&nbsp;&nbsp;
+                    Payee: <input class="pay" type="text" name="npay[]" />
+                    Deduct from: <span id="cd<?= $y;?>it<?= $z;?>">
+                    <?= $fullsel;?></span><br />
                 <?php endfor; ?>
-                </div>
+                </div><br />
             <?php endfor; ?>
-        </div>
-        <div id="entered">
         </div>
     </form>
 </div>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-<script type="text/javascript">
-    $('#back').on('click', function(ev) {
-        ev.preventDefault();
-        var home = "../main/displayBudget.php?user=" + $('#user').text();
-        window.open(home, "_self")
-    });
-
+<script src="../scripts/addCreditCharges.js" type="text/javascript"></script>
+    
 </body>
 
 </html>

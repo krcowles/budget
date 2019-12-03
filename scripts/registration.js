@@ -56,8 +56,8 @@ function validateEmail(subjectEmail){
                     "Server returned status " + this.status);
             }
         } else {
-            var homepg = "../edit/newBudget.php?user=" + usr;
-            window.open(homepg, '_self');
+            var newbud = "../edit/newBudget.php?new=Y&user=" + usr;
+            window.open(newebud, '_self');
         }
     }
     xhr.onerror = function() {
