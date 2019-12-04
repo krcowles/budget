@@ -12,7 +12,7 @@ require "../utilities/getAccountData.php";
 
 $editedBuds  = $_POST['edbud'];
 $editedCurrs  = $_POST['edcurr'];
-for ($j=0; $j<$user_cnt; $j++) {
+for ($j=0; $j<count($account_names); $j++) {
     $tblid = $acctid[$j];
     $edreq = "UPDATE `Budgets` SET `budamt` = :amt," .
         "`current` = :curr WHERE `id` = :uid;";

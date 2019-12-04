@@ -414,7 +414,7 @@ var modal = (function() {
     function rename(deferred) {
         $('#ren').after($close);
         $close.css('margin-left', '40px');
-        var $raccts = $('#asel .partsel');
+        var $raccts = $('#asel .fullsel');
         $raccts[0].id = 'racct';
         var racct = getSelectValue($raccts[0]);
         $('#racct').on('change', function() {

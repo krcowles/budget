@@ -58,5 +58,13 @@ var $mvlist = $('#mvto .partsel');
 var undisopt = document.createElement('option');
 undisopt.text = "Undistributed Funds";
 $mvlist[0].add(undisopt);
+// disable Undistribute Funds for renaming accounts:
+var $ren = $('#asel .fullsel');
+for (var j=0; j<$ren[0].options.length; j++) {
+    if ($ren[0].options[j].text == 'Undistributed Funds') {
+        $ren[0].options[j].disabled = 'disabled';
+        break;
+    }
+}
 
 }); // end page loaded

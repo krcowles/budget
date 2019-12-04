@@ -54,7 +54,7 @@ require "../utilities/getAccountData.php";
             </tr>
         </thead>
         <tbody>
-        <?php for ($j=0; $j<$user_cnt; $j++) : ?>
+        <?php for ($j=0; $j<count($account_names); $j++) : ?>
         <tr>
             <td><?= $account_names[$j];?></td>
             <td><textarea class="bud"

@@ -135,7 +135,7 @@ if ($user) {
         <!-- autopay -->
         <div id="ap">
            <p id="inst">The following items are due for auto payment. Select an item
-           to pay, and/or when done, select 'Finished' [Note: this box moveable]</p>
+           to pay, and/or when done, select 'Finished'</p>
            <table id="modal_table">
                <tbody></tbody>
            </table>
@@ -251,7 +251,7 @@ if ($user) {
         <!-- rename account -->
         <div id="rename">
             <span id="asel">Select the account you wish to rename: 
-            <?= $partsel;?></span><br /><br />
+            <?= $fullsel;?></span><br /><br />
             Supply the new name: <input id="newname" type="text" /><br /><br />
             <button id="ren">Change Name</button>
         </div>

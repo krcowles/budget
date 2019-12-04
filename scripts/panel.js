@@ -177,7 +177,7 @@ $(function() {
             case "Rename Account":
                 var def = new $.Deferred();
                 var rebox = $('#rename').detach();
-                modal.open({id: 'rename', width: '240px', height: '188px',
+                modal.open({id: 'rename', width: '240px', height: '206px',
                     content: rebox, deferred: def});
                 $.when( def ).then(function() {
                     $('#allForms').append(rebox);
