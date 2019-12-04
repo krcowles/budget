@@ -13,6 +13,30 @@ require "../utilities/getCards.php";
 require "../utilities/getExpenses.php";
 require "../utilities/timeSetup.php";
 
+// if month has rolled over:
+if ($rollover) {
+    $getMos = "SELECT `id`,`prev0`,`prev1`,`current` FROM `Budgets` " .
+        "WHERE `user` = :usr;";
+    $modat = $pdo->prepare($getMos);
+    $modat->execute(["usr" => $user]);
+    $allmos = $modat->fetchALL(PDO::FETCH_ASSOC);
+    $tblids = [];
+    foreach ($allmos as &$mo) {
+        array_push($tblids, $mo['id']);
+        $mo['prev0'] = $mo['prev1'];
+        $mo['prev1'] = $mo['current'];
+    }
+    for ($k=0; $k<count($allmos); $k++) {
+        $putMos = "UPDATE `Budgets` SET `prev0` = :p0,`prev1` = :p1 " .
+            "WHERE `id` = :uid;";
+        $newdat = $pdo->prepare($putMos);
+        $newdat->execute(
+            ["p0" => $allmos[$k]['prev0'], "p1" => $allmos[$k]['prev1'],
+            "uid" => $tblids[$k]]
+        );
+    }
+}
+
 // form balances
 $balBudget  = 0;
 $balPrev0   = 0;
