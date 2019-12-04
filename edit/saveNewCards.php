@@ -58,5 +58,5 @@ for ($n=0; $n<count($new_cards); $n++) {
     }
 }
 
-$redir = "newBudget.php?pnl=two&user=" . $user;
+$redir = "newBudgetPanels.php?pnl=two&user=" . $user;
 header("Location: {$redir}");

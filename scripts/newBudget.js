@@ -60,5 +60,10 @@ $('#done').on('click', function(ev) {
     ev.preventDefault();
     window.open("../main/displayBudget.php?user=" + user, "_self");
 });
+// or, no credit cards to enter
+$('#nocds').on('click', function(ev) {
+    ev.preventDefault();
+    window.open("../main/displayBudget.php?user=" + user, "_self");
+});
     
 });

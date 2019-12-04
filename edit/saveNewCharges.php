@@ -67,5 +67,5 @@ for ($n=0; $n<count($new_amounts); $n++) {
     }
 }
 
-$goto = "newBudget.php?pnl=three&user=" . $user;
+$goto = "newBudgetPanels.php?pnl=three&user=" . $user;
 header("Location: {$goto}");

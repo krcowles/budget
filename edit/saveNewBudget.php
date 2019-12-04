@@ -1,6 +1,6 @@
 <?php
 /**
- * This script saves all #budget entries into the 'Budgets' table.
+ * This script saves all budget entries into the 'Budgets' table.
  * It collects any changes made to existing data, and inserts new data.
  * It then returns to the newBudget.php page.
  * PHP Version 7.1
@@ -68,5 +68,5 @@ for ($n=0; $n<count($new_accounts); $n++) {
     }
 }
 
-$return = "newBudget.php?user=" . $user . "&pnl=one";
+$return = "newBudgetPanels.php?pnl=one&user=" . $user;
 header("Location: {$return}");

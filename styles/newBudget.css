@@ -65,9 +65,8 @@ h2 {
 .bal {
     width: 100px;
 }
-#paypal {
-    position: relative;
-    top: -8px;
+#nocds {
+    margin-right: 40px;
 }
 .emeth {
     margin-left: 60px;
