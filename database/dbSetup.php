@@ -31,12 +31,12 @@ $req = 'INSERT INTO Users VALUES (1, "krcowles29@gmail.com", "kenc", "quatzl"),'
        '(2, "abqgal13@icloud.com", "karen", "jimmy");';
 */
 // ------- ADD COLUMN(S) -------
-/*
+
 $req = <<<QUERY
-ALTER TABLE Users
-ADD COLUMN `passwd_expire` DATE NULL AFTER `password`;
+ALTER TABLE `Users`
+ADD COLUMN `LCM` Varchar(12) NULL AFTER `username`;
 QUERY;
-*/
+
 /*
 $req = <<<BUD
 CREATE TABLE Budgets (
@@ -68,6 +68,7 @@ CREATE TABLE Cards (
 );
 CDS;
 */
+/*
 $drop = "DROP TABLE `Charges`;";
 $pdo->query($drop);
 
@@ -85,5 +86,6 @@ CREATE TABLE Charges (
     PRIMARY KEY (`expid`)
 );
 CHGS;
+*/
 
 $results = $pdo->query($req);

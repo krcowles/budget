@@ -31,14 +31,17 @@ for ($i=0; $i<3; $i++) {
     $month[$i] = $month_names[$month_set[$i]];
 }
 $rollover = false;
-if (!file_exists('LCM.txt')) {
-    $handle = fopen("LCM.txt", "w");
-    fputs($handle, $current_month);
-    fclose($handle);
-} else {
-    $handle = fopen("LCM.txt", "r");
-    $last = fgets($handle);
-    if ($current_month !== $last) {
+$LCM = "SELECT `LCM` FROM `Users` WHERE `user` = :uid;";
+$moupdte = $pdo->prepare($LCM);
+$moupdte->execute(["uid" => $user]);
+$mo = $moupdte->fetch(PDO::FETCH_ASSOC);
+if (!empty($mo['LCM'])) {
+    if ($mo['LCM'] !== $current_month) {
         $rollover = true;
     }
+}
+if (empty($mo['LCM' || $rollover])) {
+    $newup = "UPDATE `Users` SET `LCM` = :mo WHERE `username` = :uid;";
+    $setmo = $pdo->prepare($newup);
+    $setmo->execute(["mo" => $current_month, "uid" => $user]);
 }
