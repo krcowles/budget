@@ -192,7 +192,7 @@ if ($user) {
             Method to be applied:<br />
             <div id="ccselap"><?= $allCardsHtml;?> on day
             <input id="useday" type="text" /><br />
-            of each month.</div><br />
+            of each month.</div>
             <button id="perfauto">Set up</button>
         </div>
         <!-- delete autopay -->

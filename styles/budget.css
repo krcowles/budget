@@ -21,7 +21,7 @@ table:not(#modal_table) {
 .modal_button {
     width: 120px;
     margin-bottom: 0px;
-    margin-top: 22px;
+    margin-top: 10px;
 }
 input[id^=amt] {
     width: 60px;

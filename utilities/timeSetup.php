@@ -10,7 +10,7 @@
 date_default_timezone_set('America/Denver');
 $date = date("m/d/Y");
 $digits = explode("/", $date);
-$last_yr = intval($digits[2] - 1);
+$tbldate = $digits[2] . '-' . $digits[0] . '-' . $digits[1];
 $month_names = array('January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December');
 $thismo = intval($digits[0]) - 1; // array index is zero-based

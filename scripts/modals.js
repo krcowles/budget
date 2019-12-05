@@ -37,7 +37,7 @@ var modal = (function() {
             validateUser(usrname, passwd);
         });
     }
-    // general purpose function to execute ajax on input arguments
+    // general purpose function to execute ajax based on input arguments
     function executeScript(url, ajaxdata, errtype, deferred) {
             var msgtxt = "Problem encountered " + errtype;
             $.ajax({
@@ -69,15 +69,11 @@ var modal = (function() {
         return value;
     }
     // function called when settings.id == 'autopay'
-    function autopay( method, acct_name, row) {
+    function autopay( user, method, acct_name, row, deferred) {
         $('#modal_table').after($close);
         $close.css('margin-top', '12px');
         $close.text("Finished");
-        $modal.css({
-            top: 40,
-            left: 600
-        });
-        var divht = $content.height() + 24 + 'px';
+        var divht = $content.height() + 12 + 'px';
         $modal.css({
             height: divht
         });
@@ -96,14 +92,15 @@ var modal = (function() {
                     }
                 }
                 var payee = elements.join().trim();
-                window.open('../utilities/updateAP.php?row=' + row[idno] + 
-                    '&use=' + method[idno] + '&amt=' + payment +
-                    '&payto=' + payee + '&acct=' + acct_name[idno], "_self");
+                ajaxdata = {user: user, method: method[idno], acct: acct_name[idno],
+                    amt: payment, payee: payee};
+                    executeScript('../utilities/makeAutopayment.php', ajaxdata,
+                    "executing autopayment", deferred);
             });
         });
         $close.on('click', function () {
-            $content.empty();
-            $modal.detach();
+            deferred.resolve();
+            modal.close();
         });
     }
     // modal function executed when settings.id == 'expense'
@@ -531,6 +528,9 @@ var modal = (function() {
             // separate code for each form
             if (modid === 'login') {
                 getpass(settings.usr);
+            } else if (modid === 'autopay') {
+                autopay(settings.user, settings.method, settings.acct_name,
+                    settings.row, settings.deferred);
             } else if (modid === 'expense') {
                 payExpense(settings.deferred);
             } else if (modid === 'income') {
@@ -560,8 +560,6 @@ var modal = (function() {
             } else if (modid === 'edit_chg') {
                 editCredit(settings.ivals, settings.chgitem, 
                         settings.chgid, settings.def);
-            }  else if (modid === 'autopay') {
-                autopay(settings.deferred);
             }
         },
         close: function() {

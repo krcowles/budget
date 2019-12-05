@@ -2,8 +2,9 @@ $(function() {
 
 var today = new Date();
 var dd = parseInt(String(today.getDate()).padStart(2, '0'));
-var mm = parseInt(String(today.getMonth() + 1).padStart(2, '0')); //January is 0!
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January was otherwise 0!
 var yyyy = parseInt(today.getFullYear());
+var user = $('#user').text();
 
 // check autopayment status
 var payday = [];
@@ -18,7 +19,7 @@ $('.apday').each(function(indx) {
         if (apday <= dd) {
             $rowtds = $(this).siblings();
             var pd = $rowtds.eq(6).text().trim();
-            if (pd === 'N') {
+            if (pd !== mm) {
                 rowno.push(indx);
                 var $paywith = $rowtds.eq(5);
                 var $acct = $rowtds.eq(0);
@@ -40,16 +41,26 @@ if (ap_candidates) {
             '" type="text" /><br />Payee: <input id="payee' + j +
             '" type="text" /></div></td>';
         item_html += '<td><div class="tdht"><button class="modal_button" ' +
-            'id="paymt' + j + '">Pay this</button></div></td></tr>';
+            'id="paymt' + j + '">Pay this</button><br />' +
+            '&nbsp;&nbsp;using: ' + paywith[j] +  '</div></td></tr>';
         $userlist.append(item_html);
     }
+    // table is created, now present data to modals.js
     var ap_object = $('#ap').detach();
+    var def = new $.Deferred(); // only one can pay at a time, so one deferred
     modal.open({
-        id: 'autopay', height: '300px', width: '500px', content: ap_object,
-        day: payday, method: paywith, acct_name: aname, row_no: rowno, 
+        id: 'autopay', height: '200px', width: '390px', content: ap_object,
+        user: user, method: paywith, acct_name: aname, row_no: rowno,
+        deferred: def
+    });
+    $.when( def ).then(function() {
+        $('#allForms').append(ap_object);
     });
 }
 
+// disable Check/Draft option in autopay select box
+var $apcdsel = $('#ccselap .allsel');
+$apcdsel[0].options[0].disabled = 'disabled';
 // disable first option in Delete Card box
 var $moddc = $('#deletecard .allsel');
 $moddc[0].options[0].disabled = 'disabled';
