@@ -43,9 +43,10 @@ $x=1;
     <meta name="robots" content="nofollow" />
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
     <link href="../styles/charges.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
     <style type="text/css">
         textarea { height: 24px; font-size: 16px; padding-top: 4px; }
-        .dates { width: 120px; }
+        .dates { width: 120px; height: 22px; font-size: 16px; }
         .amt { width: 100px;}
         #main { margin-left: 24px; }
         .left { text-align: left }
@@ -81,8 +82,8 @@ $x=1;
             <tbody>
                     <?php foreach ($allCharges[$i] as $card) : ?>
                     <tr>
-                        <td><textarea name="cr<?= $i;?>date[]"
-                            class="dates"><?= $card['date'];?></textarea>
+                        <td><input type="text" class="datepicker dates"
+                            name="cr<?= $i;?>date[]" value="<?= $card['date'];?>" />
                         </td>
                         <td><textarea class="amt"
                             name="cr<?= $i;?>amt[]"><?= $card['amt'];?>
@@ -103,11 +104,17 @@ $x=1;
 </div>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+<script src="../scripts/jquery-ui.js" type="text/javascript"></script>
 <script type="text/javascript">
     $('#return').on('click', function(ev) {
         ev.preventDefault();
         var dpg = "../main/displayBudget.php?user=" + $('#user').text();
         window.open(dpg, "_self");
+    });
+    $(function () {
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
     });
 </script>
 </body>

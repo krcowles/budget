@@ -25,6 +25,7 @@ require "../utilities/getAccountData.php";
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
     <style type="text/css">
         #mainpg { margin-left: 16px; }
         #back   { margin-left: 80px; }
@@ -61,8 +62,8 @@ require "../utilities/getAccountData.php";
                 </span>:
                 <div class="data">
                 <?php for ($z=0; $z<4; $z++) : ?>
-                    Date of Charge (yyyy-mm-dd): <input class="dates" 
-                        type="input" name="ndate[]" />
+                    Date of Charge: <input class="datepicker dates" 
+                        type="text" name="ndate[]" />
                     Amount Paid: <input class="amt" type="text"
                         name="namt[]" />&nbsp;&nbsp;
                     Payee: <input class="pay" type="text" name="npay[]" />
@@ -76,6 +77,7 @@ require "../utilities/getAccountData.php";
 </div>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+<script src="../scripts/jquery-ui.js"></script>
 <script src="../scripts/addCreditCharges.js" type="text/javascript"></script>
     
 </body>

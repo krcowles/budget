@@ -16,8 +16,8 @@
         <?php for ($e=0; $e<count($exIds); $e++) : ?>
         <p id="cd<?= $e;?>" 
             style="display:none;"><?= $aeCard[$e];?></p>
-        Date Entered: <textarea class="exp dates"
-            name="aeedate[]"><?= $aeDate[$e];?></textarea>
+        Date Entered: <input type="text"  class="datepicker exp dates"
+            name="aeedate[]" value="<?= $aeDate[$e];?>" />
         Credit Card Used:
         <span id="crcd<?= $e?>"><?= $ccHtml;?></span>
         Amount Paid: <textarea class="exp amts"

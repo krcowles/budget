@@ -1,5 +1,9 @@
 $(function() {
 
+$('.datepicker').datepicker({
+    dateFormat: 'yy-mm-dd'
+});
+
 // add 'name' attribute to account select drop-down
 var noOfCards = $('#cdcnt').text();
 for (var j=0; j<noOfCards; j++) {

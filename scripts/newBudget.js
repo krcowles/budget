@@ -2,6 +2,11 @@ $(function() {
 
 var user = $('#user').text();
 
+// date picker:
+$('.datepicker').datepicker({
+    dateFormat: 'yy-mm-dd'
+});
+
 // accordion panels
 var pnl = $('#pnl').text();
 if (pnl !== 'none') {

@@ -123,6 +123,7 @@ if ($new) {
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
     <link href="../styles/newBudget.css" type="text/css" rel="stylesheet" />
 </head>
 
@@ -222,8 +223,8 @@ if ($new) {
                 <span class="NormalHeading">Enter your new expense information
                     below. (Outstanding/unpaid charges only)</span><br />
                 <?php for ($z=0; $z<4; $z++) : ?>
-                    Date Expense Entered (Use: yyyy-mm-dd) <input type="input"
-                        name="edate[]" /><br />
+                    Date Expense Entered: <input type="text"
+                        class="datepicker" name="edate[]" /><br />
                     Credit Card Used:
                     <span id="ncd<?= $z;?>"><?= $ccHtml;?></span>&nbsp;&nbsp;
                     Amount Paid: <input type="text" name="eamt[]" />&nbsp;&nbsp;
@@ -240,6 +241,7 @@ if ($new) {
  </div>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+<script src="../scripts/jquery-ui.js" type="text/javascript"></script>
 <script src="../scripts/newBudget.js" type="text/javascript"></script>
 
 </body>
