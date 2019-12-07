@@ -191,6 +191,9 @@ $(function() {
                 var editexpense = "../edit/editCreditCharges.php?user=" + user;
                 window.open(editexpense, "_self");
                 break;
+            case "Budgetizer Basics":
+                window.open("../utilities/helpdoc.php", "_blank");
+                break;
             /*
             case "Monthly Report":
                 break;

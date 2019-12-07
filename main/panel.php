@@ -98,9 +98,8 @@
                 </div>
                 <div id="menu-help" class="menu-default">
                 <ul class="menus">
-                    <li><div id="about">About this site</div></li>
-                    <li><div id="conv">Naming Conventions</div></li>
-                    <li><div id="temp">Temporary Accounts</div></li>
+                    <li><div id="doc">Budgetizer Basics</div></li>
+                    <li><div id="conv">Making a Budget</div></li>
                 </ul>
                 </div>
             </li>
