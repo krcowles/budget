@@ -17,9 +17,9 @@
         <?php for ($j=0; $j<count($aeNames); $j++) : ?>
             Budget Item: <textarea class="acctname"
                 name="svdname[]"><?= $aeNames[$j];?></textarea>
-            Monthly Budget: <textarea class="bud"
+            Monthly Budget: $ <textarea class="bud"
                 name="svdbud[]"><?= $aeBudamt[$j];?></textarea>
-            Current Value: <textarea class="bal"
+            Current Value: $ <textarea class="bal"
             name="svdbal[]"><?= $aeCurr[$j];?></textarea>&nbsp;&nbsp;
             Delete: <input type="checkbox" name="remove[]"
                 value="<?= $aeIds[$j];?>"><br />

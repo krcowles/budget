@@ -70,5 +70,15 @@ $('#nocds').on('click', function(ev) {
     ev.preventDefault();
     window.open("../main/displayBudget.php?user=" + user, "_self");
 });
+
+// data validation (dbValidation.js must already be included in scripts)
+// budgets, first panel
+var $buddata = $('.bud');
+var $baldata = $('.bal');
+integerValue($buddata);
+scaleTwoNumber($baldata);
+// charges, second panel
+var $chgdata = $('.amts');
+scaleTwoNumber($chgdata);
     
 });

@@ -11,19 +11,19 @@
 ?>
 <?php if ($aeexp) : ?>
     <span class="NormalHeading">You can edit the data you have 
-        currently entered:</span><br /><br />
+        already entered:</span><br /><br />
     <div id="eentered">
         <?php for ($e=0; $e<count($exIds); $e++) : ?>
         <p id="cd<?= $e;?>" 
             style="display:none;"><?= $aeCard[$e];?></p>
-        Date Entered: <input type="text"  class="datepicker exp dates"
-            name="aeedate[]" value="<?= $aeDate[$e];?>" />
         Credit Card Used:
-        <span id="crcd<?= $e?>"><?= $ccHtml;?></span>
-        Amount Paid: <textarea class="exp amts"
-            name="aeeamt[]"><?= $aeAmt[$e];?></textarea>
-        Payee: <textarea class="exp"
-            name="aeepay[]"><?= $aePayee[$e];?></textarea>
+        <span id="crcd<?= $e?>"><?= $ccHtml;?></span>&nbsp;&nbsp;
+        Date of Expense: <input type="text"  class="datepicker exp dates"
+            name="aeedate[]" value="<?= $aeDate[$e];?>" />&nbsp;&nbsp;
+        Amount Paid: <textarea class="amts"
+            name="aeeamt[]"><?= $aeAmt[$e];?></textarea>&nbsp;&nbsp;
+        Payee: <textarea
+            name="aeepay[]"><?= $aePayee[$e];?></textarea>&nbsp;&nbsp;
         Delete: <input type="checkbox" name="edel[]" 
             value="<?= $exIds[$e]?>" />
         <input type="hidden" name="expids[]"

@@ -50,7 +50,7 @@ h2 {
     position: relative;
     top: -8px;
 }
-.acctname, .bud, .bal, .ocname, .exp {
+.acctname, .bud, .bal, .ocname {
     height: 18px;
     font-size: 14px;
     padding-top: 4px;
@@ -74,14 +74,21 @@ h2 {
     top: 4px;
 }
 textarea {
-    height: 22px;
+    height: 20px;
     font-size: 16px;
+    padding: 4px 0px 0px 4px;
 }
 input[type=checkbox] {
     transform: scale(1.6);
 }
+.inp {
+    height: 20px;
+    font-size: 16px;
+}
 .dates {
+    height: 20px;
     width: 120px;
+    font-size: 16px;
 }
 .amts {
     width: 100px;

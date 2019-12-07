@@ -4,9 +4,10 @@
  * the user to establish preliminary data for the new budget:
  * 1. The user can enter preliminary account data to display and manipulate.
  *    The budget is limited to basic data at this point. On first-time entry,
- *    the default budget items are create automatically. 
+ *    the default budget items (Temporary Accounts and Undistributed Funds)
+ *    are created automatically. 
  * 2. The user can enter preliminary card data (simple name & type)
- * 3. The user can enter current unpaid expenses
+ * 3. The user can enter current outstanding/unpaid credit card charges
  * PHP Version 7.1
  * 
  * @package Budget
@@ -150,17 +151,20 @@ if ($new) {
             <span id="selnote">Note: When you select "Save All",
                 the data you entered (and any edits) will be 
                 saved, and new entries will be available.
-            </span><br />
+            </span><br /><br />
             <div id="new">
                 <span class="NormalHeading">Enter your new budget information
-                    below.
+                    below. Please use whole numbers only (integers) for Monthly
+                    Budget amounts. Current Value entries can be 'dollars and cents'.
                 </span><br />
                 <div id="buditems">
                     <?php for ($q=0; $q<5; $q++) : ?>
                         Budget Item: <input class="acctname" type="text" 
                         name="acctname[]" />
-                        Monthly Budget: <input class="bud" type="text" name="bud[]"/>
-                        Current value: <input class="bal" type="text" name="bal[]" />
+                        Monthly Budget: $ <input class="bud" type="text"
+                            name="bud[]"/>
+                        Current value: $ <input class="bal" type="text"
+                            name="bal[]" />
                         <br /><br />
                     <?php endfor; ?>
                 </div><br />
@@ -223,12 +227,14 @@ if ($new) {
                 <span class="NormalHeading">Enter your new expense information
                     below. (Outstanding/unpaid charges only)</span><br />
                 <?php for ($z=0; $z<4; $z++) : ?>
-                    Date Expense Entered: <input type="text"
-                        class="datepicker" name="edate[]" /><br />
                     Credit Card Used:
                     <span id="ncd<?= $z;?>"><?= $ccHtml;?></span>&nbsp;&nbsp;
-                    Amount Paid: <input type="text" name="eamt[]" />&nbsp;&nbsp;
-                    Payee: <input type="text" name="epay[]" /></span><br /><br />
+                    Date of Expense: <input type="text" name="edate[]"
+                        class="datepicker dates" />&nbsp;&nbsp;
+                    Amount Paid: <input type="text" name="eamt[]" 
+                        class="inp amts" />&nbsp;&nbsp;
+                    Payee: <input type="text" name="epay[]" 
+                        class="inp" /></span><br /><br />
                 <?php endfor; ?>
             </div>
             <div id="eold">
@@ -242,6 +248,7 @@ if ($new) {
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
+<script src="../scripts/dbValidation.js" type="text/javascript"></script>
 <script src="../scripts/newBudget.js" type="text/javascript"></script>
 
 </body>
