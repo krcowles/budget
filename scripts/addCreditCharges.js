@@ -16,6 +16,10 @@ for (var j=0; j<noOfCards; j++) {
     }
 }
 
+// data validation for expense amount:
+var $amount = $('.amt');
+scaleTwoNumber($amount);
+
 $('#back').on('click', function(ev) {
     ev.preventDefault();
     var home = "../main/displayBudget.php?user=" + $('#user').text();

@@ -70,7 +70,7 @@ require "../utilities/getAccountData.php";
                     Deduct from: <span id="cd<?= $y;?>it<?= $z;?>">
                     <?= $fullsel;?></span><br />
                 <?php endfor; ?>
-                </div><br />
+                </div><br /><hr />
             <?php endfor; ?>
         </div>
     </form>
@@ -78,6 +78,7 @@ require "../utilities/getAccountData.php";
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/jquery-ui.js"></script>
+<script src="../scripts/dbValidation.js" type="text/javascript"></script>
 <script src="../scripts/addCreditCharges.js" type="text/javascript"></script>
     
 </body>

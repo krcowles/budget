@@ -105,6 +105,7 @@ $x=1;
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
+<script src="../scripts/dbValidation.js" type="text/javascript"></script>
 <script type="text/javascript">
     $('#return').on('click', function(ev) {
         ev.preventDefault();
@@ -115,6 +116,8 @@ $x=1;
         $('.datepicker').datepicker({
             dateFormat: 'yy-mm-dd'
         });
+        var $amount = $('.amt');
+        scaleTwoNumber($amount);
     });
 </script>
 </body>
