@@ -183,6 +183,10 @@ $(function() {
                     $('#allForms').append(rebox);
                 });
                 break;
+            case "View Charges":
+                var viewexp = "../utilities/viewCharges.php?user=" + user;
+                window.open(viewexp, "_self");
+                break;
             case "Add New Charges":
                 var addnew = "../edit/addCreditCharges.php?user=" + user;
                 window.open(addnew, "_self");

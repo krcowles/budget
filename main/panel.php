@@ -84,6 +84,7 @@
                 </div>
                 <div id="menu-rpts" class="menu-default">
                     <ul class="menus">
+                        <li><div id="vexp">View Charges</div></li>
                         <li><div id="lac">Add New Charges</div></li>
                         <li><div id="lin">Edit Charges</div></li>
                         <li><div id="lout">Monthly Report</div></li>
