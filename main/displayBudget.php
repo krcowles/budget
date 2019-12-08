@@ -255,6 +255,25 @@ if ($user) {
             Supply the new name: <input id="newname" type="text" /><br /><br />
             <button id="ren">Change Name</button>
         </div>
+        <!-- monthly report -->
+        <div id="morpt">
+            Please select the report month:<br />
+            <select id="rptmo" name="month">
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select><br /><br />
+            <button id="genmo">Generate</button>
+        </div>
     </div>
     <!-- after validation, place accordingly:
     <p style="clear:left;">

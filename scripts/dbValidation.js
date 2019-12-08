@@ -11,6 +11,7 @@ function integerValue(jqClass) {
         $(this).on('change', function() {
             var badInt = false;
             var entry = $(this).val();
+            entry = entry.trim();
             var amt = +entry;
             if (isNaN(amt)) {
                 badInt = true;   
@@ -38,6 +39,7 @@ function scaleTwoNumber(jqClass) {
         this.id = tid;
         $(this).on('change', function() {
             var entry = $(this).val();
+            entry = entry.trim();
             var amt = +entry;
             if (isNaN(amt)) {
                 badNo = true;

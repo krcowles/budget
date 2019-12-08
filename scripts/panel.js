@@ -195,6 +195,15 @@ $(function() {
                 var editexpense = "../edit/editCreditCharges.php?user=" + user;
                 window.open(editexpense, "_self");
                 break;
+            case "Monthly Report":
+                var def = new $.Deferred();
+                var morpt = $('#morpt').detach();
+                modal.open({id: 'morpt', width: '240px', height: '130px', 
+                    content: morpt, deferred: def});
+                $.when( def ).then(function() {
+                    $('#allForms').append(morpt);
+                });
+                break;
             case "Budgetizer Basics":
                 window.open("../utilities/helpdoc.php", "_blank");
                 break;

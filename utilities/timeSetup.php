@@ -25,6 +25,13 @@ case 2:
 default:
     $month_set = array($thismo-2, $thismo-1, $thismo);
 }
+// days in month
+$daysInMonth = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+$leapYr = intval($digits[2])%4 === 0 ? true : false;
+if ($leapYr) {
+    $daysInMonth[1] = 29;
+}
+
 // column headers
 $month = [];
 for ($i=0; $i<3; $i++) {

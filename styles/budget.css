@@ -11,7 +11,8 @@ table:not(#modal_table) {
 }
 /* <div> containing modal window content */
 #box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv,
-        #cdadd, #reconcile, #auto, #delauto, #delcrdr, #delexisting {
+        #cdadd, #reconcile, #auto, #delauto, #delcrdr,
+        #delexisting, #morpt {
     display: none;
 }
 .tdht {
@@ -46,4 +47,8 @@ input[id^=payee] {
     width: 20px;
     border-color: black;
     border-width: 1px;
+}
+#rptmo {
+    position: relative;
+    top: 6px;
 }

@@ -35,6 +35,7 @@ require "getExpenses.php";
     <h3>The following entries display the current/outstanding charges to your credit
     card(s). To edit these entries, return to the Budget page and invoke the menu
     item: <em>Expenses->Edit Charges</em>.</h3>
+    <button id="back">Return To Budget</button><br />
 <hr />
     <?php for ($i=0; $i<count($cr); $i++) : ?>
         <span class="SmallHeading">For credit card <?= $cr[$i];?>:</span><br />
@@ -63,7 +64,16 @@ require "getExpenses.php";
         <hr />
     <?php endfor; ?>
 </div>
+<p style="display:none" id="user"><?= $user;?></p>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var user = $('#user').text();
+    $('#back').on('click', function() {
+        var budpg = "../main/displayBudget.php?user=" + user;
+        window.open(budpg, "_self");
+    });
+</script>
+
 </body>
 </html>

@@ -430,7 +430,7 @@ var modal = (function() {
         $close.on('click', function () {
             deferred.resolve();
             modal.close();
-         });
+        });
     }
     // modal function executed when settings.id == 'edit_chg'
     function editCredit(inputvals, locater, cardinfo, defobj) {
@@ -479,28 +479,31 @@ var modal = (function() {
         });
         $('#svmodal').on('click', function() {
             var ajaxdata = {cno: cardinfo.cdno, item: cardinfo.itemno, 
-                chg: ajaxsel, date: ajaxdte, payee: ajaxpay, amount: ajaxamt}
-            $.ajax({
-                url: 'saveEditedCharge.php',
-                data: ajaxdata,
-                dataType: "text",
-                method: "GET",
-                success: function(results) {
-                    if (results !== 'OK') {
-                        alert("Error saving edited charge:\n" + results);
-                    } else {
-                        $close.click();
-                        location.reload();
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    var msg = "modals.js ajax to saveEditedCharge.php failed\n" +
-                        textStatus + "Error code: " + errorThrown;
-                    alert(msg);
-                }
-            });
+                chg: ajaxsel, date: ajaxdte, payee: ajaxpay, amount: ajaxamt};
+            executeScript('../edit/saveEditedCharge.php', ajaxdata, 
+                'editing charges', deferred);
         });
     }
+    // modal function executed when settings.id == 'morpt'
+    function monthly(deferred) {
+        $('#genmo').after($close);
+        $close.css('margin-left', '80px');
+        var $mosel = $('#rptmo');
+        var mosel = getSelectValue($mosel[0]);
+        $('#rptmo').on('change', function() {
+            mosel = this.value;
+        });
+        $('#genmo').on('click', function() {
+            var getdata = '../utilities/reports.php?id=morpt&mo=' +
+                mosel + '&user=' + g_user;
+            window.open(getdata, "_self");
+        });
+        $close.on('click', function () {
+            deferred.resolve();
+            modal.close();
+        });
+    }
+
     
     // public methods
     return {
@@ -559,7 +562,9 @@ var modal = (function() {
                 rename(settings.deferred);
             } else if (modid === 'edit_chg') {
                 editCredit(settings.ivals, settings.chgitem, 
-                        settings.chgid, settings.def);
+                        settings.chgid, settings.deferred);
+            } else if (modid === 'morpt') {
+                monthly(settings.deferred);
             }
         },
         close: function() {
