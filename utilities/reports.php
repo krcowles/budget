@@ -37,8 +37,9 @@ require "timeSetup.php";
        #back { margin-left: 10px; }
        table { border-collapse: collapse; background-color: #fffaf0;
                border-width: 2px; border-style: outset; border-color: black; }
-       th { text-align: left; padding: 4px 6px 4px 6px; background-color: floralwhite;
-            border-bottom: 2px solid black; border-top: 2px solid black; }
+       th { text-align: left; padding: 4px 6px 4px 6px;
+            background-color: floralwhite; border-bottom: 2px 
+            solid black; border-top: 2px solid black; }
         tr.even { background-color: #ffeecc; }
        td { padding: 4px 6px 4px 6px; }
        .red  { color: firebrick; }
@@ -52,6 +53,8 @@ require "timeSetup.php";
 <?php
 if ($monthly) {
     include "formatMonth.php";
+} else if ($annual) {
+    include "formatYear.php";
 }
 ?>
 </div>

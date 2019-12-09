@@ -1,9 +1,7 @@
 <?php
 /**
- * This script is included in viewMonthly.php after the user has selected a
- * month for the report and submitted the form to getMonthlyReport.php. It
- * takes the data from the latter and formats it in html for inclusion in the
- * report page.
+ * This script extracts all expenses (paid or unpaid) from the 'Charges' table
+ * and formats them in tabular format for display to the user.
  * PHP Version 7.1
  * 
  * @package Budget

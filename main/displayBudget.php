@@ -41,7 +41,7 @@ if ($user) {
 
 <body>
     <?php require "panel.php"; ?>
-
+    <button id="admin" style="display:none;">Admin</button>
     <p id="user" style="display:none"><?= $user;?></p>
     <div id="budget">
         <table id="roll3">

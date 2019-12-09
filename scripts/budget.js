@@ -5,6 +5,12 @@ var dd = parseInt(String(today.getDate()).padStart(2, '0'));
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January was otherwise 0!
 var yyyy = parseInt(today.getFullYear());
 var user = $('#user').text();
+if (user === 'krc') {
+    $('#admin').css('display', 'block');
+}
+$('#admin').on('click', function() {
+    window.open('../admin/admintools.php', "_blank");
+});
 
 // check autopayment status
 var payday = [];
