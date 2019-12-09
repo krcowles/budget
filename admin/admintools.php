@@ -24,7 +24,7 @@ require "../database/global_boot.php";
 </head>
 <body>
 
-<div style="margin-left:24px;" id="tools">
+<div style="margin-left:24px;margin-top:16px;" id="tools">
     <fieldset>
         <legend>Overall Site Management</legend>
         <p>Database Management Tools:</p>
