@@ -8,11 +8,8 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license
  */
-require "../utilities/getAccountData.php";
-require "../utilities/getCards.php";
-require "../utilities/getExpenses.php";
+require_once "../database/global_boot.php";
 require "../utilities/timeSetup.php";
-
 // if month has rolled over:
 if ($rollover) {
     $getMos = "SELECT `id`,`prev0`,`prev1`,`current` FROM `Budgets` " .
@@ -27,7 +24,7 @@ if ($rollover) {
         $mo['prev1'] = $mo['current'];
     }
     for ($k=0; $k<count($allmos); $k++) {
-        $putMos = "UPDATE `Budgets` SET `prev0` = :p0,`prev1` = :p1 " .
+        $putMos = "UPDATE `Budgets` SET `prev0` = :p0,`prev1` = :p1,`funded` = '0'" .
             "WHERE `id` = :uid;";
         $newdat = $pdo->prepare($putMos);
         $newdat->execute(
@@ -36,6 +33,10 @@ if ($rollover) {
         );
     }
 }
+require "../utilities/getAccountData.php";
+require "../utilities/getCards.php";
+require "../utilities/getExpenses.php";
+
 
 // form balances
 $balBudget  = 0;
