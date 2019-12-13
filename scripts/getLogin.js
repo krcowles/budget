@@ -37,7 +37,7 @@ if (cookies) {
             $('#user').on('change', function() {
                 var user = $(this).val();
                 var logdata = $('#log_modal').detach();
-                modal.open({id: 'login', height: '62px', width: '280px',
+                modal.open({id: 'login', height: '72px', width: '240px',
                     content: logdata, usr: user});
             });
         }

@@ -22,14 +22,19 @@ var modal = (function() {
      */
     // modal function used to get user's password
     function getpass(usrname) {
+        $drag.detach();
         var logpos = $('#login').offset();
-        var logtop = logpos.top - 4;
-        var logwd = logpos.left + $modal.width() + 30;
+        var logtop = logpos.top;
+        var logwd = logpos.left + $('#login').width() + 12;
         $modal.css({
             top: logtop,
             left: logwd
         });
         $('#moduser').val(usrname);
+        // add query string to <a> element
+        var link = $('#redopass').attr('href');
+        link += "?user=" + usrname;
+        $('#redopass').attr('href', link);
         document.getElementById("passin").focus(); 
         $('form').submit(function(ev) {
             ev.preventDefault();

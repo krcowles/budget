@@ -19,10 +19,8 @@ $day = $today['mday'];
 $year = intval($today['year']);
 $year++;
 $exp_date = $year . "-" . $month . "-" . $day;
-$email     = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-if (!$email) {
-    echo "Invalid email address - please go back to the Registration Page";
-} 
+$email  = isset($_POST['email']) ? 
+    filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) : false;
 if ($submitter == 'create') {
     $newuser = "INSERT INTO Users (" .
     "email,username,password,passwd_expire) " .
@@ -43,11 +41,11 @@ if ($submitter == 'create') {
 // always try to set a user cookie:
 $days = 365; // Number of days before cookie expires
 $expire = time()+60*60*24*$days;
-setcookie("epiz", $username, $expire, "/");
 if ($submitter == 'create') {
+    setcookie("epiz", $username, $expire, "/");
     echo "DONE"; // xhr request successful will redirect to newBudget.php
 } else {
-    // 'renew' form submit request will redirect to budget
-    $bud = "../main/displayBudget.php?user=" . $user;
+    // 'renew' or 'reset' form submit request will redirect to budget
+    $bud = "../main/displayBudget.php?user=" . $username;
     header("Location: {$bud}");
 }

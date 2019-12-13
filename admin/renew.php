@@ -9,6 +9,7 @@
  * @license No license to date
  */
 $user  = filter_input(INPUT_GET, 'user');
+$reset = isset($_GET['reset']) ? true : false;
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
@@ -48,32 +49,36 @@ $user  = filter_input(INPUT_GET, 'user');
 <p class="SmallHeading">Please update your password</p>
 
 <form id="form" method="POST" action="create_user.php">
-<input type="hidden" name="submitter" value="renew" />
-<input type="hidden" name="username" value="<?= $user;?>" />
-<fieldset>
-    <legend>Password Information</legend>
-    <p id="pnote">Note: Passwords must be at least 8 characters long and 
-        should contain a mix of characters (alpha, numeric, special). They
-        are automatically set to expire in 1 year, at which time you will
-        need to set a new password.</p>
-    <label for="password">Enter a password: </label>
-    <input id="passwd" type="password" name="password" size="20"
-        class="password" required />&nbsp;
-    <div class="password-meter">
-        <div class="password-meter-message"></div>
-        <div class="password-meter-bg">
-            <div class="password-meter-bar"></div>
-        </div>
-        <br />
-        <div id ="confirm">
-        <label for="confirm_password">Confirm password: </label>
-        <input id="confirm_password" type="password" 
-                name="confirm_password" size="20" class="required" />
-        </div>
-    </div><br />
-    </fieldset>
+    <?php if ($reset) : ?>
+    <input type="hidden" name="submitter" value="reset" />
+    <?php else : ?>
+    <input type="hidden" name="submitter" value="renew" />
+    <?php endif; ?>
+    <input type="hidden" name="username" value="<?= $user;?>" />
     <fieldset>
-<button id="formsubmit">Submit New Password</button>
+        <legend>Password Information</legend>
+        <p id="pnote">Note: Passwords must be at least 8 characters long and 
+            should contain a mix of characters (alpha, numeric, special). They
+            are automatically set to expire in 1 year, at which time you will
+            need to set a new password.</p><br />
+        <label for="password">Enter a password: </label>
+        <input id="passwd" type="password" name="password" size="20"
+            class="password" required />&nbsp;
+        <div class="password-meter">
+            <div class="password-meter-message"></div>
+            <div class="password-meter-bg">
+                <div class="password-meter-bar"></div>
+            </div>
+            <br />
+            <div id ="confirm">
+            <label for="confirm_password">Confirm password: </label>
+            <input id="confirm_password" type="password" 
+                    name="confirm_password" size="20" class="required" />
+            </div>
+        </div><br />
+        </fieldset>
+        <fieldset>
+    <button id="formsubmit">Submit New Password</button>
 </form>
 </div>   <!-- end of container -->
 <script src="../scripts/renew.js"></script>

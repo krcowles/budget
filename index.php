@@ -46,8 +46,10 @@ require "admin/getLogin.php";
         <form id="passform" method="POST" action="#">
             <span id="modpass">Password: </span>
             <input id="passin" type="password" name="passwd" />
-            <input id="moduser" type="hidden" name="user" value="" />
+            <input id="moduser" type="hidden" name="user" value="" /><br />
         </form>
+        <span id="rp">Forget Password? <a id="redopass" href="admin/renew.php" target="_blank">
+                Reset Password</a></span>
     </div>
 </div>
 <div>
