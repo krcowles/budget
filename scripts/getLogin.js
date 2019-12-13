@@ -101,12 +101,29 @@ function validateUser(usr_name, usr_pass) {
 }
 // for renewing password/cookie
 function renewPassword(user, update, status) {
+    var homepg = "main/displayBudget.php?user=" + user;
     if (update === 'renew') {
-       window.open('admin/renew.php?user=' + user, '_self');
+        var ajaxurl = 'admin/renew.php?user=' + user;
+        $.ajax({
+            url: ajaxurl,
+            method: "POST",
+            dataType: "text",
+            success: function(results) {
+                if (results == "OK") {
+                    window.open(homepg, "_self");
+                } else {
+                    alert("Attempt to renew has failed");
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                var msg = "An error occurred during renewal attempt:\n" +
+                    "Error " + errorThrown + ": " + textStatus;
+                alert(msg);
+            }
+        });
     } else {
         // if still valid, refresh will display login, otherwise do nothing
         if (status === 'valid') {
-            var homepg = "main/displayBudget.php?user=" + user;
             window.open(homepg, '_self');
         }
     }
