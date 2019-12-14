@@ -9,7 +9,7 @@
  * @license No license to date
  */
 $user  = filter_input(INPUT_GET, 'user');
-$reset = isset($_GET['reset']) ? true : false;
+// reset and renew are identical at this point
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
@@ -48,12 +48,8 @@ $reset = isset($_GET['reset']) ? true : false;
 <div id="container">
 <p class="SmallHeading">Please update your password</p>
 
-<form id="form" method="POST" action="create_user.php">
-    <?php if ($reset) : ?>
-    <input type="hidden" name="submitter" value="reset" />
-    <?php else : ?>
+<form id="form" method="POST" action="#">
     <input type="hidden" name="submitter" value="renew" />
-    <?php endif; ?>
     <input type="hidden" name="username" value="<?= $user;?>" />
     <fieldset>
         <legend>Password Information</legend>

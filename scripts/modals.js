@@ -30,8 +30,9 @@ var modal = (function() {
             top: logtop,
             left: logwd
         });
+        // enter username into form element:
         $('#moduser').val(usrname);
-        // add query string to <a> element
+        // add query string to <a> element for 'reset':
         var link = $('#redopass').attr('href');
         link += "?user=" + usrname;
         $('#redopass').attr('href', link);

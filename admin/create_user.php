@@ -14,25 +14,26 @@ $username  = filter_input(INPUT_POST, 'username');
 $user_pass = filter_input(INPUT_POST, 'password');
 $password  = password_hash($user_pass, PASSWORD_DEFAULT);
 $today = getdate();
-$month = $today['mon'];
+$month_digits = $today['mon'];
+$month_string = $today['month'];
 $day = $today['mday'];
 $year = intval($today['year']);
 $year++;
-$exp_date = $year . "-" . $month . "-" . $day;
-$email  = isset($_POST['email']) ? 
-    filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) : false;
+$exp_date = $year . "-" . $month_digits . "-" . $day;
 if ($submitter == 'create') {
-    $newuser = "INSERT INTO Users (" .
-    "email,username,password,passwd_expire) " .
-        "VALUES (:email,:uname,:passwd,:pass_exp);";
+    $email  = isset($_POST['email']) ? 
+        filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) : false;
+    $newuser = "INSERT INTO `Users` (`email`,`username`,`LCM`,`password`," .
+        "`passwd_expire`) " .
+        "VALUES (:email,:uname,'{$month_string}',:passwd,:pass_exp);";
     $user = $pdo->prepare($newuser);
     $user->execute(
         array( ":email" => $email, ":uname" =>  $username, ":passwd" => $password,
         ":pass_exp" => $exp_date)
     );
 } else { // update user
-    $updateuser = "UPDATE Users SET `password`=?, " .
-        "`passwd_expire`=? WHERE username=?;";
+    $updateuser = "UPDATE Users SET `password`=?,`passwd_expire`=? " .
+        "WHERE username=?;";
     $update = $pdo->prepare($updateuser);
     $update->execute(
         array($password, $exp_date, $username)
@@ -41,11 +42,5 @@ if ($submitter == 'create') {
 // always try to set a user cookie:
 $days = 365; // Number of days before cookie expires
 $expire = time()+60*60*24*$days;
-if ($submitter == 'create') {
-    setcookie("epiz", $username, $expire, "/");
-    echo "DONE"; // xhr request successful will redirect to newBudget.php
-} else {
-    // 'renew' or 'reset' form submit request will redirect to budget
-    $bud = "../main/displayBudget.php?user=" . $username;
-    header("Location: {$bud}");
-}
+setcookie("epiz", $username, $expire, "/");
+echo "DONE";

@@ -1,4 +1,4 @@
-// timestamp: 7:00PM 11/17/2019
+// timestamp: 7:00PM 12/13/2019
 // are cookies enabled on this browser?
 var cookies = navigator.cookieEnabled ? true : false;
 // the next two variables are provided complements getLogin.php
@@ -30,7 +30,6 @@ if (cookies) {
             "\nPlease contact the site master");
     } else if (user_cookie_state === 'OK') {
         if (login_name !== 'none') {
-            //alert("OK");
             var homepg = "main/displayBudget.php?user=" + login_name;
             window.open(homepg, "_self");
         } else { // login process
@@ -101,29 +100,13 @@ function validateUser(usr_name, usr_pass) {
 }
 // for renewing password/cookie
 function renewPassword(user, update, status) {
-    var homepg = "main/displayBudget.php?user=" + user;
     if (update === 'renew') {
-        var ajaxurl = 'admin/renew.php?user=' + user;
-        $.ajax({
-            url: ajaxurl,
-            method: "POST",
-            dataType: "text",
-            success: function(results) {
-                if (results == "OK") {
-                    window.open(homepg, "_self");
-                } else {
-                    alert("Attempt to renew has failed");
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                var msg = "An error occurred during renewal attempt:\n" +
-                    "Error " + errorThrown + ": " + textStatus;
-                alert(msg);
-            }
-        });
+        var renewpg = "admin/renew.php?user=" + user;
+        window.open(renewpg, "_self");
     } else {
         // if still valid, refresh will display login, otherwise do nothing
         if (status === 'valid') {
+            var homepg = "main/displayBudget.php?user=" + user;
             window.open(homepg, '_self');
         }
     }

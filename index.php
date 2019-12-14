@@ -17,7 +17,7 @@ require "admin/getLogin.php";
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>Welcome to Budget Trackin</title>
+    <title>Welcome to Budget Tracking</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="description"
         content="Rolling 4-month budget tracker" />
@@ -48,8 +48,8 @@ require "admin/getLogin.php";
             <input id="passin" type="password" name="passwd" />
             <input id="moduser" type="hidden" name="user" value="" /><br />
         </form>
-        <span id="rp">Forget Password? <a id="redopass" href="admin/renew.php" target="_blank">
-                Reset Password</a></span>
+        <span id="rp">Forget Password? <a id="redopass" href="admin/renew.php"
+            target="_blank">Reset Password</a></span>
     </div>
 </div>
 <div>

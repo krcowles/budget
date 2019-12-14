@@ -20,15 +20,50 @@ $('#form').validate({
         }
     }
 }); // end validate form
-function validateEmail(subjectEmail){      
-    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    return emailPattern.test(subjectEmail); 
-    } 
-    $('#email').on('change', function() {
-        if (!validateEmail( $(this).val() )) {
-            $(this).val("");
-            alert("This does not appear to be a valid email: please re-enter");
+
+// prevent hitting 'Return' key submitting form - user must hit button
+window.onkeydown = function(event) {
+    if(event.keyCode == 13) {
+        if(event.preventDefault) event.preventDefault();
+        return false;
+    }
+}
+
+$('#form').on('submit', function(evt) {
+    evt.preventDefault();
+    if ($('#passwd').val() == '' || $('#confirm_password').val() == '') {
+            alert("Password and Confirm Password must both be completed");
+            return;
+    }
+    if ($('#passwd').val() !== $('#confirm_password').val()) {
+        alert("The entries for 'Passwords' and 'Confirm' do not match");
+        $('#confirm_password').val('');
+        return;
+    }
+    var usr = $('input[name=username]').val();
+    var ajaxData = new FormData();
+    ajaxData.append('username',  usr);
+    ajaxData.append('password',  $('input[name=password]').val());
+    ajaxData.append('submitter',    'renew');
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'create_user.php');
+    xhr.onload = function() {
+        if (this.status !== 200) {
+            if (this.response !== 'DONE') {
+                alert("The password renewal/reset did not occur\n\n" +
+                    "The following unexpected result occurred:\n" +
+                    "Server returned status " + this.status);
+            }
+        } else {
+            var success = "../main/displayBudget.php?&user=" + usr;
+            window.open(success, '_self');
         }
-    });
+    }
+    xhr.onerror = function() {
+        alert("The request failed: password renewal/reset did not occur\n" +
+            "Contact the site master or try again.");
+    }
+    xhr.send(ajaxData);
+});
 
 });
