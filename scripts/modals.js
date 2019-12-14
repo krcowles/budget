@@ -43,6 +43,45 @@ var modal = (function() {
             validateUser(usrname, passwd);
         });
     }
+    // modal function used to send email to user with user's name
+    function usermail(deferred) {
+        $drag.detach();
+        $('#sendmail').after($close);
+        $close.css('margin-left', '112px');
+        $('#sendmail').on('click', function() {
+            var data = $('#umail').val();
+            var ajaxdata = {email: data};
+            $.ajax({
+                url: 'admin/sendmail.php',
+                method: "POST",
+                data: ajaxdata,
+                dataType: "text",
+                success: function(results) {
+                    if (results === 'ok') {
+                        alert("An email has been sent");
+                    } else if (results === 'bad') {
+                        alert("The information you typed\n" +
+                            "is not a well-formed email addresss");
+                    } else if (results === 'nofind') {
+                        alert("Your email could not be located in our records");
+                    }
+                    deferred.resolve();
+                    modal.close();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    var msg = "Unable to complete the process of sending email:\n"
+                        + "Contact site master or try again";
+                    alert(msg);
+                    deferred.resolve();
+                    modal.close();
+                }
+            });
+        });
+        $close.on('click', function() {
+            deferred.resolve();
+            modal.close();
+        });
+    }
     // general purpose function to execute ajax based on input arguments
     function executeScript(url, ajaxdata, errtype, deferred) {
             var msgtxt = "Problem encountered " + errtype;
@@ -537,6 +576,8 @@ var modal = (function() {
             // separate code for each form
             if (modid === 'login') {
                 getpass(settings.usr);
+            } else if (modid == 'usrmail') {
+                usermail(settings.deferred);
             } else if (modid === 'autopay') {
                 autopay(settings.user, settings.method, settings.acct_name,
                     settings.row, settings.deferred);
@@ -568,7 +609,7 @@ var modal = (function() {
                 rename(settings.deferred);
             } else if (modid === 'edit_chg') {
                 editCredit(settings.ivals, settings.chgitem, 
-                        settings.chgid, settings.deferred);
+                    settings.chgid, settings.deferred);
             } else if (modid === 'morpt') {
                 monthly(settings.deferred);
             }

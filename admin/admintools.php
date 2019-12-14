@@ -26,15 +26,15 @@ require "../database/global_boot.php";
 
 <div style="margin-left:24px;margin-top:16px;" id="tools">
     <fieldset>
-        <legend>Overall Site Management</legend>
+        <legend>Database Management</legend>
+        <button id="exall">Export All Tables</button>
+            [NOTE: Creates .sql file]<br />
         <p>Database Management Tools:</p>
         <button id="reload">Reload Database</button>&nbsp;
             [Drops All Tables and Loads All Tables]<br />
         <button id="drall">Drop All Tables</button><br />
         <button id="ldall">Load All Tables</button>
             [NOTE: Tables must not exist]<br />
-        <button id="exall">Export All Tables</button>
-            [NOTE: Creates .sql file]<br />
         <button id="show">Show All Tables</button><br />
         <!-- End of Show/Set div w/form -->
     </fieldset><br />

@@ -20,9 +20,10 @@ require "admin/getLogin.php";
     <title>Welcome to Budget Tracking</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="description"
-        content="Rolling 4-month budget tracker" />
+        content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
+    <link href="styles/standards.css" type="text/css" rel="stylesheet" />
     <link href="styles/index.css" type="text/css" rel="stylesheet" />
     <link href="styles/modals.css" type="text/css" rel="stylesheet" />
 </head>
@@ -39,17 +40,28 @@ require "admin/getLogin.php";
     <div id="userbox">
         <em><span id="free">This site is totally free!</span></em><br />
         Login: &nbsp;<input id="user" type="text" name="user" /><br />
-        No login?&nbsp;&nbsp;&nbsp;<a id="signup" href="admin/registration.php" 
-            target="_self">Sign me up!</a>
+        <span id="lgtxt">No login?&nbsp;&nbsp;&nbsp;<a id="signup" 
+            href="admin/registration.php" target="_self">Sign me up!</a></span>
     </div>
-    <div id="log_modal">
-        <form id="passform" method="POST" action="#">
-            <span id="modpass">Password: </span>
-            <input id="passin" type="password" name="passwd" />
-            <input id="moduser" type="hidden" name="user" value="" /><br />
-        </form>
-        <span id="rp">Forget Password? <a id="redopass" href="admin/renew.php"
-            target="_blank">Reset Password</a></span>
+    <div id="nousr">
+        Forgot User Name?&nbsp;&nbsp;<a id="forgot" href="#">Click Here</a>
+    </div>
+    <div id="modal_wins">
+        <div id="log_modal">
+            <form id="passform" method="POST" action="#">
+                <span id="modpass">Password: </span>
+                <input id="passin" type="password" name="passwd" />
+                <input id="moduser" type="hidden" name="user" value="" /><br />
+            </form>
+            <span id="rp">Forget Password? <a id="redopass" href="admin/renew.php"
+                target="_blank">Reset Password</a></span>
+        </div>
+        <div id="usr_modal">
+            Enter your email address:
+            <input id="umail" type="email" name="umail" /><br /><br />
+            <span id="mailtxt">Click to send your user name</span><br />
+            <button id="sendmail">Send</button>
+        </div>
     </div>
 </div>
 <div>

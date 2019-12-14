@@ -39,6 +39,16 @@ if (cookies) {
                 modal.open({id: 'login', height: '72px', width: '240px',
                     content: logdata, usr: user});
             });
+            $('#forgot').on('click', function(ev) {
+                ev.preventDefault();
+                var def = new $.Deferred();
+                var usrmail = $('#usr_modal').detach();
+                modal.open({id: 'usrmail', height: '108px', width: '240px',
+                    content: usrmail, deferred: def});
+                $.when(def).then(function() {
+                    $('#modal_wins').append(usrmail);
+                });
+            });
         }
     } 
 } else {  // cookies disabled
