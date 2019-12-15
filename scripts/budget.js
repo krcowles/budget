@@ -55,7 +55,7 @@ if (ap_candidates) {
     var ap_object = $('#ap').detach();
     var def = new $.Deferred(); // only one can pay at a time, so one deferred
     modal.open({
-        id: 'autopay', height: '200px', width: '390px', content: ap_object,
+        id: 'autopay', height: '200px', width: '400px', content: ap_object,
         user: user, method: paywith, acct_name: aname, row_no: rowno,
         deferred: def
     });

@@ -10,6 +10,8 @@
  * @license No license to date
  */
 require "../database/global_boot.php";
+require "gmail.php";
+
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 if (!$email) {
     echo "bad";
@@ -22,9 +24,22 @@ if (in_array($email, $registered)) {
     $stmnt = $pdo->prepare($uname);
     $stmnt->execute(["email" => $email]);
     $user = $stmnt->fetch(PDO::FETCH_ASSOC);
-    $msg = "Your Budgetizer User Name is " . $user['username'];
-    mail($mail, 'Budgetizer User Name', $msg);
-    echo "ok";
+    $mail->setFrom('webmaster@budgetizer.epizy.com', 'Do not reply');
+    $mail->addAddress($email, 'Budgetizer User');
+    $mail->Subject = 'Your Budgetizer User Name';
+    $mail->Body = "Your Budgetizer User Name is " . $user['username'];
+    // ... or send an email with HTML.
+    //$mail->msgHTML(file_get_contents('contents.html'));
+    // Optional when using HTML: Set an alternative plain text message for email clients who prefer that.
+    //$mail->AltBody = 'This is a plain-text message body'; 
+    // Optional: attach a file
+    //$mail->addAttachment('images/phpmailer_mini.png');
+    if ($mail->send()) {
+        echo "ok";
+    } else {
+        $msg = "Error: " . $mail->ErrorInfo;
+        echo $msg;
+    }
 } else {
     echo "nofind";
 }
