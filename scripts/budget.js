@@ -64,12 +64,6 @@ if (ap_candidates) {
     });
 }
 
-// disable Check/Draft option in autopay select box
-var $apcdsel = $('#ccselap .allsel');
-$apcdsel[0].options[0].disabled = 'disabled';
-// disable first option in Delete Card box
-var $moddc = $('#deletecard .allsel');
-$moddc[0].options[0].disabled = 'disabled';
 // Add option for moving account
 var $mvlist = $('#mvto .partsel');
 var undisopt = document.createElement('option');

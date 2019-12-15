@@ -27,7 +27,7 @@ if ($credit_cards) {
     }
 }
 
-$ccHtml = '<select class="ccsel">';
+$ccHtml = '<select class="ccsel"><option value="">SELECT ONE:</option>';
 for ($c=0; $c<count($cr); $c++) {
     $ccHtml .= '<option value="' . $cr[$c] . '">' . $cr[$c] . '</option>';
 }
@@ -38,7 +38,7 @@ for ($d=0; $d<count($dr); $d++) {
 }
 $dcHtml .= '</select>';
 $allCds = array_merge($cr, $dr);
-$allCardsHtml = '<select class="allsel">' .
+$allCardsHtml = '<select class="allsel"><option value="">SELECT ONE:</option>' .
     '<option value="check">Check or Draft</option>';
 for ($a=0; $a<count($allCds); $a++) {
     $allCardsHtml .= '<option value="' . $allCds[$a] . '">' .

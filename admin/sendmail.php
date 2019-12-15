@@ -30,16 +30,22 @@ if (in_array($email, $registered)) {
     $mail->Body = "Your Budgetizer User Name is " . $user['username'];
     // ... or send an email with HTML.
     //$mail->msgHTML(file_get_contents('contents.html'));
-    // Optional when using HTML: Set an alternative plain text message for email clients who prefer that.
+    // Optional when using HTML: Set an alternative plain text message 
+    //                                   for email clients who prefer that.
     //$mail->AltBody = 'This is a plain-text message body'; 
     // Optional: attach a file
     //$mail->addAttachment('images/phpmailer_mini.png');
+    @$mail->send();
+    echo "ok";
+    /*
     if ($mail->send()) {
         echo "ok";
+        exit;
     } else {
         $msg = "Error: " . $mail->ErrorInfo;
-        echo $msg;
+        exit;
     }
+    */
 } else {
     echo "nofind";
 }

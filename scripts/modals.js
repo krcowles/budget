@@ -70,7 +70,8 @@ var modal = (function() {
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     var msg = "Unable to complete the process of sending email:\n"
-                        + "Contact site master or try again";
+                        + "Contact site master or try again\n" +
+                        "Error: " + errorThrown + "; " + textStatus;
                     alert(msg);
                     deferred.resolve();
                     modal.close();
@@ -159,7 +160,7 @@ var modal = (function() {
         var $payee = $('#payee');
         // initial values
         var acctname = getSelectValue($selacct[0]);
-        var charge = getSelectValue($selcd[0]);
+        var charge = '';
         var amount = 0;
         var payee = 'None specified';
         // updated values
@@ -176,6 +177,20 @@ var modal = (function() {
             payee = this.value;
         });
         $('#pay').on('click', function() {
+            // validate:
+            if (charge === '') {
+                alert("You have not selected a payment method");
+                return;
+            } else if (amount === 0) {
+                alert("You have not entered an amount to pay");
+                return;
+            } else if (!$.isNumeric(amount)) {
+                alert("The amount entered is not a number");
+                return;
+            } else if (payee === 'None specified' || payee === '') {
+                alert("You have not entered a payee");
+                return;
+            }
             var ajaxdata = {id: 'payexp', user: g_user, acct_name: acctname,
                 method: charge, amt: amount, payto: payee};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
@@ -258,14 +273,18 @@ var modal = (function() {
     // modal function executed when settings.id == 'recon'
     function reconcile(deferred) {
         $('#usecard').after($close);
+        $close.css('margin-left', '68px');
         var $ccbox = $('#ccsel0 .ccsel');
         $ccbox[0].id = 'reccd';
-        $close.css('margin-left', '76px');
-        var usecd = getSelectValue($ccbox[0]);
+        var usecd = '';
         $('#reccd').on('change', function() {
             usecd = this.value;
         });
         $('#usecard').on('click', function() {
+            if (usecd === '') {
+                alert("You have not selected card to reconcile");
+                return;
+            }
             deferred.resolve();
             var recloc = "../utilities/reconcile.php?user=" + g_user 
                 + "&card=" + usecd;
@@ -287,17 +306,24 @@ var modal = (function() {
         $('#sapacct').on('change', function() {
             against = this.value;
         });
-        var $cardsel = $('#ccselap .allsel');  // also used in Pay Expense
-        var use = getSelectValue($cardsel[0]);
+        var $cardsel = $('#ccselap .allsel');
+        var use = ''
         $cardsel[0].id = 'forap';
         $('#forap').on('change', function() {
             use = this.value;
         });
-        var dom = $('#useday').text();
+        var dom = '';
         $('#useday').on('change', function() {
             dom = this.value;
         });
         $('#perfauto').on('click', function() {
+            if (use === '') {
+                alert("You have not entered a payment method");
+                return;
+            } else if (dom === '') {
+                alert("You have not entered a day-of-month for autopay");
+                return;
+            }
             ajaxdata = {id: 'apset', user: g_user, acct: against,
                 method: use, day: dom};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
@@ -328,7 +354,7 @@ var modal = (function() {
             modal.close();
         });
     }
-    // modal function executed when settings.id = 'aadcd'
+    // modal function executed when settings.id = 'addcd'
     function addcard(deferred) {
         $('#newcd').after($close);
         $close.css('margin-left', '100px');
@@ -351,16 +377,21 @@ var modal = (function() {
             modal.close();
         });
     }
+    // modal function executed when settings.id = 'delcd'
     function deleteCrDr(deferred) {
         $('#godel').after($close);
         $close.css('margin-left', '54px');
         var $dc = $('#deletecard .allsel');
-        var dc = getSelectValue($dc[0]);
+        var dc = '';
         $dc[0].id = "dcid";
         $('#dcid').on('change', function() {
             dc = this.value;
         });
         $('#godel').on('click', function() {
+            if (dc === '') {
+                alert("You have not selected a card to delete");
+                return;
+            }
             ajaxdata = {id: 'decard', user: g_user, target: dc};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'deleting Cr/Dr card', deferred);
