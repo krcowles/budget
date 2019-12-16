@@ -20,16 +20,15 @@ require $lead . "vendor/autoload.php";
 require $lead . "database/settings.php";
 require $lead . "database/sql_modes.php";
 require $lead . "utilities/budgetFunctions.php";
-//require $lead . "database/errFunctions.php";
+require $lead . "database/errFunctions.php";
 // PHP site recommends following value for future expansion of E_ALL
 error_reporting(-1);  // 2147483647 is also suggested on PHP site, both work
-/*if ($appMode === 'production') {
-    ini_set('log_errors', 1); // (this may be the default anyway)
-    ini_set('error_log', '../ktesa.log');
+ini_set('log_errors', 1); // (this may be the default anyway)
+ini_set('error_log', '../budgetizer.log');
 
 // UNCAUGHT error/exception handling:
-set_error_handler('ktesaErrors'); // errors not using Throwable interface
-set_exception_handler('ktesaExceptions'); // uncaught exceptions (no try/ctach)
+set_error_handler('budgetizerErrors'); // errors not using Throwable interface
+set_exception_handler('budgetizerExceptions'); // uncaught exceptions (no try/ctach)
 // A method for fatal errors that handlers don't catch
 register_shutdown_function("shutdownHandler");
 

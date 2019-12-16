@@ -8,6 +8,9 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+date_default_timezone_set('Etc/UTC');
+
+require "../PHPMailer/PHPMailerAutoload.php";
 date_default_timezone_set('America/Denver');
 require '../PHPMailer/PHPMailerAutoload.php';
 $mail = new PHPMailer;

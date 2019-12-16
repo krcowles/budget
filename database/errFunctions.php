@@ -19,13 +19,13 @@
  * 
  * @return null
  */
-function ktesaErrors($errno, $errstr, $errfile, $errline)
+function budgetizerErrors($errno, $errstr, $errfile, $errline)
 {
     $message = "An error occurred in {$errfile} on line {$errline}. " .
         "\nError no. {$errno}: {$errstr}\n";
     error_log($message);
     // send email to site master
-    errorPage();
+    //errorPage();
 }
 /**
  * This is the production mode exception handler, also presenting 
@@ -36,7 +36,7 @@ function ktesaErrors($errno, $errstr, $errfile, $errline)
  * 
  * @return null
  */
-function ktesaExceptions($exception)
+function budgetizerExceptions($exception)
 {
     $message = "An uncaught exception occurred:\n" .
         "Code: " . $exception->getCode() . 
@@ -46,7 +46,7 @@ function ktesaExceptions($exception)
         "TRACE: " . $exception->getTraceAsString();
     error_log($message);
     // send email to site masters
-    errorPage();
+    //errorPage();
 } 
 /**
  * This is a custom handler to catch the ugly parse/compile errors et al
@@ -86,7 +86,7 @@ function shutdownHandler() //will be called when php script ends.
 function shutdownError($errmsg, $errlvl) 
 {
     error_log($errmsg);
-    errorPage();
+    //errorPage();
 }
 /**
  * This is the user-friendly error page presented to the user

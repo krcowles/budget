@@ -1,5 +1,23 @@
 $(function() { 
 
+function menuSpace() {
+    var wd = window.innerWidth;
+    if (wd < 1150) {
+        alert("Your browser window needs to expand to show all the menus:\n" +
+            "Please Widen until you see space after the Help Menu");
+    }
+}
+menuSpace();
+var able = true;
+$(window).resize(function() {
+    if (able) {
+        able = false;
+        setTimeout(function() {
+            able = true;
+            menuSpace();
+        }, 400);
+    }
+});
 var today = new Date();
 var dd = parseInt(String(today.getDate()).padStart(2, '0'));
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January was otherwise 0!

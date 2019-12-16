@@ -1,3 +1,6 @@
+body {
+    min-width: 1140px;
+}
 .noshow, #chgaccts {
     display: none;
 }
@@ -15,10 +18,9 @@ table:not(#modal_table) {
     left: 28px;
     margin: 0px;
 }
-/* <div> containing modal window content */
-#box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv,
-        #cdadd, #reconcile, #auto, #delauto, #delcrdr,
-        #delexisting, #morpt {
+/* <div>s containing modal window content */
+#box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv, #cdadd, 
+        #reconcile, #auto, #delauto, #delcrdr, #delexisting, #morpt {
     display: none;
 }
 .tdht {

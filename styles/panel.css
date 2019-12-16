@@ -10,11 +10,11 @@
 #allMenus {
     margin: 0;
     height: 64px;
-    padding-left: 12px;
+    padding-left: 8px;
 }
 .menu-main {
     display: inline-block;
-    margin-left: 32px;
+    margin-left: 16px;
     margin-right: 8px;
     height: 30px;
 }

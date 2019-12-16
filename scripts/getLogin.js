@@ -1,5 +1,3 @@
-// timestamp: 7:00PM 12/13/2019
-// are cookies enabled on this browser?
 var cookies = navigator.cookieEnabled ? true : false;
 // the next two variables are provided complements getLogin.php
 var login_name = document.getElementById('usrcookie').textContent;
@@ -36,7 +34,7 @@ if (cookies) {
             $('#user').on('change', function() {
                 var user = $(this).val();
                 var logdata = $('#log_modal').detach();
-                modal.open({id: 'login', height: '72px', width: '240px',
+                modal.open({id: 'login', height: '72px', width: '260px',
                     content: logdata, usr: user});
             });
             $('#forgot').on('click', function(ev) {
