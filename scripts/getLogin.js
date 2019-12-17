@@ -40,11 +40,13 @@ if (cookies) {
             $('#forgot').on('click', function(ev) {
                 ev.preventDefault();
                 var def = new $.Deferred();
+                $('#passtxt').css('display', 'none');
                 var usrmail = $('#usr_modal').detach();
                 modal.open({id: 'usrmail', height: '108px', width: '240px',
                     content: usrmail, deferred: def});
                 $.when(def).then(function() {
                     $('#modal_wins').append(usrmail);
+                    $('#passtxt').css('dispaly', 'inline');
                 });
             });
         }

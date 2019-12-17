@@ -39,8 +39,7 @@ if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
     } else {
         spl_autoload_register('PHPMailerAutoload');
     }
-} else {
-    spl_autoload_register('PHPMailerAutoload', true, true);
+} /*else {
     /**
      * Fall back to traditional autoload for old PHP versions
      *  -----  AUTHOR's NOTE ----
@@ -52,5 +51,4 @@ if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
     {
         PHPMailerAutoload($classname);
     }
-    */
-}
+}*/

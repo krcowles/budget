@@ -20,7 +20,7 @@ var modal = (function() {
      * are called by the (public) modal.open function, based on the modal id
      * passed via settings.
      */
-    // modal function used to get user's password
+    // modal function used to verify user's password or send link to reset
     function getpass(usrname) {
         $drag.detach();
         var logpos = $('#login').offset();
@@ -32,55 +32,61 @@ var modal = (function() {
         });
         // enter username into form element:
         $('#moduser').val(usrname);
-        // add query string to <a> element for 'reset':
-        var link = $('#redopass').attr('href');
-        link += "?user=" + usrname;
-        $('#redopass').attr('href', link);
         document.getElementById("passin").focus(); 
         $('form').submit(function(ev) {
             ev.preventDefault();
             passwd = $('#passin').val();
             validateUser(usrname, passwd);
         });
+        // OR send a link to reset the password:
+        $('#redopass').on('click', function() {
+            var unused = new $.Deferred();
+            var ajaxdata = {parm: 'passwd', email: usrname};
+            sendUserMail(ajaxdata, unused);
+        });
     }
     // modal function used to send email to user with user's name
-    function usermail(deferred) {
+    function userName(deferred) {
         $drag.detach();
         $('#sendmail').after($close);
         $close.css('margin-left', '112px');
         $('#sendmail').on('click', function() {
-            var data = $('#umail').val();
-            var ajaxdata = {email: data};
-            $.ajax({
-                url: 'admin/sendmail.php',
-                method: "POST",
-                data: ajaxdata,
-                dataType: "text",
-                success: function(results) {
-                    if (results === 'ok') {
-                        alert("An email has been sent");
-                    } else if (results === 'bad') {
-                        alert("The information you typed\n" +
-                            "is not a well-formed email addresss");
-                    } else if (results === 'nofind') {
-                        alert("Your email could not be located in our records");
-                    }
-                    deferred.resolve();
-                    modal.close();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    var msg = "Unable to complete the process of sending email:\n"
-                        + "Contact site master or try again\n" +
-                        "Error: " + errorThrown + "; " + textStatus;
-                    alert(msg);
-                    deferred.resolve();
-                    modal.close();
-                }
-            });
+            var mailaddr = $('#umail').val();
+            var ajaxdata = {parm: 'uname', email: mailaddr};
+            sendUserMail(ajaxdata, deferred);
         });
         $close.on('click', function() {
             deferred.resolve();
             modal.close();
+        });
+    }
+    // reusable ajax code to sendmail to user
+    function sendUserMail(ajaxdata, deferred) {
+        $.ajax({
+            url: 'admin/sendmail.php',
+            method: "POST",
+            data: ajaxdata,
+            dataType: "text",
+            success: function(results) {
+                if (results === 'ok') {
+                    alert("An email has been sent");
+                } else if (results === 'bad') {
+                    alert("The information you typed\n" +
+                        "is not a well-formed email addresss");
+                } else if (results === 'nofind') {
+                    alert("Your email/username could not be located in our records");
+                }
+                deferred.resolve();
+                modal.close();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                var msg = "Unable to complete the process of sending email:\n"
+                    + "Contact site master or try again\n" +
+                    "Error: " + errorThrown + "; " + textStatus;
+                alert(msg);
+                deferred.resolve();
+                modal.close();
+            }
         });
     }
     // general purpose function to execute ajax based on input arguments
@@ -608,7 +614,7 @@ var modal = (function() {
             if (modid === 'login') {
                 getpass(settings.usr);
             } else if (modid == 'usrmail') {
-                usermail(settings.deferred);
+                userName(settings.deferred);
             } else if (modid === 'autopay') {
                 autopay(settings.user, settings.method, settings.acct_name,
                     settings.row, settings.deferred);
