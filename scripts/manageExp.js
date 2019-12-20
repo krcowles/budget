@@ -36,6 +36,12 @@ $('#canc').css('top', hrpos.top - 40 + 'px');
 $('#canc').css('left', hrpos.left + 4 + 'px');
 function enableCancel(xfrtype) {
     $('#canc').css('display', 'block');
+    $('#canc').on('mouseover', function() {
+        $(this).css('color', 'white');
+    });
+    $('#canc').on('mouseout', function() {
+        $(this).css('color', 'brown');
+    });
     $('#canc').on('click', function() {
         window.location.reload();
     });
