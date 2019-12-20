@@ -2,7 +2,7 @@ $(function() {
     // establish menu/sub-menu widths, sub-menu positions and menu icons
     var menuWidth = ['120', '120', '120', '140', 
         '120', '120', '120', '120']; // 8 main menu items
-    var subWidth = ['120', '90', '130', '120', '130'];  // 4 sub-menus
+    var subWidth = ['120', '90', '130', '150', '130'];  // 4 sub-menus
     var $mainMenus = $('.menu-main');
     var navPos = $('#navbar').offset();
     var navBottom = navPos.top + $('#navbar').height() + 5 + 'px';
@@ -183,7 +183,7 @@ $(function() {
                     $('#allForms').append(rebox);
                 });
                 break;
-            case "View Expenses":
+            case "View/Manage Expenses":
                 var viewexp = "../utilities/viewCharges.php?user=" + user;
                 window.open(viewexp, "_self");
                 break;

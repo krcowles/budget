@@ -27,8 +27,6 @@ for ($i=0; $i<count($cr); $i++) {
     $cardCharges = [];
     $card_cnts[$i] = count($allCharges[$i]);
 }
-//print_r($allCharges);
-$x=1;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -59,7 +57,7 @@ $x=1;
     <p id="user" style="display:none;"><?= $user;?></p>
     <p class="NormalHeading">You can use this form to edit active charges
     charged to a credit card.</p>
-    <form id=#form method="POST" action="saveEditedCharge.php">
+    <form id="form" method="POST" action="saveEditedCharge.php">
     <button id="save">Save All Changes</button>
     <button id="return" style="margin-left:80px;">
         Return to Budget</button><br /><br />

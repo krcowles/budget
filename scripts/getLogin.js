@@ -1,3 +1,4 @@
+$('#user').val(''); // clear login for refresh
 var cookies = navigator.cookieEnabled ? true : false;
 // the next two variables are provided complements getLogin.php
 var login_name = document.getElementById('usrcookie').textContent;

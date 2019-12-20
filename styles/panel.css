@@ -1,6 +1,8 @@
 #panel {
     display: inline-block;
     width: 100%;
+    position: fixed;
+    top: 0;
 }
 #navbar {
     background-color: #004a00;

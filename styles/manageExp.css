@@ -1,0 +1,79 @@
+#actions {
+    height: 48px;
+    width: 100%;
+    background-color: #004a00;
+    color: #fff5e6;
+    position: fixed;
+    top: 0;
+}
+#mv {
+    float: left;
+    padding-top: 14px;
+    margin-left: 24px;
+    height: 100%;
+    font-size: 18px;
+    text-decoration: underline;
+}
+.sel {
+    float: left;
+    display: block;
+    padding: 14px 16px;
+    font-size: 17px;
+}
+.sel:hover {
+    cursor: pointer;
+    background-color: #fff5e6;
+    color: #004a00;
+}
+#e2c {
+    margin-left: 4px;
+}
+table { 
+    border-collapse: collapse;
+}
+th {
+    text-align: left;
+    padding: 0px 6px 0px 6px;
+    border: 1px solid #ddd;
+    background-color: #B8D2AF;
+}
+td {
+    padding: 0px 6px 0px 6px;
+    border: 1px solid #ddd;
+}
+.col1 {
+    width: 120px;
+}
+.col2 {
+    width: 100px;
+}
+.col3, .col4 {
+    width: 180px;
+}
+#ochgs, #exps {
+    width: 50%;
+    float: left;
+    margin-top: 16px;
+}
+#innerexp {
+    position: absolute
+ }
+ #canc {
+     display: none;
+     position: absolute;
+     color: brown;
+ }
+ input[type=checkbox] {
+    transform: scale(1.4);
+}
+ .mvcr, .mvex, .mvdr, .mvtocr, .mvtodr {
+     display: none;
+ }
+.blinking{
+    animation:blinkingText 0.8s infinite;
+}
+@keyframes blinkingText{
+    0%{ color: brown; }
+    70%{ color: transparent; }
+    100%{   color: #000;    }
+}

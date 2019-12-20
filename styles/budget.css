@@ -1,6 +1,9 @@
 body {
     min-width: 1140px;
 }
+#budget {
+    margin-top: 18px;
+}
 .noshow, #chgaccts {
     display: none;
 }
@@ -13,7 +16,7 @@ table:not(#modal_table) {
     margin-left: auto;
 }
 #admin {
-    position: absolute;
+    position: fixed;
     top: 68px;
     left: 28px;
     margin: 0px;
