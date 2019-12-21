@@ -1,9 +1,9 @@
 <?php
 /**
- * Administration tools for the admin(s) is/are included here. These
+ * Administration tools for the admin are included here. These
  * comprise buttons to carry out certain admin tasks, and are grouped
  * and ordered based on current usage. Note: first implementation has 
- * only the database backup (export all tables).
+ * only the database backup (export all tables), and database reload.
  * PHP Version 7.1
  * 
  * @package Admin

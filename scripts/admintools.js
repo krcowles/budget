@@ -3,51 +3,7 @@ $( function() {  // wait until document is loaded...
 $('#exall').on('click', function() {
     window.open('export_all_tables.php?dwnld=N', "_blank");
 });
-/*
-var current_state = $('#currstate').text();
-$('#switchstate').on('click', function() {
-    window.open('changeSiteMode.php?mode=' + current_state);
-    window.close();
-});
-$('#chgs').on('click', function() {
-    window.open('export_all_tables.php?dwnld=C');
-});
-$('#site').on('click', function() {
-    window.open('export_all_tables.php?dwnld=S');
-});
-$('#npix').on('click', function() {
-    window.open('list_new_files.php?request=pictures', "_self");
-});
-var picfile = '';
-var pselLoc = $('#psel').offset();
-var dselLoc = $('#dsel').offset();
-var dselCoord = {top: dselLoc.top, left: pselLoc.left};
-$('#dsel').offset(dselCoord);
-$('#cmppic').on('change', function(ev) {
-    picfile = ev.target.files[0].name;
-});
-$('#rel2pic').on('click', function() {
-    picloc = '';
-    var dateSelected = $('#datepicker').val();
-    if (picfile === '' && dateSelected === '') {
-        alert("No image or date has been selected");
-    } else {
-        if (picfile !== '') {
-            var extPos = picfile.lastIndexOf(".");
-            var sizedir = picfile.substring(extPos - 1, extPos);
-            if (sizedir === 'n') {
-                var picloc = "pictures/nsize/" + picfile;
-            } else {
-                var picloc = "pictures/zsize/" + picfile;
-            }
-            $('#cmppic').val(null);
-            picfile = '';
-        }
-        $('#datepicker').val('');
-        window.open("list_new_files.php?request=pictures&dtFile=" + picloc +
-            "&dtTime=" + dateSelected, "_self");
-    }
-});
+
 function retrieveDwnldCookie(dcname) {
     var parts = document.cookie.split(dcname + "=");
     if (parts.length == 2) {
@@ -56,23 +12,21 @@ function retrieveDwnldCookie(dcname) {
 }
 $('#reload').on('click', function() {
     if (confirm("Do you really want to drop all tables and reload them?")) {
-        if (hostIs !== 'localhost') {
-            window.open('export_all_tables.php?dwnld=N', "_blank");
-            var dwnldResult;
-            var downloadTimer = setInterval(function() {
-                dwnldResult = retrieveDwnldCookie('DownloadDisplayed');
-                if (dwnldResult === '1234') {
-                    clearInterval(downloadTimer);
-                    if (confirm("Proceed with reload?")) {
-                        window.open('drop_all_tables.php', "_blank");
-                    }
+        // backup, just in case...
+        window.open('export_all_tables.php?dwnld=N', "_blank");
+        var dwnldResult;
+        var downloadTimer = setInterval(function() {
+            dwnldResult = retrieveDwnldCookie('DownloadDisplayed');
+            if (dwnldResult === '1234') {
+                clearInterval(downloadTimer);
+                if (confirm("Proceed with reload?")) {
+                    window.open('drop_all_tables.php', "_blank");
                 }
-            }, 1000)
-        } else {
-            window.open('drop_all_tables.php', "_blank");
-        }
+            }
+        }, 1000)
     }
 });
+
 $('#drall').on('click', function() {
     if (confirm("Do you really want to drop all tables?")) {
         window.open('drop_all_tables.php?no=all', "_blank");
@@ -81,7 +35,7 @@ $('#drall').on('click', function() {
 $('#ldall').on('click', function() {
     window.open('load_all_tables.php', "_blank");
 });
-
+/*
 $('#swdb').on('click', function() {
     window.open('switchDb.php');
     window.close();
