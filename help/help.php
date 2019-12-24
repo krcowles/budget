@@ -7,8 +7,9 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$file = 'help.pdf';
-$filename = 'help.pdf';
+$doc = filter_input(INPUT_GET, 'doc');
+$file = $doc;
+$filename = $doc;
 header('Content-type: application/pdf');
 header('Content-Disposition: inline; filename="' . $filename . '"');
 header('Content-Transfer-Encoding: binary');

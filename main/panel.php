@@ -99,8 +99,8 @@
                 </div>
                 <div id="menu-help" class="menu-default">
                 <ul class="menus">
-                    <li><div id="doc">Budgetizer Basics</div></li>
-                    <li><div id="conv">Making a Budget</div></li>
+                    <li><div id="doc">Intro to Budgeting</div></li>
+                    <li><div id="conv">Using Budgetizer</div></li>
                 </ul>
                 </div>
             </li>

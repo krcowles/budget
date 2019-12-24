@@ -10,7 +10,6 @@
  */
 
 // Read in entire file
-$here = getcwd();
 $dbFile = "../database/epiz_24776673_BudgdetData.sql";
 $lines = file($dbFile);
 if (!$lines) {

@@ -204,15 +204,16 @@ $(function() {
                     $('#allForms').append(morpt);
                 });
                 break;
-            case "Budgetizer Basics":
-                window.open("../utilities/helpdoc.php", "_blank");
-                break;
-            /*
-            case "Monthly Report":
-                break;
+             /*
             case "Annual Report":
                 break;
             */
+            case "Intro to Budgeting":
+                window.open("../help/help.php?doc=HowToBudget.pdf", "_blank");
+                break;
+            case "Using Budgetizer":
+                window.open("../help/help.php?doc=Tools.pdf", "_blank");
+                break;
             default:
                 alert(item + " is not yet implemented");
         }
