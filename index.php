@@ -12,10 +12,10 @@
 require_once "database/global_boot.php";
 require "admin/getLogin.php";
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
 <head>
     <title>Welcome to Budget Tracking</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -32,10 +32,14 @@ require "admin/getLogin.php";
 <div id="welcome">
     <img src="images/BudgetHome.jpg" alt="Home Page for Site: Flowers" />
 </div>
+<div id="learn">Beginner?&nbsp;&nbsp;Learn <a 
+    href="help/help.php?doc=HowToBudget.pdf"
+    target="_blank">How to Budget</a>
+</div>
 <div id="login">
     <div id="intro">
         <em>Welcome to Budgetizer</em><br />
-        <span id="subtext">A budget creation & management tool</span>
+        <span id="subtext">A budget creation &amp; management tool</span>
     </div>
     <div id="userbox">
         <em><span id="free">This site is totally free!</span></em><br />
@@ -48,7 +52,7 @@ require "admin/getLogin.php";
     </div>
     <div id="modal_wins">
         <div id="log_modal">
-            <form id="passform" method="POST" action="#">
+            <form id="passform" method="post" action="#">
                 <span id="modpass">Password: </span>
                 <input id="passin" type="password" name="passwd" />
                 <input id="moduser" type="hidden" name="user" value="" /><br />
@@ -58,7 +62,7 @@ require "admin/getLogin.php";
         </div>
         <div id="usr_modal">
             Enter your email address:
-            <input id="umail" type="email" name="umail" /><br /><br />
+            <input id="umail" type="text" name="umail" /><br /><br />
             <span id="mailtxt">Click to send your user name</span>
             <span id="passtxt">Click for email to reset password</span><br />
             <button id="sendmail">Send</button>
@@ -66,8 +70,9 @@ require "admin/getLogin.php";
     </div>
 </div>
 <div>
-    <p id="usrcookie" style="display:none"><?= $uname;?></p>
-    <p id="cookiestatus" style="display:none"><?= $cstat?></p>
+    <p id="usrcookie" style="display:none;"><?= $uname;?></p>
+    <p id="cookiestatus" style="display:none;"><?= $cstat?></p>
+    <p id="startpg" style="display:none;"><?= $start;?></p>
 </div>
 
 <script src="scripts/jquery-1.12.1.js" type="text/javascript"></script>

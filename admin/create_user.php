@@ -23,9 +23,9 @@ $exp_date = $year . "-" . $month_digits . "-" . $day;
 if ($submitter == 'create') {
     $email  = isset($_POST['email']) ? 
         filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) : false;
-    $newuser = "INSERT INTO `Users` (`email`,`username`,`LCM`,`password`," .
+        $newuser = "INSERT INTO `Users` (`email`,`username`,`setup`,`LCM`,`password`," .
         "`passwd_expire`) " .
-        "VALUES (:email,:uname,'{$month_string}',:passwd,:pass_exp);";
+        "VALUES (:email,:uname,'budget','{$month_string}',:passwd,:pass_exp);";
     $user = $pdo->prepare($newuser);
     $user->execute(
         array( ":email" => $email, ":uname" =>  $username, ":passwd" => $password,

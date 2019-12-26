@@ -13,6 +13,12 @@ require "../database/global_boot.php";
 
 $user = filter_input(INPUT_POST, 'user');
 $pos  = filter_input(INPUT_POST, 'lastpos', FILTER_VALIDATE_INT);
+$lv1  = filter_input(INPUT_POST, 'lv1');
+if ($lv1 === 'yes') {
+    $status = "UPDATE `Users` SET `setup` = 'budget' WHERE `username` = :uid;";
+    $newstat = $pdo->prepare($status);
+    $newstat->execute(["uid" => $user]);
+}
 
 // get all pre-entered data, if any
 if (isset($_POST['svdname'])) {
@@ -68,5 +74,9 @@ for ($n=0; $n<count($new_accounts); $n++) {
     }
 }
 
-$return = "newBudgetPanels.php?pnl=one&user=" . $user;
-header("Location: {$return}");
+if ($lv1 === 'no') { // 'normal' form submit
+    $next = "newBudgetPanels.php?pnl=budget&user=" . $user;
+} else { // 'leave and return' button
+    $next = "../utilities/exitPage.html";
+}
+header("Location: {$next}");

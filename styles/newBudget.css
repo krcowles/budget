@@ -5,6 +5,9 @@
     margin-top: 12px;
     margin-bottom: 8px;
 }
+#help {
+    font-size: 20px;
+}
 h2 {
     margin-top: 4px;
 }
@@ -12,7 +15,10 @@ h2 {
     height: 32px;
     font-size: 18px;
     position: relative;
-    left: 120px;
+    left: 40px;
+}
+#lv1 {
+  margin-top: 4px;
 }
 .steps {
     background-color: #004a00;
@@ -29,7 +35,7 @@ h2 {
 .note {
     margin-bottom: 8px;
 }
-#selnote {
+.selnote {
     position: relative;
     top: 7px;
 }
@@ -43,7 +49,7 @@ h2 {
 #buditems {
     margin-top: 8px;
 }
-#form {
+#form, #cdform, #edform {
     margin-top: 8px;
 }
 #entered, #centered, #eentered {
@@ -64,9 +70,6 @@ h2 {
 }
 .bal {
     width: 100px;
-}
-#nocds {
-    margin-right: 40px;
 }
 .emeth {
     margin-left: 60px;

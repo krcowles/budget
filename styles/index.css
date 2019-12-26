@@ -10,6 +10,16 @@ img {
     border-style: solid;
     border-color: black;
 }
+#learn {
+    position: absolute;
+    width: 303px;
+    top: 316px;
+    left: 180px;
+    border: 1px solid black;
+    background-color: floralwhite;
+    padding: 8px;
+    font-size: 18px;
+}
 #intro {
     padding: 8px 8px 0px 8px;
     font-size: 24px;

@@ -16,7 +16,9 @@ CREATE TABLE `Users` (
     `uid` int(10) NOT NULL AUTO_INCREMENT,
     `email` varchar(60) NOT NULL,
     `username` varchar(40) NOT NULL,
+    `LCM` varchar(12) NULL,
     `password` varchar(100) NOT NULL,
+    `passwd_expire` date NULL,
     PRIMARY KEY (`uid`)
 );
 EOR;
@@ -34,8 +36,9 @@ $req = 'INSERT INTO Users VALUES (1, "krcowles29@gmail.com", "kenc", "quatzl"),'
 
 $req = <<<QUERY
 ALTER TABLE `Users`
-ADD COLUMN `LCM` Varchar(12) NULL AFTER `username`;
+ADD COLUMN `setup` Varchar(7) NULL AFTER `username`;
 QUERY;
+// setup=> 'none', 'budget', 'cards', 'charges', 'all'
 
 /*
 $req = <<<BUD

@@ -1,7 +1,8 @@
 <?php
 /**
- * This page is invoked when a new user successfully signs up. It allows
- * the user to establish preliminary data for the new budget:
+ * This page is invoked when a new user successfully signs up, or when a new
+ * user has 'returned' after partially entering data, saved and then exited.
+ * It allows the user to establish preliminary data for the new budget:
  * 1. The user can enter preliminary account data to display and manipulate.
  *    The budget is limited to basic data at this point. On first-time entry,
  *    the default budget items (Temporary Accounts and Undistributed Funds)
@@ -18,7 +19,7 @@ require_once "../database/global_boot.php";
 
 $user = filter_input(INPUT_GET, 'user');
 $new  = isset($_GET['new']) ? true : false;
-$pnl  = isset($_GET['pnl']) ? filter_input(INPUT_GET, 'pnl') : "none";
+$pnl  = isset($_GET['pnl']) ? filter_input(INPUT_GET, 'pnl') : "budget";
 $lastpos = 0;
 if ($new) {
     // this will happen once and only once - on first invocation after registering
@@ -112,15 +113,15 @@ if ($new) {
     }
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
 <head>
     <title>New Account Data</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="description"
-        content="Rolling 4-month budget tracker" />
+        content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
@@ -132,25 +133,35 @@ if ($new) {
 <p id="user" style="display:none;"><?= $user;?></p>
 <p id="pnl" style="display:none;"><?= $pnl;?></p>
 <div id="intro">
-    <p id="ready" class="LargeHeading">You're Ready To Start!</p>
+    <p id="ready" class="LargeHeading">You're Ready To Start!&nbsp;&nbsp;
+        <span id="help">[New to Budgeting? See
+        <a href="../help/help.php?doc=HowToBudget.pdf" target="_blank">How
+        to Budget</a>]</span>
+    </p>
     <h2>Click on these three simple steps (in order) to get started:
         <span>
-            <button id="done">Done Entering Data</button>
+            <button id="done">Done: Go To Budget</button>
         </span>
     </h2>
     
     <div id="one" class="steps">Create the basic budget</div>
     <div id="budget">
         <span class="note NormalHeading">Note: If you make changes,
-            be sure to 'Save All'
+            be sure to 'Save'!
         </span><br />
-        <form id="form" action="saveNewBudget.php" method="POST">
+        <form id="form" action="saveNewBudget.php" method="post">
             <input type="hidden" name="user" value="<?= $user;?>" />
             <input type="hidden" name="lastpos" value="<?= $lastpos;?>" />
-            <button id="save">Save All</button> (Changes and New Data)<br />
-            <span id="selnote">Note: When you select "Save All",
-                the data you entered (and any edits) will be 
-                saved, and new entries will be available.
+            <button id="save1">Save and Continue</button>
+            <input type="hidden" name="lv1" value="no" />
+            <span><button id="lv1">Save and Return Later</button>
+            </span><br />
+            <span class="selnote">Note: When you click on 'Save and Continue',
+                the data you entered, and any edits, will be 
+                saved to your budget, and new entries will become available.
+                If you 'Save and Return Later', all data will be saved and
+                you will leave the site. When you later return to the Budgetizer,
+                you will be brought to this page to complete your data entry.
             </span><br /><br />
             <div id="new">
                 <span class="NormalHeading">Enter your new budget information
@@ -180,21 +191,27 @@ if ($new) {
     <div id="two" class="steps">Add Credit/Debit Cards</div>
     <div id="cards">
         <span class="note NormalHeading">Note: If you make changes,
-            be sure to 'Save All'
+            be sure to 'Save'!
         </span><br />
-        <form id="cdform" method="POST" action="saveNewCards.php">
+        <form id="cdform" method="post" action="saveNewCards.php">
             <input type="hidden" name="user" value="<?= $user;?>" />
+            <input type="hidden" name="lv2" value="no" />
             <button id="nocds">No Cards to Enter</button>
-            <button id="save">Save All</button> (Changes and New Data)<br />
-            <span id="selnote">Note: When you select "Save All",
-                the data you entered (and any edits) will be 
-                saved, and new entries will be available.
+            <button id="save2">Save and Continue</button>
+            <span><button id="lv2">Save and Return Later</button>
+            </span><br />
+            <span class="selnote">Note: When you click on 'Save and Continue',
+                the data you entered, and any edits, will be 
+                saved to your budget, and new entries will become available.
+                If you 'Save and Return Later', all data will be saved and
+                you will leave the site. When you later return to the Budgetizer,
+                you will be brought to this page to complete your data entry.
             </span><br /><br />
             <div id="cnew">
                 <span class="NormalHeading">Enter your new card information
                     below.</span><br />
                 <?php for ($y=0; $y<4; $y++) : ?>
-                    New Card Name: <input type="input" name="cname[]" />
+                    New Card Name: <input type="text" name="cname[]" />
                     Card Type: <select name="ctype[]">
                         <option value="Credit">Credit</option>
                         <option value="Debit">Debit</option>
@@ -214,14 +231,20 @@ if ($new) {
     <div id="expenses">
         <?php require "../utilities/getCards.php"; ?>
         <span class="note NormalHeading">Note: If you make changes,
-            be sure to 'Save All'
+            be sure to 'Save'!
         </span><br />
-        <form id="cdform" method="POST" action="saveNewCharges.php">
+        <form id="edform" method="post" action="saveNewCharges.php">
             <input type="hidden" name="user" value="<?= $user;?>" />
-            <button id="save">Save All</button> (Changes and New Data)<br />
-            <span id="selnote">Note: When you select "Save All",
-                the data you entered (and any edits) will be 
-                saved, and new entries will be available.
+            <input type="hidden" name="lv3" value="no" />
+            <button id="save">Save and Continue</button>
+            <span><button id="lv3">Save and Return Later</button>
+            </span><br />
+            <span class="selnote">Note: When you click on 'Save and Continue',
+                the data you entered, and any edits, will be 
+                saved to your budget, and new entries will become available.
+                If you 'Save and Return Later', all data will be saved and
+                you will leave the site. When you later return to the Budgetizer,
+                you will be brought to this page to complete your data entry.
             </span><br /><br />
             <div id="enew">
                 <span class="NormalHeading">Enter your new expense information
@@ -234,7 +257,7 @@ if ($new) {
                     Amount Paid: <input type="text" name="eamt[]" 
                         class="inp amts" />&nbsp;&nbsp;
                     Payee: <input type="text" name="epay[]" 
-                        class="inp" /></span><br /><br />
+                        class="inp" /><br /><br />
                 <?php endfor; ?>
             </div>
             <div id="eold">

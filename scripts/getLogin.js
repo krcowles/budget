@@ -5,6 +5,7 @@ var login_name = document.getElementById('usrcookie').textContent;
 // if a login_name appears, cookies are already enabled:
 var user_cookie_state = document.getElementById('cookiestatus').textContent;
 // defaults to 'OK' unless a registered user is logged in with expiration issues
+var startpg = $('#startpg').text();
 if (cookies) {
     if (user_cookie_state === 'NONE') {
         alert("No user registration has been located for " + login_name);
@@ -29,8 +30,14 @@ if (cookies) {
             "\nPlease contact the site master");
     } else if (user_cookie_state === 'OK') {
         if (login_name !== 'none') {
-            var homepg = "main/displayBudget.php?user=" + login_name;
-            window.open(homepg, "_self");
+            if (startpg === 'all') {
+                var homepg = "main/displayBudget.php?user=" + login_name;
+                window.open(homepg, "_self");
+            } else {
+                var startpoint = 'edit/newBudgetPanels.php?user=' +
+                    login_name + '&pnl=' + startpg;
+                window.open(startpoint, "_self");
+            }
         } else { // login process
             $('#user').on('change', function() {
                 var user = $(this).val();
@@ -69,8 +76,16 @@ function validateUser(usr_name, usr_pass) {
             var status = srchResults;
             if (status.indexOf('LOCATED') >= 0) {
                 alert("You are logged in");
-                var homepg = "main/displayBudget.php?user=" + usr_name;
-                window.open(homepg, "_self");
+                var pos = status.indexOf('&') + 1;
+                var startpg = status.substr(pos);
+                if (startpg === 'all') {
+                    var homepg = "main/displayBudget.php?user=" + usr_name;
+                    window.open(homepg, "_self");
+                } else {
+                    var startpoint = 'edit/newBudgetPanels.php?user=' +
+                        login_name + '&pnl=' + startpg;
+                    window.open(startpoint, "_self");
+                }
             } else if (status.indexOf('RENEW') >=0) {
                 // in this case, the old cookie has been set pending renewal
                 var renew = confirm("Your password is about to expire\n" + 

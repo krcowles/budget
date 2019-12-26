@@ -11,12 +11,13 @@
  */
 define("UX_DAY", 60*60*24); // unix timestamp value for 1 day
 
-$regusr = isset($_COOKIE['epiz'])   ? true : false;
+$regusr = isset($_COOKIE['epiz'])   ? true : false; // registered user?
 $uname = 'none';
 $cstat = 'OK'; // changed below based on user cookie expiration data
+$start = '';
 if ($regusr) { // if no cookie, $uname remains 'none'
     $uname = $_COOKIE['epiz'];
-    $expirationReq = "SELECT passwd_expire FROM Users WHERE username = ?;";
+    $expirationReq = "SELECT passwd_expire, setup FROM Users WHERE username = ?;";
     $userExpire = $pdo->prepare($expirationReq);
     $userExpire->execute([$uname]);
     $rowcnt = $userExpire->rowCount();
@@ -25,6 +26,7 @@ if ($regusr) { // if no cookie, $uname remains 'none'
     } elseif ($rowcnt === 1) {
         $fetched = $userExpire->fetch(PDO::FETCH_ASSOC);
         $expDate = $fetched['passwd_expire'];
+        $start = $fetched['setup'];
         $american = str_replace("-", "/", $expDate);
         $orgDate = strtotime($american);
         if ($orgDate <= time()) {

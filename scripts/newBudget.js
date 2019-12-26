@@ -11,11 +11,11 @@ $('.datepicker').datepicker({
 var pnl = $('#pnl').text();
 if (pnl !== 'none') {
     //NOT WORKING! document.getElementById(pnl).click();
-    if (pnl === 'one') {
+    if (pnl === 'budget') {
         $('#budget').toggle();
-    } else if (pnl === 'two') {
+    } else if (pnl === 'cards') {
         $('#cards').toggle();
-    } else if (pnl === 'three') {
+    } else if (pnl === 'charges') {
         $('#expenses').toggle();
     }
 }
@@ -60,15 +60,32 @@ $('span[id^=crcd]').each(function(i) {
     $(this).children().eq(0).val(cdvals[i]);
 });
 
-// return to main button
+// return to budget page button
 $('#done').on('click', function(ev) {
     ev.preventDefault();
+    $.post('../utilities/setall.php', {user: user});
     window.open("../main/displayBudget.php?user=" + user, "_self");
+});
+// save and come back later
+$('#lv1').on('click', function(ev) {
+    ev.preventDefault();
+    $('input[name=lv1]').attr('value', 'yes');
+    $('#form').submit();
 });
 // or, no credit cards to enter
 $('#nocds').on('click', function(ev) {
     ev.preventDefault();
     window.open("../main/displayBudget.php?user=" + user, "_self");
+});
+$('#lv2').on('click', function(ev) {
+    ev.preventDefault();
+    $('input[name=lv2]').attr('value', 'yes');
+    $('#cdform').submit();
+});
+$('#lv3').on('click', function(ev) {
+    ev.preventDefault();
+    $('input[name=lv3]').attr('value', 'yes');
+    $('#edform').submit();
 });
 
 // data validation (dbValidation.js must already be included in scripts)

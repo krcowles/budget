@@ -12,6 +12,12 @@
 require "../database/global_boot.php";
 
 $user = filter_input(INPUT_POST, 'user');
+$lv3  = filter_input(INPUT_POST, 'lv3');
+if ($lv3 === 'yes') {
+    $status = "UPDATE `Users` SET `setup` = 'charges' WHERE `username` = :uid;";
+    $newstat = $pdo->prepare($status);
+    $newstat->execute(["uid" => $user]);
+}
 
 // get all pre-entered data, if any
 if (isset($_POST['aeeamt'])) {
@@ -66,6 +72,9 @@ for ($n=0; $n<count($new_amounts); $n++) {
         }
     }
 }
-
-$goto = "newBudgetPanels.php?pnl=three&user=" . $user;
+if ($lv3 === 'no') {
+    $goto = "newBudgetPanels.php?pnl=charges&user=" . $user;
+} else {
+    $goto = "../utilities/exitPage.html";
+}
 header("Location: {$goto}");
