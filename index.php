@@ -50,23 +50,23 @@ require "admin/getLogin.php";
     <div id="nousr">
         Forgot User Name?&nbsp;&nbsp;<a id="forgot" href="#">Click Here</a>
     </div>
-    <div id="modal_wins">
-        <div id="log_modal">
-            <form id="passform" method="post" action="#">
-                <span id="modpass">Password: </span>
-                <input id="passin" type="password" name="passwd" />
-                <input id="moduser" type="hidden" name="user" value="" /><br />
-            </form>
-            <span id="rp">Forget Password? <a id="redopass"
-                href="#">Reset Password</a></span>
-        </div>
-        <div id="usr_modal">
-            Enter your email address:
-            <input id="umail" type="text" name="umail" /><br /><br />
-            <span id="mailtxt">Click to send your user name</span>
-            <span id="passtxt">Click for email to reset password</span><br />
-            <button id="sendmail">Send</button>
-        </div>
+</div>
+<div id="modal_wins">
+    <div id="log_modal">
+        <form id="passform" method="post" action="#">
+            <span id="modpass">Password: </span>
+            <input id="passin" type="password" name="passwd" />
+            <input id="moduser" type="hidden" name="user" value="" /><br />
+        </form>
+        <span id="rp">Forget Password? <a id="redopass"
+            href="#">Reset Password</a></span>
+    </div>
+    <div id="usr_modal">
+        Enter your email address:
+        <input id="umail" type="text" name="umail" /><br /><br />
+        <span id="mailtxt">Click to send your user name</span>
+        <span id="passtxt">Click for email to reset password</span><br />
+        <button id="sendmail">Send</button>
     </div>
 </div>
 <div>

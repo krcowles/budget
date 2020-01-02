@@ -39,7 +39,9 @@ if (cookies) {
                 window.open(startpoint, "_self");
             }
         } else { // login process
-            $('#user').on('change', function() {
+            $('#user').on('change', function(ev) {
+                // the following is required to correct a Safari bug:
+                $(this).unbind('change');
                 var user = $(this).val();
                 var logdata = $('#log_modal').detach();
                 modal.open({id: 'login', height: '72px', width: '260px',
