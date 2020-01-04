@@ -71,7 +71,8 @@ require "../utilities/getAccountData.php";
 <script type="text/javascript">
     $('#backtobud').on('click', function(ev) {
         ev.preventDefault();
-        var budget = "../main/displayBudget.php?user=" + $('#user').text();
+        var budget = "../main/displayBudget.php?user=" + 
+            encodeURIComponent($('#user').text());
         window.open(budget, "_self");
     });
 </script>

@@ -45,5 +45,5 @@ for ($k=0; $k<count($cr); $k++) {
         }
     }
 }
-$back = "editCreditCharges.php?user=" . $user;
+$back = "editCreditCharges.php?user=" . rawurlencode($user);
 header("Location: {$back}");

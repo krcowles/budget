@@ -292,8 +292,8 @@ var modal = (function() {
                 return;
             }
             deferred.resolve();
-            var recloc = "../utilities/reconcile.php?user=" + g_user 
-                + "&card=" + usecd;
+            var recloc = "../utilities/reconcile.php?user=" + 
+                encodeURIComponent(g_user) + "&card=" + usecd;
             window.open(recloc, "_self");
             modal.close();
         });
@@ -577,7 +577,7 @@ var modal = (function() {
         });
         $('#genmo').on('click', function() {
             var getdata = '../utilities/reports.php?id=morpt&mo=' +
-                mosel + '&user=' + g_user;
+                mosel + '&user=' + encodeURIComponent(g_user);
             window.open(getdata, "_self");
         });
         $close.on('click', function () {

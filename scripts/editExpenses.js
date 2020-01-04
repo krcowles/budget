@@ -2,12 +2,14 @@ $(function() {
 
 $('#return').on('click', function(ev) {
     ev.preventDefault();
-    var dpg = "../main/displayBudget.php?user=" + $('#user').text();
+    var dpg = "../main/displayBudget.php?user=" + 
+        encodeURIComponent($('#user').text());
     window.open(dpg, "_self");
 });
 $('#viewer').on('click', function(ev) {
     ev.preventDefault();
-    var vpg = "../utilities/viewCharges.php?user=" + $('#user').text();
+    var vpg = "../utilities/viewCharges.php?user=" + 
+        encodeURIComponent($('#user').text());
     window.open(vpg, "_self");
 });
 $(function () {

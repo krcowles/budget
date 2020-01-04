@@ -107,7 +107,8 @@ for ($i=0; $i<count($cr); $i++) {
 <script type="text/javascript">
     $('#return').on('click', function(ev) {
         ev.preventDefault();
-        var dpg = "../main/displayBudget.php?user=" + $('#user').text();
+        var dpg = "../main/displayBudget.php?user=" + 
+            encodeURIComponent($('#user').text());
         window.open(dpg, "_self");
     });
     $(function () {

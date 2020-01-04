@@ -56,7 +56,8 @@ function validateEmail(subjectEmail){
                     "Server returned status " + this.status);
             }
         } else {
-            var newbud = "../edit/newBudgetPanels.php?new=y&user=" + usr;
+            var newbud = "../edit/newBudgetPanels.php?new=y&user=" + 
+                encodeURIComponent(usr);
             window.open(newbud, '_self');
         }
     }

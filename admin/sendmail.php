@@ -47,7 +47,8 @@ if ($etype === 'uname') {
         $href = strpos($phtml, "href");
         $half = substr($phtml, 0, $href);
         $whole = $half . 'href="http://budgetizer.epizy.com/admin/renew.php?user=' .
-            $user . '">Reset Your Budgetizer Password</a></p>' . PHP_EOL;
+            rawurlencode($user) . 
+            '">Reset Your Budgetizer Password</a></p>' . PHP_EOL;
         $whole .= PHP_EOL . "</body>" . PHP_EOL . "</html>" . PHP_EOL;
         $email = $sendto['email'];
         file_put_contents('passwordLink.html', $whole);
@@ -66,17 +67,3 @@ if ($proceed) {
 } else {
     echo "nofind";
 }
-
-    /*
-    if ($mail->send()) {
-        echo "ok";
-        exit;
-    } else {
-        $msg = "Error: " . $mail->ErrorInfo;
-        exit;
-    }
-
-} else {
-    echo "nofind";
-}
-*/

@@ -38,5 +38,5 @@ for ($i=0; $i<$noOfEntries; $i++) {
         }
     }
 }
-$back = "addCreditCharges.php?user=" . $user;
+$back = "addCreditCharges.php?user=" . rawurlencode($user);
 header("Location: {$back}");

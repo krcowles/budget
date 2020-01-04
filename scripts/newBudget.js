@@ -64,7 +64,8 @@ $('span[id^=crcd]').each(function(i) {
 $('#done').on('click', function(ev) {
     ev.preventDefault();
     $.post('../utilities/setall.php', {user: user});
-    window.open("../main/displayBudget.php?user=" + user, "_self");
+    var redir = '../main/displayBudget.php?user=' + encodeURIComponent(user);
+    window.open(redir, "_self");
 });
 // save and come back later
 $('#lv1').on('click', function(ev) {
@@ -75,7 +76,8 @@ $('#lv1').on('click', function(ev) {
 // or, no credit cards to enter
 $('#nocds').on('click', function(ev) {
     ev.preventDefault();
-    window.open("../main/displayBudget.php?user=" + user, "_self");
+    var redir = '../main/displayBudget.php?user=' + encodeURIComponent(user);
+    window.open(redir, "_self");
 });
 $('#lv2').on('click', function(ev) {
     ev.preventDefault();

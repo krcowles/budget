@@ -55,7 +55,8 @@ $('#form').on('submit', function(evt) {
                     "Server returned status " + this.status);
             }
         } else {
-            var success = "../main/displayBudget.php?&user=" + usr;
+            var success = "../main/displayBudget.php?&user=" + 
+                encodeURIComponent(usr);
             window.open(success, '_self');
         }
     }

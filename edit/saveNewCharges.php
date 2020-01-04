@@ -73,7 +73,7 @@ for ($n=0; $n<count($new_amounts); $n++) {
     }
 }
 if ($lv3 === 'no') {
-    $goto = "newBudgetPanels.php?pnl=charges&user=" . $user;
+    $goto = "newBudgetPanels.php?pnl=charges&user=" . rawurlencode($user);
 } else {
     $goto = "../utilities/exitPage.html";
 }

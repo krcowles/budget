@@ -62,7 +62,8 @@ if ($monthly) {
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script type="text/javascript">
     $('#back').on('click', function() {
-        var budpg = '../main/displayBudget.php?user=' + '<?= $user;?>';
+        var budpg = '../main/displayBudget.php?user=' + 
+            '<?= rawurlencode($user);?>';
         window.open(budpg, "_self");
     });
 </script>

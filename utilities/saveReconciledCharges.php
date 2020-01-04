@@ -37,5 +37,6 @@ if ($paid) {
 }
 
 // encode card name as it may contain spaces
-$return = "reconcile.php?user=" . $user . "&card=" . urlencode($subj);
+$return = "reconcile.php?user=" . rawurlencode($user) .
+    "&card=" . rawurlencode($subj);
 header("Location: {$return}");

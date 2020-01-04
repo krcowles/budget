@@ -68,5 +68,5 @@ case 'c2e': // from type credit card to expense or debit
 $del = "DELETE FROM `Charges` WHERE `expid` = :eid;";
 $delexp = $pdo->prepare($del);
 $delexp->execute(["eid" => $from]);
-$viewer = "../utilities/viewCharges.php?user=" . $user;
+$viewer = "../utilities/viewCharges.php?user=" . rawurlencode($user);
 header("Location: {$viewer}");

@@ -2,6 +2,7 @@ $('#user').val(''); // clear login for refresh
 var cookies = navigator.cookieEnabled ? true : false;
 // the next two variables are provided complements getLogin.php
 var login_name = document.getElementById('usrcookie').textContent;
+var query_name = encodeURIComponent(login_name);
 // if a login_name appears, cookies are already enabled:
 var user_cookie_state = document.getElementById('cookiestatus').textContent;
 // defaults to 'OK' unless a registered user is logged in with expiration issues
@@ -31,11 +32,11 @@ if (cookies) {
     } else if (user_cookie_state === 'OK') {
         if (login_name !== 'none') {
             if (startpg === 'all') {
-                var homepg = "main/displayBudget.php?user=" + login_name;
+                var homepg = "main/displayBudget.php?user=" + query_name;
                 window.open(homepg, "_self");
             } else {
                 var startpoint = 'edit/newBudgetPanels.php?user=' +
-                    login_name + '&pnl=' + startpg;
+                    query_name + '&pnl=' + startpg;
                 window.open(startpoint, "_self");
             }
         } else { // login process
@@ -81,11 +82,12 @@ function validateUser(usr_name, usr_pass) {
                 var pos = status.indexOf('&') + 1;
                 var startpg = status.substr(pos);
                 if (startpg === 'all') {
-                    var homepg = "main/displayBudget.php?user=" + usr_name;
+                    var homepg = "main/displayBudget.php?user=" + 
+                        encodeURIComponent(usr_name);
                     window.open(homepg, "_self");
                 } else {
                     var startpoint = 'edit/newBudgetPanels.php?user=' +
-                        login_name + '&pnl=' + startpg;
+                        encodeURIComponent(usr_name) + '&pnl=' + startpg;
                     window.open(startpoint, "_self");
                 }
             } else if (status.indexOf('RENEW') >=0) {
@@ -129,12 +131,12 @@ function validateUser(usr_name, usr_pass) {
 // for renewing password/cookie
 function renewPassword(user, update, status) {
     if (update === 'renew') {
-        var renewpg = "admin/renew.php?user=" + user;
+        var renewpg = "admin/renew.php?user=" + encodeURIComponent(user);
         window.open(renewpg, "_self");
     } else {
         // if still valid, refresh will display login, otherwise do nothing
         if (status === 'valid') {
-            var homepg = "main/displayBudget.php?user=" + user;
+            var homepg = "main/displayBudget.php?user=" + encodeURIComponent(user);
             window.open(homepg, '_self');
         }
     }

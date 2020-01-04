@@ -21,7 +21,7 @@ $chkbox.each(function() {
 var user = $('#user').text();
 $('#rtb').on('click', function(ev) {
     ev.preventDefault();
-    var backpg = "../main/displayBudget.php?user=" + user;
+    var backpg = "../main/displayBudget.php?user=" + encodeURIComponent(user);
     window.open(backpg, '_self');
 });
 

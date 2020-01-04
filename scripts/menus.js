@@ -93,7 +93,8 @@ function gotoPage(content) {
     }
     if (typeof page !== 'undefined') {
         $.get({
-            url: '../php/opener.php?page=' + page + '&user=' + usr,
+            url: '../php/opener.php?page=' + page + '&user=' + 
+                encodeURIComponent(usr),
             dataType: "html",
             success: function(redir) {
                 $('#login_result').after(redir);

@@ -22,7 +22,8 @@ scaleTwoNumber($amount);
 
 $('#back').on('click', function(ev) {
     ev.preventDefault();
-    var home = "../main/displayBudget.php?user=" + $('#user').text();
+    var home = "../main/displayBudget.php?user=" + 
+        encodeURIComponent($('#user').text());
     window.open(home, "_self")
 });
 

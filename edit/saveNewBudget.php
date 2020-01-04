@@ -75,7 +75,7 @@ for ($n=0; $n<count($new_accounts); $n++) {
 }
 
 if ($lv1 === 'no') { // 'normal' form submit
-    $next = "newBudgetPanels.php?pnl=budget&user=" . $user;
+    $next = "newBudgetPanels.php?pnl=budget&user=" . rawurlencode($user);
 } else { // 'leave and return' button
     $next = "../utilities/exitPage.html";
 }

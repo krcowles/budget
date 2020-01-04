@@ -46,5 +46,5 @@ for ($j=0; $j<count($id); $j++) {
         $updte->execute(["cur" => $adjusted, "bid" => $olddat['id']]);
     }
 }
-$back = "editExpenses.php?user=" . $user;
+$back = "editExpenses.php?user=" . rawurlencode($user);
 header("Location: {$back}");

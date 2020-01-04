@@ -106,6 +106,7 @@ $(function() {
     });
     // Submenu actions
     function executeItem(item) {
+        var query_name = encodeURIComponent(user);
         switch(item) {
             case "Schedule Autopay":
                 var def = new $.Deferred;
@@ -144,7 +145,7 @@ $(function() {
                 });
                 break;
             case "Edit Budget Entries":
-                var editor = "../edit/budgetEditor.php?user=" + user;
+                var editor = "../edit/budgetEditor.php?user=" + query_name;
                 window.open(editor, "_self");
                 break;
             case "Add Account":
@@ -184,15 +185,16 @@ $(function() {
                 });
                 break;
             case "View/Manage Expenses":
-                var viewexp = "../utilities/viewCharges.php?user=" + user;
+                var viewexp = "../utilities/viewCharges.php?user=" + query_name;
                 window.open(viewexp, "_self");
                 break;
             case "Add New Charges":
-                var addnew = "../edit/addCreditCharges.php?user=" + user;
+                var addnew = "../edit/addCreditCharges.php?user=" + query_name;
                 window.open(addnew, "_self");
                 break;
             case "Edit Charges":
-                var editexpense = "../edit/editCreditCharges.php?user=" + user;
+                var editexpense = "../edit/editCreditCharges.php?user=" + 
+                    query_name;
                 window.open(editexpense, "_self");
                 break;
             case "Monthly Report":

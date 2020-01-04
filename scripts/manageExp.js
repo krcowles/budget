@@ -1,8 +1,9 @@
 $(function() {
 
 var user = $('#user').text();
+var query_user = encodeURIComponent(user);
     $('#back').on('click', function() {
-        var budpg = "../main/displayBudget.php?user=" + user;
+        var budpg = "../main/displayBudget.php?user=" + query_user;
         window.open(budpg, "_self");
 });
 positionExpenses();
@@ -15,13 +16,13 @@ function positionExpenses() {
     });
 }
 $('#edcred').on('click', function() {
-    window.open('../edit/editCreditCharges.php?user=' + user, "_self");
+    window.open('../edit/editCreditCharges.php?user=' + query_user, "_self");
 });
 $('#edexp').on('click', function() {
     alert("NOTE: You will be able to modify paid expense data from the last\n" +
         "30 days, including checks and debit card charges. Any changes in the\n" +
         "$ amounts will be reflected in the associated account(s)");
-    window.open('../edit/editExpenses.php?user=' + user, "_self");
+    window.open('../edit/editExpenses.php?user=' + query_user, "_self");
 });
 
 // reset all checkboxes:
@@ -76,8 +77,8 @@ $('#e2c').on('click', function() {
                     $('.mvtocr').removeClass('blinking');
                     var toid = $(this).attr('id');
                     to = toid.substr(4);
-                    var query = '../edit/moveExp.php?type=e2c&user=' + user +
-                        '&frm=' + from + "&to=" + to;
+                    var query = '../edit/moveExp.php?type=e2c&user=' + 
+                        query_user + '&frm=' + from + "&to=" + to;
                     window.open(query, "_self");
                 });
             } else if ($(this).prop('checked') && selected) {
@@ -134,8 +135,8 @@ $('#c2c').on('click', function() {
             $('input[id^=tocr]').on('click', function() {
                 var toid = this.id;
                 to = toid.substr(4);
-                var query = "../edit/moveExp.php?type=c2c&user=" + user +
-                    "&frm=" + from + "&to=" + to;
+                var query = "../edit/moveExp.php?type=c2c&user=" + 
+                    query_user + "&frm=" + from + "&to=" + to;
                 window.open(query, "_self");
             });
         } else if ($(this).prop('checked') && selected) {
@@ -171,8 +172,8 @@ $('#c2e').on('click', function() {
                     $('.mvtodr').removeClass('blinking');
                     var toid = this.id;
                     to = toid.substr(4);
-                    var query = '../edit/moveExp.php?type=c2e&user=' + user +
-                        '&frm=' + from + "&to=" + to;
+                    var query = '../edit/moveExp.php?type=c2e&user=' + 
+                        query_user + '&frm=' + from + "&to=" + to;
                     window.open(query, "_self");
                 });
             } else if ($(this).prop('checked') && selected) {

@@ -64,7 +64,7 @@ for ($n=0; $n<count($new_cards); $n++) {
     }
 }
 if ($lv2 === 'no') {
-    $redir = "newBudgetPanels.php?pnl=cards&user=" . $user;
+    $redir = "newBudgetPanels.php?pnl=cards&user=" . rawurlencode($user);
 } else {
     $redir = "../utilities/exitPage.html";
 }

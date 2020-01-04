@@ -22,5 +22,5 @@ for ($j=0; $j<count($account_names); $j++) {
     );
 }
 
-$backpg = "budgetEditor.php?user=" . $user;
+$backpg = "budgetEditor.php?user=" . rawurlencode($user);
 header("Location: {$backpg}");
