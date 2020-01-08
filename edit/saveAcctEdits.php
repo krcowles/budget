@@ -47,11 +47,10 @@ case 'payexp':
 case 'income':
     $newcur = [];
     $newfnd = [];
-    $adj = 0;
     $funds = floatval(filter_input(INPUT_POST, 'funds'));
+    $indx = array_search('Undistributed Funds', $account_names);
     for ($j=0; $j<count($account_names); $j++) {
         if ($account_names === 'Undistributed Funds') {
-            $indx = $j;
             break;
         } else {
             $funded = floatval($income[$j]);
@@ -65,7 +64,6 @@ case 'income':
                     $bal = $curbal + $delta;
                     array_push($newcur, (string) $bal);
                     $funds -= $delta;
-                    $adj++;
                 } else {
                     $newbucks = $funded + $funds;
                     $fnd = array((string) $acctid[$j] => (string) $newbucks);
@@ -73,13 +71,12 @@ case 'income':
                     $bal = $curbal + $funds;
                     array_push($newcur, (string) $bal);
                     $funds = 0;
-                    $adj++;
                     break;
                 }
             }
         }
     }
-    // since $newfnd is an array of arrays, thus cannot use fct array_values()
+    // $newfnd is an array of arrays, thus cannot use fct array_values()
     $fndval = [];
     $fndkey = [];
     for ($q=0; $q<count($newfnd); $q++) {
@@ -90,7 +87,7 @@ case 'income':
     }
     // Note: $newbal has the same indices and does not need to be an array of arrays
     if ($funds > 0) {
-        $uinc = floatval($income[$indx]) + $funds;
+        $uinc = floatval($current[$indx]) + $funds;
         array_push($newcur, (string) $uinc);
         array_push($fndval, '0');
         array_push($fndkey, $acctid[$indx]); // unique id for this Undist acct

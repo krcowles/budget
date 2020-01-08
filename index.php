@@ -45,7 +45,7 @@ require "admin/getLogin.php";
         <em><span id="free">This site is totally free!</span></em><br />
         Login: &nbsp;<input id="user" type="text" name="user" /><br />
         <span id="lgtxt">No login?&nbsp;&nbsp;&nbsp;<a id="signup" 
-            href="admin/registration.php" target="_self">Sign me up!</a></span>
+            href="admin/registration.html" target="_self">Sign me up!</a></span>
     </div>
     <div id="nousr">
         Forgot User Name?&nbsp;&nbsp;<a id="forgot" href="#">Click Here</a>
