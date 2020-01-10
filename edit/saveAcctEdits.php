@@ -50,29 +50,25 @@ case 'income':
     $funds = floatval(filter_input(INPUT_POST, 'funds'));
     $indx = array_search('Undistributed Funds', $account_names);
     for ($j=0; $j<count($account_names); $j++) {
-        if ($account_names === 'Undistributed Funds') {
-            break;
-        } else {
-            $funded = floatval($income[$j]);
-            $budval = floatval($budgets[$j]);
-            $curbal = floatval($current[$j]);
-            if ($funded < $budval) {
-                $delta = $budval - $funded;
-                if ($funds >= $delta) {
-                    $fnd = array((string) $acctid[$j] => (string) $budval);
-                    array_push($newfnd, $fnd);
-                    $bal = $curbal + $delta;
-                    array_push($newcur, (string) $bal);
-                    $funds -= $delta;
-                } else {
-                    $newbucks = $funded + $funds;
-                    $fnd = array((string) $acctid[$j] => (string) $newbucks);
-                    array_push($newfnd, $fnd);
-                    $bal = $curbal + $funds;
-                    array_push($newcur, (string) $bal);
-                    $funds = 0;
-                    break;
-                }
+        $funded = floatval($income[$j]);
+        $budval = floatval($budgets[$j]);
+        $curbal = floatval($current[$j]);
+        if ($funded < $budval) {
+            $delta = $budval - $funded;
+            if ($funds >= $delta) {
+                $fnd = array((string) $acctid[$j] => (string) $budval);
+                array_push($newfnd, $fnd);
+                $bal = $curbal + $delta;
+                array_push($newcur, (string) $bal);
+                $funds -= $delta;
+            } else {
+                $newbucks = $funded + $funds;
+                $fnd = array((string) $acctid[$j] => (string) $newbucks);
+                array_push($newfnd, $fnd);
+                $bal = $curbal + $funds;
+                array_push($newcur, (string) $bal);
+                $funds = 0;
+                break;
             }
         }
     }
