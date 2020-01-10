@@ -15,6 +15,8 @@ $(window).resize(function() {
         setTimeout(function() {
             able = true;
             menuSpace();
+            // the nav bar can get out of whack, so regenerate the page w/o cache
+            location.reload(); // query string forces no cache access
         }, 400);
     }
 });
