@@ -17,21 +17,27 @@ legend {
     color: darkred;
     font-style: italic;
 }
+input {
+    font-size: 16px;
+}
+input[name=email] {
+    width: 300px;
+}
+input[name=username] {
+    width: 280px;
+}
 input[type=submit] {
     width: 180px;
     height: 26px;
-    font-size: 16px;
     color: darkred;
     background: white;
 }
 input[type=reset] {
     width: 180px;
     height: 26px;
-    font-size: 16px;
     color: darkred;
     background: white;
 }
-/* For unknown reasons, confirm "This field required" text wraps... */
 #confirm {
     width: 600px;
     margin-top:0px;
