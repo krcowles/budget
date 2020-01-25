@@ -59,7 +59,7 @@ $('.apday').each(function(indx) {
 });
 // user presentation of autopay candidates:
 if (ap_candidates) {
-    var $userlist = $('table#modal_table tbody');
+    var $userlist = $('<table id="modal_table"><tbody></tbody></table>');
     // create the html list based on number of autopays due
     for (var j=0; j<aname.length; j++) {
         var item_html = '<tr><td><div class="tdht">' + aname[j] + '<br />Due day: ' +
@@ -71,6 +71,7 @@ if (ap_candidates) {
             '&nbsp;&nbsp;using: ' + paywith[j] +  '</div></td></tr>';
         $userlist.append(item_html);
     }
+    $('#ap').append($userlist);
     // table is created, now present data to modals.js
     var ap_object = $('#ap').detach();
     var def = new $.Deferred(); // only one can pay at a time, so one deferred

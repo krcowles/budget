@@ -136,9 +136,6 @@ if ($user) {
         <div id="ap">
            <p id="inst">The following items are due for auto payment. Select an item
            to pay, and/or when done, select 'Finished'</p>
-           <table id="modal_table">
-               <tbody></tbody>
-           </table>
         </div>
         <!-- pay expense -->
         <div id="box">
@@ -275,14 +272,12 @@ if ($user) {
             <button id="genmo">Generate</button>
         </div>
     </div>
-    <!-- after validation, place accordingly:
-    <p style="clear:left;">
+    <p style="clear:left;margin-left:16px;">
         <a href="http://validator.w3.org/check?uri=referer">
             <img src="http://www.w3.org/Icons/valid-xhtml10"
             alt="Valid XHTML 1.0 Strict" height="31" width="88" />
         </a>
     </p>
-    -->
     <script type="text/javascript">var g_user = $('#user').text();</script>
     <script src="../scripts/budget.js" type="text/javascript"></script>
     <script src="../scripts/modals.js" type="text/javascript"></script>
