@@ -48,15 +48,21 @@ require "timeSetup.php";
 
 <body>
 <div id="page">
-<p id="user" style="display:none;"><?= $user;?></p>
-<button id="back">Return to Budget</button>
-<?php
-if ($monthly) {
-    include "formatMonth.php";
-} else if ($annual) {
-    include "formatYear.php";
-}
-?>
+    <p id="user" style="display:none;"><?= $user;?></p>
+    <button id="back">Return to Budget</button>
+    <?php
+    if ($monthly) {
+        include "formatMonth.php";
+    } else if ($annual) {
+        include "formatYear.php";
+    }
+    ?>
+    <p style="clear:left;margin-left:16px;">
+        <a href="http://validator.w3.org/check?uri=referer">
+            <img src="http://www.w3.org/Icons/valid-xhtml10"
+            alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+        </a>
+    </p>
 </div>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>

@@ -57,48 +57,57 @@ for ($i=0; $i<count($cr); $i++) {
     <p id="user" style="display:none;"><?= $user;?></p>
     <p class="NormalHeading">You can use this form to edit active charges
     charged to a credit card.</p>
-    <form id="form" method="POST" action="saveEditedCharge.php">
-    <button id="save">Save All Changes</button>
-    <button id="return" style="margin-left:80px;">
-        Return to Budget</button><br /><br />
-    <input type="hidden" name="user" value="<?= $user;?>" />
-    <div id="existing">
-    <?php for ($i=0; $i<count($cr); $i++) : ?>
-        <input type="hidden" name="cnt[]" value="<?= $card_cnts[$i];?>" />
-        <span class="BoldText">These are your current charges against
-            <?= $cr[$i];?>
-        </span>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date:</th>
-                    <th>Amount</th>
-                    <th>Deducted From:</th>
-                    <th>Payee:</th>
-                </tr>
-            </thead>
-            <tbody>
-                    <?php foreach ($allCharges[$i] as $card) : ?>
+    <form id="form" method="post" action="saveEditedCharge.php">
+    <div>
+        <button id="save">Save All Changes</button>
+        <button id="return" style="margin-left:80px;">
+            Return to Budget</button><br /><br />
+        <input type="hidden" name="user" value="<?= $user;?>" />
+        <div id="existing">
+        <?php for ($i=0; $i<count($cr); $i++) : ?>
+            <input type="hidden" name="cnt[]" value="<?= $card_cnts[$i];?>" />
+            <span class="BoldText">These are your current charges against
+                <?= $cr[$i];?>
+            </span>
+            <table>
+                <thead>
                     <tr>
-                        <td><input type="text" class="datepicker dates"
-                            name="cr<?= $i;?>date[]" value="<?= $card['date'];?>" />
-                        </td>
-                        <td><textarea class="amt"
-                            name="cr<?= $i;?>amt[]"><?= $card['amt'];?>
-                        </textarea></td>
-                        <td><textarea class="chgd"
-                            name="cr<?=$i;?>chgd[]"><?= $card['chgd'];?>
-                        </textarea></td>
-                        <td><textarea  class="payee"
-                        name="cr<?= $i;?>pay[]"><?= $card['payee'];?>
-                        </textarea></td>
+                        <th>Date:</th>
+                        <th>Amount</th>
+                        <th>Deducted From:</th>
+                        <th>Payee:</th>
                     </tr>
-                    <?php endforeach; ?>
-            </tbody>
-        </table><br />
-    <?php endfor; ?>
+                </thead>
+                <tbody>
+                        <?php foreach ($allCharges[$i] as $card) : ?>
+                        <tr>
+                            <td><input type="text" class="datepicker dates"
+                                name="cr<?= $i;?>date[]" 
+                                value="<?= $card['date'];?>" />
+                            </td>
+                            <td><textarea rows="1" cols="80" class="amt"
+                                name="cr<?= $i;?>amt[]"><?= $card['amt'];?>
+                            </textarea></td>
+                            <td><textarea rows="1" cols="20" class="chgd"
+                                name="cr<?=$i;?>chgd[]"><?= $card['chgd'];?>
+                            </textarea></td>
+                            <td><textarea  rows="1" cols="30" class="payee"
+                            name="cr<?= $i;?>pay[]"><?= $card['payee'];?>
+                            </textarea></td>
+                        </tr>
+                        <?php endforeach; ?>
+                </tbody>
+            </table><br />
+        <?php endfor; ?>
+        </div>
     </div>
     </form>
+    <p style="clear:left;margin-left:16px;">
+        <a href="http://validator.w3.org/check?uri=referer">
+            <img src="http://www.w3.org/Icons/valid-xhtml10"
+            alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+        </a>
+    </p>
 </div>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>

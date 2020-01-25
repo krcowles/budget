@@ -47,7 +47,8 @@ for ($i=0; $i<count($expamt); $i++) {
         your "<?= $rec_cd;?>" card against your monthly statement.
         Your budget will be automatically updated to show payment of those
         charges.</p>
-    <form id="form" method="POST" action="saveReconciledCharges.php">
+    <form id="form" method="post" action="saveReconciledCharges.php">
+    <div>
         <button id="reconcile">Reconcile</button>
         <button id="rtb">Return to Budget</button><br /><br />
         <p id="user" style="display:none;"><?= $user;?></p>
@@ -83,7 +84,14 @@ for ($i=0; $i<count($expamt); $i++) {
             </tbody>
             <?php endif; ?>
         </table><br />
+    </div>
     </form>
+    <p style="clear:left;margin-left:16px;">
+        <a href="http://validator.w3.org/check?uri=referer">
+            <img src="http://www.w3.org/Icons/valid-xhtml10"
+            alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+        </a>
+    </p>
 </div>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>

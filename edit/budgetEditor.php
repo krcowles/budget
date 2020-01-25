@@ -40,7 +40,8 @@ require "../utilities/getAccountData.php";
     be sure to 'Save Edits'</span><br />
 <span style="font-size:18px;">You can add, delete, or rename accounts separately 
     in the main menu.</span><br /><br />
-<form id="form" action="saveBudgetEdits.php" method="POST">
+<form id="form" action="saveBudgetEdits.php" method="post">
+<div>
     <input type="hidden" name="user" value="<?= $user;?>" />
     <button id="save">Save Edits</button>
     <button id="backtobud" 
@@ -57,16 +58,24 @@ require "../utilities/getAccountData.php";
         <?php for ($j=0; $j<count($account_names); $j++) : ?>
         <tr>
             <td><?= $account_names[$j];?></td>
-            <td><textarea class="bud"
+            <td><textarea rows="1" cols="80" class="bud"
                 name="edbud[]"><?= $budgets[$j];?></textarea></td>
-            <td><textarea class="bal"
+            <td><textarea rows="1" cols="80" class="bal"
                 name="edcurr[]"><?= $current[$j];?></textarea></td>
         </tr>
         <?php endfor; ?>
         </tbody>
     </table><br />
-</form>
 </div>
+</form>
+<p style="clear:left;margin-left:16px;">
+    <a href="http://validator.w3.org/check?uri=referer">
+        <img src="http://www.w3.org/Icons/valid-xhtml10"
+        alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+    </a>
+</p>
+</div>
+
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script type="text/javascript">
     $('#backtobud').on('click', function(ev) {
