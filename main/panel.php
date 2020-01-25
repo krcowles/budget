@@ -69,7 +69,7 @@
                 </div>
                 <div id="menu-edbud" class="menu-default">
                     <ul class="menus">
-                        <li><div id="edbud">Edit Budget Entries</div></li>
+                        <li><div id="eddat">Edit Budget Entries</div></li>
                         <li><div id="edadd">Add Account</div></li>
                         <li><div id="eddel">Delete Account</div></li>
                         <li><div id="edmov">Move Account</div></li>
@@ -107,5 +107,4 @@
         </ul>
     </div>
 </div>
-<br />
-<br />
+<pre><br /><br /></pre>

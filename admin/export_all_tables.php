@@ -7,8 +7,8 @@
  * file's string contents. 
  * PHP Version 7.1
  * 
- * @package Admin
- * @author  Tom Sandberg and Ken Cowles <krcowles29@gmail.com>
+ * @package Budget
+ * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
 require "../database/global_boot.php";

@@ -1,16 +1,21 @@
 <?php
 /**
- * This script is the essence of the action for loading all tables. It
- * can be called individually, or as a part of the reload action.
+ * This script is the essence of the action for loading all tables.
+ * Alternately, it can be called to simply drop all tables when a query
+ * string parameter is specified.
  * PHP Version 7.1
  * 
- * @package Admin
- * @author  Tom Sandberg and Ken Cowles <krcowles29@gmail.com>
+ * @package Budget
+ * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
 
-// Read in entire file
-$dbFile = "../database/epiz_24776673_BudgdetData.sql";
+// Because of screw-up in db naming between localhost and server:
+if ($using === 'server') {
+    $dbFile = "../database/epiz_24776673_BudgdetData.sql";
+} else {
+    $dbFile = "../database/epiz_2477663_BudgetData.sql";
+}
 $lines = file($dbFile);
 if (!$lines) {
     throw new Exception(

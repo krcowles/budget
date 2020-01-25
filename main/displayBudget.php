@@ -41,7 +41,7 @@ if ($user) {
 
 <body>
     <?php require "panel.php"; ?>
-    <button id="admin" style="display:none;">Admin</button>
+    <pre><button id="admin">Admin</button></pre>
     <p id="user" style="display:none"><?= $user;?></p>
     <div id="budget">
         <table id="roll3">
@@ -167,7 +167,7 @@ if ($user) {
             Enter the amount to be deposited (it will be placed in 'Undistributed
             Funds')<br />
             $ <input type="text" id="depo" /><br /><br />
-            <button id="depfunds">Deposit Funds</option>
+            <button id="depfunds">Deposit Funds</button>
         </div>
         <!-- transfer funds -->
         <div id="xfr">

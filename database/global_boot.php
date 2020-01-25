@@ -24,6 +24,7 @@ require $lead . "database/errFunctions.php";
 // PHP site recommends following value for future expansion of E_ALL
 error_reporting(-1);  // 2147483647 is also suggested on PHP site, both work
 if ($HOSTNAME !== '127.0.0.1') { // production environment
+    $using = 'server';
     ini_set('log_errors', 1); // (this may be the default anyway)
     ini_set('error_log', '../budgetizer.log');
     // UNCAUGHT error/exception handling:
@@ -32,6 +33,7 @@ if ($HOSTNAME !== '127.0.0.1') { // production environment
     // A method for fatal errors that handlers don't catch
     register_shutdown_function("shutdownHandler");
 } else { // development
+    $using = 'local';
     // In effect, the default UNCAUGHT error/exception handler
     $whoops = new \Whoops\Run;
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);

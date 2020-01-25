@@ -16,6 +16,7 @@ table:not(#modal_table) {
     margin-left: auto;
 }
 #admin {
+    display: none;
     position: fixed;
     top: 68px;
     left: 28px;
