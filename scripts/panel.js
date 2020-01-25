@@ -78,6 +78,12 @@ $(function() {
         });
     });
     $('#otd').on('click', function() {
+        var ans = confirm("If this deposit is for regularly received " +
+            "monthly income,\nplease use the 'Deposit Monthly Income' command;\n" +
+            "Selecting CANCEL below will exit the current command");
+        if (!ans) {
+            return false;
+        }
         var def = new $.Deferred();
         var funds = $('#dep').detach();
         modal.open({id: 'deposit', height: '170px', width: '220px',
