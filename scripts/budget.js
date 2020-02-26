@@ -59,7 +59,8 @@ $('.apday').each(function(indx) {
 });
 // user presentation of autopay candidates:
 if (ap_candidates) {
-    var $userlist = $('<table id="modal_table"><tbody></tbody></table>');
+    var $userlist = $('<table id="modal_table" style="width:100%;"><tbody></tbody></table>');
+    var modalWidth = '420px';
     // create the html list based on number of autopays due
     for (var j=0; j<aname.length; j++) {
         var item_html = '<tr><td><div class="tdht">' + aname[j] + '<br />Due day: ' +
@@ -76,7 +77,7 @@ if (ap_candidates) {
     var ap_object = $('#ap').detach();
     var def = new $.Deferred(); // only one can pay at a time, so one deferred
     modal.open({
-        id: 'autopay', height: '200px', width: '400px', content: ap_object,
+        id: 'autopay', height: '200px', width: modalWidth, content: ap_object,
         user: user, method: paywith, acct_name: aname, row_no: rowno,
         deferred: def
     });

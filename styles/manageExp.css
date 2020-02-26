@@ -5,6 +5,7 @@
     color: #fff5e6;
     position: fixed;
     top: 0;
+    z-index: 100;
 }
 #mv {
     float: left;
@@ -54,6 +55,7 @@ td {
     width: 50%;
     float: left;
     margin-top: 16px;
+    z-index: 1;
 }
 #innerexp {
     position: absolute
