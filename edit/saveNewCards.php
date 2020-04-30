@@ -12,12 +12,16 @@
 require "../database/global_boot.php";
 
 $user = filter_input(INPUT_POST, 'user');
-$lv2  = filter_input(INPUT_POST, 'lv2');
-if ($lv2 === 'yes') {
-    $status = "UPDATE `Users` SET `setup` = 'cards' WHERE `username` = :uid;";
-    $newstat = $pdo->prepare($status);
-    $newstat->execute(["uid" => $user]);
-}
+$exit  = filter_input(INPUT_POST, 'exit2') === 'no' ? false : true;
+
+$oldquery = "SELECT `setup` FROM `Users` WHERE `username` = :uid;";
+$old = $pdo->prepare($oldquery);
+$old->execute(["uid" => $user]);
+$fetched = $old->fetch(PDO::FETCH_ASSOC);
+$setup = $fetched['setup'] | '010';
+$status = "UPDATE `Users` SET `setup` = :setup WHERE `username` = :uid;";
+$newstat = $pdo->prepare($status);
+$newstat->execute(["setup" => $setup, "uid" => $user]);
 
 // get all pre-entered data, if any
 if (isset($_POST['svdcard'])) {
@@ -63,8 +67,8 @@ for ($n=0; $n<count($new_cards); $n++) {
         $pdo->query($new);
     }
 }
-if ($lv2 === 'no') {
-    $redir = "newBudgetPanels.php?pnl=cards&user=" . rawurlencode($user);
+if (!$exit) {
+    $redir = "newBudgetPanels.php?pnl={$setup}&user=" . rawurlencode($user);
 } else {
     $redir = "../utilities/exitPage.html";
 }

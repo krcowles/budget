@@ -10,6 +10,6 @@
 require_once "../database/global_boot.php";
 $user = filter_input(INPUT_POST, 'user');
 
-$done = "UPDATE `Users` SET `setup` = 'all' WHERE `username` = :uid;";
+$done = "UPDATE `Users` SET `setup` = '111' WHERE `username` = :uid;";
 $updte = $pdo->prepare($done);
 $updte->execute(["uid" => $user]);

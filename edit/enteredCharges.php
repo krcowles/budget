@@ -20,9 +20,9 @@
         <span id="crcd<?= $e?>"><?= $ccHtml;?></span>&nbsp;&nbsp;
         Date of Expense: <input type="text"  class="datepicker exp dates"
             name="aeedate[]" value="<?= $aeDate[$e];?>" />&nbsp;&nbsp;
-        Amount Paid: <textarea class="amts"
+        Amount Paid: <textarea class="amts" rows="1" cols="8"
             name="aeeamt[]"><?= $aeAmt[$e];?></textarea>&nbsp;&nbsp;
-        Payee: <textarea
+        Payee: <textarea rows="1" cols="60"
             name="aeepay[]"><?= $aePayee[$e];?></textarea>&nbsp;&nbsp;
         Delete: <input type="checkbox" name="edel[]" 
             value="<?= $exIds[$e]?>" />

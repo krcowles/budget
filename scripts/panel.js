@@ -6,13 +6,10 @@ $(function() {
     var $mainMenus = $('.menu-main');
     var navPos = $('#navbar').offset();
     var navBottom = navPos.top + $('#navbar').height() + 5 + 'px';
-    // page_type allows setting of icon in the menu
-    var page_type = $('#page_id').text();
-    var icon = '<span class="ui-icon ui-icon-circle-triangle-e"></span>';
 
-    // jQuery UI Menu widget
+    // jQuery UI Menu widget - all menus w/submenus
     $(".menus").menu({
-        select: function(evt, ui) {  // ui is object whose [item]is a jQuery obj
+        select: function(evt, ui) {  // ui is object whose [item] is a jQuery obj
             var itemText = ui.item.text();
             var $itemDiv = ui.item.children().eq(0);
             if (!$itemDiv.hasClass('ui-state-disabled')) {
@@ -54,8 +51,8 @@ $(function() {
 
     /**
      *                ----- Menu Actions -----
-     * Menus without submenus are clicked on to invoke (code follows);
-     * Submenus utilize 'executeItem()' (listed after the above)
+     * Menus without submenus are clicked on in order to invoke (code follows);
+     * Submenus utilize 'executeItem()' to invoke
      */
     var user = $('#user').text();
     
@@ -68,7 +65,27 @@ $(function() {
             $('#allForms').append(exp_form);
         });
     });
+    
     $('#moinc').on('click', function() {
+        // make sure income hasn't already been fully deposited this month...
+        let paidout = true;
+        let $payments = $('table tbody tr');
+        $payments.each(function() {
+            let budget = $(this).find('.amt').children().last().text();
+            let monthpay = $(this).children().last().text();
+            if (parseInt(monthpay) < parseInt(budget)) {
+                paidout = false;
+                return;
+            }
+        });
+        if (paidout) {
+            let ans = confirm("It appears income has already been distributed\n" +
+                "to all budgeted accounts. If you choose to proceed,\n" +
+                "the funds will be placed in Undistributed Funds");
+            if (!ans) {
+                return;
+            }
+        }
         var def = new $.Deferred();
         var income_form = $('#distinc').detach();
         modal.open({id: 'income', height: '280px', width: '320px',

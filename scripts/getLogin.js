@@ -7,6 +7,9 @@ var query_name = encodeURIComponent(login_name);
 var user_cookie_state = document.getElementById('cookiestatus').textContent;
 // defaults to 'OK' unless a registered user is logged in with expiration issues
 var startpg = $('#startpg').text();
+var completed1 = startpg.charAt(0) === '1' ? true : false;
+var completed2 = startpg.charAt(1) === '1' ? true : false;
+var completed3 = startpg.charAt(2) === '1' ? true : false;
 if (cookies) {
     if (user_cookie_state === 'NONE') {
         alert("No user registration has been located for " + login_name);
@@ -31,7 +34,7 @@ if (cookies) {
             "\nPlease contact the site master");
     } else if (user_cookie_state === 'OK') {
         if (login_name !== 'none') {
-            if (startpg === 'all') {
+            if (completed1 && completed2 && completed3) {
                 var homepg = "main/displayBudget.php?user=" + query_name;
                 window.open(homepg, "_self");
             } else {

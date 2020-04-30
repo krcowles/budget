@@ -16,7 +16,7 @@
         <?php for ($c=0; $c<count($cdNames); $c++) : ?>
         <p id="oc<?= $c;?>" 
             style="display:none;"><?= $cdTypes[$c];?></p>
-        Card name: <textarea class="ocname"
+        Card name: <textarea class="ocname" rows="1" cols="20"
         name="svdcard[]"><?= $cdNames[$c];?></textarea>
         Card type: <select name="svdtype[]" id="seloc<?= $c;?>">
             <option value="Credit">Credit</option>

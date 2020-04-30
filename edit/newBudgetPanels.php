@@ -1,8 +1,12 @@
 <?php
 /**
- * This page is invoked when a new user successfully signs up, or when a new
- * user has 'returned' after partially entering data, saved and then exited.
- * It allows the user to establish preliminary data for the new budget:
+ * This page is invoked when a new user successfully signs up, or, when a new
+ * user has 'returned' after having partially entered data, saved and then exited.
+ * The state of initial budget completion is tracked by the 'setup' field in the 
+ * 'Users' table of the database. This is reflected in the quwery string parameter
+ * 'new'. If true, it's a first-time entry; if false, the user is returning to
+ * complete (or further) the setup process. The page allows the user to establish
+ * preliminary data for the new budget in three steps:
  * 1. The user can enter preliminary account data to display and manipulate.
  *    The budget is limited to basic data at this point. On first-time entry,
  *    the default budget items (Temporary Accounts and Undistributed Funds)
@@ -19,11 +23,14 @@ require_once "../database/global_boot.php";
 
 $user = filter_input(INPUT_GET, 'user');
 $new  = isset($_GET['new']) ? true : false;
-$pnl  = isset($_GET['pnl']) ? filter_input(INPUT_GET, 'pnl') : "budget";
+$pnl  = isset($_GET['pnl']) ? filter_input(INPUT_GET, 'pnl') : "000";
+$lv1 = $pnl[0] === '0' ? 'no' : 'yes';
+$lv2 = $pnl[1] === '0' ? 'no' : 'yes';
+$lv3 = $pnl[2] === '0' ? 'no' : 'yes';
 $lastpos = 0;
 if ($new) {
     // this will happen once and only once - on first invocation after registering
-    $undis = array(
+    $undis = array(  // 'Undistributed funds' account initial settings
         '`user`' => "'" . $user . "'",
         '`budname`' => "'Undistributed Funds'",
         '`budpos`' => "'30000'",
@@ -131,7 +138,6 @@ if ($new) {
 
 <body>
 <p id="user" style="display:none;"><?= $user;?></p>
-<p id="pnl" style="display:none;"><?= $pnl;?></p>
 <div id="intro">
     <p id="ready" class="LargeHeading">You're Ready To Start!&nbsp;&nbsp;
         <span id="help">[New to Budgeting? See
@@ -152,8 +158,9 @@ if ($new) {
         <form id="form" action="saveNewBudget.php" method="post">
             <input type="hidden" name="user" value="<?= $user;?>" />
             <input type="hidden" name="lastpos" value="<?= $lastpos;?>" />
+            <input type="hidden" name="lv1" value="<?= $lv1;?>" />
+            <input type="hidden" name="exit1" value="no" />
             <button id="save1">Save and Continue</button>
-            <input type="hidden" name="lv1" value="no" />
             <span><button id="lv1">Save and Return Later</button>
             </span><br />
             <span class="selnote">Note: When you click on 'Save and Continue',
@@ -165,8 +172,9 @@ if ($new) {
             </span><br /><br />
             <div id="new">
                 <span class="NormalHeading">Enter your new budget information
-                    below. Please use whole numbers only (integers) for Monthly
-                    Budget amounts. Current Value entries can be 'dollars and cents'.
+                    below. Please use whole numbers only (integers) for "Monthly
+                    Budget" amounts. "Current Value" entries can be 
+                    'dollars and cents'.
                 </span><br />
                 <div id="buditems">
                     <?php for ($q=0; $q<5; $q++) : ?>
@@ -195,7 +203,8 @@ if ($new) {
         </span><br />
         <form id="cdform" method="post" action="saveNewCards.php">
             <input type="hidden" name="user" value="<?= $user;?>" />
-            <input type="hidden" name="lv2" value="no" />
+            <input type="hidden" name="lv2" value="<?= $lv2;?>" />
+            <input type="hidden" name="exit2" value="no" />
             <button id="nocds">No Cards to Enter</button>
             <button id="save2">Save and Continue</button>
             <span><button id="lv2">Save and Return Later</button>
@@ -235,7 +244,8 @@ if ($new) {
         </span><br />
         <form id="edform" method="post" action="saveNewCharges.php">
             <input type="hidden" name="user" value="<?= $user;?>" />
-            <input type="hidden" name="lv3" value="no" />
+            <input type="hidden" name="lv3" value="<?= $lv3;?>" />
+            <input type="hidden" name="exit3" value="no" />
             <button id="save">Save and Continue</button>
             <span><button id="lv3">Save and Return Later</button>
             </span><br />
@@ -267,7 +277,14 @@ if ($new) {
             </div>
         </form>
     </div>
- </div>
+</div>
+
+ <p style="clear:left;margin-left:16px;">
+    <a href="http://validator.w3.org/check?uri=referer">
+        <img src="http://www.w3.org/Icons/valid-xhtml10"
+        alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+    </a>
+</p>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/jquery-ui.js" type="text/javascript"></script>

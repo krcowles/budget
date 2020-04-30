@@ -25,7 +25,7 @@ if ($submitter == 'create') {
         filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) : false;
         $newuser = "INSERT INTO `Users` (`email`,`username`,`setup`,`LCM`,`password`," .
         "`passwd_expire`) " .
-        "VALUES (:email,:uname,'budget','{$month_string}',:passwd,:pass_exp);";
+        "VALUES (:email,:uname,'000','{$month_string}',:passwd,:pass_exp);";
     $user = $pdo->prepare($newuser);
     $user->execute(
         array( ":email" => $email, ":uname" =>  $username, ":passwd" => $password,

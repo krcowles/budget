@@ -13,12 +13,17 @@ require "../database/global_boot.php";
 
 $user = filter_input(INPUT_POST, 'user');
 $pos  = filter_input(INPUT_POST, 'lastpos', FILTER_VALIDATE_INT);
-$lv1  = filter_input(INPUT_POST, 'lv1');
-if ($lv1 === 'yes') {
-    $status = "UPDATE `Users` SET `setup` = 'budget' WHERE `username` = :uid;";
-    $newstat = $pdo->prepare($status);
-    $newstat->execute(["uid" => $user]);
-}
+$exit  = filter_input(INPUT_POST, 'exit1') === 'no' ? false : true;
+
+$oldquery = "SELECT `setup` FROM `Users` WHERE `username` = :uid;";
+$old = $pdo->prepare($oldquery);
+$old->execute(["uid" => $user]);
+$fetched = $old->fetch(PDO::FETCH_ASSOC);
+$setup = $fetched['setup'] | '100';
+$status = "UPDATE `Users` SET `setup` = :setup WHERE `username` = :uid;";
+$newstat = $pdo->prepare($status);
+$newstat->execute(["setup" => $setup, "uid" => $user]);
+
 
 // get all pre-entered data, if any
 if (isset($_POST['svdname'])) {
@@ -74,8 +79,8 @@ for ($n=0; $n<count($new_accounts); $n++) {
     }
 }
 
-if ($lv1 === 'no') { // 'normal' form submit
-    $next = "newBudgetPanels.php?pnl=budget&user=" . rawurlencode($user);
+if (!$exit) { // 'normal' form submit
+    $next = "newBudgetPanels.php?pnl={$setup}}&user=" . rawurlencode($user);
 } else { // 'leave and return' button
     $next = "../utilities/exitPage.html";
 }
