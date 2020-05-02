@@ -29,18 +29,15 @@ if ($user) {
         content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
-    <link href="../styles/panel.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/menu.css" type="text/css" rel="stylesheet" />
     <link href="../styles/budget.css" type="text/css" rel="stylesheet" />
     <link href="../styles/charges.css" type="text/css" rel="stylesheet" />
     <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
-    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-    <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
 </head>
 
 <body>
-    <?php require "panel.php"; ?>
+    <?php require "menu.html"; ?>
     <pre><button id="admin">Admin</button></pre>
     <p id="user" style="display:none"><?= $user;?></p>
     <div id="budget">
@@ -278,10 +275,11 @@ if ($user) {
             alt="Valid XHTML 1.0 Strict" height="31" width="88" />
         </a>
     </p>
+    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
     <script type="text/javascript">var g_user = $('#user').text();</script>
+    <script src="../scripts/menu.js" type="text/javascript"></script>
     <script src="../scripts/budget.js" type="text/javascript"></script>
     <script src="../scripts/modals.js" type="text/javascript"></script>
-    <script src="../scripts/panel.js" type="text/javascript"></script>
     <script src="../scripts/jQnumberFormat.js" type="text/javascript"></script>
 </body>
 </html>

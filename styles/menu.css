@@ -1,0 +1,146 @@
+/* Budgetizer specific */
+#navbar {
+    background-color: #004a00;
+    height: 48px;
+}
+#budgeting {
+    display: inline-block;
+    width: 460px;
+    text-align: center;
+    color: #004a00;
+    padding-top: 1px;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: gray;
+}
+#managing {
+    display: inline-block;
+    width: calc(100% - 470px);
+    text-align: center;
+    color: brown;
+    padding-top: 1px;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: gray;
+}
+/* Horizontal Menu CSS */
+.horizontalcssmenu {
+    height: 48px;
+    z-index: 5;
+}
+.horizontalcssmenu ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    height: 100%;
+    border: none;
+}
+/*Top level list items*/
+.horizontalcssmenu ul li {
+    height: 100%;
+    position: relative;
+    float: left;
+}
+.horizontalcssmenu ul li:hover {
+    background-color: green;
+}
+.horizontalcssmenu ul li a {
+    display: block;
+    height: 100%;
+    width: 160px; /*Width of top level menu link items*/
+    padding: 2px 8px;
+    text-decoration: none;
+    color: white;
+    font: 16px Tahoma;
+}
+#m1, #m2, #m3, #m4, #m5, #m6 {
+    color: lightgray;
+}
+
+/* Sub-menu CSS */
+div[id^=sub] {
+    position: absolute;
+    display: none;
+    background-color: #004a00;
+    top: 56px;
+}
+div[id^=sub]:hover {
+    background-color: green;
+}
+div[id^=sub] ul {
+    list-style-type: none;
+    padding-top: 4px;
+    padding-left: 4px;
+}
+div[id^=sub] ul li {
+    line-height: 150%;
+}
+#sub_undos {  /* div */
+    height: 60px;
+    width: 184px;
+}
+#sub_schedap {
+    height: 60px;
+    width: 134px;
+}
+#sub_mgexp {
+    height: 108px;
+    width: 172px;
+}
+#sub_mgcds {
+    height: 58px;
+    width: 112px;
+}
+#sub_mgbud {
+    height: 134px;
+    width: 146px;
+}
+#sub_help {
+    height: 84px;
+    width: 148px;
+}
+.sub_list {  /* ul */
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.sub_item {  /* li */
+    margin: 0;
+    padding: 0;
+}
+.sub_item a {
+    color: white;
+    margin: 0;
+    padding: 0;
+    padding-left: 6px;
+    text-decoration: none;
+}
+
+/* Holly Hack for IE \*/
+* html .horizontalcssmenu ul li { float: left; height: 1%; }
+* html .horizontalcssmenu ul li a { height: 1%; }
+/* End */
+
+.menu-open {
+    display: inline-block;
+    position: relative;
+    top: -6px;
+    left: 12px;
+    margin-right: 8px;
+    width: 0;
+    max-height: 8px;
+    border-top: 8px    solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid cornsilk;
+}
+.menu-close {
+    display: inline-block;
+    position: relative;
+    top: -10px;
+    left: 8px;
+    width: 0;
+    max-height: 8px;
+    border-left: 8px  solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid yellow;
+}
