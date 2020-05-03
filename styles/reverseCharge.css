@@ -1,0 +1,32 @@
+#main {
+    margin-left:48px;
+}
+#carddiv {
+    margin-left: 24px;
+}
+#return {
+    margin-left:40px;
+}
+#paid {
+    color: brown;
+}
+input[type=checkbox] {
+    -ms-transform: scale(1.5); /* IE */
+    -moz-transform: scale(1.5); /* FF */
+    -webkit-transform: scale(1.5); /* Safari and Chrome */
+    -o-transform: scale(1.5); /* Opera */
+    transform: scale(1.5);
+    padding: 10px;
+}
+.cdentry {
+    font-size: 16px;
+}
+.amts {
+    width: 80px;
+}
+.dates {
+    width: 100px;
+}
+.accts {
+    width: 200px;
+}

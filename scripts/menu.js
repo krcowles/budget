@@ -149,11 +149,13 @@ $('#recon').on('click', function() {
     return; 
 });
 $('#revcc').on('click', function() {
-    alert("Coming soon!");
+    let rev = "../utilities/reverseCharge.php?user=" + query_name;
+    window.open(rev, "_self");
     return;
 });
 $('#revexp').on('click', function() {
-    alert("Coming soon!");
+    let uexp = "../utilities/undoExpense.php?user=" + query_name;
+    window.open(uexp, "_self");
     return;
 });
 $('#addap').on('click', function() {
