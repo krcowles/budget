@@ -80,7 +80,7 @@ for ($n=0; $n<count($new_accounts); $n++) {
 }
 
 if (!$exit) { // 'normal' form submit
-    $next = "newBudgetPanels.php?pnl={$setup}}&user=" . rawurlencode($user);
+    $next = "newBudgetPanels.php?pnl={$setup}&user=" . rawurlencode($user);
 } else { // 'leave and return' button
     $next = "../utilities/exitPage.html";
 }

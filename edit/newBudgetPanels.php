@@ -27,6 +27,10 @@ $pnl  = isset($_GET['pnl']) ? filter_input(INPUT_GET, 'pnl') : "000";
 $lv1 = $pnl[0] === '0' ? 'no' : 'yes';
 $lv2 = $pnl[1] === '0' ? 'no' : 'yes';
 $lv3 = $pnl[2] === '0' ? 'no' : 'yes';
+if ($lv1 === 'yes' && $lv2 === 'yes' && $lv3 === 'yes') {
+    $redir = '../main/displayBudget.php?user=' . $user;
+    header("Location: {$redir}");
+}
 $lastpos = 0;
 if ($new) {
     // this will happen once and only once - on first invocation after registering
@@ -258,7 +262,7 @@ if ($new) {
             </span><br /><br />
             <div id="enew">
                 <span class="NormalHeading">Enter your new expense information
-                    below. (Outstanding/unpaid charges only)</span><br />
+                    below. (Outstanding/unpaid Credit charges only)</span><br />
                 <?php for ($z=0; $z<4; $z++) : ?>
                     Credit Card Used:
                     <span id="ncd<?= $z;?>"><?= $ccHtml;?></span>&nbsp;&nbsp;

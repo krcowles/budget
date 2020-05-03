@@ -1,9 +1,13 @@
-var cssmenuids=["budgettools"];    //Enter id(s) of CSS Horizontal UL menus, separated by commas
-var csssubmenuoffset = -1;         //Offset of submenus from main menu. Default is 0 pixels.
-
-$(function() {
-
-// set main menu widths
+/**
+ * @fileoverview There are two sections within: menu visuals and operation;
+ *               menu item selection and execution
+ * @author Ken Cowles
+ */
+$(function() { // doc ready statement
+/**
+ * This section places items on the page, sizing them and operating open/close arrows
+ */
+// set main menu widths (determined by trial and error for appearance; not derived - yet)
 var menuwidths = ['96', '84', '70', '60', '72',    '82', '83', '91', '98', '84','64'];
 var $buds = $('.bud a');
 $buds.each(function(indx) {
@@ -61,6 +65,216 @@ $subs.each(function(indx) {
         $(id).hide();
         return;
     });
+    return;
+});
+
+/**
+ * This section executes an item in the menu when it is clicked on;
+ * One event def for each potential item click
+ */
+var query_name = g_user;
+$('#paymts').on('click', function() {
+    var def = new $.Deferred();
+    var exp_form = $('#box').detach();
+    modal.open({id: 'expense', width: '342px', height: '240px', 
+        content: exp_form, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(exp_form);
+    });
+    return;
+});
+$('#depmo').on('click', function() {
+    // make sure income hasn't already been fully deposited this month...
+    let paidout = true;
+    let $payments = $('table tbody tr');
+    $payments.each(function() {
+        let budget = $(this).find('.amt').children().last().text();
+        let monthpay = $(this).children().last().text();
+        if (parseInt(monthpay) < parseInt(budget)) {
+            paidout = false;
+            return;
+        }
+    });
+    if (paidout) {
+        let ans = confirm("It appears income has already been distributed\n" +
+            "to all budgeted accounts. If you choose to proceed,\n" +
+            "the funds will be placed in Undistributed Funds");
+        if (!ans) {
+            return;
+        }
+    }
+    var def = new $.Deferred();
+    var income_form = $('#distinc').detach();
+    modal.open({id: 'income', height: '280px', width: '320px',
+        content: income_form, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(income_form);
+    });
+    return;
+});
+$('#otd').on('click', function() {
+    var ans = confirm("If this deposit is for regularly received " +
+        "monthly income,\nplease use the 'Deposit Monthly Income' command;\n" +
+        "Selecting CANCEL below will exit the current command");
+    if (!ans) {
+        return false;
+    }
+    var def = new $.Deferred();
+    var funds = $('#dep').detach();
+    modal.open({id: 'deposit', height: '170px', width: '220px',
+        content: funds, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(funds);
+    });
+    return;
+});
+$('#movefnds').on('click', function() {
+    var def = new $.Deferred();
+    var xfr = $('#xfr').detach();
+    modal.open({id: 'xfr', height: '226px', width: '240px',
+        content: xfr, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(xfr);
+    });
+    return;  
+});
+$('#recon').on('click', function() {
+    var def = new $.Deferred();
+    var rec = $('#reconcile').detach();
+    modal.open({id: 'recon', height: '160px', width: '240px',
+        content: rec, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(rec);
+    });
+    return; 
+});
+$('#revcc').on('click', function() {
+    alert("Coming soon!");
+    return;
+});
+$('#revexp').on('click', function() {
+    alert("Coming soon!");
+    return;
+});
+$('#addap').on('click', function() {
+    var def = new $.Deferred;
+    var apbox = $('#auto').detach();
+    modal.open({id: 'setup_ap', height: '196px', width: '280px',
+        content: apbox, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(apbox);
+    }); 
+    return; 
+});
+$('#delap').on('click', function() {
+    var def = new $.Deferred();
+    var dapbox = $('#delauto').detach();
+    modal.open({id: 'del_ap', height: '146px', width: '240px',
+        content: dapbox, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(dapbox);
+    });
+    return;
+});
+$('#vmexp').on('click', function() {
+    var viewexp = "../utilities/viewCharges.php?user=" + query_name;
+    window.open(viewexp, "_self");
+    return;
+});
+$('#edcc').on('click', function() {
+    var editexpense = "../edit/editCreditCharges.php?user=" + query_name;
+    window.open(editexpense, "_self");
+    return;
+});
+$('#vmrpt').on('click', function() {
+    var def = new $.Deferred();
+    var morpt = $('#morpt').detach();
+    modal.open({id: 'morpt', width: '240px', height: '130px', 
+        content: morpt, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(morpt);
+    });
+    return;
+});
+$('#varpt').on('click', function() {
+    alert("Not Available Yet");
+    return;
+});
+$('#addcd').on('click', function() {
+    var def = new $.Deferred();
+    var cdbox = $('#cdadd').detach();
+    modal.open({id: 'addcd', width: '248px', height: '160px',
+    content: cdbox, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(cdbox)
+    });
+    return;
+});
+$('#delcd').on('click', function() {
+    var def = new $.Deferred();
+    var crdrbox = $('#delcrdr').detach();
+    modal.open({id: 'delcard', width: '240px', height: '148px',
+        content: crdrbox, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(crdrbox)
+    });
+    return;
+});
+$('#addacct').on('click', function() {
+    var def = new $.Deferred();
+    var adder = $('#addacct').detach();
+    modal.open({id: 'addacct', width: '360px', height: '320px',
+        content: adder, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(adder);
+    }); 
+    return;
+});
+$('#mvacct').on('click', function() {
+    var def = new $.Deferred();
+    var mvbox = $('#mv').detach();
+    modal.open({id: 'mvacct', width: '260px', height: '250px',
+        content: mvbox, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(mvbox);
+    });
+    return;
+});
+$('#renacct').on('click', function() {
+    var def = new $.Deferred();
+    var rebox = $('#rename').detach();
+    modal.open({id: 'rename', width: '240px', height: '206px',
+        content: rebox, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(rebox);
+    });
+    return;
+});
+$('#delacct').on('click', function() {
+    var def = new $.Deferred();
+    var delbox = $('#delexisting').detach();
+    modal.open({id: 'delacct', width: '260px', height: '220px',
+        content: delbox, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(delbox);
+    });
+    return;
+});
+$('#edacct').on('click', function() {
+    var editor = "../edit/budgetEditor.php?user=" + query_name;
+    window.open(editor, "_self");
+    return;
+});
+$('#faq').on('click', function() {
+    alert("Coming soon!");
+    return;
+});
+$('#siteguide').on('click', function() {
+    window.open("../help/help.php?doc=Tools.pdf", "_blank");
+    return;
+});
+$('#howto').on('click', function() {
+    window.open("../help/help.php?doc=HowToBudget.pdf", "_blank");
     return;
 });
 

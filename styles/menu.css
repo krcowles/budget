@@ -17,7 +17,7 @@
     display: inline-block;
     width: calc(100% - 470px);
     text-align: center;
-    color: brown;
+    color: chocolate;
     padding-top: 1px;
     border-width: 0px 1px 1px 1px;
     border-style: solid;
@@ -64,9 +64,6 @@ div[id^=sub] {
     background-color: #004a00;
     top: 56px;
 }
-div[id^=sub]:hover {
-    background-color: green;
-}
 div[id^=sub] ul {
     list-style-type: none;
     padding-top: 4px;
@@ -92,7 +89,7 @@ div[id^=sub] ul li {
     width: 112px;
 }
 #sub_mgbud {
-    height: 134px;
+    height: 106px;
     width: 146px;
 }
 #sub_help {
@@ -107,6 +104,9 @@ div[id^=sub] ul li {
 .sub_item {  /* li */
     margin: 0;
     padding: 0;
+}
+.sub_item:hover {
+    background-color: green;
 }
 .sub_item a {
     color: white;
