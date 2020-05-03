@@ -220,7 +220,7 @@ $('#delcd').on('click', function() {
     });
     return;
 });
-$('#addacct').on('click', function() {
+$('#acctadd').on('click', function() {
     var def = new $.Deferred();
     var adder = $('#addacct').detach();
     modal.open({id: 'addacct', width: '360px', height: '320px',
