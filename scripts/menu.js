@@ -268,7 +268,7 @@ $('#edacct').on('click', function() {
     return;
 });
 $('#faq').on('click', function() {
-    alert("Coming soon!");
+    window.open("../help/help.php?doc=FAQ.pdf", "_blank");
     return;
 });
 $('#siteguide').on('click', function() {
