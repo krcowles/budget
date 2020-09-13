@@ -70,9 +70,8 @@ require "admin/getLogin.php";
     </div>
 </div>
 <div>
-    <p id="usrcookie" style="display:none;"><?= $uname;?></p>
-    <p id="cookiestatus" style="display:none;"><?= $cstat?></p>
-    <p id="startpg" style="display:none;"><?= $start;?></p>
+    <p id="cookiestatus" style="display:none;"><?=$cstat?></p>
+    <p id="startpg" style="display:none;"><?=$start;?></p>
 </div>
 
 <script src="scripts/jquery-1.12.1.js" type="text/javascript"></script>

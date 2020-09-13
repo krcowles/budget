@@ -1,49 +1,58 @@
 <?php
 /**
  * This script authenticates the username/password combo entered by
- * the user when submitting a login requiest. The information is 
+ * the user when submitting a login request. The information is 
  * compared to entries in the Users table. The successful login always
- * attempts to set a cookie for this user. This script is invoked via ajax.
+ * attempts to set a cookie for this user. This script is invoked via
+ * ajax from getLogin.js (Version 2.0)
  * PHP Version 7.1
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+session_start();
 require "../database/global_boot.php";
 
-define("UX_DAY", 60*60*24); // unix timestamp value for 1 day
-$usrname = filter_input(INPUT_POST, 'usr_name');
-$usrpass = filter_input(INPUT_POST, 'usr_pass');
-$usr_req = "SELECT username,`password`,`passwd_expire`,`setup` FROM Users " .
-    "WHERE username = :usr;";
+// invoking this script implies no $_SESSION data exists yet
+$username = filter_input(INPUT_POST, 'usr_name');
+$userpass = filter_input(INPUT_POST, 'usr_pass');
+
+$usr_req = "SELECT * FROM `Users` WHERE `username` = :usr;";
 $auth = $pdo->prepare($usr_req);
-$auth->bindValue(":usr", $usrname);
+$auth->bindValue(":usr", $username);
 $auth->execute();
 $rowcnt = $auth->rowCount();
 if ($rowcnt === 1) {  // located single instance of user
     $user_dat = $auth->fetch(PDO::FETCH_ASSOC);
-    $setup = $user_dat['setup'];
-    if (password_verify($usrpass, $user_dat['password'])) {
+    if (password_verify($userpass, $user_dat['password'])) {
+        $_SESSION['userid'] = $user_dat['uid'];
         $expiration = $user_dat['passwd_expire'];
+        $_SESSION['expire'] = $expiration;
+        $_SESSION['cookies'] = $user_dat['cookies'];
+        $_SESSION['cookiestatus'] = "OK";
+        $_SESSION['start'] = $user_dat['start'];
         $american = str_replace("-", "/", $expiration);
         $expdate = strtotime($american);
         if ($expdate <= time()) {
+            $_SESSION['cookiestatus'] = 'EXPIRED';
             echo "EXPIRED";
             exit;
         } else {
-            $days = floor(($expdate - time())/UX_DAY);
+            $UX_DAY = 60*60*24; // unix timestamp value for 1 day
+            $days = floor(($expdate - time())/$UX_DAY);
             if ($days <= 5) {
-                // set current cookie pending renewal
-                setcookie('epiz', $usrname, $expdate, "/");
+                $_SESSION['cookiestatus'] = 'RENEW';
                 echo "RENEW";
                 exit;
             }
         }
-        setcookie('epiz', $usrname, $expdate, "/");
-        echo "LOCATED&" . $setup;
+        if ($_SESSION['cookies'] === 'accept') {
+            setcookie('epiz', $usrname, $expdate, "/");
+        }
+        echo "LOCATED&" . $_SESSION['start'];
     } else {  // user exists, but password doesn't match:
-        echo "BADPASSWD" . $usrpass . ";" . $user_dat['password'];
+        echo "BADPASSWD";
     }
 } else {  // not in User table (or multiple entries for same user)
     echo "FAIL";
