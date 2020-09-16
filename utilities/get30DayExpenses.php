@@ -10,7 +10,15 @@
  */
 require_once "../database/global_boot.php";
 require "timeSetup.php";
-$chgdate = "SELECT * FROM `Charges` WHERE `userid` = :uid AND `method` = :etype;";
+
+if (isset($unpaid)) {
+    $chgdate = "SELECT * FROM `Charges` WHERE `userid` = :uid AND " .
+        "`method` = :etype AND `paid` = 'N';";
+} else {
+    $chgdate = "SELECT * FROM `Charges` WHERE `userid` = :uid AND " .
+        "`method` = :etype;";
+
+}
 $chks = $pdo->prepare($chgdate);
 $chks->execute(["uid" => $_SESSION['userid'], "etype" => 'Check']);
 $paidChecks = $chks->fetchALL(PDO::FETCH_ASSOC);

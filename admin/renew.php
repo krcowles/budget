@@ -57,7 +57,7 @@ require "../database/global_boot.php";
             need to set a new password.</p><br />
         <label for="password">Enter a password: </label>
         <input id="passwd" type="password" name="password" size="20"
-            class="password" required />&nbsp;
+            class="password" required autocomplete="new-password" />&nbsp;
         <div class="password-meter">
             <div class="password-meter-message"></div>
             <div class="password-meter-bg">
@@ -67,7 +67,8 @@ require "../database/global_boot.php";
             <div id ="confirm">
             <label for="confirm_password">Confirm password: </label>
             <input id="confirm_password" type="password" 
-                    name="confirm_password" size="20" class="required" />
+                    name="confirm_password" size="20" 
+                    autocomplete="new-password" class="required" />
             </div>
         </div><br />
         </fieldset>

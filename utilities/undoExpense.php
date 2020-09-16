@@ -10,10 +10,11 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+session_start();
 require_once "../database/global_boot.php";
 
-$user = filter_input(INPUT_GET, 'user');
 $paid = isset($_GET['paid']) ? true : false;
+$unpaid = true;
 require "get30DayExpenses.php";
 
 $chgs = [];
@@ -67,7 +68,6 @@ $noOfExp = count($chgs);
 <form action="doUndo.php" method="POST">
     <button>Undo Expense</button>
     <button id="return">Return To Budget</button>
-    <input type="hidden" name="user" value="<?= $user;?>" />
 <?php if ($noOfExp === 0) : ?>
     <h3>You have no outstanding expenses for the last 30 days</h3>
 <?php else : ?>

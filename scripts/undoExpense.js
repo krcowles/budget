@@ -1,4 +1,3 @@
-var user = $('input[name=user]').attr('value');
 $('input[type=checkbox]').each(function() {
     $(this).on('change', function() {
         let item = $(this).attr('value');
@@ -16,6 +15,6 @@ $('input[type=checkbox]').each(function() {
 });
 $('#return').on('click', function(ev) {
     ev.preventDefault();
-    let bud = "../main/displayBudget.php?user=" + user;
+    let bud = "../main/displayBudget.php"
     window.open(bud, "_self");
 });

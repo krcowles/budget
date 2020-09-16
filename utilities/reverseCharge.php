@@ -10,15 +10,15 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+session_start();
 require_once "../database/global_boot.php";
 
-$user = filter_input(INPUT_GET, 'user');
 $paid = isset($_GET['paid']) ? true : false;
 
 $chargeRequest = "SELECT * FROM `Charges` WHERE " .
-    "`user` = :user AND `paid` = 'N' AND `method` = 'Credit';";
+    "`userid` = :uid AND `paid` = 'N' AND `method` = 'Credit';";
 $charge = $pdo->prepare($chargeRequest);
-$charge->execute(["user" => $user]);
+$charge->execute(["uid" => $_SESSION['userid']]);
 $charges = $charge->fetchAll(PDO::FETCH_ASSOC);
 $noOfCards = 0;
 $cards = [];
@@ -75,7 +75,6 @@ originally drawn</h3>
 <form action="doReverse.php" method="POST">
     <button>Reverse Charges</button>
     <button id="return">Return To Budget</button>
-    <input type="hidden" name="user" value="<?= $user;?>" />
 <?php if ($noOfCards === 0) : ?>
     <h3>You have no outstanding credit card charges</h3>
 <?php else : ?>

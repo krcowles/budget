@@ -197,7 +197,7 @@ var modal = (function() {
                 alert("You have not entered a payee");
                 return;
             }
-            var ajaxdata = {id: 'payexp', user: g_user, acct_name: acctname,
+            var ajaxdata = {id: 'payexp', acct_name: acctname,
                 method: charge, amt: amount, payto: payee};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'making payment', deferred);
@@ -216,7 +216,7 @@ var modal = (function() {
             funds = this.value;
         });
         $('#dist').on('click', function() {
-            var ajaxdata = {id: 'income', user: g_user, funds: funds};
+            var ajaxdata = {id: 'income', funds: funds};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 "distributing income", deferred);
             modal.close();
@@ -236,7 +236,7 @@ var modal = (function() {
             deposit_funds = this.value
         });
         $('#depfunds').on('click', function() {
-            ajaxdata = {id: 'otdeposit', user: g_user, newfunds: deposit_funds};
+            ajaxdata = {id: 'otdeposit', newfunds: deposit_funds};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 "making deposit", deferred);
         });
@@ -266,8 +266,7 @@ var modal = (function() {
             xframt = this.value;
         });
         $('#transfer').on('click', function() {
-            ajaxdata = {id: 'xfr', user: g_user, 
-                from: fromacct, to: toacct, sum: xframt};
+            ajaxdata = {id: 'xfr', from: fromacct, to: toacct, sum: xframt};
             executeScript("../edit/saveAcctEdits.php", ajaxdata,
                 "transferring funds", deferred);
         });
@@ -292,8 +291,7 @@ var modal = (function() {
                 return;
             }
             deferred.resolve();
-            var recloc = "../utilities/reconcile.php?user=" + 
-                encodeURIComponent(g_user) + "&card=" + usecd;
+            var recloc = "../utilities/reconcile.php?card=" + usecd;
             window.open(recloc, "_self");
             modal.close();
         });
@@ -330,8 +328,7 @@ var modal = (function() {
                 alert("You have not entered a day-of-month for autopay");
                 return;
             }
-            ajaxdata = {id: 'apset', user: g_user, acct: against,
-                method: use, day: dom};
+            ajaxdata = {id: 'apset', acct: against, method: use, day: dom};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'setting up autopay', deferred);
         });
@@ -351,7 +348,7 @@ var modal = (function() {
             dacct = this.value;
         });
         $('#remap').on('click', function() {
-            ajaxdata = {id: 'delapay', user: g_user, acct: dacct};
+            ajaxdata = {id: 'delapay', acct: dacct};
             executeScript('../edit/saveAcctEdits.php', ajaxdata, 
                 'deleting autopay', deferred);
         });

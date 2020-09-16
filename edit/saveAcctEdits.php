@@ -8,14 +8,14 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-date_default_timezone_set('America/Denver');
-$dbdate = date("Y-m-d");
-$user = filter_input(INPUT_POST, 'user'); // mandatory for the following 'requires'
+session_start();
 require "../utilities/getAccountData.php";
 require "../utilities/getCards.php";
 
 $id = filter_input(INPUT_POST, 'id');
 
+date_default_timezone_set('America/Denver');
+$dbdate = date("Y-m-d");
 switch ($id) {
 case 'payexp':
     $acct = filter_input(INPUT_POST, 'acct_name');
@@ -24,10 +24,10 @@ case 'payexp':
     $payto = filter_input(INPUT_POST, 'payto');
     $item = array_search($acct, $account_names);
     $bal = floatval($current[$item]) - floatval($amt);
-    $budupdte = "UPDATE `Budgets` SET `current` = :bal WHERE `user` = :user " .
-        "AND `budname` = :acct;";
+    $budupdte = "UPDATE `Budgets` SET `current` = :bal WHERE " .
+        "`userid` = :uid AND `budname` = :acct;";
     $bud = $pdo->prepare($budupdte);
-    $bud->execute(["bal" => $bal, "user" => $user, "acct" => $acct]);
+    $bud->execute(["bal" => $bal, "uid" => $_SESSION['userid'], "acct" => $acct]);
     // examine method for Cr/Dr
     if (in_array($method, $cr)) {
         $dbmethod = "Credit";
@@ -36,11 +36,11 @@ case 'payexp':
     } else {
         $dbmethod = "Check";
     }
-    $addchg = "INSERT INTO `Charges` (`user`, `method`, `cdname`," .
+    $addchg = "INSERT INTO `Charges` (`userid`, `method`, `cdname`," .
         "`expdate`, `expamt`, `payee`, `acctchgd`, `paid`) " .
         "VALUES (?,?,?,?,?,?,?,'N');";
     $pdo->prepare($addchg)->execute(
-        [$user, $dbmethod, $method, $dbdate, $amt, $payto, $acct]
+        [$_SESSION['userid'], $dbmethod, $method, $dbdate, $amt, $payto, $acct]
     );
     echo "OK";
     break;

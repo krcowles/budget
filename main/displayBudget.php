@@ -277,7 +277,6 @@ if (isset($_SESSION['userid'])) {
         </a>
     </p>
     <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-    <script type="text/javascript">var g_user = $('#user').text();</script>
     <script src="../scripts/menu.js" type="text/javascript"></script>
     <script src="../scripts/budget.js" type="text/javascript"></script>
     <script src="../scripts/modals.js" type="text/javascript"></script>

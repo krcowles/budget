@@ -87,7 +87,6 @@ $subs.each(function(indx) {
  * This section executes an item in the menu when it is clicked on;
  * One event def for each potential item click
  */
-var query_name = g_user;
 $('#paymts').on('click', function() {
     var def = new $.Deferred();
     var exp_form = $('#box').detach();
@@ -164,12 +163,12 @@ $('#recon').on('click', function() {
     return; 
 });
 $('#revcc').on('click', function() {
-    let rev = "../utilities/reverseCharge.php?user=" + query_name;
+    let rev = "../utilities/reverseCharge.php";
     window.open(rev, "_self");
     return;
 });
 $('#revexp').on('click', function() {
-    let uexp = "../utilities/undoExpense.php?user=" + query_name;
+    let uexp = "../utilities/undoExpense.php";
     window.open(uexp, "_self");
     return;
 });
