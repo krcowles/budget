@@ -22,7 +22,7 @@
             name="aeedate[]" value="<?= $aeDate[$e];?>" />&nbsp;&nbsp;
         Amount Paid: <textarea class="amts" rows="1" cols="8"
             name="aeeamt[]"><?= $aeAmt[$e];?></textarea>&nbsp;&nbsp;
-        Payee: <textarea rows="1" cols="60"
+        Payee: <textarea rows="1" cols="30"
             name="aeepay[]"><?= $aePayee[$e];?></textarea>&nbsp;&nbsp;
         Delete: <input type="checkbox" name="edel[]" 
             value="<?= $exIds[$e]?>" />

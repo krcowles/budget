@@ -14,9 +14,9 @@ require "../database/global_boot.php";
 
 $exit  = filter_input(INPUT_POST, 'exit2') === 'no' ? false : true;
 
-$setup = '110';
+$setup = '010';
 $_SESSION['start'] = $setup;
-$status = "UPDATE `Users` SET `setup` = :setup WHERE `userid` = :uid;";
+$status = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
 $newstat = $pdo->prepare($status);
 $newstat->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
 

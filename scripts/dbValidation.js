@@ -35,12 +35,8 @@ function integerValue(jqClass) {
             }
             if (badInt) {
                 alert("Please use whole numbers only (dollars, no cents)");
-                $(this).val('');
-                setTimeout(function() {
-                    $(jqid).get(0).focus();
-                    badInt = false;
-                }, 5);
             }
+            return;
         });
     });
     return;
@@ -73,11 +69,6 @@ function scaleTwoNumber(jqClass) {
             }
             if (badNo) {
                 alert("Nummeric entries only: 2 decimals places max");
-                $(this).val('');
-                setTimeout(function() {
-                    $(jq).get(0).focus();
-                    badNo = false;
-                }, 5);
             }
         });
     });

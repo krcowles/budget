@@ -16,7 +16,7 @@ $exit  = filter_input(INPUT_POST, 'exit3') === 'no' ? false : true;
 
 $setup = '001';
 $_SESSION['start'] = $setup;
-$status = "UPDATE `Users` SET `setup` = :setup WHERE `userid` = :uid;";
+$status = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
 $newstat = $pdo->prepare($status);
 $newstat->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
 

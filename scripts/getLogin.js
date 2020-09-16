@@ -84,16 +84,37 @@ function validateUser(usr_name, usr_pass) {
                 alert("You are logged in");
                 var pos = status.indexOf('&') + 1;
                 var startpg = status.substr(pos);
-                if(startpg.charAt(0) === '1' && startpg.charAt(1) === '1'
-                    && startpg.charAt(2) === '1'
-                ) {
-                    var homepg = "main/displayBudget.php"
-                    window.open(homepg, "_self");
+                var cookie_choice = status.substr(pos+4);
+                var proceed = $.Deferred();
+                var ajaxdata = {username: usr_name};
+                if (cookie_choice === 'accept') {
+                    $.ajax({
+                        url: "../admin/sendcookie.php",
+                        data: ajaxdata,
+                        method: "post",
+                        success: function() {
+                            proceed.resolve();
+                        },
+                        error: function() {
+                            alert("cookie script failed in login");
+                            proceed.reject();
+                        }
+                    });
                 } else {
-                    var startpoint = 'edit/newBudgetPanels.php' +
-                        '?pnl=' + startpg;
-                    window.open(startpoint, "_self");
+                    proceed.resolve();
                 }
+                $.when(proceed).then(function() {
+                    if(startpg.charAt(0) === '1' && startpg.charAt(1) === '1'
+                        && startpg.charAt(2) === '1'
+                    ) {
+                        var homepg = "main/displayBudget.php"
+                        window.open(homepg, "_self");
+                    } else {
+                        var startpoint = 'edit/newBudgetPanels.php' +
+                            '?pnl=' + startpg;
+                        window.open(startpoint, "_self");
+                    }
+                });
             } else if (status.indexOf('RENEW') !== -1) {
                 // in this case, the old cookie has been set pending renewal
                 var renew = confirm("Your password is about to expire\n" + 

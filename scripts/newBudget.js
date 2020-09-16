@@ -60,26 +60,39 @@ $('span[id^=crcd]').each(function(i) {
     $(this).children().eq(0).val(cdvals[i]);
 });
 
+// these functions set up 'on change' events to examine data entry
+// validate data in budget section
+var $buddata = $('.bud');
+var $baldata = $('.bal');
+integerValue($buddata); 
+scaleTwoNumber($baldata);
+// validate data in outstanding expenses:
+var $chgdata = $('.amts');
+scaleTwoNumber($chgdata);
+
 /**
- * Form submittal functions
+ * Form submittal validation functions: make sure that line
+ * entries are complete.
  */
 const dataComplete = (section) => {
     switch (section) {
-        case 'one':
+        case 'one': // are entries made in budgets?
             let lines = [0b000, 0b000, 0b000, 0b000, 0b000];
             let messages = [];
             let $budnames = $('input[class=acctname]');
             let $budamts  = $('input[class=bud]');
             let $budbals  = $('input[class=bal]');
             for (let i=0; i<5; i++) {
-                if ($budnames[i].value !== '') {
-                    lines[i] = lines[i] | 0b100;
-                }
-                if ($budamts[i].value !== '') {
-                    lines[i] = lines[i] | 0b010;
-                }
-                if ($budbals[i].value !== '') {
-                    lines[i] = lines[i] | 0b001;
+                if (!($budnames[i] === '' && $budamts[i] === '' && $budbals[i] === '')) {
+                    if ($budnames[i].value !== '') {
+                        lines[i] = lines[i] | 0b100;
+                    }
+                    if ($budamts[i].value !== '') {
+                        lines[i] = lines[i] | 0b010;
+                    }
+                    if ($budbals[i].value !== '') {
+                        lines[i] = lines[i] | 0b001;
+                    }
                 }
             }
             lines.forEach(function(state, indx) {
@@ -109,17 +122,9 @@ const dataComplete = (section) => {
             } else {
                 return true;
             }
-        case 'two':
-            $card_names = $('input[name^=cname]');
-            let cards = false;
-            $card_names.each(function() {
-                if (this.value !== '') {
-                    cards = true;
-                    return;
-                }
-            });
-            return cards;
-        case 'three':
+        case 'two': // no checks are done on credit/debit card names
+           break;
+        case 'three': // outstanding credit card expenses
             let gotcards = true;
             let states = [0b0000, 0b0000, 0b0000, 0b0000];
             let missing    = [];
@@ -189,6 +194,11 @@ const dataComplete = (section) => {
             }
     }
 }
+
+/** 
+ * When a user selects 'Save and Continue', data checks
+ * may be made prior to saving. The data is refreshed.
+ */
 $('#save1').on('click', function(ev) {
     ev.preventDefault();
     if(!dataComplete('one')) {
@@ -197,11 +207,7 @@ $('#save1').on('click', function(ev) {
     $('#form').submit();
     return;
 });
-$('#save2').on('click', function(ev) {
-    ev.preventDefault();
-    if(!dataComplete('two')) {
-        return;
-    }
+$('#save2').on('click', function() {
     $('#cdform').submit();
     return;
 });
@@ -213,17 +219,18 @@ $('#save').on('click', function(ev) {
     $('#edform').submit();
     return;
 });
-// set exit status for 'Save and Return Later'
+
+/**
+ * When a user selects 'Save and Return Later', data checks may
+ * be made before saving, and the exitPage is called whereby a
+ * link back to this page is provided at the point left
+ */
 $('#lv1').on('click', function(ev) {
     ev.preventDefault();
     if (!dataComplete('one')) {
         return;
     }
     $('input[name=exit1]').attr('value', 'yes');
-    if ($('input[name=lv2]').attr('value') === 'yes' && $('input[name=lv3]').attr('value') === 'yes') {
-       alert("You have entered data in all three sections:\n" +
-        "You will be able to further edit your data in the main budget page");
-    }
     $('#form').submit();
     return;
 });
@@ -232,11 +239,6 @@ $('#lv2').on('click', function(ev) {
     if (!dataComplete('two')) {
         return;
     }
-    $('input[name=exit2]').attr('value', 'yes');
-    if ($('input[name=lv1]').attr('value') === 'yes' && $('input[name=lv3]').attr('value') === 'yes') {
-        alert("You have entered data in all three sections:\n" +
-         "You will be able to further edit your data in the main budget page");
-    }
     $('cdform').submit();
     return;
 });
@@ -244,11 +246,6 @@ $('#lv3').on('click', function(ev) {
     ev.preventDefault();
     if (!dataComplete('three')) {
         return;
-    }
-    $('input[name=exit3]').attr('value', 'yes');
-    if ($('input[name=lv1]').attr('value') === 'yes' && $('input[name=lv2]').attr('value') === 'yes') {
-        alert("You have entered data in all three sections:\n" +
-         "You will be able to further edit your data in the main budget page");
     }
     $('#edform').submit();
     return;
@@ -259,43 +256,32 @@ $('#nocds').on('click', function(ev) {
     ev.preventDefault();
     // don't do anything if data has already been entered
     if ($('#cold').children().length === 0) {
-        $('input[name=lv2]').attr('value', 'yes');
-        $('input[name=lv3]').attr('value', 'yes');
-        $.post('../utilities/noCardSetup.php', {usr: user})
-        .fail(function() {
-            alert("Failed to update Users table");
-        });
-        if ($('input[name=lv1]').attr('value') === 'yes') {
-            // go to the main budget now
-            let budhome = '../main/displayBudget.php';
-            window.open(budhome, "_self");
-        } else {
-            alert("Please complete the first section");
-        }
+        // with this choice, section 2 and 3 will be empty
+        $.get('../utilities/setall.php')
+            .done(function() {
+                let budhome = '../main/displayBudget.php';
+                window.open(budhome, "_self");
+            })
+            .fail(function() {
+                alert("Failed to update User's data");
+            });
     } else {
-        alert("Data has already been entered");
+        alert("Data has already been entered\n" +
+            "If you wish, you may delete it");
     }
 });
 
-// return to budget page button
+// force return to budget page
 $('#done').on('click', function(ev) {
     ev.preventDefault();
-    $.get('../utilities/setall.php').done(function() {
-        var redir = '../main/displayBudget.php';
-        window.open(redir, "_self");
-    }).fail(function(results) {
-        alert(results);
-    });
+    $.get('../utilities/setall.php')
+        .done(function() {
+            var redir = '../main/displayBudget.php';
+            window.open(redir, "_self");
+        })
+        .fail(function(results) {
+            alert(results);
+        });
 });
-
-// data validation (dbValidation.js must already be included in scripts)
-// budgets, first panel
-var $buddata = $('.bud');
-var $baldata = $('.bal');
-integerValue($buddata);
-scaleTwoNumber($baldata);
-// charges, second panel
-var $chgdata = $('.amts');
-scaleTwoNumber($chgdata);
     
 });

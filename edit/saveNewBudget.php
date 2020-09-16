@@ -18,7 +18,7 @@ $exit  = filter_input(INPUT_POST, 'exit1') === 'no' ? false : true;
 // as long as user is editing lv1, setup = '100'
 $setup = '100';
 $_SESSION['start'] = $setup;
-$status = "UPDATE `Users` SET `setup` = :setup WHERE `userid` = :uid;";
+$status = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
 $newstat = $pdo->prepare($status);
 $newstat->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
 

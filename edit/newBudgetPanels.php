@@ -25,17 +25,16 @@ require_once "../database/global_boot.php";
 
 $pnl    = isset($_GET['pnl'])    ? filter_input(INPUT_GET, 'pnl') : "000";
 
-// $lvx values are used by newBudget.js to determine which panel to open
+// $lv_ values are used by newBudget.js to determine which panel to open
 $lv1 = $pnl === '100' ? 'yes' : 'no';
-$lv2 = $pnl === '110' ? 'yes' : 'no';
+$lv2 = $pnl === '010' ? 'yes' : 'no';
 $lv3 = $pnl === '001' ? 'yes' : 'no';
-// first time entry only, when $pnl === '000'
+// first time entry only (user just registered), $pnl === '000'
 $new = $pnl === '000' ? true : false; 
-if ($new) {
-    $lastpos = 0;
-}
 
 if ($new) {
+    // Create Undistributed Funds account and Temp Accounts
+    $lastpos = 0;
     // 'Undistributed funds' account initial settings
     $undis = array(  
         '`userid`'  =>  $_SESSION['userid'],
@@ -55,7 +54,7 @@ if ($new) {
     $values = implode(",", array_values($undis));
     $sql = "INSERT INTO `Budgets` (" . $columns .  ") VALUES (" . $values . ");";
     $addUndis = $pdo->query($sql);
-    // temporary funds accounts
+    // 'Tmp_' funds accounts
     for ($i=1; $i<6; $i++) {
         $tname = 'Tmp' . $i;
         $tname = "'" . $tname . "'";
@@ -70,6 +69,13 @@ if ($new) {
         $sql = "INSERT INTO `Budgets` (" . $columns . ") VALUES (" . $values . ");";
         $addTemp = $pdo->query($sql);
     }
+    // prevent re-creating these prelim accounts by ensuring that setup 
+    // is no longer '000'; Start with '100', and may be changed below
+    $setup = '100';
+    $_SESSION['start'] = $setup;
+    $initReq = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
+    $init = $pdo->prepare($initReq);
+    $init->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
 } else {
     // get any budget data already entered (if any)
     $aeIds = [];
@@ -91,7 +97,9 @@ if ($new) {
     }
     if ($aedata) {
         $lastpos = max($aePos);
-    } 
+    } else {
+        $lastpos = 0;
+    }
     // get any card data already entered (if any)
     include "../utilities/getCards.php";
     $cdIds = [];

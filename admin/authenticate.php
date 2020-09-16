@@ -47,10 +47,7 @@ if ($rowcnt === 1) {  // located single instance of user
                 exit;
             }
         }
-        if ($_SESSION['cookies'] === 'accept') {
-            setcookie('epiz', $usrname, $expdate, "/", "", false, true);
-        }
-        echo "LOCATED&" . $_SESSION['start'];
+        echo "LOCATED&" . $_SESSION['start'] . "&" . $_SESSION['cookies'];
     } else {  // user exists, but password doesn't match:
         echo "BADPASSWD";
     }
