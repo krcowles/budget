@@ -11,11 +11,12 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license
  */
-$user = isset($_GET['user']) ? filter_input(INPUT_GET, 'user') : false;
-if ($user) {
+session_start();
+
+if (isset($_SESSION['userid'])) {
     include "budgetSetup.php";
 } else {
-    echo "There has been no legitimate login";
+    die("There has been no legitimate login");
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -39,7 +40,7 @@ if ($user) {
 <body>
     <?php require "menu.html"; ?>
     <pre><button id="admin">Admin</button></pre>
-    <p id="user" style="display:none"><?= $user;?></p>
+    <p id="usercookies" style="display:none"><?=$menu_item?></p>
     <div id="budget">
         <table id="roll3">
             <colgroup>

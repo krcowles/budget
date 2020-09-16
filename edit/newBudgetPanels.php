@@ -3,63 +3,67 @@
  * This page is invoked when a new user successfully signs up, or, when a new
  * user has 'returned' after having partially entered data, saved and then exited.
  * The state of initial budget completion is tracked by the 'setup' field in the 
- * 'Users' table of the database. This is reflected in the quwery string parameter
- * 'new'. If true, it's a first-time entry; if false, the user is returning to
- * complete (or further) the setup process. The page allows the user to establish
+ * 'Users' table of the database. The page allows the user to establish
  * preliminary data for the new budget in three steps:
  * 1. The user can enter preliminary account data to display and manipulate.
  *    The budget is limited to basic data at this point. On first-time entry,
  *    the default budget items (Temporary Accounts and Undistributed Funds)
- *    are created automatically. 
+ *    are created automatically.
+ *    >>> When working in this mode, setup = '100'
  * 2. The user can enter preliminary card data (simple name & type)
+ *    >>> When working in lv2, lv1 is finished and setup = '110'
  * 3. The user can enter current outstanding/unpaid credit card charges
+ *    >>> When working in lv3, lv1 & lv2 are finished and setup = '001'
  * PHP Version 7.1
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+session_start();
 require_once "../database/global_boot.php";
 
-$user = filter_input(INPUT_GET, 'user');
-$new  = isset($_GET['new']) ? true : false;
-$pnl  = isset($_GET['pnl']) ? filter_input(INPUT_GET, 'pnl') : "000";
-$lv1 = $pnl[0] === '0' ? 'no' : 'yes';
-$lv2 = $pnl[1] === '0' ? 'no' : 'yes';
-$lv3 = $pnl[2] === '0' ? 'no' : 'yes';
-if ($lv1 === 'yes' && $lv2 === 'yes' && $lv3 === 'yes') {
-    $redir = '../main/displayBudget.php?user=' . $user;
-    header("Location: {$redir}");
-}
-$lastpos = 0;
+$pnl    = isset($_GET['pnl'])    ? filter_input(INPUT_GET, 'pnl') : "000";
+
+// $lvx values are used by newBudget.js to determine which panel to open
+$lv1 = $pnl === '100' ? 'yes' : 'no';
+$lv2 = $pnl === '110' ? 'yes' : 'no';
+$lv3 = $pnl === '001' ? 'yes' : 'no';
+// first time entry only, when $pnl === '000'
+$new = $pnl === '000' ? true : false; 
 if ($new) {
-    // this will happen once and only once - on first invocation after registering
-    $undis = array(  // 'Undistributed funds' account initial settings
-        '`user`' => "'" . $user . "'",
+    $lastpos = 0;
+}
+
+if ($new) {
+    // 'Undistributed funds' account initial settings
+    $undis = array(  
+        '`userid`'  =>  $_SESSION['userid'],
         '`budname`' => "'Undistributed Funds'",
-        '`budpos`' => "'30000'",
-        '`status`' => "'T'",
-        '`budamt`' => "'0'",
-        '`prev0`' => "'0'",
-        '`prev1`' => "'0'",
+        '`budpos`'  => "'30000'",
+        '`status`'  => "'T'",
+        '`budamt`'  => "'0'",
+        '`prev0`'   => "'0'",
+        '`prev1`'   => "'0'",
         '`current`' => "'0'",
         '`autopay`' => "''",
-        '`moday`' => "'0'",
-        '`autopd`' => "''",
-        '`funded`' => "'0'"
+        '`moday`'   => "'0'",
+        '`autopd`'  => "''",
+        '`funded`'  => "'0'"
     );
     $columns = implode(",", array_keys($undis));
     $values = implode(",", array_values($undis));
     $sql = "INSERT INTO `Budgets` (" . $columns .  ") VALUES (" . $values . ");";
     $addUndis = $pdo->query($sql);
+    // temporary funds accounts
     for ($i=1; $i<6; $i++) {
-        $usr = "'" . $user . "'";
         $tname = 'Tmp' . $i;
         $tname = "'" . $tname . "'";
         $tno = 30000 + $i;
         $tno = "'" . $tno . "'";
         $tacct = array(
-            $usr, $tname, $tno, "'T'", "'0'", "'0'", "'0'", "'0'", "''", "'0'", 
+            $_SESSION['userid'], $tname, $tno, 
+            "'T'", "'0'", "'0'", "'0'", "'0'", "''", "'0'", 
             "''", "'0'"
         );
         $values = implode(",", $tacct);
@@ -73,9 +77,9 @@ if ($new) {
     $aeBudamt = [];
     $aeCurr = [];
     $aePos = [];
-    $sql = "SELECT * FROM `Budgets` WHERE `user` = :user AND `status` = 'A';";
+    $sql = "SELECT * FROM `Budgets` WHERE `userid` = :uid AND `status` = 'A';";
     $stmnt = $pdo->prepare($sql);
-    $stmnt->execute(["user" => $user]);
+    $stmnt->execute(["uid" => $_SESSION['userid']]);
     $old_dat = $stmnt->fetchALL(PDO::FETCH_ASSOC);
     $aedata = count($old_dat) > 0 ? true : false;
     foreach ($old_dat as $old) {
@@ -89,13 +93,13 @@ if ($new) {
         $lastpos = max($aePos);
     } 
     // get any card data already entered (if any)
-    include "../utilities/getCards.php";  // html for select boxes
+    include "../utilities/getCards.php";
     $cdIds = [];
     $cdNames = [];
     $cdTypes = [];
-    $cds = "SELECT * FROM `Cards` WHERE `user` = :user;";
+    $cds = "SELECT * FROM `Cards` WHERE `userid` = :uid;";
     $cddat = $pdo->prepare($cds);
-    $cddat->execute(["user" => $user]);
+    $cddat->execute(["uid" => $_SESSION['userid']]);
     $cards = $cddat->fetchALL(PDO::FETCH_ASSOC);
     $aecards = count($cards) > 0 ? true : false;
     foreach ($cards as $card) {
@@ -110,9 +114,9 @@ if ($new) {
     $aeDate = [];
     $aeAmt = [];
     $aePayee = [];
-    $exp = "SELECT * FROM `Charges` WHERE `user` = :user;";
+    $exp = "SELECT * FROM `Charges` WHERE `userid` = :uid;";
     $expdat = $pdo->prepare($exp);
-    $expdat->execute(["user" => $user]);
+    $expdat->execute(["uid" => $_SESSION['userid']]);
     $expenses = $expdat->fetchALL(PDO::FETCH_ASSOC);
     $aeexp = count($expenses) > 0 ? true : false;
     foreach ($expenses as $expense) {
@@ -141,7 +145,6 @@ if ($new) {
 </head>
 
 <body>
-<p id="user" style="display:none;"><?= $user;?></p>
 <div id="intro">
     <p id="ready" class="LargeHeading">You're Ready To Start!&nbsp;&nbsp;
         <span id="help">[New to Budgeting? See
@@ -150,7 +153,7 @@ if ($new) {
     </p>
     <h2>Click on these three simple steps (in order) to get started:
         <span>
-            <button id="done">Done: Go To Budget</button>
+            <button id="done">Completed: Go To Budget</button>
         </span>
     </h2>
     
@@ -160,9 +163,8 @@ if ($new) {
             be sure to 'Save'!
         </span><br />
         <form id="form" action="saveNewBudget.php" method="post">
-            <input type="hidden" name="user" value="<?= $user;?>" />
-            <input type="hidden" name="lastpos" value="<?= $lastpos;?>" />
-            <input type="hidden" name="lv1" value="<?= $lv1;?>" />
+            <input type="hidden" name="lastpos" value="<?=$lastpos;?>" />
+            <input type="hidden" name="lv1" value="<?=$lv1;?>" />
             <input type="hidden" name="exit1" value="no" />
             <button id="save1">Save and Continue</button>
             <span><button id="lv1">Save and Return Later</button>
@@ -206,8 +208,7 @@ if ($new) {
             be sure to 'Save'!
         </span><br />
         <form id="cdform" method="post" action="saveNewCards.php">
-            <input type="hidden" name="user" value="<?= $user;?>" />
-            <input type="hidden" name="lv2" value="<?= $lv2;?>" />
+            <input type="hidden" name="lv2" value="<?=$lv2;?>" />
             <input type="hidden" name="exit2" value="no" />
             <button id="nocds">No Cards to Enter</button>
             <button id="save2">Save and Continue</button>
@@ -239,7 +240,6 @@ if ($new) {
         </form>
     </div>
 
-
     <div id="three" class="steps">Enter/Edit Outstanding/Unpaid Charges</div>
     <div id="expenses">
         <?php require "../utilities/getCards.php"; ?>
@@ -247,8 +247,7 @@ if ($new) {
             be sure to 'Save'!
         </span><br />
         <form id="edform" method="post" action="saveNewCharges.php">
-            <input type="hidden" name="user" value="<?= $user;?>" />
-            <input type="hidden" name="lv3" value="<?= $lv3;?>" />
+            <input type="hidden" name="lv3" value="<?=$lv3;?>" />
             <input type="hidden" name="exit3" value="no" />
             <button id="save">Save and Continue</button>
             <span><button id="lv3">Save and Return Later</button>

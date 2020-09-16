@@ -1,8 +1,21 @@
 /**
+ * @fileoverview Validate data entries
+ * 
+ * @author Ken Cowles
+ * @version 2.0 Secure login
+ * 
  * NOTE: the 'change' event seems to trigger PRIOR TO the DOM focus changing,
  * therefore it became necessary to re-focus on the changed element AFTER the
  * change event processing is finished - hence the setTimeout function.
  */ 
+
+/**
+ * Check for integer values in the set of nodes provided
+ * 
+ * @param {array} jqClass jQuery nodes
+ * 
+ * @return {null}
+ */
 function integerValue(jqClass) {
     jqClass.each(function(indx) {
         var tmpid = "nbud" + indx;
@@ -30,7 +43,16 @@ function integerValue(jqClass) {
             }
         });
     });
+    return;
 }
+
+/**
+ * Validate currency amounts in the set of nodes provided
+ * 
+ * @param {array} jqClass jQuery nodes
+ * 
+ * @return {null}
+ */
 function scaleTwoNumber(jqClass) {
     jqClass.each(function(indx) {
         var badNo = false;

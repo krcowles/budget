@@ -10,9 +10,9 @@
  */
 require_once "../database/global_boot.php";
 require "timeSetup.php";
-$chgdate = "SELECT * FROM `Charges` WHERE `user` = :usrid AND `method` = :etype;";
+$chgdate = "SELECT * FROM `Charges` WHERE `userid` = :uid AND `method` = :etype;";
 $chks = $pdo->prepare($chgdate);
-$chks->execute(["usrid" => $user, "etype" => 'Check']);
+$chks->execute(["uid" => $_SESSION['userid'], "etype" => 'Check']);
 $paidChecks = $chks->fetchALL(PDO::FETCH_ASSOC);
 $prev30 = time() - (30 * 24 * 60 * 60);
 // collection of info for each qualified expense (<= previous 30 days)
@@ -31,9 +31,9 @@ foreach ($paidChecks as $pd) {
         array_push($ded, $pd['acctchgd']);
     }
 }
-$dbdata = "SELECT * FROM `Charges` WHERE `user` = :usrid AND `method` = :deb;";
+$dbdata = "SELECT * FROM `Charges` WHERE `userid` = :uid AND `method` = :deb;";
 $debs = $pdo->prepare($dbdata);
-$debs->execute(["usrid" => $user, "deb" => 'Debit']);
+$debs->execute(["uid" => $_SESSION['userid'], "deb" => 'Debit']);
 $recent = $debs->fetchALL(PDO::FETCH_ASSOC);
 $did = [];
 $debname = [];

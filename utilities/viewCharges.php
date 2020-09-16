@@ -9,7 +9,8 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_GET, 'user');
+session_start();
+
 require "getCards.php";
 require "getExpenses.php";
 require "get30DayExpenses.php";
@@ -157,7 +158,6 @@ require "get30DayExpenses.php";
         alt="Valid XHTML 1.0 Strict" height="31" width="88" />
     </a>
 </p>
-<p style="display:none" id="user"><?= $user;?></p>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/manageExp.js" type="text/javascript"></script>

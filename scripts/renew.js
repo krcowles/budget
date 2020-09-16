@@ -1,3 +1,11 @@
+/**
+ * @fileoverview This form will reset the user's password and update
+ * the User table 'passwd_expire' field. If cookies are accepted, a
+ * new cookie will be sent.
+ * 
+ * @author Ken Cowles
+ * @version 2.0 Secure login
+ */
 $(function() {
   
 $('#form').validate({
@@ -29,6 +37,21 @@ window.onkeydown = function(event) {
     }
 }
 
+// register user's choice for site cookies
+var cookies = false;
+$('#accept').on('click', function(ev) {
+    ev.preventDefault();
+    $('#choice').val('accept');
+    cookies = true;
+    $('#cookie_banner').slideToggle();
+ });
+ $('#reject').on('click', function(ev) {
+    ev.preventDefault();
+    $('#choice').val('reject');
+    cookies = true;
+    $('#cookie_banner').slideToggle();
+ });
+
 $('#form').on('submit', function(evt) {
     evt.preventDefault();
     if ($('#passwd').val() == '' || $('#confirm_password').val() == '') {
@@ -40,11 +63,15 @@ $('#form').on('submit', function(evt) {
         $('#confirm_password').val('');
         return;
     }
+    if (!cookies) {
+        alert("You must accept or reject the use of cookies for this site");
+        return;
+    }
     var usr = $('input[name=username]').val();
     var ajaxData = new FormData();
-    ajaxData.append('username',  usr);
     ajaxData.append('password',  $('input[name=password]').val());
-    ajaxData.append('submitter',    'renew');
+    ajaxData.append('cookies',   $('#choice').val());
+    ajaxData.append('submitter', 'renew');
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'create_user.php');
     xhr.onload = function() {

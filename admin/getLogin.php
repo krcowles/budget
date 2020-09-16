@@ -20,7 +20,7 @@ if (!isset($_SESSION['userid'])) {
 
     $cstat = "NOLOGIN"; // $cstat & $start are recorded on page for getLogin.js
     $start = '000';
-    $regusr = isset($_COOKIE['epiz'])   ? true : false; // registered user?
+    $regusr = isset($_COOKIE['epiz']) ? true : false; // registered user?
     if ($regusr) {
         $uname = $_COOKIE['epiz'];
         $userReq = "SELECT * FROM Users WHERE username = ?;";

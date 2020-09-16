@@ -8,8 +8,8 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user  = filter_input(INPUT_GET, 'user');
-// reset and renew are identical at this point
+session_start();
+require "../database/global_boot.php";
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
@@ -49,8 +49,6 @@ $user  = filter_input(INPUT_GET, 'user');
 <p class="SmallHeading">Please update your password</p>
 
 <form id="form" method="POST" action="#">
-    <input type="hidden" name="submitter" value="renew" />
-    <input type="hidden" name="username" value="<?= $user;?>" />
     <fieldset>
         <legend>Password Information</legend>
         <p id="pnote">Note: Passwords must be at least 8 characters long and 
@@ -76,6 +74,19 @@ $user  = filter_input(INPUT_GET, 'user');
         <fieldset>
     <button id="formsubmit">Submit New Password</button>
 </form>
+
+<div id="cookie_banner">
+    <h3>This site uses cookies to save member usernames</h3>
+    <p>Accepting cookies allows automatic login. If you reject cookies,
+    no cookie data will be collected, and you must login each visit.
+    <br />You may change your decision later via the Help menu.
+    </p>
+    <div id="cbuttons">
+        <button id="accept">Accept</button>
+        <button id="reject">Reject</button>
+    </div>
+</div>
+
 </div>   <!-- end of container -->
 <script src="../scripts/renew.js"></script>
 </body>

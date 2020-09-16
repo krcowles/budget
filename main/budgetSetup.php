@@ -10,12 +10,17 @@
  */
 require_once "../database/global_boot.php";
 require "../utilities/timeSetup.php";
+if ($_SESSION['cookies'] === 'accept') {
+    $menu_item = 'Reject Cookies';
+} else {
+    $menu_item = 'Accept Cookies';
+}
 // if month has rolled over:
 if ($rollover) {
     $getMos = "SELECT `id`,`prev0`,`prev1`,`current` FROM `Budgets` " .
-        "WHERE `user` = :usr;";
+        "WHERE `userid` = :uid;";
     $modat = $pdo->prepare($getMos);
-    $modat->execute(["usr" => $user]);
+    $modat->execute(["uid" => $_SESSION['userid']]);
     $allmos = $modat->fetchALL(PDO::FETCH_ASSOC);
     $tblids = [];
     foreach ($allmos as &$mo) {

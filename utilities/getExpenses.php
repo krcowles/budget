@@ -17,9 +17,9 @@ $expmethod = [];
 $expcdname = [];
 $exppayee = [];
 $expcharged = [];
-$chgreq = "SELECT * FROM `Charges` WHERE `user` = :user AND `paid` = 'N';";
+$chgreq = "SELECT * FROM `Charges` WHERE `userid` = :uid AND `paid` = 'N';";
 $chgdat = $pdo->prepare($chgreq);
-$chgdat->execute(["user" => $user]);
+$chgdat->execute(["uid" => $_SESSION['userid']]);
 $charges = $chgdat->fetchALL(PDO::FETCH_ASSOC);
 $expenses = count($charges) > 0 ? true : false;
 if ($expenses) {

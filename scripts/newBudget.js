@@ -1,11 +1,11 @@
 /**
- * @fileoverview This script monitors user data entry and checks for comleted
- *               form data when submitting.
+ * @fileoverview This script monitors user data entry and checks for
+ * completed form data when submitting.
+ * 
  * @author Ken Cowles
+ * @version 2.0 Secure login
  */
 $(function() {
-
-var user = $('#user').text(); // url encoded version
 
 // date picker:
 $('.datepicker').datepicker({
@@ -13,11 +13,11 @@ $('.datepicker').datepicker({
 });
 
 // accordion panels
-if ($('input[name=lv1]').attr('value') === 'no') {
+if ($('input[name=lv1]').attr('value') === 'yes') {
      $('#budget').show();
-} else if ($('input[name=lv2]').attr('value') === 'no') {
+} else if ($('input[name=lv2]').attr('value') === 'yes') {
     $('#cards').show();
-} else if ($('input[name=lv3]').attr('value') === 'no') {
+} else if ($('input[name=lv3]').attr('value') === 'yes') {
     $('#expenses').show();
 }
 $('#one').on('click', function() {
@@ -35,7 +35,6 @@ $('#three').on('click', function() {
     $('#budget').hide();
     $('#cards').hide();
 });
-
 
 // initialization of select boxes: 1st is 'old cards'
 $('p[id^=oc]').each(function() {
@@ -83,7 +82,6 @@ const dataComplete = (section) => {
                     lines[i] = lines[i] | 0b001;
                 }
             }
-            let entries = 0;
             lines.forEach(function(state, indx) {
                 if (state !== 0) {
                     // apparently can't place bit operators directly in 'if'...
@@ -99,13 +97,8 @@ const dataComplete = (section) => {
                     if (b3 === 0) {
                         messages.push("Missing Current Value in Line " + (indx+1));
                     }
-                    entries++;
                 }
             });
-            if (entries === 0) {
-                alert("There is nothing to save");
-                return false;
-            }
             let error_list = '';
             for (let j=0; j<messages.length; j++) {
                 error_list += messages[j] + "\n";
@@ -125,9 +118,6 @@ const dataComplete = (section) => {
                     return;
                 }
             });
-            if (!cards) {
-                alert("There is nothing to save");
-            }
             return cards;
         case 'three':
             let gotcards = true;
@@ -167,7 +157,6 @@ const dataComplete = (section) => {
                     states[i] = states[i] | 1;
                 }
             }
-            let charges = 0;
             states.forEach(function(state, indx) {
                 if (state !== 0) {
                     let e1 = state >> 3;
@@ -186,13 +175,8 @@ const dataComplete = (section) => {
                     if (e4 == 0) {
                         missing.push("You have not specified a payee on Line " + (indx+1));
                     }
-                    charges++;
                 }
             });
-            if (charges === 0) {
-                alert("There is nothing to save");
-                return false;
-            }
             let notes = '';
             for (let j=0; j<missing.length; j++) {
                 notes += missing[j] + "\n";
@@ -283,7 +267,7 @@ $('#nocds').on('click', function(ev) {
         });
         if ($('input[name=lv1]').attr('value') === 'yes') {
             // go to the main budget now
-            let budhome = '../main/displayBudget.php?user=' + encodeURIComponent(user);
+            let budhome = '../main/displayBudget.php';
             window.open(budhome, "_self");
         } else {
             alert("Please complete the first section");
@@ -296,21 +280,12 @@ $('#nocds').on('click', function(ev) {
 // return to budget page button
 $('#done').on('click', function(ev) {
     ev.preventDefault();
-    let $state = $('input[name^=lv]');
-    let proceed = true;
-    $state.each(function() {
-        if ($(this).attr('value') !== 'yes') {
-            proceed = false;
-            return;
-        }
-    });
-    if (proceed) {
-        $.post('../utilities/setall.php', {user: user});
-        var redir = '../main/displayBudget.php?user=' + encodeURIComponent(user);
+    $.get('../utilities/setall.php').done(function() {
+        var redir = '../main/displayBudget.php';
         window.open(redir, "_self");
-    } else {
-        alert ("You must complete all three sections");
-    }
+    }).fail(function(results) {
+        alert(results);
+    });
 });
 
 // data validation (dbValidation.js must already be included in scripts)

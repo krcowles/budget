@@ -7,9 +7,10 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+session_start();
 require_once "../database/global_boot.php";
-$user = filter_input(INPUT_POST, 'user');
 
-$done = "UPDATE `Users` SET `setup` = '111' WHERE `username` = :uid;";
+$done = "UPDATE `Users` SET `setup` = '111' WHERE `uid` = ?";
 $updte = $pdo->prepare($done);
-$updte->execute(["uid" => $user]);
+$updte->execute([$_SESSION['userid']]);
+$_SESSION['start'] = '111';

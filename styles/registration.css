@@ -59,7 +59,6 @@ input[type=reset] {
 	top: 16px;
 	background: #e0e0e0;
 }
-
 .password-meter-message-very-weak {
 	color: #aa0033;
 }
@@ -93,11 +92,30 @@ input[type=reset] {
     width: 190px;
     height: 28px;
     font-size: 18px;
-    color: brown;
     margin-bottom: 18px;
 }
-#formsubmit:hover {
-    cursor: pointer;
-    background-color: honeydew;
-    font-weight: bold;
+#cookie_banner {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding-left: 16px;
+    padding-right: 16px;
+    z-index: 9999;
+    background-color: floralwhite;
+}
+#cookie_banner h3, #cookie_banner p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+#cbuttons {
+    margin-bottom: 12px;
+}
+#accept {
+    position: relative;
+    left: -16px;
+}
+#reject {
+    margin-left: 40px;
 }

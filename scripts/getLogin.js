@@ -31,7 +31,7 @@ $('#forgot').on('click', function(ev) {
         content: usrmail, deferred: def});
     $.when(def).then(function() {
         $('#modal_wins').append(usrmail);
-        $('#passtxt').css('dispaly', 'inline');
+        $('#passtxt').css('display', 'inline');
     });
 });
 
@@ -59,18 +59,16 @@ if (cookies) {
             + "Please contact the site master");
     } else if (user_cookie_state === 'OK') {
             if (completed1 && completed2 && completed3) {
-                var homepg = "main/displayBudget.php?user=" + query_name;
+                var homepg = "main/displayBudget.php";
                 window.open(homepg, "_self");
             } else {
-                var startpoint = 'edit/newBudgetPanels.php?user=' +
-                    query_name + '&pnl=' + startpg;
+                var startpoint = 'edit/newBudgetPanels.php?pnl=' + startpg;
                 window.open(startpoint, "_self");
             }
     } 
 } else {  // cookies disabled
     alert("Cookies are disabled on this browser:\n" +
-        "You will not be able to login or register for this site.\n" +
-        "Please enable cookies to overcome this limitation");
+        "You will need to login with each visit");
 }
 
 // login authentication
@@ -118,14 +116,12 @@ function validateUser(usr_name, usr_pass) {
                     "your registered password;\nPlease try again";
                 alert(msg);
                 $('#passin').val('');
-                textResult =  "bad_password";
             } else { // no such user in USERS table
                 var msg = "Your registration info cannot be uniquely located:\n" +
                     "Please click on the 'Sign me up!' link to register";
                 alert(msg);
                 $('#user').val('');
                 $('#passin').val('');
-                textResult =  "no_user";
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -135,7 +131,7 @@ function validateUser(usr_name, usr_pass) {
     });
 }
 // for renewing password/cookie
-function renewPassword(user, update, status) {
+function renewPassword(update, status) {
     if (update === 'renew') {
         var renewpg = "admin/renew.php";
         window.open(renewpg, "_self");
@@ -144,6 +140,9 @@ function renewPassword(user, update, status) {
         if (status === 'valid') {
             var homepg = "main/displayBudget.php";
             window.open(homepg, '_self');
+        } else {
+            $.get("../admin/logout.php");
+            alert("You have been logged out and must now re-register");
         }
     }
 }

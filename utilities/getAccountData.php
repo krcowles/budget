@@ -1,10 +1,9 @@
 <?php
 /**
  * This script extracts the user's budget data from the 'Budgets' table.
- * In order to do so, the variable $user MUST BE DEFINED BY THE CALLER.
  * The data is compiled in arrays for consumption by the caller. Also, 
  * html select drop-downs are formed for use in some of the modals which
- * request user input.
+ * may request user input.
  * PHP Version 7.1
  * 
  * @package Budget
@@ -24,9 +23,9 @@ $autopay = [];
 $day = [];
 $paid = [];
 $income = [];
-$request = "SELECT * FROM Budgets WHERE user = :user AND status = 'A';";
+$request = "SELECT * FROM `Budgets` WHERE `userid` = :uid AND status = 'A';";
 $stmnt = $pdo->prepare($request);
-$stmnt->execute(["user" => $user]);
+$stmnt->execute(["uid" => $_SESSION['userid']]);
 $bud_dat = $stmnt->fetchALL(PDO::FETCH_ASSOC);
 if (count($bud_dat) === 0) {
     // go to budget setup
@@ -96,9 +95,10 @@ $tap = [];
 $tday = [];
 $tpd = [];
 $tinc = [];
-$treq = "SELECT * FROM Budgets WHERE `user` = :user AND `status` = 'T';";
+$treq = "SELECT * FROM `Budgets` WHERE `userid` = :uid AND `status` = 'T' " .
+    "ORDER BY `budpos`;";
 $tdat = $pdo->prepare($treq);
-$tdat->execute(["user" => $user]);
+$tdat->execute(["uid" => $_SESSION['userid']]);
 $temps = $tdat->fetchALL(PDO::FETCH_ASSOC);
 foreach ($temps as $tacct) {
     array_push($tid, $tacct['id']);

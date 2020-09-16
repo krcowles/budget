@@ -2,6 +2,7 @@
  * @fileoverview There are two sections within: menu visuals and operation;
  *               menu item selection and execution
  * @author Ken Cowles
+ * @version 2.0 Secure login
  */
 $(function() { // doc ready statement
 /**
@@ -14,14 +15,28 @@ $buds.each(function(indx) {
     $(this).width(menuwidths[indx]);
     return;
 });
+// user can revisit cookie choice under help menu
+var choice = $('#usercookies').text();
+$('#chglink').text(choice);
 
-// handle sub-menus
+/**
+ * Sets the menu arrow - open
+ * @param {jQueryNode} sub The jQuery subroutine node
+ * 
+ * @return {null}
+ */
 const showOpenSymbol = (sub) => {
     let arrow = sub.find('.dropdown');
     arrow.removeClass('menu-close');
     arrow.addClass('menu-open');
     return;
 };
+/**
+ * Sets the menu arrow - close
+ * @param {jQueryNode} sub The jQuery subroutine node
+ * 
+ * @return {null}
+ */
 const showCloseSymbol = (sub) => {
     let arrow = sub.find('.dropdown');
     arrow.removeClass('menu-open');
@@ -278,6 +293,22 @@ $('#siteguide').on('click', function() {
 $('#howto').on('click', function() {
     window.open("../help/help.php?doc=HowToBudget.pdf", "_blank");
     return;
+});
+$('#chgcookies').on('click', function() {
+    let uchoice = $('#chglink').text();
+    let newchoice;
+    let newmenu;
+    if (uchoice.indexOf('Reject') !== -1) {
+        newchoice = 'reject';
+        newmenu = 'Accept Cookies';
+    } else {
+        newchoice = 'accept';
+        newmenu = 'Reject Cookies';
+    }
+    $.get("registerCookieChoice.php", {choice: newchoice}).done(function() {
+        $('#chglink').text(newmenu);
+        alert("You're new cookie choice has been saved");
+    });
 });
 
 });

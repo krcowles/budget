@@ -9,19 +9,16 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+session_start();
 require "../database/global_boot.php";
 
-$user = filter_input(INPUT_POST, 'user');
 $exit  = filter_input(INPUT_POST, 'exit2') === 'no' ? false : true;
 
-$oldquery = "SELECT `setup` FROM `Users` WHERE `username` = :uid;";
-$old = $pdo->prepare($oldquery);
-$old->execute(["uid" => $user]);
-$fetched = $old->fetch(PDO::FETCH_ASSOC);
-$setup = $fetched['setup'] | '010';
-$status = "UPDATE `Users` SET `setup` = :setup WHERE `username` = :uid;";
+$setup = '110';
+$_SESSION['start'] = $setup;
+$status = "UPDATE `Users` SET `setup` = :setup WHERE `userid` = :uid;";
 $newstat = $pdo->prepare($status);
-$newstat->execute(["setup" => $setup, "uid" => $user]);
+$newstat->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
 
 // get all pre-entered data, if any
 if (isset($_POST['svdcard'])) {
@@ -61,15 +58,15 @@ $new_types = $_POST['ctype'];
 // save the new stuff to the 'Budgets' table
 for ($n=0; $n<count($new_cards); $n++) {
     if (!empty($new_cards[$n])) {
-        $new = "INSERT INTO `Cards` (`user`,`cdname`,`type`) " .
-            "VALUES ('" . $user . "','" . $new_cards[$n] . "','" . 
-            $new_types[$n] . "');";
+        $new = "INSERT INTO `Cards` (`userid`,`cdname`,`type`) " .
+            "VALUES ('" . $_SESSION['userid'] . "','" . $new_cards[$n] .
+            "','" . $new_types[$n] . "');";
         $pdo->query($new);
     }
 }
 if (!$exit) {
-    $redir = "newBudgetPanels.php?pnl={$setup}&user=" . rawurlencode($user);
+    $redir = "newBudgetPanels.php?pnl={$setup}";
 } else {
-    $redir = "../utilities/exitPage.html";
+    $redir = "../utilities/exitPage.php";
 }
 header("Location: {$redir}");

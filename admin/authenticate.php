@@ -31,7 +31,7 @@ if ($rowcnt === 1) {  // located single instance of user
         $_SESSION['expire'] = $expiration;
         $_SESSION['cookies'] = $user_dat['cookies'];
         $_SESSION['cookiestatus'] = "OK";
-        $_SESSION['start'] = $user_dat['start'];
+        $_SESSION['start'] = $user_dat['setup'];
         $american = str_replace("-", "/", $expiration);
         $expdate = strtotime($american);
         if ($expdate <= time()) {
@@ -48,7 +48,7 @@ if ($rowcnt === 1) {  // located single instance of user
             }
         }
         if ($_SESSION['cookies'] === 'accept') {
-            setcookie('epiz', $usrname, $expdate, "/");
+            setcookie('epiz', $usrname, $expdate, "/", "", false, true);
         }
         echo "LOCATED&" . $_SESSION['start'];
     } else {  // user exists, but password doesn't match:
