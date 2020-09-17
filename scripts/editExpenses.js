@@ -1,15 +1,20 @@
+/**
+ * @fileoverview This script manages buttons and form submittal
+ * for the editExpenses.php script
+ * 
+ * @author Ken Cowles
+ * @version 2.0 Secure login
+ */
 $(function() {
 
 $('#return').on('click', function(ev) {
     ev.preventDefault();
-    var dpg = "../main/displayBudget.php?user=" + 
-        encodeURIComponent($('#user').text());
+    let dpg = "../main/displayBudget.php"; 
     window.open(dpg, "_self");
 });
 $('#viewer').on('click', function(ev) {
     ev.preventDefault();
-    var vpg = "../utilities/viewCharges.php?user=" + 
-        encodeURIComponent($('#user').text());
+    let vpg = "../utilities/viewCharges.php";
     window.open(vpg, "_self");
 });
 $(function () {

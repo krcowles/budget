@@ -8,8 +8,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_POST, 'user');
-
+session_start();
 require "../utilities/getCards.php";
 require "../utilities/getExpenses.php";
 
@@ -45,5 +44,5 @@ for ($k=0; $k<count($cr); $k++) {
         }
     }
 }
-$back = "editCreditCharges.php?user=" . rawurlencode($user);
+$back = "editCreditCharges.php";
 header("Location: {$back}");

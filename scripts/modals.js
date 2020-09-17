@@ -124,7 +124,7 @@ var modal = (function() {
     function autopay( user, method, acct_name, row, deferred) {
         $('#modal_table').after($close);
         $close.css('margin-top', '12px');
-        $close.text("Finished");
+        $close.text("Exit");
         var divht = $content.height() + 12 + 'px';
         $modal.css({
             height: divht
@@ -144,7 +144,7 @@ var modal = (function() {
                     }
                 }
                 var payee = elements.join().trim();
-                ajaxdata = {user: user, method: method[idno], acct: acct_name[idno],
+                ajaxdata = {method: method[idno], acct: acct_name[idno],
                     amt: payment, payee: payee};
                     executeScript('../utilities/makeAutopayment.php', ajaxdata,
                     "executing autopayment", deferred);
@@ -370,8 +370,8 @@ var modal = (function() {
             newcard = this.value;
         });
         $('#newcd').on('click', function() {
-            var ajaxdata = {id: 'addcd', user: g_user, 
-                cdname: newcard, cdtype: newtype};
+            var ajaxdata = {id: 'addcd', cdname: newcard,
+                cdtype: newtype};
             executeScript('../edit/saveAcctEdits.php', ajaxdata, 
                 'adding new card', deferred);
         });
@@ -395,7 +395,7 @@ var modal = (function() {
                 alert("You have not selected a card to delete");
                 return;
             }
-            ajaxdata = {id: 'decard', user: g_user, target: dc};
+            ajaxdata = {id: 'decard', target: dc};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'deleting Cr/Dr card', deferred);
         });
@@ -419,7 +419,7 @@ var modal = (function() {
             monthly = this.value;
         });
         $('#addit').on('click', function() {
-            var ajaxdata = {id: 'addacct', user: g_user,
+            var ajaxdata = {id: 'addacct',
                     acct_name: newacct, monthly: monthly};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'adding new account', deferred);
@@ -440,10 +440,9 @@ var modal = (function() {
             todelete = this.value;
         });
         $('#delit').on('click', function() {
-            var ans = confirm("Are you sure (is balance $0)?");
+            var ans = confirm("Are you sure? (if balance not $0, adjust other accts)");
             if (ans) { 
-                var ajaxdata = {id: 'acctdel', user: g_user,
-                    acct: todelete};
+                var ajaxdata = {id: 'acctdel', acct: todelete};
                 executeScript('../edit/saveAcctEdits.php', ajaxdata,
                     'deleting account', deferred);
             } else {
@@ -475,8 +474,7 @@ var modal = (function() {
             if (mover == ontopof) {
                 alert("From and To are the same - no action taken");
             } else {
-                var ajaxdata = {id: 'move', user: g_user, mvfrom: mover,
-                    mvto: ontopof};
+                var ajaxdata = {id: 'move', mvfrom: mover, mvto: ontopof};
                 executeScript('../edit/saveAcctEdits.php', ajaxdata,
                     'moving account', deferred);
             }
@@ -501,8 +499,7 @@ var modal = (function() {
             rname = this.value;
         });
         $('#ren').on('click', function() {
-            var ajaxdata = {id: 'rename', user: g_user,
-            newname: rname, acct: racct};
+            var ajaxdata = {id: 'rename', newname: rname, acct: racct};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'renaming account', deferred);   
         });
@@ -573,8 +570,7 @@ var modal = (function() {
             mosel = this.value;
         });
         $('#genmo').on('click', function() {
-            var getdata = '../utilities/reports.php?id=morpt&mo=' +
-                mosel + '&user=' + encodeURIComponent(g_user);
+            var getdata = '../utilities/reports.php?id=morpt&mo=' + mosel;
             window.open(getdata, "_self");
         });
         $close.on('click', function () {

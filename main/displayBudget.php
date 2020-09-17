@@ -18,6 +18,7 @@ if (isset($_SESSION['userid'])) {
 } else {
     die("There has been no legitimate login");
 }
+$admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -39,6 +40,7 @@ if (isset($_SESSION['userid'])) {
 
 <body>
     <?php require "menu.html"; ?>
+    <p id="mstr" style="display:none;"><?=$admin;?></p>
     <pre><button id="admin">Admin</button></pre>
     <p id="usercookies" style="display:none"><?=$menu_item?></p>
     <div id="budget">

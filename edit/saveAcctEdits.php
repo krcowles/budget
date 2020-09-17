@@ -9,6 +9,7 @@
  * @license No license to date
  */
 session_start();
+require_once "../database/global_boot.php";
 require "../utilities/getAccountData.php";
 require "../utilities/getCards.php";
 
@@ -16,6 +17,14 @@ $id = filter_input(INPUT_POST, 'id');
 
 date_default_timezone_set('America/Denver');
 $dbdate = date("Y-m-d");
+// get current highest budpos for user:
+$budposReq = "SELECT `budpos` FROM `Budgets` WHERE `userid` = :uid AND " .
+    "`status` = 'A' ORDER BY 1 DESC LIMIT 1;";
+$highbud = $pdo->prepare($budposReq);
+$highbud->execute(["uid" => $_SESSION['userid']]);
+$budnos = $highbud->fetch(PDO::FETCH_ASSOC);
+$user_cnt = $budnos['budpos'];
+
 switch ($id) {
 case 'payexp':
     $acct = filter_input(INPUT_POST, 'acct_name');
@@ -154,39 +163,39 @@ case 'delapay':
 case 'addcd':
     $newcard = filter_input(INPUT_POST, 'cdname');
     $newtype = filter_input(INPUT_POST, 'cdtype');
-    $cdsql = "INSERT INTO `Cards` (`user`, `cdname`, `type`) " .
-        "Values (:usr, :name, :type);";
+    $cdsql = "INSERT INTO `Cards` (`userid`, `cdname`, `type`) " .
+        "Values (:uid, :name, :type);";
     $newcdentry = $pdo->prepare($cdsql);
     $newcdentry->execute(
-        ["usr" => $user, "name" => $newcard, "type" => $newtype]
+        ["uid" => $_SESSION['userid'], "name" => $newcard, "type" => $newtype]
     );
     echo "OK";
     break;
 case 'decard':
     $cd2delete = filter_input(INPUT_POST, 'target');
-    $delsql = "DELETE FROM `Cards` WHERE `user` = :usr AND `cdname` = :cd;";
+    $delsql = "DELETE FROM `Cards` WHERE `userid` = :uid AND `cdname` = :cd;";
     $delstmnt = $pdo->prepare($delsql);
-    $delstmnt->execute(["usr" => $user, "cd" => $cd2delete]);
+    $delstmnt->execute(["uid" => $_SESSION['userid'], "cd" => $cd2delete]);
     echo "OK";
     break;
 case 'addacct':
     $newacct = filter_input(INPUT_POST, 'acct_name');
     $budget  = filter_input(INPUT_POST, 'monthly');
     $newpos = $user_cnt + 1;
-    $newsql = "INSERT INTO `Budgets` (`user`,`budname`,`budpos`,`status`,`budamt`," .
+    $newsql = "INSERT INTO `Budgets` (`userid`,`budname`,`budpos`,`status`,`budamt`," .
         "`prev0`,`prev1`,`current`,`autopay`,`moday`,`autopd`,`funded`) VALUES (" .
-        ":usr,:item,:pos,'A',:amt,'0','0','0','','0','','0');";
+        ":uid,:item,:pos,'A',:amt,'0','0','0','','0','','0');";
     $addinfo = $pdo->prepare($newsql);
     $addinfo->execute(
-        ["usr" => $user, "item" => $newacct, "pos" => $newpos, "amt" => $budget]
+        ["uid" => $_SESSION['userid'], "item" => $newacct, "pos" => $newpos, "amt" => $budget]
     );
     echo "OK";
     break;
 case 'acctdel':
     $target = filter_input(INPUT_POST, 'acct');
-    $delreq = "DELETE FROM `Budgets` WHERE `budname` = :bud AND `user` = :usr;";
+    $delreq = "DELETE FROM `Budgets` WHERE `budname` = :bud AND `userid` = :uid;";
     $delbud = $pdo->prepare($delreq);
-    $delbud->execute(["bud" => $target, "usr" => $user]);
+    $delbud->execute(["bud" => $target, "uid" => $_SESSION['userid']]);
     echo "OK";
     break;
 case 'move':

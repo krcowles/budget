@@ -193,12 +193,12 @@ $('#delap').on('click', function() {
     return;
 });
 $('#vmexp').on('click', function() {
-    var viewexp = "../utilities/viewCharges.php?user=" + query_name;
+    var viewexp = "../utilities/viewCharges.php";
     window.open(viewexp, "_self");
     return;
 });
 $('#edcc').on('click', function() {
-    var editexpense = "../edit/editCreditCharges.php?user=" + query_name;
+    var editexpense = "../edit/editCreditCharges.php";
     window.open(editexpense, "_self");
     return;
 });
@@ -277,7 +277,7 @@ $('#delacct').on('click', function() {
     return;
 });
 $('#edacct').on('click', function() {
-    var editor = "../edit/budgetEditor.php?user=" + query_name;
+    var editor = "../edit/budgetEditor.php";
     window.open(editor, "_self");
     return;
 });

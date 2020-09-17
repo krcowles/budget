@@ -8,10 +8,12 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_GET, 'user');
+session_start();
+
 $id = isset($_GET['id']) ? filter_input(INPUT_GET, 'id') : false;
 $monthly = $id = 'morpt' ? true : false;
 $annual  = $id = 'yrrpt' ? true : false;
+
 if ($monthly) {
     $period = isset($_GET['mo']) ? filter_input(INPUT_GET, 'mo') : false;
 } elseif ($annual) {
@@ -48,7 +50,6 @@ require "timeSetup.php";
 
 <body>
 <div id="page">
-    <p id="user" style="display:none;"><?= $user;?></p>
     <button id="back">Return to Budget</button>
     <?php
     if ($monthly) {
@@ -68,8 +69,7 @@ require "timeSetup.php";
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script type="text/javascript">
     $('#back').on('click', function() {
-        var budpg = '../main/displayBudget.php?user=' + 
-            '<?= rawurlencode($user);?>';
+        var budpg = '../main/displayBudget.php';
         window.open(budpg, "_self");
     });
 </script>

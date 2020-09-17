@@ -9,9 +9,9 @@
  * @license No license to date
  */
 $mo = array_search($period, $month_names) + 1;
-$datareq = "SELECT * FROM `Charges` WHERE `user` = :uid;";
+$datareq = "SELECT * FROM `Charges` WHERE `userid` = :uid;";
 $data = $pdo->prepare($datareq); 
-$data->execute(["uid" => $user]);
+$data->execute(["uid" => $_SESSION['userid']]);
 $modat = $data->fetchALL(PDO::FETCH_ASSOC);
 $method = [];
 $cdname = [];

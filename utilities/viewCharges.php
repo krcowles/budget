@@ -37,9 +37,9 @@ require "get30DayExpenses.php";
     <a id="edcred" class="sel">Edit Credit Data</a>
     <a id="edexp" class="sel">Edit Expenses/Debits</a>
     <div id="mv">MOVE:</div>
-    <a id="e2c" class="sel">Expense/Debit to Card</a>
-    <a id="c2c" class="sel">One Card to Another</a>
-    <a id="c2e" class="sel">Card to Expense/Debit</a>
+    <a id="e2c" class="sel">Expense/Debit to CrCard</a>
+    <a id="c2c" class="sel">One CrCard to Another</a>
+    <a id="c2e" class="sel">CrCard to Expense/Debit</a>
 </div>
 <pre><br /></pre>
 <!-- end of menu -->

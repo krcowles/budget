@@ -53,35 +53,46 @@ if (count($bud_dat) === 0) {
     }
 }
 // copy the arrays so that they can be re-sequenced according to $positions
-$idArray  = new ArrayObject($acctid);
-$nmeArray = new ArrayObject($account_names);
-$posArray = new ArrayObject($positions);
-$budArray = new ArrayObject($budgets);
-$p0Array  = new ArrayObject($prev0);
-$p1Array  = new ArrayObject($prev1);
-$curArray = new ArrayObject($current);
-$apArray  = new ArrayObject($autopay);
-$dayArray = new ArrayObject($day);
-$pdArray  = new ArrayObject($paid);
-$incArray = new ArrayObject($income);
-$orgpos = [];
-for ($j=0; $j<count($account_names); $j++) {
-    $orgpos[$j] = $positions[$j];
-} // necessary because 'array_search' treats ArrayObject as *not* an array!
-for ($i=0; $i<count($account_names); $i++) {
-    $posval = $i + 1; // there is no 0 position
-    $pos = array_search($posval, $orgpos); // find the key for each consec. item
-    $acctid[$i] = $idArray[$pos];
-    $positions[$i] = $posArray[$pos];
-    $account_names[$i] = $nmeArray[$pos];
-    $budgets[$i] = $budArray[$pos];
-    $prev0[$i] = $p0Array[$pos];
-    $prev1[$i] = $p1Array[$pos];
-    $current[$i] = $curArray[$pos];
-    $autopay[$i] = $apArray[$pos];
-    $day[$i] = $dayArray[$pos];
-    $paid[$i] = $pdArray[$pos];
-    $income[$i] = $incArray[$pos];
+$idArrayObj  = new ArrayObject($acctid);
+$idArray = $idArrayObj->getArrayCopy();
+$nmeArrayObj = new ArrayObject($account_names);
+$nmeArray = $nmeArrayObj->getArrayCopy();
+$posArrayObj = new ArrayObject($positions);
+$posArray = $posArrayObj->getArrayCopy();
+$budArrayObj = new ArrayObject($budgets);
+$budArray = $budArrayObj->getArrayCopy();
+$p0ArrayObj  = new ArrayObject($prev0);
+$p0Array = $p0ArrayObj->getArrayCopy();
+$p1ArrayObj  = new ArrayObject($prev1);
+$p1Array = $p1ArrayObj->getArrayCopy();
+$curArrayObj = new ArrayObject($current);
+$curArray = $curArrayObj->getArrayCopy();
+$apArrayObj  = new ArrayObject($autopay);
+$apArray = $apArrayObj->getArrayCopy();
+$dayArrayObj = new ArrayObject($day);
+$dayArray = $dayArrayObj->getArrayCopy();
+$pdArrayObj  = new ArrayObject($paid);
+$pdArray = $pdArrayObj->getArrayCopy();
+$incArrayObj = new ArrayObject($income);
+$incArray = $incArrayObj->getArrayCopy();
+$orgPosObj = new ArrayObject($positions);
+$orgpos = $orgPosObj->getArrayCopy();
+asort($positions);
+$keyindx = 0;
+foreach ($positions as $sorted) {
+    $pos = array_search($sorted, $orgpos); // get positional key
+    $acctid[$keyindx] = $idArray[$pos];
+    $positions[$keyindx] = $posArray[$pos];
+    $account_names[$keyindx] = $nmeArray[$pos];
+    $budgets[$keyindx] = $budArray[$pos];
+    $prev0[$keyindx] = $p0Array[$pos];
+    $prev1[$keyindx] = $p1Array[$pos];
+    $current[$keyindx] = $curArray[$pos];
+    $autopay[$keyindx] = $apArray[$pos];
+    $day[$keyindx] = $dayArray[$pos];
+    $paid[$keyindx] = $pdArray[$pos];
+    $income[$keyindx] = $incArray[$pos];
+    $keyindx++;
 }
 $user_cnt = count($account_names);
 // get the temporary accounts (includes Undistributed Funds)

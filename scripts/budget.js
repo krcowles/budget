@@ -1,13 +1,28 @@
+/**
+ * @fileoverview The main budget display, which automatically updates with
+ * potential month-rollover, and manages autopay activity
+ * 
+ * @author Ken Cowles
+ * @version 2.0 Secure login
+ */
 $(function() { 
 
+/**
+ * This function reports to the user when the window is too narrow
+ * to see all the menus
+ * 
+ * @return {null}
+ */
 function menuSpace() {
-    var wd = window.innerWidth;
+    let wd = window.innerWidth;
     if (wd < 1150) {
         alert("Your browser window needs to expand to show all the menus:\n" +
             "Please Widen until you see space after the Help Menu");
     }
+    return
 }
 menuSpace();
+
 var able = true;
 $(window).resize(function() {
     if (able) {
@@ -20,17 +35,20 @@ $(window).resize(function() {
         }, 400);
     }
 });
+
+// get date info to check for upcoming or past due autopays
 var today = new Date();
 var dd = parseInt(String(today.getDate()).padStart(2, '0'));
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January was otherwise 0!
 var yyyy = parseInt(today.getFullYear());
 var user = $('#user').text();
-if (user === 'krc') {
+// for admin
+if ($('#mstr').text() === 'yes') {
     $('#admin').css('display', 'block');
+    $('#admin').on('click', function() {
+        window.open('../admin/admintools.php', "_blank");
+    });
 }
-$('#admin').on('click', function() {
-    window.open('../admin/admintools.php', "_blank");
-});
 
 // check autopayment status
 var payday = [];
@@ -53,6 +71,9 @@ $('.apday').each(function(indx) {
                 paywith.push($paywith.text().trim());
                 aname.push($acct.text());
                 ap_candidates = true;
+            } else {
+                $(this).css('color', 'darkgray');
+                $(this).prev().css('color', 'darkgray');
             }
         }
     }

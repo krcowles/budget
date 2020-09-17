@@ -8,16 +8,17 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_POST, 'user');
+session_start();
 require_once "../database/global_boot.php";
+
 $id   = $_POST['exid'];
 $type = $_POST['type'];
 $name = $_POST['cdname'];
 $date = $_POST['date'];
 $amt  = $_POST['amt'];
 $paye = $_POST['pay'];
-$acct = $_POST['chgd'];
 $org  = $_POST['org']; // original amount to detect a change
+$acct = $_POST['chgd'];
 // update the 'Charges' table with these items
 for ($j=0; $j<count($id); $j++) {
     $update = "UPDATE `Charges` SET " .
@@ -35,10 +36,10 @@ for ($j=0; $j<count($id); $j++) {
         $old = floatval(filter_var($org[$j]));
         $new = floatval(filter_var($amt[$j]));
         $delta = $old - $new;
-        $buditem = "SELECT `current`,`id` FROM `Budgets` WHERE `user` = :uid " .
+        $buditem = "SELECT `current`,`id` FROM `Budgets` WHERE `userid` = :uid " .
             "AND `budname` = :bud;";
         $buddat = $pdo->prepare($buditem);
-        $buddat->execute(["uid" => $user, "bud" => filter_var($acct[$j])]);
+        $buddat->execute(["uid" => $_SESSION['userid'], "bud" => filter_var($acct[$j])]);
         $olddat = $buddat->fetch(PDO::FETCH_ASSOC);
         $adjusted = floatval($olddat['current']) + $delta;
         $newacct = "UPDATE `Budgets` SET `current` = :cur WHERE `id` = :bid;";
@@ -46,5 +47,5 @@ for ($j=0; $j<count($id); $j++) {
         $updte->execute(["cur" => $adjusted, "bid" => $olddat['id']]);
     }
 }
-$back = "editExpenses.php?user=" . rawurlencode($user);
+$back = "editExpenses.php";
 header("Location: {$back}");

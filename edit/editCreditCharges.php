@@ -7,7 +7,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_GET, 'user');
+session_start();
 require "../utilities/getCards.php";
 require "../utilities/getExpenses.php";
 
@@ -54,15 +54,13 @@ for ($i=0; $i<count($cr); $i++) {
 
 <body>
 <div id="main">
-    <p id="user" style="display:none;"><?= $user;?></p>
     <p class="NormalHeading">You can use this form to edit active charges
     charged to a credit card.</p>
     <form id="form" method="post" action="saveEditedCharge.php">
     <div>
         <button id="save">Save All Changes</button>
-        <button id="return" style="margin-left:80px;">
-            Return to Budget</button><br /><br />
-        <input type="hidden" name="user" value="<?= $user;?>" />
+        <button id="return" style="margin-left:80px;">Return to Budget</button>
+        <br /><br />
         <div id="existing">
         <?php for ($i=0; $i<count($cr); $i++) : ?>
             <input type="hidden" name="cnt[]" value="<?= $card_cnts[$i];?>" />
@@ -116,8 +114,7 @@ for ($i=0; $i<count($cr); $i++) {
 <script type="text/javascript">
     $('#return').on('click', function(ev) {
         ev.preventDefault();
-        var dpg = "../main/displayBudget.php?user=" + 
-            encodeURIComponent($('#user').text());
+        var dpg = "../main/displayBudget.php";
         window.open(dpg, "_self");
     });
     $(function () {

@@ -8,7 +8,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_GET, 'user');
+session_start();
 require "../utilities/getAccountData.php";
 require "../utilities/timeSetup.php";
 
@@ -16,7 +16,7 @@ require "../utilities/timeSetup.php";
 $optloc = strpos($fullsel, "<option");
 $backhalf = substr($fullsel, $optloc);
 $newsel = '<select class="fullsel" name="chgd[]"><option value="">' .
-    'SELECT CURRENT:</option>';
+    'SELECT Account Charged:</option>';
 $newsel .= $backhalf;
 
 $prev30 = time() - (30 * 24 * 60 * 60);
@@ -29,9 +29,9 @@ $expdte = [];
 $exppye = [];
 $expact = [];
 
-$expreq = "SELECT * FROM `Charges` WHERE `user` = :usr AND `method` <> 'Credit';";
+$expreq = "SELECT * FROM `Charges` WHERE `userid` = :uid AND `method` <> 'Credit';";
 $data = $pdo->prepare($expreq);
-$data->execute(["usr" => $user]);
+$data->execute(["uid" => $_SESSION['userid']]);
 $expdat = $data->fetchALL(PDO::FETCH_ASSOC);
 foreach ($expdat as $expense) {
     $rel = strtotime($expense['expdate']);
@@ -73,7 +73,6 @@ foreach ($expdat as $expense) {
 <body>
 
 <div id="main">
-    <p id="user" style="display:none;"><?= $user;?></p>
     <p class="NormalHeading">You can use this form to edit any expense paid 
     within the last 30 days. <strong style="color:brown;">NOTE:</strong> Changes
     to dollar amounts will be reflected in the associated accounts</p>
@@ -83,7 +82,6 @@ foreach ($expdat as $expense) {
         <button id="return" style="margin-left:80px;">Return to Budget</button>
         <button id="viewer" style="margin-left:80px;">Return to View/Manage</button>
         <br /><br />
-        <input type="hidden" name="user" value="<?= $user;?>" />
         <table>
             <thead>
                 <tr>
