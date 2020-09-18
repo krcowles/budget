@@ -121,7 +121,7 @@ var modal = (function() {
         return value;
     }
     // function called when settings.id == 'autopay'
-    function autopay( user, method, acct_name, row, deferred) {
+    function autopay(method, acct_name, deferred) {
         $('#modal_table').after($close);
         $close.css('margin-top', '12px');
         $close.text("Exit");
@@ -430,10 +430,10 @@ var modal = (function() {
         });
     }
     // modal function executed when settings.id == 'delacct'
-    function delacct(deferred) {
+    function delete_acct(deferred) {
         $('#delit').after($close);
         $close.css('margin-left', '48px');
-        var $acct = $('#delacct .partsel');
+        var $acct = $('#remacct .partsel');
         $acct[0].id = 'dacct';
         var todelete = getSelectValue($acct[0]);
         $('#dacct').on('change', function() {
@@ -632,7 +632,7 @@ var modal = (function() {
             } else if (modid === 'addacct') {
                 newacct(settings.deferred);
             } else if (modid === 'delacct') {
-                delacct(settings.deferred);
+                delete_acct(settings.deferred);
             } else if (modid === 'mvacct') {
                 mvacct(settings.deferred);
             } else if (modid === 'rename') {

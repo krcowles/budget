@@ -232,7 +232,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             Funds' or 'Temporary Accounts')
             <span style="color:brown;">NOTE: Please Ensure the budget-to-delete
             has a balance of $0.</span><br /><br />
-            <div id="delacct">Delete: <?= $partsel;?></div><br />
+            <div id="remacct">Delete: <?= $partsel;?></div><br />
             <button id="delit">Delete Account</button>
         </div>
         <!-- move account -->
