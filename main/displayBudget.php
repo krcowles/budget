@@ -53,8 +53,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                 <col style="width:120px" />
                 <col style="width:100px" />
                 <col style="width:64px" />
-                <col style="width:10px" />
-                <col style="width:16px" />
+                <col style="width:10px" class="noshow" />
+                <col style="width:16px" class="noshow" />
             </colgroup>
             <thead>
                 <tr>
@@ -65,8 +65,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                     <th><?= $month[2];?></th>
                     <th>AutoPay</th>
                     <th>Day</th>
-                    <th>Paid</th>
-                    <th>Income</th>
+                    <th class="noshow">Paid</th>
+                    <th class="noshow">Income</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,8 +81,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                         <td class="mo3 grayCell"></td>
                         <td class="ap grayCell"></td>
                         <td class="apday grayCell"></td>
-                        <td></td>
-                        <td></td>
+                        <td class="noshow"></td>
+                        <td class="noshow"></td>
                     </tr>
                     <?php endif; ?>
                     <tr>
@@ -97,8 +97,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                         <?php else : ?>
                             <td class="apcolor apday"><?= $day[$j];?></td>
                         <?php endif; ?>
-                        <td><?= $paid[$j];?></td>
-                        <td><?= $income[$j];?></td>
+                        <td class="noshow"><?= $paid[$j];?></td>
+                        <td class="noshow"><?= $income[$j];?></td>
                     </tr>
                 <?php endfor; ?>
                 <tr id="cchd">
@@ -124,8 +124,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                     <td class="balance heavyTop"><?= $balPrev1;?></td>
                     <td class="balance heavyTop"><?= $balCurrent;?></td>
                     <td class="grayCell heavyTop" colspan="2"></td>
-                    <td class="grayCell"></td>
-                    <td class="grayCell"></td>
+                    <td class="noshow grayCell"></td>
+                    <td class="noshow grayCell"></td>
                 </tr>
             </tbody>
         </table>
