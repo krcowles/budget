@@ -609,8 +609,7 @@ var modal = (function() {
             } else if (modid == 'usrmail') {
                 userName(settings.deferred);
             } else if (modid === 'autopay') {
-                autopay(settings.user, settings.method, settings.acct_name,
-                    settings.row, settings.deferred);
+                autopay(settings.method, settings.acct_name, settings.deferred);
             } else if (modid === 'expense') {
                 payExpense(settings.deferred);
             } else if (modid === 'income') {

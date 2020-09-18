@@ -65,9 +65,11 @@ $noOfExp = count($chgs);
 <?php if ($paid) : ?>
 <h3 id="paid">Expense(s) Successfully Undone</h3>
 <? endif; ?>
-<form action="doUndo.php" method="POST">
-    <button>Undo Expense</button>
-    <button id="return">Return To Budget</button>
+<form action="doUndo.php" method="post">
+    <div>
+        <button>Undo Expense</button>
+        <button id="return">Return To Budget</button>
+    </div>
 <?php if ($noOfExp === 0) : ?>
     <h3>You have no outstanding expenses for the last 30 days</h3>
 <?php else : ?>
@@ -75,19 +77,19 @@ $noOfExp = count($chgs);
         <div id="carddiv">
         <h3>Expenses From the Last 30 Days</h3>
         <?php for ($j=0; $j<$noOfExp; $j++) : ?>
-            <div id="<?= $chgs[$j][0];?>" style="margin-bottom:6px;">
+            <div id="d<?=$chgs[$j][0];?>" style="margin-bottom:6px;">
                 <input type="checkbox" name="revexp[]"
-                    value="<?= $chgs[$j][0];?>" /> &nbsp;&nbsp;
+                    value="<?=$chgs[$j][0];?>" /> &nbsp;&nbsp;
                 <input class="cdentry" type="text" value="<?= $chgs[$j][1];?>" />
                 <input class="cdentry dates" type="text"
-                    value="<?= $chgs[$j][2];?>" />
+                    value="<?=$chgs[$j][2];?>" />
                 <input class="cdentry amts" type="text"
-                    name="amt<?= $chgs[$j][0];?>"
-                    value="<?= $chgs[$j][3];?>" />
-                <input class="cdentry" type="text" value="<?= $chgs[$j][5];?>" />
+                    name="amt<?=$chgs[$j][0];?>"
+                    value="<?=$chgs[$j][3];?>" />
+                <input class="cdentry" type="text" value="<?=$chgs[$j][5];?>" />
                 <input class="cdentry accts" type="text" 
-                    name="acc<?= $chgs[$j][0];?>"
-                    value="<?= $chgs[$j][4];?>" />
+                    name="acc<?=$chgs[$j][0];?>"
+                    value="<?=$chgs[$j][4];?>" />
             </div>
         <?php endfor; ?>
         </div>

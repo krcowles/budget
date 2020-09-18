@@ -99,8 +99,7 @@ if (ap_candidates) {
     var def = new $.Deferred(); // only one can pay at a time, so one deferred
     modal.open({
         id: 'autopay', height: '200px', width: modalWidth, content: ap_object,
-        user: user, method: paywith, acct_name: aname, row_no: rowno,
-        deferred: def
+        method: paywith, acct_name: aname, deferred: def
     });
     $.when( def ).then(function() {
         $('#allForms').append(ap_object);
