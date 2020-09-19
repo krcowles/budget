@@ -28,12 +28,13 @@ require "../database/global_boot.php";
             width: 230px;
             height: 28px;
             font-size: 18px;
-            color: brown;
+            color: black;
             margin-bottom: 18px;
         }
         #formsubmit:hover {
             cursor: pointer;
-            background-color: honeydew;
+            color: white;
+            background-color: black;
             font-weight: bold;
         }
     </style>
@@ -47,8 +48,9 @@ require "../database/global_boot.php";
 
 <div id="container">
 <p class="SmallHeading">Please update your password</p>
+<p id="choice" style="display:none;">nochoice</p>
 
-<form id="form" method="POST" action="#">
+<form id="form" method="post" action="#">
     <fieldset>
         <legend>Password Information</legend>
         <p id="pnote">Note: Passwords must be at least 8 characters long and 

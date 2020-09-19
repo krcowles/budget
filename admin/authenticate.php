@@ -28,17 +28,19 @@ if ($rowcnt === 1) {  // located single instance of user
     if (password_verify($userpass, $user_dat['password'])) {
         $_SESSION['userid'] = $user_dat['uid'];
         $expiration = $user_dat['passwd_expire'];
-        $_SESSION['expire'] = $expiration;
-        $_SESSION['cookies'] = $user_dat['cookies'];
-        $_SESSION['cookiestatus'] = "OK";
-        $_SESSION['start'] = $user_dat['setup'];
         $american = str_replace("-", "/", $expiration);
         $expdate = strtotime($american);
         if ($expdate <= time()) {
-            $_SESSION['cookiestatus'] = 'EXPIRED';
+            // for renewal, need only userid and cookies status
             echo "EXPIRED";
             exit;
         } else {
+            // establish remaining login credentials
+            
+            $_SESSION['expire'] = $expiration;
+            $_SESSION['cookies'] = $user_dat['cookies'];
+            $_SESSION['cookiestatus'] = "OK";
+            $_SESSION['start'] = $user_dat['setup'];
             $UX_DAY = 60*60*24; // unix timestamp value for 1 day
             $days = floor(($expdate - time())/$UX_DAY);
             if ($days <= 5) {
@@ -46,6 +48,9 @@ if ($rowcnt === 1) {  // located single instance of user
                 echo "RENEW";
                 exit;
             }
+        }
+        if ($cstat !== 'EXPIRED') {
+            $_SESSION['cookiestatus'] = 'EXPIRED';
         }
         echo "LOCATED&" . $_SESSION['start'] . "&" . $_SESSION['cookies'];
     } else {  // user exists, but password doesn't match:

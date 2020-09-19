@@ -11,13 +11,18 @@
  */
 session_start();
 
-if (!isset($_SESSION['userid'])) {
-    // Clear out any partial logins created during testing
+// check for partial logins, e.g. when expired password
+if (!isset($_SESSION['userid']) || !isset($_SESSION['cookiestatus'])
+    || !isset($_SESSION['expire']) || !isset($_SESSION['cookies']) 
+    || !isset($_SESSION['start'])
+) {
+    unset($_SESSION['userid']);
     unset($_SESSION['cookiestatus']);
     unset($_SESSION['expire']);
     unset($_SESSION['cookies']);
     unset($_SESSION['start']);
-
+}
+if (!isset($_SESSION['userid'])) {
     $cstat = "NOLOGIN"; // $cstat & $start are recorded on page for getLogin.js
     $start = '000';
     $regusr = isset($_COOKIE['epiz']) ? true : false; // registered user?
@@ -32,25 +37,28 @@ if (!isset($_SESSION['userid'])) {
         } elseif ($rowcnt === 1) {
             $cstat = "OK";
             $fetched = $user_dat->fetch(PDO::FETCH_ASSOC);
-            // now establish session login data
-            $_SESSION['userid']       = $fetched['uid'];
-            $_SESSION['expire']       = $fetched['passwd_expire'];
-            $_SESSION['cookies']      = $fetched['cookies'];
-            $_SESSION['start']        = $fetched['setup'];
             $start    = $fetched['setup'];
             $expDate  = $fetched['passwd_expire'];
             $american = str_replace("-", "/", $expDate);
             $orgDate  = strtotime($american);
             if ($orgDate <= time()) {
                 $cstat = 'EXPIRED';
+                // no login credentials
             } else {
+                // establish login credentials
+                $_SESSION['userid']       = $fetched['uid'];
+                $_SESSION['expire']       = $fetched['passwd_expire'];
+                $_SESSION['cookies']      = $fetched['cookies'];
+                $_SESSION['start']        = $fetched['setup'];
                 $UX_DAY = 60*60*24; // unix timestamp value for 1 day
                 $days = floor(($orgDate - time())/$UX_DAY);
                 if ($days <= 5) {
                     $cstat = 'RENEW';
                 }
             }
-            $_SESSION['cookiestatus'] = $cstat; // OK, EXPIRED, or RENEW
+            if ($cstat !== 'EXPIRED') {
+                $_SESSION['cookiestatus'] = $cstat; // OK or RENEW
+            }
         } else {
             $cstat = 'MULTIPLE';
         }

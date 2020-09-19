@@ -15,6 +15,8 @@ $submitter = filter_input(INPUT_POST, 'submitter');
 $username  = isset($_POST['username']) ?
     filter_input(INPUT_POST, 'username') : false;
 $user_pass = filter_input(INPUT_POST, 'password');
+$choice    = filter_input(INPUT_POST, 'cookies');
+$_SESSION['cookies']      = $choice;
 
 $password  = password_hash($user_pass, PASSWORD_DEFAULT);
 $today = getdate();
@@ -25,7 +27,6 @@ $year = intval($today['year']);
 $year++;
 $exp_date = $year . "-" . $month_digits . "-" . $day;
 if ($submitter == 'create') {
-    $choice = filter_input(INPUT_POST, 'cookies');
     $email  = isset($_POST['email']) ? 
         filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) : false;
     $newuser = "INSERT INTO `Users` (`email`,`username`,`setup`," .
@@ -42,14 +43,13 @@ if ($submitter == 'create') {
     $_SESSION['userid']       = $newid['uid'];
     $_SESSION['expire']       = $exp_date;
     $_SESSION['cookiestatus'] = "OK";
-    $_SESSION['cookies']      = $choice;
     $_SESSION['start']        = '000';
-} else { // update user
-    $updateuser = "UPDATE `Users` SET `password`=?, `passwd_expire`=? " .
-        "WHERE `userid`=?;";
+} else { // renew: update user
+    $updateuser = "UPDATE `Users` SET `password`=?, `passwd_expire`=?, " .
+        "`cookies`=? WHERE `uid`=?;";
     $update = $pdo->prepare($updateuser);
     $update->execute(
-        array($password, $exp_date, $_SESSION['userid'])
+        array($password, $exp_date, $choice, $_SESSION['userid'])
     );
 }
 if ($_SESSION['cookies'] === 'accept') {

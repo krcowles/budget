@@ -42,17 +42,17 @@ if (cookies) {
         var ans = confirm("Your password has expired\n" + 
             "Would you like to renew?");
         if (ans) {
-            renewPassword(login_name, 'renew', 'expired');
+            renewPassword('renew', 'expired');
         } else {
-            renewPassword(login_name, 'norenew', 'expired');
+            renewPassword('norenew', 'expired');
         }
     } else if (user_cookie_state === 'RENEW') {
         var ans = confirm("Your password is about to expire\n" + 
             "Would you like to renew?");
         if (ans) {
-            renewPassword(login_name, 'renew', 'valid');
+            renewPassword('renew', 'valid');
         } else {
-            renewPassword(login_name, 'norenew', 'valid');
+            renewPassword('norenew', 'valid');
         }
     } else if (user_cookie_state === 'MULTIPLE') {
         alert("There are multiple accounts registered for this login:\n"
@@ -120,17 +120,17 @@ function validateUser(usr_name, usr_pass) {
                 var renew = confirm("Your password is about to expire\n" + 
                     "Would you like to renew?");
                 if (renew) {
-                    renewPassword(usr_name, 'renew', 'valid');
+                    renewPassword('renew', 'valid');
                 } else {
-                    renewPassword(usr_name, 'norenew', 'valid');
+                    renewPassword('norenew', 'valid');
                 }
             } else if (status.indexOf('EXPIRED') !== -1) {
                 var renew = confirm("Your password has expired\n" +
                     "Would you like to renew?");
                 if (renew) {
-                    renewPassword(usr_name, 'renew', 'expired');
+                    renewPassword('renew', 'expired');
                 } else {
-                    renewPassword(usr_name, 'norenew', 'expired');
+                    renewPassword('norenew', 'expired');
                 }
             } else if (status.indexOf('BADPASSWD') !== -1) {
                 var msg = "The password you entered does not match " +
