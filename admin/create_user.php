@@ -40,7 +40,7 @@ if ($submitter == 'create') {
     );
     $last = $pdo->query("SELECT * FROM `Users` ORDER BY 1 DESC LIMIT 1;");
     $newid = $last->fetch(PDO::FETCH_ASSOC);
-    $_SESSION['userid']       = $newid['uid'];
+    $_SESSION['userid']       = $newid['uid']; // already incremented via INSERT
     $_SESSION['expire']       = $exp_date;
     $_SESSION['cookiestatus'] = "OK";
     $_SESSION['start']        = '000';

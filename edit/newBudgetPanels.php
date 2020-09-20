@@ -257,7 +257,7 @@ if ($new) {
         <form id="edform" method="post" action="saveNewCharges.php">
             <input type="hidden" name="lv3" value="<?=$lv3;?>" />
             <input type="hidden" name="exit3" value="no" />
-            <button id="save">Save and Continue</button>
+            <button id="save">Save and Go to Budget</button>
             <span><button id="lv3">Save and Return Later</button>
             </span><br />
             <span class="selnote">Note: When you click on 'Save and Continue',

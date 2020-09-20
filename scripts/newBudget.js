@@ -123,7 +123,7 @@ const dataComplete = (section) => {
                 return true;
             }
         case 'two': // no checks are done on credit/debit card names
-           break;
+            return true;
         case 'three': // outstanding credit card expenses
             let gotcards = true;
             let states = [0b0000, 0b0000, 0b0000, 0b0000];
@@ -216,6 +216,7 @@ $('#save').on('click', function(ev) {
     if(!dataComplete('three')) {
         return;
     }
+    $('input[name=exit3]').attr('value', 'no');
     $('#edform').submit();
     return;
 });
@@ -237,9 +238,11 @@ $('#lv1').on('click', function(ev) {
 $('#lv2').on('click', function(ev) {
     ev.preventDefault();
     if (!dataComplete('two')) {
+
         return;
     }
-    $('cdform').submit();
+    $('input[name=exit2]').attr('value', 'yes');
+    $('#cdform').submit();
     return;
 });
 $('#lv3').on('click', function(ev) {
@@ -247,6 +250,7 @@ $('#lv3').on('click', function(ev) {
     if (!dataComplete('three')) {
         return;
     }
+    $('input[name=exit3]').attr('value', 'yes');
     $('#edform').submit();
     return;
 });

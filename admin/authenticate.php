@@ -32,11 +32,11 @@ if ($rowcnt === 1) {  // located single instance of user
         $expdate = strtotime($american);
         if ($expdate <= time()) {
             // for renewal, need only userid and cookies status
+            $_SESSION['cookiestatus'] = 'EXPIRED';
             echo "EXPIRED";
             exit;
         } else {
             // establish remaining login credentials
-            
             $_SESSION['expire'] = $expiration;
             $_SESSION['cookies'] = $user_dat['cookies'];
             $_SESSION['cookiestatus'] = "OK";
@@ -48,9 +48,6 @@ if ($rowcnt === 1) {  // located single instance of user
                 echo "RENEW";
                 exit;
             }
-        }
-        if ($cstat !== 'EXPIRED') {
-            $_SESSION['cookiestatus'] = 'EXPIRED';
         }
         echo "LOCATED&" . $_SESSION['start'] . "&" . $_SESSION['cookies'];
     } else {  // user exists, but password doesn't match:

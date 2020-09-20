@@ -12,9 +12,9 @@
 session_start();
 require "../database/global_boot.php";
 
-$exit  = filter_input(INPUT_POST, 'exit3') === 'no' ? false : true;
+$exit_and_return  = filter_input(INPUT_POST, 'exit3') === 'yes' ? true : false;
 
-$setup = '001';
+$setup = $exit_and_return ? '001' : '111';
 $_SESSION['start'] = $setup;
 $status = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
 $newstat = $pdo->prepare($status);
@@ -69,8 +69,8 @@ for ($n=0; $n<count($new_amounts); $n++) {
         $pdo->query($new);
     }
 }
-if (!$exit) {
-    $goto = "newBudgetPanels.php?pnl={$setup}";
+if ($setup === '111') { // don't return
+    $goto = "../main/displayBudget.php";
 } else {
     $goto = "../utilities/exitPage.php";
 }

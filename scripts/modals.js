@@ -122,9 +122,9 @@ var modal = (function() {
     }
     // function called when settings.id == 'autopay'
     function autopay(method, acct_name, deferred) {
+        // $close applies to all functions, so changes must be undone
         $('#modal_table').after($close);
         $close.css('margin-top', '12px');
-        $close.text("Exit");
         var divht = $content.height() + 12 + 'px';
         $modal.css({
             height: divht
@@ -144,6 +144,7 @@ var modal = (function() {
                     }
                 }
                 var payee = elements.join().trim();
+                $close.css('margin-top', '0px');
                 ajaxdata = {method: method[idno], acct: acct_name[idno],
                     amt: payment, payee: payee};
                     executeScript('../utilities/makeAutopayment.php', ajaxdata,
@@ -152,6 +153,7 @@ var modal = (function() {
         });
         $close.on('click', function () {
             deferred.resolve();
+            $close.css('margin-top', '0px');
             modal.close();
         });
     }

@@ -175,7 +175,7 @@ $('#revexp').on('click', function() {
 $('#addap').on('click', function() {
     var def = new $.Deferred;
     var apbox = $('#auto').detach();
-    modal.open({id: 'setup_ap', height: '196px', width: '280px',
+    modal.open({id: 'setup_ap', height: '186px', width: '280px',
         content: apbox, deferred: def});
     $.when( def ).then(function() {
         $('#allForms').append(apbox);
@@ -185,7 +185,7 @@ $('#addap').on('click', function() {
 $('#delap').on('click', function() {
     var def = new $.Deferred();
     var dapbox = $('#delauto').detach();
-    modal.open({id: 'del_ap', height: '146px', width: '240px',
+    modal.open({id: 'del_ap', height: '150px', width: '240px',
         content: dapbox, deferred: def});
     $.when( def ).then(function() {
         $('#allForms').append(dapbox);
@@ -219,7 +219,7 @@ $('#varpt').on('click', function() {
 $('#addcd').on('click', function() {
     var def = new $.Deferred();
     var cdbox = $('#cdadd').detach();
-    modal.open({id: 'addcd', width: '248px', height: '160px',
+    modal.open({id: 'addcd', width: '248px', height: '168px',
     content: cdbox, deferred: def});
     $.when( def ).then(function() {
         $('#allForms').append(cdbox)
@@ -229,7 +229,7 @@ $('#addcd').on('click', function() {
 $('#delcd').on('click', function() {
     var def = new $.Deferred();
     var crdrbox = $('#delcrdr').detach();
-    modal.open({id: 'delcard', width: '240px', height: '148px',
+    modal.open({id: 'delcard', width: '240px', height: '150px',
         content: crdrbox, deferred: def});
     $.when( def ).then(function() {
         $('#allForms').append(crdrbox)
@@ -239,7 +239,7 @@ $('#delcd').on('click', function() {
 $('#acctadd').on('click', function() {
     var def = new $.Deferred();
     var adder = $('#addacct').detach();
-    modal.open({id: 'addacct', width: '360px', height: '320px',
+    modal.open({id: 'addacct', width: '360px', height: '316px',
         content: adder, deferred: def});
     $.when( def ).then(function() {
         $('#allForms').append(adder);
@@ -259,7 +259,7 @@ $('#mvacct').on('click', function() {
 $('#renacct').on('click', function() {
     var def = new $.Deferred();
     var rebox = $('#rename').detach();
-    modal.open({id: 'rename', width: '240px', height: '206px',
+    modal.open({id: 'rename', width: '240px', height: '210px',
         content: rebox, deferred: def});
     $.when( def ).then(function() {
         $('#allForms').append(rebox);
@@ -269,7 +269,7 @@ $('#renacct').on('click', function() {
 $('#delacct').on('click', function() {
     var def = new $.Deferred();
     var delbox = $('#delexisting').detach();
-    modal.open({id: 'delacct', width: '260px', height: '220px',
+    modal.open({id: 'delacct', width: '260px', height: '226px',
         content: delbox, deferred: def});
     $.when( def ).then(function() {
         $('#allForms').append(delbox);
