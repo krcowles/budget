@@ -92,6 +92,7 @@ var modal = (function() {
     // general purpose function to execute ajax based on input arguments
     function executeScript(url, ajaxdata, errtype, deferred) {
             var msgtxt = "Problem encountered " + errtype;
+            $('#preloader').show();
             $.ajax({
                 url: url,
                 method: "POST",
@@ -102,14 +103,17 @@ var modal = (function() {
                         deferred.resolve();
                         modal.close()
                         location.reload();
+                        $('#preloader').hide();
                     } else {
                         deferred.resolve();
                         alert(msgtxt);
+                        $('#preloader').hide();
                         modal.close();
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     deferred.resolve();
+                    $('#preloader').hide();
                     msg = msgtxt + ":\n" + textStatus + "; Error: " + errorThrown;
                     alert(msg);
                     modal.close();

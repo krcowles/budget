@@ -272,6 +272,9 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             <button id="genmo">Generate</button>
         </div>
     </div>
+    <div id="preloader">
+        <img src="../images/preload.gif" alt="waiting..." />
+    </div>
     <p style="clear:left;margin-left:16px;">
         <a href="http://validator.w3.org/check?uri=referer">
             <img src="http://www.w3.org/Icons/valid-xhtml10"
