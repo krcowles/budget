@@ -567,22 +567,36 @@ var modal = (function() {
         });
     }
     // modal function executed when settings.id == 'morpt'
-    function monthly(deferred) {
-        $('#genmo').after($close);
-        $close.css('margin-left', '80px');
-        var $mosel = $('#rptmo');
-        var mosel = getSelectValue($mosel[0]);
-        $('#rptmo').on('change', function() {
-            mosel = this.value;
-        });
-        $('#genmo').on('click', function() {
-            var getdata = '../utilities/reports.php?id=morpt&mo=' + mosel;
-            window.open(getdata, "_self");
-        });
-        $close.on('click', function () {
-            deferred.resolve();
-            modal.close();
-        });
+    function reports(deferred, period) {
+        if (period === 'mo') {
+            $('#genmo').after($close);
+            $close.css('margin-left', '80px');
+            var $mosel = $('#rptmo');
+            var mosel = getSelectValue($mosel[0]);
+            $('#rptmo').on('change', function() {
+                mosel = this.value;
+            });
+            $('#genmo').on('click', function() {
+                var getdata = '../utilities/reports.php?id=morpt&mo=' + mosel;
+                window.open(getdata, "_self");
+            });
+            $close.on('click', function () {
+                deferred.resolve();
+                modal.close();
+            });
+        } else if (period = 'yr') {
+            $('#genyr').after($close);
+            $close.css('margin-left', '80px');
+            var $yrsel = $('#rptyr');
+            var yrsel = getSelectValue($yrsel[0]);
+            $('#yrsel').on('change', function() {
+                yrsel = this.value;
+            });
+            $('#genyr').on('click', function() {
+                var getdata = '../utilities/reports.php?id=yrrpt&yr=' + yrsel;
+                window.open(getdata, "_self");
+            });
+        }
     }
 
     
@@ -646,7 +660,9 @@ var modal = (function() {
                 editCredit(settings.ivals, settings.chgitem, 
                     settings.chgid, settings.deferred);
             } else if (modid === 'morpt') {
-                monthly(settings.deferred);
+                reports(settings.deferred, 'mo');
+            } else if (modid === 'yrrpt') {
+                reports(settings.deferred, 'yr');
             }
         },
         close: function() {

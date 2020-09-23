@@ -213,7 +213,13 @@ $('#vmrpt').on('click', function() {
     return;
 });
 $('#varpt').on('click', function() {
-    alert("Not Available Yet");
+    var def = new $.Deferred();
+    var yrrpt = $('#yearrpt').detach();
+    modal.open({id: 'yrrpt', width: '240px', height: '130px', 
+        content: yrrpt, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(yrrpt);
+    });
     return;
 });
 $('#addcd').on('click', function() {

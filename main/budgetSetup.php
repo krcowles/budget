@@ -80,3 +80,8 @@ $balBudget  = dataPrep($balBudget, 'budget');
 $balPrev0   = dataPrep($balPrev0, 'prev0');
 $balPrev1   = dataPrep($balPrev1, 'prev1');
 $balCurrent = dataPrep($balCurrent, 'current');
+
+// setup available years for annual report:
+$thisyear = $digits[2];
+$prioryr1 = $thisyear - 1;
+$prioryr2 = $thisyear - 2;

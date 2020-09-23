@@ -40,16 +40,28 @@ case 'payexp':
     // examine method for Cr/Dr
     if (in_array($method, $cr)) {
         $dbmethod = "Credit";
+        $pd = 'N';
     } elseif (in_array($method, $dr)) {
         $dbmethod = "Debit";
+        $pd = 'Y';
     } else {
         $dbmethod = "Check";
+        $pd = 'Y';
     }
     $addchg = "INSERT INTO `Charges` (`userid`, `method`, `cdname`," .
         "`expdate`, `expamt`, `payee`, `acctchgd`, `paid`) " .
-        "VALUES (?,?,?,?,?,?,?,'N');";
+        "VALUES (?,?,?,?,?,?,?,'?');";
     $pdo->prepare($addchg)->execute(
-        [$_SESSION['userid'], $dbmethod, $method, $dbdate, $amt, $payto, $acct]
+        [
+            $_SESSION['userid'], 
+            $dbmethod,
+            $method,
+            $dbdate,
+            $amt,
+            $payto,
+            $acct,
+            $pd
+        ]
     );
     echo "OK";
     break;
@@ -182,12 +194,17 @@ case 'addacct':
     $newacct = filter_input(INPUT_POST, 'acct_name');
     $budget  = filter_input(INPUT_POST, 'monthly');
     $newpos = $user_cnt + 1;
-    $newsql = "INSERT INTO `Budgets` (`userid`,`budname`,`budpos`,`status`,`budamt`," .
-        "`prev0`,`prev1`,`current`,`autopay`,`moday`,`autopd`,`funded`) VALUES (" .
-        ":uid,:item,:pos,'A',:amt,'0','0','0','','0','','0');";
+    $newsql = "INSERT INTO `Budgets` (`userid`,`budname`,`budpos`,`status`," .
+        "`budamt`,`prev0`,`prev1`,`current`,`autopay`,`moday`,`autopd`,`funded`)" .
+        " VALUES (:uid,:item,:pos,'A',:amt,'0','0','0','','0','','0');";
     $addinfo = $pdo->prepare($newsql);
     $addinfo->execute(
-        ["uid" => $_SESSION['userid'], "item" => $newacct, "pos" => $newpos, "amt" => $budget]
+        [
+            "uid" => $_SESSION['userid'],
+            "item" => $newacct,
+            "pos" => $newpos,
+            "amt" => $budget
+        ]
     );
     echo "OK";
     break;

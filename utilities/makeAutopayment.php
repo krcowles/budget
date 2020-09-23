@@ -33,13 +33,15 @@ $updte->execute(["val" => $newval, "ap" => $digits[0], "tblid" => $tblid]);
 // update Charges table
 if (in_array($with, $cr)) {
     $methodtype = 'Credit';
+    $pd = 'N';
 } else {
     $methodtype = 'Debit';
+    $pd = 'Y';
 }
 $newexp = "INSERT INTO `Charges` (`userid`,`method`,`cdname`,`expdate`,`expamt`," .
-    "`payee`,`acctchgd`,`paid`) VALUES ('" . $_SESSION['userid'] ."','" . $methodtype . "','" .
-    $with . "','" . $tbldate . "','" . $apamt . "','" . $payee .
-    "','" . $apacct . "','N');";
+    "`payee`,`acctchgd`,`paid`) VALUES ('" . $_SESSION['userid'] ."','" .
+    $methodtype . "','" . $with . "','" . $tbldate . "','" . $apamt . "','" .
+    $payee . "','" . $apacct . "','" . $pd . "');";
 $pdo->query($newexp);
 
 echo "OK";

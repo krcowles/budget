@@ -271,6 +271,15 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             </select><br /><br />
             <button id="genmo">Generate</button>
         </div>
+        <div id="yearrpt">
+                Please select the report year<br />
+                <select id="rptyr" name="year">
+                    <option value="<?=$thisyear;?>"><?=$thisyear;?></option>
+                    <option value="<?=$prioryr1;?>"><?=$prioryr1;?></option>
+                    <option value="<?=$prioryr2;?>"><?=$prioryr2;?></option>
+                </select><br /><br />
+                <button id="genyr">Generate</button>
+        </div>
     </div>
     <div id="preloader">
         <img src="../images/preload.gif" alt="waiting..." />

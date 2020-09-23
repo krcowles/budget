@@ -8,30 +8,6 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$mo = array_search($period, $month_names) + 1;
-$datareq = "SELECT * FROM `Charges` WHERE `userid` = :uid;";
-$data = $pdo->prepare($datareq); 
-$data->execute(["uid" => $_SESSION['userid']]);
-$modat = $data->fetchALL(PDO::FETCH_ASSOC);
-$method = [];
-$cdname = [];
-$date = [];
-$amt = [];
-$payee = [];
-$acct = [];
-$paid = [];
-foreach ($modat as $item) {
-    $expdate = explode("-", $item['expdate']);
-    if ($expdate[0] === $digits[2] && $expdate[1] == $mo) {
-        array_push($method, $item['method']);
-        array_push($cdname, $item['cdname']);
-        array_push($date, $item['expdate']);
-        array_push($amt, $item['expamt']);
-        array_push($payee, $item['payee']);
-        array_push($acct, $item['acctchgd']);
-        array_push($paid, $item['paid']);
-    }
-}
 ?>
 <p class="SmallHeading">The following charges were incurred in <?= $period;?></p>
 <table>
