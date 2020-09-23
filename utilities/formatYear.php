@@ -40,13 +40,12 @@
                 <?php else: ?>
                 <tr>
                 <?php endif; ?>
-                <td><?= $mo[$k][$n][6];?></td>
+                <td><?= $mo[$k][$n][2];?></td>
                 <?php if ($mo[$k][$n][6] === "Y") : ?>
                 <td>Paid</td>
                 <?php else: ?>
                 <td class="red">Unpaid</td>
                 <?php endif; ?>
-                <td><?= $mo[$k][$n][2];?></td>
                 <td><?= $mo[$k][$n][0];?></td>
                 <td><?= $mo[$k][$n][1];?></td>
                 <td><?= $mo[$k][$n][3];?></td>
