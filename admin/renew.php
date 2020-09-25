@@ -1,7 +1,8 @@
 <?php
 /**
  * This script will allow the user to renew his/her password if he/she
- * has opted to do so.
+ * has opted to do so. It is also used when a user requests to reset his/her
+ * password,
  * PHP Version 7.1
  * 
  * @package Budget
@@ -10,6 +11,8 @@
  */
 session_start();
 require "../database/global_boot.php";
+$resetmail = isset($_GET['user']) ? filter_input(INPUT_GET, 'user') : 'notmail';
+
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
@@ -51,6 +54,7 @@ require "../database/global_boot.php";
 <p id="choice" style="display:none;">nochoice</p>
 
 <form id="form" method="post" action="#">
+    <input type="hidden" name="username" value="<?=$resetmail;?>" />
     <fieldset>
         <legend>Password Information</legend>
         <p id="pnote">Note: Passwords must be at least 8 characters long and 

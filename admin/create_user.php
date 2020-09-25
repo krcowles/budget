@@ -2,6 +2,7 @@
 /**
  * This script will update the Users table with the form information 
  * entered by the new user on Registration.html, or update for renewal.
+ * If the user 'Forgot Password', the session data will also be set.
  * PHP Version 7.1
  * 
  * @package Admin
@@ -12,11 +13,10 @@ session_start();
 require_once "../database/global_boot.php";
 
 $submitter = filter_input(INPUT_POST, 'submitter');
-$username  = isset($_POST['username']) ?
-    filter_input(INPUT_POST, 'username') : false;
+$username  = filter_input(INPUT_POST, 'username');
 $user_pass = filter_input(INPUT_POST, 'password');
 $choice    = filter_input(INPUT_POST, 'cookies');
-$_SESSION['cookies']      = $choice;
+$_SESSION['cookies'] = $choice;
 
 $password  = password_hash($user_pass, PASSWORD_DEFAULT);
 $today = getdate();
@@ -45,6 +45,18 @@ if ($submitter == 'create') {
     $_SESSION['cookiestatus'] = "OK";
     $_SESSION['start']        = '000';
 } else { // renew: update user
+    if ($username !== 'notmail') {
+        // if changing password via email, there are no login credentials yet
+        $getUserReq = "SELECT * FROM `Users` WHERE `username` = :uname;";
+        $getUser = $pdo->prepare($getUserReq);
+        $getUser->execute(["uname" => $username]);
+        $user_dat = $getUser->fetch(PDO::FETCH_ASSOC);
+        $_SESSION['userid'] = $user_dat['uid'];
+        $_SESSION['expire'] = $user_dat['passwd_expire'];
+        $_SESSION['cookiestatus'] = "OK";
+        $_SESSION['start'] = $user_dat['setup'];
+        $_SESSION['cookies'] = $choice;
+    }
     $updateuser = "UPDATE `Users` SET `password`=?, `passwd_expire`=?, " .
         "`cookies`=? WHERE `uid`=?;";
     $update = $pdo->prepare($updateuser);

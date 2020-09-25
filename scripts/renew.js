@@ -67,11 +67,11 @@ $('#form').on('submit', function(evt) {
         alert("You must accept or reject the use of cookies for this site");
         return;
     }
-    var usr = $('input[name=username]').val();
     var ajaxData = new FormData();
-    ajaxData.append('password',  $('input[name=password]').val());
-    ajaxData.append('cookies',   $('#choice').val());
+    ajaxData.append('password', $('input[name=password]').val());
+    ajaxData.append('cookies', $('#choice').val());
     ajaxData.append('submitter', 'renew');
+    ajaxData.append('username', $('input[name=username]').val());
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'create_user.php');
     xhr.onload = function() {
@@ -82,8 +82,7 @@ $('#form').on('submit', function(evt) {
                     "Server returned status " + this.status);
             }
         } else {
-            var success = "../main/displayBudget.php?&user=" + 
-                encodeURIComponent(usr);
+            var success = "../index.php";
             window.open(success, '_self');
         }
     }
