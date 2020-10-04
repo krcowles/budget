@@ -76,7 +76,7 @@ for ($p=0; $p<count($dr); $p++) {
             $dbody .= "<td class='col2'>{$damt[$q]}</td>" . PHP_EOL;
             $dbody .= "<td class='col3'>{$dpay[$q]}</td>" . PHP_EOL;
             $dbody .= "<td class='col4'>{$dfrm[$q]}</td>" . PHP_EOL;
-            $dbody .= "<td class='mvdr'><input id='dr{$did[$j]}' " .
+            $dbody .= "<td class='mvdr'><input id='dr{$did[$q]}' " .
                 "type='checkbox' /></td>" . PHP_EOL;
             $dbody .= "</tr>" . PHP_EOL;
         }

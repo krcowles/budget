@@ -14,7 +14,7 @@
 if ($using === 'server') {
     $dbFile = "../database/epiz_24776673_BudgdetData.sql";
 } else {
-    $dbFile = "../database/epiz_2477663_BudgetData.sql";
+    $dbFile = "../database/epiz_24776673_BudgdetData.sql";
 }
 $lines = file($dbFile);
 if (!$lines) {

@@ -50,7 +50,7 @@ case 'payexp':
     }
     $addchg = "INSERT INTO `Charges` (`userid`, `method`, `cdname`," .
         "`expdate`, `expamt`, `payee`, `acctchgd`, `paid`) " .
-        "VALUES (?,?,?,?,?,?,?,'?');";
+        "VALUES (?,?,?,?,?,?,?,?);";
     $pdo->prepare($addchg)->execute(
         [
             $_SESSION['userid'], 

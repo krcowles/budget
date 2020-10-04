@@ -13,6 +13,7 @@ function retrieveDwnldCookie(dcname) {
 $('#reload').on('click', function() {
     if (confirm("Do you really want to drop all tables and reload them?")) {
         // backup, just in case...
+        /*
         window.open('export_all_tables.php?dwnld=N', "_blank");
         var dwnldResult;
         var downloadTimer = setInterval(function() {
@@ -24,6 +25,8 @@ $('#reload').on('click', function() {
                 }
             }
         }, 1000)
+        */
+       window.open('drop_all_tables.php', "_blank");
     }
 });
 
