@@ -54,6 +54,9 @@
     font-size: 16px;
     border-width: 1px;
 }
+#otd_desc {
+    width: 210px;
+}
 #doit {
     margin-top: 8px;
 }

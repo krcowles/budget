@@ -854,6 +854,21 @@ INSERT INTO Charges VALUES
 
 
 
+CREATE TABLE `Deposits` (
+  `depid` int(10) NOT NULL AUTO_INCREMENT,
+  `userid` int(10) NOT NULL,
+  `date` date NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `otd` char(1) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  PRIMARY KEY (`depid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+
 CREATE TABLE `Users` (
   `uid` int(10) NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL,

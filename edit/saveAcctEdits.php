@@ -69,6 +69,7 @@ case 'income':
     $newcur = [];
     $newfnd = [];
     $funds = floatval(filter_input(INPUT_POST, 'funds'));
+    $deposit_amt = $funds;
     $indx = array_search('Undistributed Funds', $account_names);
     for ($j=0; $j<count($account_names); $j++) {
         $funded = floatval($income[$j]);
@@ -117,10 +118,16 @@ case 'income':
             ["bal" => $newcur[$l], "newfund" => $fndval[$l], "id" => $fndkey[$l]]
         );
     }
+    // Record the deposit
+    $depositReq = "INSERT INTO `Deposits` (`userid`,`date`,`amount`,`otd`," .
+        "`description`) VALUES (?,?,?,'N','');";
+    $deposit = $pdo->prepare($depositReq);
+    $deposit->execute([$_SESSION['userid'], $dbdate, $deposit_amt]);
     echo "OK";
     break;
 case 'otdeposit':
     $funds = filter_input(INPUT_POST, 'newfunds');
+    $note  = filter_input(INPUT_POST, 'note');
     $key = array_search('Undistributed Funds', $account_names);
     $newval = floatval($current[$key]) + floatval($funds);
     $undis = (string) $newval;
@@ -128,6 +135,13 @@ case 'otdeposit':
     $updte = "UPDATE `Budgets` SET `current` = :undis WHERE `id` = :tblid;";
     $newundis = $pdo->prepare($updte);
     $newundis->execute(["undis" => $undis, "tblid" => $loc]);
+    // record in 'Deposits' table
+    $depositReq = "INSERT INTO `Deposits` (`userid`,`date`,`amount`,`otd`," .
+        "`description`) VALUES (?,?,?,'Y',?);";
+    $deposit = $pdo->prepare($depositReq);
+    $deposit->execute(
+        [$_SESSION['userid'], $dbdate, $funds, $note]
+    );
     echo "OK";
     break;
 case 'xfr':

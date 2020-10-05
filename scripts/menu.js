@@ -135,7 +135,7 @@ $('#otd').on('click', function() {
     }
     var def = new $.Deferred();
     var funds = $('#dep').detach();
-    modal.open({id: 'deposit', height: '170px', width: '220px',
+    modal.open({id: 'deposit', height: '220px', width: '220px',
         content: funds, deferred: def});
     $.when( def ).then(function() {
         $('#allForms').append(funds);

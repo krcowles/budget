@@ -163,7 +163,9 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
         <div id="dep">
             Enter the amount to be deposited (it will be placed in 'Undistributed
             Funds')<br />
-            $ <input type="text" id="depo" /><br /><br />
+            $ <input type="text" id="depo" /><br />
+            Description (Optional)<br />
+            <textarea id="otd_desc" rows="2" columns="30"></textarea><br /><br />
             <button id="depfunds">Deposit Funds</button>
         </div>
         <!-- transfer funds -->

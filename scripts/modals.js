@@ -241,8 +241,13 @@ var modal = (function() {
         $deposit.on('change', function() {
             deposit_funds = this.value
         });
+        var otd_desc = '';
+        $('#otd_desc').on('change', function() {
+            otd_desc = this.value;
+        });
         $('#depfunds').on('click', function() {
-            ajaxdata = {id: 'otdeposit', newfunds: deposit_funds};
+            ajaxdata = {id: 'otdeposit', newfunds: deposit_funds,
+                note: otd_desc};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 "making deposit", deferred);
         });
