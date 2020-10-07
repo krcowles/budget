@@ -38,7 +38,11 @@ require "../database/global_boot.php";
         <button id="show">Show All Tables</button><br />
         <!-- End of Show/Set div w/form -->
     </fieldset><br />
-
+    <fieldset>
+        <legend>Miscellaneous Tools</legend>
+        <button id="phpinfo">PHPInfo</button><br />
+    </fieldset>
+    
 <script src="../scripts/jquery-1.12.1.js"></script>
 <script src="../scripts/admintools.js"></script>
 

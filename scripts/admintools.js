@@ -75,9 +75,11 @@ $('#commit').on('click', function() {
 $('#cleanPix').on('click', function() {
     window.open('cleanPix.php', "_blank");
 });
-$('#pinfo').on('click', function() {
+*/
+$('#phpinfo').on('click', function() {
     window.open('phpInfo.php', "_blank");
 });
+/*
 $('#pub').on('click', function() {
     window.open("reldel.php?act=rel", "_blank");
 });
