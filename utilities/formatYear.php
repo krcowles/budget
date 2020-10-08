@@ -9,10 +9,11 @@
  * @license No license to date
  */
 ?>
-<p class="SmallHeading">The following charges were incurred in <?= $period;?></p>
+<p class="SmallHeading">The following charges were incurred in <?= $period;?><br />
+NOTE: You can sort by clicking the column header</p>
 <?php for ($k=1; $k<=12; $k++) : ?>
     <p>In <?=$month_names[$k-1];?>:</p>
-    <table>
+    <table class="sortable">
         <colgroup>
             <col style="width:120px" />
             <col style="width:100px" />
@@ -24,13 +25,13 @@
         </colgroup>
         <thead>
             <tr>
-                <th>Date Incurred</th>
-                <th>Status</th>
-                <th>Method</th>
-                <th>Card Used</th>
-                <th>Amount</th>
-                <th>Payee</th>
-                <th>Deducted From</th>
+                <th data-sort="date">Date Incurred</th>
+                <th data-sort="std">Status</th>
+                <th data-sort="std">Method</th>
+                <th data-sort="std">Card Used</th>
+                <th data-sort="amt">Amount</th>
+                <th data-sort="std">Payee</th>
+                <th data-sort="std">Deducted From</th>
             </tr>
         </thead>
         <tbody>

@@ -86,8 +86,9 @@ if ($monthly) {
                border-width: 2px; border-style: outset; border-color: black; }
        th { text-align: left; padding: 4px 6px 4px 6px;
             background-color: #afcfaf; border-bottom: 2px 
-            solid black; border-top: 2px solid black; 
-            position: sticky; top: 0}
+            solid black; border-top: 2px; border-right: 2px solid black; 
+            position: sticky; top: 0; cursor: pointer;}
+        th:hover {background-color: ghostwhite;}
         tr.even { background-color: #dfecdf; }
        td { padding: 4px 6px 4px 6px; }
        .red  { color: firebrick; }
@@ -105,14 +106,22 @@ if ($monthly) {
     }
     ?>
 </div>
+<div>
+<p style="clear:left;margin-left:16px;">
+        <a href="http://validator.w3.org/check?uri=referer">
+            <img src="http://www.w3.org/Icons/valid-xhtml10"
+            alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+        </a>
+</p>
+</div>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+<script src="../scripts/tableSort.js" type="text/javascript"></script>
 <script type="text/javascript">
     $('#back').on('click', function() {
         var budpg = '../main/displayBudget.php';
         window.open(budpg, "_self");
     });
-
 </script>
 
 </body>
