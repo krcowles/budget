@@ -8,7 +8,7 @@ $(function() { // doc ready statement
 /**
  * This section places items on the page, sizing them and operating open/close arrows
  */
-// set main menu widths (determined by trial and error for appearance; not derived - yet)
+// set main menu widths (determined by trial and error for appearance; not derived [yet])
 var menuwidths = ['96', '84', '70', '60', '72',    '82', '83', '91', '98', '84','64'];
 var $buds = $('.bud a');
 $buds.each(function(indx) {
@@ -127,7 +127,7 @@ $('#depmo').on('click', function() {
     return;
 });
 $('#otd').on('click', function() {
-    var ans = confirm("If this deposit is for regularly received " +
+    var ans = confirm("IF this deposit is for regularly received " +
         "monthly income,\nplease use the 'Deposit Monthly Income' command;\n" +
         "Selecting CANCEL below will exit the current command");
     if (!ans) {
@@ -202,6 +202,11 @@ $('#edcc').on('click', function() {
     window.open(editexpense, "_self");
     return;
 });
+$('#inc').on('click', function() {
+    var inc_rpt = '../utilities/reports.php?id=inc';
+    window.open(inc_rpt, "_self");
+    return;
+})
 $('#vmrpt').on('click', function() {
     var def = new $.Deferred();
     var morpt = $('#morpt').detach();

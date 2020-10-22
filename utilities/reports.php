@@ -16,6 +16,7 @@ require "timeSetup.php";
 $id = isset($_GET['id']) ? filter_input(INPUT_GET, 'id') : false;
 $monthly = $id === 'morpt' ? true : false;
 $annual  = $id === 'yrrpt' ? true : false;
+$income  = $id === 'inc' ? true : false;
 
 $datareq = "SELECT * FROM `Charges` WHERE `userid` = :uid;";
 $data = $pdo->prepare($datareq); 
@@ -43,7 +44,8 @@ if ($monthly) {
             array_push($paid, $item['paid']);
         }
     }
-} elseif ($annual) {
+} 
+if ($annual) {
     $period = isset($_GET['yr']) ? filter_input(INPUT_GET, 'yr') : false;
     $mo = [];
     for ($j=1; $j<=12; $j++) {
@@ -101,8 +103,10 @@ if ($monthly) {
     <?php
     if ($monthly) {
         include "formatMonth.php";
-    } else {
+    } elseif ($annual) {
         include "formatYear.php";
+    } elseif ($income) {
+        include "formatIncome.php";
     }
     ?>
 </div>
