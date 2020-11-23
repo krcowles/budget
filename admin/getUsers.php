@@ -7,7 +7,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require "../php/global_boot.php";
+require "../database/global_boot.php";
 
 $name = filter_input(INPUT_POST, 'username');
 // Get current list of usernames:

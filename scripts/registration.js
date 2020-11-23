@@ -170,7 +170,7 @@ var spacesInName = function () {
             data: ajaxdata,
             success: function(response) {
                 if (response == 'DONE') {
-                    window.open('../newindex.php', '_self');
+                    window.open('../index.php', '_self');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {

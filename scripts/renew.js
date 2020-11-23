@@ -84,7 +84,7 @@ $('#formsubmit').on('click', function(ev) {
                 alert("Could not find the One-Time Code");
             } else {
                 alert("Successful: you will be redirected to the home page");
-                window.open('../newindex.php');
+                window.open('../index.php');
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
