@@ -1,96 +1,97 @@
 /**
- * @fileoverview This form will reset the user's password and update
- * the User table 'passwd_expire' field. If cookies are accepted, a
- * new cookie will be sent.
+ * @fileoverview Allow user to renew account with new password
  * 
  * @author Ken Cowles
- * @version 2.0 Secure login
+ * @version 2.0 Redesigned login for security improvement
  */
 $(function() {
-  
-$('#form').validate({
-    rules: {
-        password: {
-            minlength: 8,
-        },
-        confirm_password: {
-            minlength: 8,
-            equalTo: "#passwd"
-        }
-    },
-    messages: {
-        password: {
-            minlength: "Passwords must be at least 8 characters"
-        },
-        confirm_password: {
-            minlength: "Passwords must be at least 8 characters",
-            equalTo: "Password does not match - please retry"
-        }
-    }
-}); // end validate form
 
-// prevent hitting 'Return' key submitting form - user must hit button
-window.onkeydown = function(event) {
-    if(event.keyCode == 13) {
-        if(event.preventDefault) event.preventDefault();
-        return false;
-    }
+// Start with checkbox cleared
+$('#ckbox').prop('checked', false);
+
+/**
+ * position the registration box on the page
+ * 
+ * @return {null}
+ */ 
+function setbox() {
+    let regbox_center = Math.floor($('#container').width()/2);
+    let regbox_left = window.innerWidth/2 - regbox_center; // 280 = regbox/2 width
+    $('#container').offset({
+        top: 140,
+        left: regbox_left
+    });
 }
+setbox();
+$(window).resize(setbox);
 
-// register user's choice for site cookies
-var cookies = false;
-$('#accept').on('click', function(ev) {
-    ev.preventDefault();
-    $('#choice').val('accept');
-    cookies = true;
+$('#accept').on('click', function() {
+    $('#cookie_banner').slideToggle(); 
+    $('#usrchoice').val("accept");
+});
+$('#reject').on('click', function() {
     $('#cookie_banner').slideToggle();
- });
- $('#reject').on('click', function(ev) {
-    ev.preventDefault();
-    $('#choice').val('reject');
-    cookies = true;
-    $('#cookie_banner').slideToggle();
- });
-
-$('#form').on('submit', function(evt) {
-    evt.preventDefault();
-    if ($('#passwd').val() == '' || $('#confirm_password').val() == '') {
-            alert("Password and Confirm Password must both be completed");
-            return;
-    }
-    if ($('#passwd').val() !== $('#confirm_password').val()) {
-        alert("The entries for 'Passwords' and 'Confirm' do not match");
-        $('#confirm_password').val('');
-        return;
-    }
-    if (!cookies) {
-        alert("You must accept or reject the use of cookies for this site");
-        return;
-    }
-    var ajaxData = new FormData();
-    ajaxData.append('password', $('input[name=password]').val());
-    ajaxData.append('cookies', $('#choice').val());
-    ajaxData.append('submitter', 'renew');
-    ajaxData.append('username', $('input[name=username]').val());
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'create_user.php');
-    xhr.onload = function() {
-        if (this.status !== 200) {
-            if (this.response !== 'DONE') {
-                alert("The password renewal/reset did not occur\n\n" +
-                    "The following unexpected result occurred:\n" +
-                    "Server returned status " + this.status);
-            }
-        } else {
-            var success = "../index.php";
-            window.open(success, '_self');
-        }
-    }
-    xhr.onerror = function() {
-        alert("The request failed: password renewal/reset did not occur\n" +
-            "Contact the site master or try again.");
-    }
-    xhr.send(ajaxData);
+    $('#usrchoice').val("reject");
 });
 
+// toggle visibility of password:
+var pword = document.getElementsByName('password');
+$('#ckbox').on('click', function() {
+    if ($(this).is(':checked')) {
+        pword[0].type = "text";
+        pword[0].style.position = "relative";
+        //pword[0].style.left = "-20px";
+    } else {
+        pword[0].type = "password";
+    }
+});
+
+$('#formsubmit').on('click', function(ev) {
+    ev.preventDefault();
+    let submit  = $('input[name=submitter]').val();
+    let usrnme  = $('input[name=username]').val();
+    let cookies = $('input[name=cookies]').val();
+    let oldpass = $('input[name=oldpass]').length > 0 ?
+        $('input[name=oldpass]').val() : '';
+    let newpass = $('input[name=password]').val();
+    let confirm = $('input[name=confirm]').val();
+    if ($('#password') == '') {
+        alert("You must fill in a password");
+        return false;
+    }
+    if (confirm !== newpass) {
+        alert("Passwords do not match");
+        return false;
+    }
+    if ($('#usrchoice').val() == 'nochoice') {
+        alert("You must designate your cookie choice below");
+        return false;
+    }
+    var ajaxData = {
+        submitter: submit,
+        username: usrnme,
+        password: newpass,
+        cookies: cookies,
+        oldpass: oldpass
+    };
+    $.ajax({
+        url: 'create_user.php',
+        method: "post",
+        data: ajaxData,
+        dataType: "text",
+        success: function(response) {
+            if (response == 'NOTFOUND') {
+                alert("Could not find the One-Time Code");
+            } else {
+                alert("Successful: you will be redirected to the home page");
+                window.open('../newindex.php');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("Error encountered: " + textStatus + "; Errno " + errorThrown);
+            return false;
+        }
+    });
+});
+    
 });

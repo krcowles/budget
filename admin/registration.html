@@ -11,57 +11,51 @@
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
     <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
     <link href="../styles/registration.css" type="text/css" rel="stylesheet" />
-    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-    <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
-    <script src="../scripts/jquery.validate.min.js" type="text/javascript"></script>
-    <script src="../scripts/jquery.validate.password.js"
-        type="text/javascript"></script>
 </head>
 
 <body>
-<div id="container">
-<h2 class="NormalHeading">
-    Welcome to the Budgetizer Website!
-</h2>
-<p class="SmallHeading">Please fill out the form below to become a (free) 
-    registered user. Only the minimum information is required to secure your login.
-</p>
-<form id="form" method="post" action="#">
-    <input type="hidden" id="choice" name="choice" value="none" />
-    <fieldset>
-        <legend>Required Information</legend>
-        <label>Your email address (only used if you forget your 
-            password)</label>
-        <input type="text" name="email" size="40" class="email" 
-                maxlength="60" value="" autocomplete="email" /><br />
-        <label>Your user name for logging in (30 characters max - no spaces please)</label>
-        <input type="text" name="username" size="40" 
-                maxlength="30" value="" autocomplete="username" /><br />
-        <p>Note: Passwords must be at least 8 characters long and 
-            should contain a mix of characters (alpha, numeric, special).</p>
-        <label for="passwd">Enter a password: </label>
-        <input id="passwd" type="password" name="password" 
-            size="20" class="password" autocomplete="new-password" />&nbsp;
-        <div class="password-meter">
-            <div class="password-meter-message"></div>
-            <div class="password-meter-bg">
-                <div class="password-meter-bar"></div>
-            </div>
-            <br />
-            <div id ="confirm">
-            <label for="confirm_password">Confirm password: </label>
-            <input id="confirm_password" type="password" name="confirm_password"
-                size="20" class="required" autocomplete="new-password"/>
-            </div>
-        </div><br />
-    </fieldset><br /><br />
-    <button id="formsubmit">Submit My Info</button>
-</form>
-<div id="xhtml" style="margin-top:40px;">
-    <p>
-        <a href="http://validator.w3.org/check?uri=referer"><img
-          src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
+
+<div id="header">
+    <h2 class="NormalHeading">
+        Welcome to the Budgetizer Website!
+    </h2>
+    <p class="SmallHeading">Please fill out the form below to become a (free) 
+        registered user. Only the minimum information is required to secure your login.
     </p>
+</div>
+<div id="container">
+    <form id="form" action="create_user.php" method="post">
+        <input type="hidden" name="submitter" value="create" />
+        <input id="usrchoice" type="hidden" name="cookies" value="nochoice" />
+        <div id="registration">
+            <p id="sub">Create and manage your personal budget</p>
+            <div class="user-input leftmost">
+                <div class="pseudo-legend">Username</div>
+                <div id="line3" class="lines"></div>
+                <input id="uname" class="signup" type="text"
+                    placeholder="User Name" name="username"
+                    autocomplete="username" />
+            </div>
+            <div class="user-input">
+                <div class="pseudo-legend">Email</div>
+                <div id="line4" class="lines"></div>
+                <input id="email" class="signup" type="email"
+                    placeholder="Email" name="email"
+                    autocomplete="email" />
+            </div><br />
+
+            <div class="user-input leftmost">
+                <div class="pseudo-legend">Password</div>
+                <div id="line5" class="lines"></div>
+                <input id="pword" class="signup" type="password"
+                    placeholder="Password" name="password"
+                    autocomplete="new-password" />
+            </div>
+            <span id="showit">&nbsp;&nbsp;Show password:<input id="cb"
+                    type="checkbox" /></span>
+            <button id="submit">Submit</button>    
+        </div>
+    </form>
 </div>
 
 <div id="cookie_banner">
@@ -76,8 +70,7 @@
     </div>
 </div>
 
-</div>   <!-- end of container -->
-
+<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/registration.js" type="text/javascript"></script>
 
 </body>

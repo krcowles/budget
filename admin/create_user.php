@@ -12,6 +12,7 @@
 session_start();
 require_once "../database/global_boot.php";
 
+// all posted, regardless of caller:
 $submitter = filter_input(INPUT_POST, 'submitter');
 $username  = filter_input(INPUT_POST, 'username');
 $user_pass = filter_input(INPUT_POST, 'password');
@@ -26,6 +27,8 @@ $day = $today['mday'];
 $year = intval($today['year']);
 $year++;
 $exp_date = $year . "-" . $month_digits . "-" . $day;
+
+// response is based on caller: register ('create') or renew ('change')
 if ($submitter == 'create') {
     $email  = isset($_POST['email']) ? 
         filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) : false;
@@ -44,25 +47,42 @@ if ($submitter == 'create') {
     $_SESSION['expire']       = $exp_date;
     $_SESSION['cookiestatus'] = "OK";
     $_SESSION['start']        = '000';
-} else { // renew: update user
-    if ($username !== 'notmail') {
-        // if changing password via email, there are no login credentials yet
-        $getUserReq = "SELECT * FROM `Users` WHERE `username` = :uname;";
-        $getUser = $pdo->prepare($getUserReq);
-        $getUser->execute(["uname" => $username]);
-        $user_dat = $getUser->fetch(PDO::FETCH_ASSOC);
-        $_SESSION['userid'] = $user_dat['uid'];
-        $_SESSION['expire'] = $user_dat['passwd_expire'];
-        $_SESSION['cookiestatus'] = "OK";
-        $_SESSION['start'] = $user_dat['setup'];
-        $_SESSION['cookies'] = $choice;
+} elseif ($submitter == 'change') { // renew: update user
+    if (empty($username)) {
+        /**
+         * This is the 'forgot password' situation, with a temporary code: 
+         * no login credentials yet exist
+         */
+        $tmp_code = filter_input(INPUT_POST, 'oldpass');
+        $users = $pdo->query("SELECT * FROM `Users`;")->fetchAll(PDO::FETCH_ASSOC);
+        $found = false;
+        foreach ($users as $user_dat) {
+            if (password_verify($tmp_code, $user_dat['password'])) {
+                // update the user info using new password,
+                // but don't log in (return to login site)
+                $userid = $user_dat['uid'];
+                $updateuser = "UPDATE `Users` SET `password`=?, `passwd_expire`=?, " .
+                    "`cookies`=? WHERE `uid`=?;";
+                $update = $pdo->prepare($updateuser);
+                $update->execute(
+                    array($password, $exp_date, $choice, $userid)
+                );
+                $found = true;
+                break;
+            }
+        }  
+        if (!$found) {
+            echo "NOTFOUND";
+            exit();
+        } 
+    } else {
+        $updateuser = "UPDATE `Users` SET `password`=?, `passwd_expire`=?, " .
+            "`cookies`=? WHERE `uid`=?;";
+        $update = $pdo->prepare($updateuser);
+        $update->execute(
+            array($password, $exp_date, $choice, $_SESSION['userid'])
+        );
     }
-    $updateuser = "UPDATE `Users` SET `password`=?, `passwd_expire`=?, " .
-        "`cookies`=? WHERE `uid`=?;";
-    $update = $pdo->prepare($updateuser);
-    $update->execute(
-        array($password, $exp_date, $choice, $_SESSION['userid'])
-    );
 }
 if ($_SESSION['cookies'] === 'accept') {
     $days = 365; // Number of days before cookie expires

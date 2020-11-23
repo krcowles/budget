@@ -1,8 +1,12 @@
 <?php
 /**
- * This script will allow the user to renew his/her password if he/she
- * has opted to do so. It is also used when a user requests to reset his/her
- * password,
+ * This script will allow the user to renew his/her password.
+ * One way to get here is via the login process which examines
+ * the user's expiration date and allows a redirect here if it has
+ * expired, or is about to expire (and the user has confirmed he/she
+ * wishes to renew). In this case, all login credentials are already
+ * established. Another way is via the 'Forgot Password' mail
+ * link. In this case, there are no user login credentials.
  * PHP Version 7.1
  * 
  * @package Budget
@@ -11,79 +15,88 @@
  */
 session_start();
 require "../database/global_boot.php";
-$resetmail = isset($_GET['user']) ? filter_input(INPUT_GET, 'user') : 'notmail';
-
+$tmpcode  = isset($_GET['code']) ? filter_input(INPUT_GET, 'code') : '';
+$username = isset($_SESSION['username']) && empty($tmpcode) ? 
+    $_SESSION['username'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-    <title>Profile/Password Renewal</title>
+    <title>Login Reset</title>
     <meta charset="utf-8" />
-    <meta name="description" content="User update password et al" />
+    <meta name="description" content="User password update" />
     <meta name="author" content="Tom Sandberg and Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
-    <link href="../styles/registration.css" type="text/css" rel="stylesheet" />
-    <style type="text/css">
-        body { margin: 0px;}
-        #formsubmit {
-            width: 230px;
-            height: 28px;
-            font-size: 18px;
-            color: black;
-            margin-bottom: 18px;
-        }
-        #formsubmit:hover {
-            cursor: pointer;
-            color: white;
-            background-color: black;
-            font-weight: bold;
-        }
-    </style>
-    <script src="../scripts/jquery-1.12.1.js"></script>
-    <script src="../scripts/jquery-ui.js"></script>
-    <script src="../scripts/jquery.validate.min.js"></script>
-    <script src="../scripts/jquery.validate.password.js"></script>
+    <link href="../styles/renew.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>
-
 <div id="container">
-<p class="SmallHeading">Please update your password</p>
-<p id="choice" style="display:none;">nochoice</p>
-
-<form id="form" method="post" action="#">
-    <input type="hidden" name="username" value="<?=$resetmail;?>" />
-    <fieldset>
-        <legend>Password Information</legend>
-        <p id="pnote">Note: Passwords must be at least 8 characters long and 
-            should contain a mix of characters (alpha, numeric, special). They
-            are automatically set to expire in 1 year, at which time you will
-            need to set a new password.</p><br />
-        <label for="password">Enter a password: </label>
-        <input id="passwd" type="password" name="password" size="20"
-            class="password" required autocomplete="new-password" />&nbsp;
-        <div class="password-meter">
-            <div class="password-meter-message"></div>
-            <div class="password-meter-bg">
-                <div class="password-meter-bar"></div>
-            </div>
-            <br />
-            <div id ="confirm">
-            <label for="confirm_password">Confirm password: </label>
-            <input id="confirm_password" type="password" 
-                    name="confirm_password" size="20" 
-                    autocomplete="new-password" class="required" />
-            </div>
-        </div><br />
-        </fieldset>
-        <fieldset>
-    <button id="formsubmit">Submit New Password</button>
-</form>
+    <h3>Please enter and confirm a new password:</h3>
+    <form id="form" method="POST" action="create_user.php">
+        <input type="hidden" name="submitter"  value="change" />
+        <input id="usr" type="hidden" name="username" value="<?=$username;?>" />
+        <input id="usrchoice" type="hidden" name="cookies" value="nochoice" />
+        <table>
+            <tbody>
+                <?php if (!empty($tmpcode)) : ?>
+                <tr>
+                    <td>One-time Code</td>
+                    <td class="space"></td>
+                    <td><input type="password" name="oldpass" size="20"
+                        autocomplete="off" value="<?=$tmpcode;?>" /></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <?php endif; ?>
+                <tr style="visibility:hidden">
+                    <td>linebreak</td>
+                </tr>
+                <tr>
+                    <td>New password:</td>
+                    <td class="space"></td>
+                    <td><input id="password" type="password"
+                        name="password" size="20" autocomplete="new-password" /></td>
+                    <td class="space"></td>
+                    <td>Show Password:</td>
+                    <td><input id="ckbox"
+                        type="checkbox" /></td>
+                </tr>
+                <tr>
+                    <td>Confirm:</td>
+                    <td class="space"></td>
+                    <td><input id="confirm" type="password" name="confirm" 
+                        autocomplete="new-password" size="20" /></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="visibility:hidden;">x</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="space"></td>
+                    <td><button id="formsubmit">Submit</button></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table><br />
+        
+    </form>
+</div>   <!-- end of container -->
 
 <div id="cookie_banner">
-    <h3>This site uses cookies to save member usernames</h3>
+    <h3>This site uses cookies to save member usernames only</h3>
     <p>Accepting cookies allows automatic login. If you reject cookies,
     no cookie data will be collected, and you must login each visit.
     <br />You may change your decision later via the Help menu.
@@ -94,7 +107,7 @@ $resetmail = isset($_GET['user']) ? filter_input(INPUT_GET, 'user') : 'notmail';
     </div>
 </div>
 
-</div>   <!-- end of container -->
+<script src="../scripts/jquery-1.12.1.js"></script>
 <script src="../scripts/renew.js"></script>
 </body>
 </html>

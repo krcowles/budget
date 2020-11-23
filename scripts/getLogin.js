@@ -5,35 +5,13 @@
  * @author Ken Cowles
  * @version 2.0 Secure login
  */
-$('#user').val(''); // clear login for refresh/reload
+$('input[name=username]').val(''); // clear login for refresh/reload
 var cookies = navigator.cookieEnabled ? true : false;
 var user_cookie_state = $('#cookiestatus').text();
 var startpg = $('#startpg').text();
 var completed1 = startpg.charAt(0) === '1' ? true : false;
 var completed2 = startpg.charAt(1) === '1' ? true : false;
 var completed3 = startpg.charAt(2) === '1' ? true : false;
-
-// enable user logins
-$('#user').on('change', function(ev) {
-    // the following is required to correct a Safari bug:
-    $(this).unbind('change');
-    var user = $(this).val();
-    var logdata = $('#log_modal').detach();
-    modal.open({id: 'login', height: '72px', width: '260px',
-        content: logdata, usr: user});
-});
-$('#forgot').on('click', function(ev) {
-    ev.preventDefault();
-    var def = new $.Deferred();
-    $('#passtxt').css('display', 'none');
-    var usrmail = $('#usr_modal').detach();
-    modal.open({id: 'usrmail', height: '108px', width: '240px',
-        content: usrmail, deferred: def});
-    $.when(def).then(function() {
-        $('#modal_wins').append(usrmail);
-        $('#passtxt').css('display', 'inline');
-    });
-});
 
 if (cookies) {
     if (user_cookie_state === 'NONE') {

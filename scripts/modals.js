@@ -20,39 +20,31 @@ var modal = (function() {
      * are called by the (public) modal.open function, based on the modal id
      * passed via settings.
      */
-    // modal function used to verify user's password or send link to reset
-    function getpass(usrname) {
-        $drag.detach();
-        var logpos = $('#login').offset();
-        var logtop = logpos.top;
-        var logwd = logpos.left + $('#login').width() + 12;
-        $modal.css({
-            top: logtop,
-            left: logwd
-        });
-        // enter username into form element:
-        $('#moduser').val(usrname);
-        document.getElementById("passin").focus(); 
-        $('form').submit(function(ev) {
-            ev.preventDefault();
-            passwd = $('#passin').val();
-            validateUser(usrname, passwd);
-        });
-        // OR send a link to reset the password:
-        $('#redopass').on('click', function() {
-            var unused = new $.Deferred();
-            var ajaxdata = {parm: 'passwd', email: usrname};
-            sendUserMail(ajaxdata, unused);
-        });
-    }
+
     // modal function used to send email to user with user's name
     function userName(deferred) {
         $drag.detach();
         $('#sendmail').after($close);
-        $close.css('margin-left', '112px');
+        $close.css({
+            marginLeft: '48px',
+            marginTop: '-10px',
+            height: '24px',
+            width: '72px',
+            fontSize: '16px',
+            borderRadius: '4px',
+            backgroundColor: 'blanchedalmond'
+        });
+        let loginboxpos = $('#login').offset();
+        let modalloc_top = loginboxpos.top + 12;
+        let modalloc_left = loginboxpos.left + 12;
+        $('.modal').offset({
+            top: modalloc_top,
+            left: modalloc_left
+        });
+        $('#umail').focus();
         $('#sendmail').on('click', function() {
             var mailaddr = $('#umail').val();
-            var ajaxdata = {parm: 'uname', email: mailaddr};
+            var ajaxdata = {email: mailaddr};
             sendUserMail(ajaxdata, deferred);
         });
         $close.on('click', function() {
@@ -62,6 +54,7 @@ var modal = (function() {
     }
     // reusable ajax code to sendmail to user
     function sendUserMail(ajaxdata, deferred) {
+        $('#sendmail').text("Working...");
         $.ajax({
             url: 'admin/sendmail.php',
             method: "POST",
@@ -74,7 +67,7 @@ var modal = (function() {
                     alert("The information you typed\n" +
                         "is not a well-formed email addresss");
                 } else if (results === 'nofind') {
-                    alert("Your email/username could not be located in our records");
+                    alert("Your email could not be located in our records");
                 }
                 deferred.resolve();
                 modal.close();

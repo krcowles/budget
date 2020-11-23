@@ -1,0 +1,128 @@
+body {
+    height: 100%;
+    min-width: 960px;
+}
+.hcontainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+.vcontainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+#sitetext {
+    width: calc(100% - 640px);
+    height: 426px;
+    line-height: 120px;
+    background-color: seagreen;
+    text-align: center;
+}
+#maintext {
+    font-size: 48px;
+    color: white;
+    text-align: center;
+    margin-bottom: 16px;
+}
+#subtext {
+    line-height: 32px;
+    font-size: 24px;
+    color: lightgray;
+    text-align: center;
+    margin-top: 12px;
+}
+#logger {
+    width: auto;
+    margin-top: 4px;
+}
+.breaks {
+    line-height: 24px;
+}
+#info {
+    float: left;
+    width: calc(25% - 4px);
+    height: 100%;
+    font-size: 20px;
+    text-align: center;
+    background-color: floralwhite;
+    border-style: solid;
+    border-width: 2px;
+    border-color: green;
+}
+#learn {
+    height: 40%;
+}
+#tools {
+    height: 40%;
+}
+#login {
+    float: left;
+    width: calc(75% - 2px);
+    height: 100%;
+    background-color: floralwhite;
+    border-style: solid;
+    border-color: green;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 0px;
+    text-align: center;
+}
+#banner {
+    font-size: 28px;
+    margin-top: 36px;
+    margin-bottom: 24px;
+}
+::placeholder {
+    color: gray;
+}
+#user {
+    font-size: 24px;
+}
+#entry {
+    display: inline-block;
+    text-align: left;
+}
+.userinput {
+    height: 34px;
+    width: 220px;
+    border-radius: 4px;
+    font-size: 18px;
+    padding-left: 6px;
+    background-color: blanchedalmond;
+}
+.userinput:focus {
+    background-color: ivory;
+}
+#spacer {
+    visibility: hidden;
+}
+#forgot {
+    font-size: 18px;
+    text-align: center;
+}
+#register {
+    font-size: 22px;
+}
+#button {
+    text-align: center;
+}
+#submit {
+    height: 34px;
+    width: 230px;
+    background-color: blanchedalmond;
+    font-size: 18px;
+    border-radius: 4px;
+}
+#submit:hover {
+    cursor: pointer;
+    background-color:black;
+    color: white;
+}
+#sendmail {
+    width: 100px;
+}
