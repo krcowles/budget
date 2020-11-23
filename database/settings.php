@@ -17,7 +17,7 @@ if ($devhost) { // LOCAL MACHINE
     $HOSTNAME = "127.0.0.1";
     $USERNAME = "root";
     $PASSWORD = "root";
-    $DATABASE = "epiz_2477663_BudgetData"; // omitted "7" in epiz_name locally
+    $DATABASE = "epiz_24776673_BudgdetData"; // omitted "7" in epiz_name locally
     
 } else {
     $HOSTNAME = "sql204.epizy.com";
