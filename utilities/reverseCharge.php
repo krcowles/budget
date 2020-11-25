@@ -10,15 +10,15 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+session_start();
 require_once "../database/global_boot.php";
 
-$user = filter_input(INPUT_GET, 'user');
 $paid = isset($_GET['paid']) ? true : false;
 
 $chargeRequest = "SELECT * FROM `Charges` WHERE " .
-    "`user` = :user AND `paid` = 'N' AND `method` = 'Credit';";
+    "`userid` = :uid AND `paid` = 'N' AND `method` = 'Credit';";
 $charge = $pdo->prepare($chargeRequest);
-$charge->execute(["user" => $user]);
+$charge->execute(["uid" => $_SESSION['userid']]);
 $charges = $charge->fetchAll(PDO::FETCH_ASSOC);
 $noOfCards = 0;
 $cards = [];
@@ -72,30 +72,31 @@ originally drawn</h3>
 <?php if ($paid) : ?>
 <h3 id="paid">Charge(s) Successfully Completed</h3>
 <? endif; ?>
-<form action="doReverse.php" method="POST">
-    <button>Reverse Charges</button>
-    <button id="return">Return To Budget</button>
-    <input type="hidden" name="user" value="<?= $user;?>" />
+<form action="doReverse.php" method="post">
+    <div>
+        <button>Reverse Charges</button>
+        <button id="return">Return To Budget</button>
+    </div>
 <?php if ($noOfCards === 0) : ?>
     <h3>You have no outstanding credit card charges</h3>
 <?php else : ?>
     <div id="main">
     <?php for ($j=0; $j<$noOfCards; $j++) : ?>
         <h3>For Credit Card <?= $cards[$j];?>:</h3>
-        <div id="carddiv">
+        <div class="carddiv">
             <?php for ($k=0; $k<count($chgs[$j]); $k++) : ?>
-            <div id="<?= $chgs[$j][$k][0];?>" style="margin-bottom:6px;">
-                <input type="hidden" name="card[]" value="<?= $cards[$j];?>" />
+            <div id="d<?=$chgs[$j][$k][0];?>" style="margin-bottom:6px;">
+                <input type="hidden" name="card[]" value="<?=$cards[$j];?>" />
                 <input type="checkbox" name="revchg[]"
-                    value="<?= $chgs[$j][$k][0];?>" /> &nbsp;&nbsp;
+                    value="<?=$chgs[$j][$k][0];?>" /> &nbsp;&nbsp;
                 <input class="cdentry amts" type="text"
-                    name="amt<?= $chgs[$j][$k][0];?>"
-                    value="<?= $chgs[$j][$k][1];?>" />
+                    name="amt<?=$chgs[$j][$k][0];?>"
+                    value="<?=$chgs[$j][$k][1];?>" />
                 <input class="cdentry dates" type="text"
-                    value="<?= $chgs[$j][$k][3];?>" />
+                    value="<?=$chgs[$j][$k][3];?>" />
                 <input class="cdentry accts" type="text"
-                    name="acc<?= $chgs[$j][$k][0];?>"
-                    value="<?= $chgs[$j][$k][2];?>" />
+                    name="acc<?=$chgs[$j][$k][0];?>"
+                    value="<?=$chgs[$j][$k][2];?>" />
             </div>
             <?php endfor; ?>
         </div>

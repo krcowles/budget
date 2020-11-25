@@ -1,74 +1,52 @@
-$('#user').val(''); // clear login for refresh
+/**
+ * @fileoverview The login state is determined via getLogin.php; that script
+ * stores '#cookiestatus' and '#startpg' on index.php
+ * 
+ * @author Ken Cowles
+ * @version 2.0 Secure login
+ */
+$('input[name=username]').val(''); // clear login for refresh/reload
 var cookies = navigator.cookieEnabled ? true : false;
-// the next two variables are provided complements getLogin.php
-var login_name = document.getElementById('usrcookie').textContent;
-var query_name = encodeURIComponent(login_name);
-// if a login_name appears, cookies are already enabled:
-var user_cookie_state = document.getElementById('cookiestatus').textContent;
-// defaults to 'OK' unless a registered user is logged in with expiration issues
+var user_cookie_state = $('#cookiestatus').text();
 var startpg = $('#startpg').text();
 var completed1 = startpg.charAt(0) === '1' ? true : false;
 var completed2 = startpg.charAt(1) === '1' ? true : false;
 var completed3 = startpg.charAt(2) === '1' ? true : false;
+
 if (cookies) {
     if (user_cookie_state === 'NONE') {
-        alert("No user registration has been located for " + login_name);
+        alert("Valid user registration cannot be located");
     } else if (user_cookie_state === 'EXPIRED') {
         var ans = confirm("Your password has expired\n" + 
             "Would you like to renew?");
         if (ans) {
-            renewPassword(login_name, 'renew', 'expired');
+            renewPassword('renew', 'expired');
         } else {
-            renewPassword(login_name, 'norenew', 'expired');
+            renewPassword('norenew', 'expired');
         }
     } else if (user_cookie_state === 'RENEW') {
         var ans = confirm("Your password is about to expire\n" + 
             "Would you like to renew?");
         if (ans) {
-            renewPassword(login_name, 'renew', 'valid');
+            renewPassword('renew', 'valid');
         } else {
-            renewPassword(login_name, 'norenew', 'valid');
+            renewPassword('norenew', 'valid');
         }
     } else if (user_cookie_state === 'MULTIPLE') {
-        alert("There are multiple accounts associated with " + login_name +
-            "\nPlease contact the site master");
+        alert("There are multiple accounts registered for this login:\n"
+            + "Please contact the site master");
     } else if (user_cookie_state === 'OK') {
-        if (login_name !== 'none') {
             if (completed1 && completed2 && completed3) {
-                var homepg = "main/displayBudget.php?user=" + query_name;
+                var homepg = "main/displayBudget.php";
                 window.open(homepg, "_self");
             } else {
-                var startpoint = 'edit/newBudgetPanels.php?user=' +
-                    query_name + '&pnl=' + startpg;
+                var startpoint = 'edit/newBudgetPanels.php?pnl=' + startpg;
                 window.open(startpoint, "_self");
             }
-        } else { // login process
-            $('#user').on('change', function(ev) {
-                // the following is required to correct a Safari bug:
-                $(this).unbind('change');
-                var user = $(this).val();
-                var logdata = $('#log_modal').detach();
-                modal.open({id: 'login', height: '72px', width: '260px',
-                    content: logdata, usr: user});
-            });
-            $('#forgot').on('click', function(ev) {
-                ev.preventDefault();
-                var def = new $.Deferred();
-                $('#passtxt').css('display', 'none');
-                var usrmail = $('#usr_modal').detach();
-                modal.open({id: 'usrmail', height: '108px', width: '240px',
-                    content: usrmail, deferred: def});
-                $.when(def).then(function() {
-                    $('#modal_wins').append(usrmail);
-                    $('#passtxt').css('dispaly', 'inline');
-                });
-            });
-        }
     } 
 } else {  // cookies disabled
     alert("Cookies are disabled on this browser:\n" +
-        "You will not be able to login or register for this site.\n" +
-        "Please enable cookies to overcome this limitation");
+        "You will need to login with each visit");
 }
 
 // login authentication
@@ -80,49 +58,69 @@ function validateUser(usr_name, usr_pass) {
         dataType: "text",
         success: function(srchResults) {
             var status = srchResults;
-            if (status.indexOf('LOCATED') >= 0) {
+            if (status.indexOf('LOCATED') !== -1) {
                 alert("You are logged in");
                 var pos = status.indexOf('&') + 1;
                 var startpg = status.substr(pos);
-                if (startpg === 'all') {
-                    var homepg = "main/displayBudget.php?user=" + 
-                        encodeURIComponent(usr_name);
-                    window.open(homepg, "_self");
+                var cookie_choice = status.substr(pos+4);
+                var proceed = $.Deferred();
+                var ajaxdata = {username: usr_name};
+                if (cookie_choice === 'accept') {
+                    $.ajax({
+                        url: "../admin/sendcookie.php",
+                        data: ajaxdata,
+                        method: "post",
+                        success: function() {
+                            proceed.resolve();
+                        },
+                        error: function() {
+                            alert("cookie script failed in login");
+                            proceed.reject();
+                        }
+                    });
                 } else {
-                    var startpoint = 'edit/newBudgetPanels.php?user=' +
-                        encodeURIComponent(usr_name) + '&pnl=' + startpg;
-                    window.open(startpoint, "_self");
+                    proceed.resolve();
                 }
-            } else if (status.indexOf('RENEW') >=0) {
+                $.when(proceed).then(function() {
+                    if(startpg.charAt(0) === '1' && startpg.charAt(1) === '1'
+                        && startpg.charAt(2) === '1'
+                    ) {
+                        var homepg = "main/displayBudget.php"
+                        window.open(homepg, "_self");
+                    } else {
+                        var startpoint = 'edit/newBudgetPanels.php' +
+                            '?pnl=' + startpg;
+                        window.open(startpoint, "_self");
+                    }
+                });
+            } else if (status.indexOf('RENEW') !== -1) {
                 // in this case, the old cookie has been set pending renewal
                 var renew = confirm("Your password is about to expire\n" + 
                     "Would you like to renew?");
                 if (renew) {
-                    renewPassword(usr_name, 'renew', 'valid');
+                    renewPassword('renew', 'valid');
                 } else {
-                    renewPassword(usr_name, 'norenew', 'valid');
+                    renewPassword('norenew', 'valid');
                 }
-            } else if (status.indexOf('EXPIRED') >= 0) {
+            } else if (status.indexOf('EXPIRED') !== -1) {
                 var renew = confirm("Your password has expired\n" +
                     "Would you like to renew?");
                 if (renew) {
-                    renewPassword(usr_name, 'renew', 'expired');
+                    renewPassword('renew', 'expired');
                 } else {
-                    renewPassword(usr_name, 'norenew', 'expired');
+                    renewPassword('norenew', 'expired');
                 }
-            } else if (status.indexOf('BADPASSWD') >= 0) {
+            } else if (status.indexOf('BADPASSWD') !== -1) {
                 var msg = "The password you entered does not match " +
                     "your registered password;\nPlease try again";
                 alert(msg);
                 $('#passin').val('');
-                textResult =  "bad_password";
             } else { // no such user in USERS table
                 var msg = "Your registration info cannot be uniquely located:\n" +
                     "Please click on the 'Sign me up!' link to register";
                 alert(msg);
                 $('#user').val('');
                 $('#passin').val('');
-                textResult =  "no_user";
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -132,15 +130,18 @@ function validateUser(usr_name, usr_pass) {
     });
 }
 // for renewing password/cookie
-function renewPassword(user, update, status) {
+function renewPassword(update, status) {
     if (update === 'renew') {
-        var renewpg = "admin/renew.php?user=" + encodeURIComponent(user);
+        var renewpg = "admin/renew.php";
         window.open(renewpg, "_self");
     } else {
         // if still valid, refresh will display login, otherwise do nothing
         if (status === 'valid') {
-            var homepg = "main/displayBudget.php?user=" + encodeURIComponent(user);
+            var homepg = "main/displayBudget.php";
             window.open(homepg, '_self');
+        } else {
+            $.get("../admin/logout.php");
+            alert("You have been logged out and must now re-register");
         }
     }
 }

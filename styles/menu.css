@@ -81,8 +81,8 @@ div[id^=sub] ul li {
     width: 134px;
 }
 #sub_mgexp {
-    height: 108px;
-    width: 172px;
+    height: 130px;
+    width: 184px;
 }
 #sub_mgcds {
     height: 58px;
@@ -93,7 +93,7 @@ div[id^=sub] ul li {
     width: 146px;
 }
 #sub_help {
-    height: 84px;
+    height: 108px;
     width: 148px;
 }
 .sub_list {  /* ul */

@@ -11,12 +11,14 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license
  */
-$user = isset($_GET['user']) ? filter_input(INPUT_GET, 'user') : false;
-if ($user) {
+session_start();
+
+if (isset($_SESSION['userid'])) {
     include "budgetSetup.php";
 } else {
-    echo "There has been no legitimate login";
+    die("There has been no legitimate login");
 }
+$admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -38,8 +40,9 @@ if ($user) {
 
 <body>
     <?php require "menu.html"; ?>
+    <p id="mstr" style="display:none;"><?=$admin;?></p>
     <pre><button id="admin">Admin</button></pre>
-    <p id="user" style="display:none"><?= $user;?></p>
+    <p id="usercookies" style="display:none"><?=$menu_item?></p>
     <div id="budget">
         <table id="roll3">
             <colgroup>
@@ -160,7 +163,9 @@ if ($user) {
         <div id="dep">
             Enter the amount to be deposited (it will be placed in 'Undistributed
             Funds')<br />
-            $ <input type="text" id="depo" /><br /><br />
+            $ <input type="text" id="depo" /><br />
+            Description (Optional)<br />
+            <textarea id="otd_desc" rows="2" columns="30"></textarea><br /><br />
             <button id="depfunds">Deposit Funds</button>
         </div>
         <!-- transfer funds -->
@@ -229,7 +234,7 @@ if ($user) {
             Funds' or 'Temporary Accounts')
             <span style="color:brown;">NOTE: Please Ensure the budget-to-delete
             has a balance of $0.</span><br /><br />
-            <div id="delacct">Delete: <?= $partsel;?></div><br />
+            <div id="remacct">Delete: <?= $partsel;?></div><br />
             <button id="delit">Delete Account</button>
         </div>
         <!-- move account -->
@@ -268,6 +273,18 @@ if ($user) {
             </select><br /><br />
             <button id="genmo">Generate</button>
         </div>
+        <div id="yearrpt">
+                Please select the report year<br />
+                <select id="rptyr" name="year">
+                    <option value="<?=$thisyear;?>"><?=$thisyear;?></option>
+                    <option value="<?=$prioryr1;?>"><?=$prioryr1;?></option>
+                    <option value="<?=$prioryr2;?>"><?=$prioryr2;?></option>
+                </select><br /><br />
+                <button id="genyr">Generate</button>
+        </div>
+    </div>
+    <div id="preloader">
+        <img src="../images/preload.gif" alt="waiting..." />
     </div>
     <p style="clear:left;margin-left:16px;">
         <a href="http://validator.w3.org/check?uri=referer">
@@ -276,7 +293,6 @@ if ($user) {
         </a>
     </p>
     <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-    <script type="text/javascript">var g_user = $('#user').text();</script>
     <script src="../scripts/menu.js" type="text/javascript"></script>
     <script src="../scripts/budget.js" type="text/javascript"></script>
     <script src="../scripts/modals.js" type="text/javascript"></script>

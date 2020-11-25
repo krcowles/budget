@@ -7,7 +7,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_POST, 'user');
+session_start();
 require "../utilities/getAccountData.php";
 
 $editedBuds  = $_POST['edbud'];
@@ -22,5 +22,5 @@ for ($j=0; $j<count($account_names); $j++) {
     );
 }
 
-$backpg = "budgetEditor.php?user=" . rawurlencode($user);
+$backpg = "budgetEditor.php";
 header("Location: {$backpg}");

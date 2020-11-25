@@ -7,9 +7,8 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_GET, 'user');
+session_start();
 require "../utilities/getAccountData.php";
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -19,7 +18,7 @@ require "../utilities/getAccountData.php";
     <title>Budget Editor</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="description"
-        content="Rolling 4-month budget tracker" />
+        content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
@@ -34,7 +33,6 @@ require "../utilities/getAccountData.php";
 </head>
 
 <body>
-<p id="user" style="display:none;"><?= $user;?></p>
 <div id="page">
 <span class="note NormalHeading">Note: If you make changes,
     be sure to 'Save Edits'</span><br />
@@ -42,7 +40,6 @@ require "../utilities/getAccountData.php";
     in the main menu.</span><br /><br />
 <form id="form" action="saveBudgetEdits.php" method="post">
 <div>
-    <input type="hidden" name="user" value="<?= $user;?>" />
     <button id="save">Save Edits</button>
     <button id="backtobud" 
         style="margin-left:120px;">Return to Budget</button><br /><br />
@@ -80,8 +77,7 @@ require "../utilities/getAccountData.php";
 <script type="text/javascript">
     $('#backtobud').on('click', function(ev) {
         ev.preventDefault();
-        var budget = "../main/displayBudget.php?user=" + 
-            encodeURIComponent($('#user').text());
+        var budget = "../main/displayBudget.php";
         window.open(budget, "_self");
     });
 </script>

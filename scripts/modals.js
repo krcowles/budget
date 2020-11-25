@@ -20,39 +20,31 @@ var modal = (function() {
      * are called by the (public) modal.open function, based on the modal id
      * passed via settings.
      */
-    // modal function used to verify user's password or send link to reset
-    function getpass(usrname) {
-        $drag.detach();
-        var logpos = $('#login').offset();
-        var logtop = logpos.top;
-        var logwd = logpos.left + $('#login').width() + 12;
-        $modal.css({
-            top: logtop,
-            left: logwd
-        });
-        // enter username into form element:
-        $('#moduser').val(usrname);
-        document.getElementById("passin").focus(); 
-        $('form').submit(function(ev) {
-            ev.preventDefault();
-            passwd = $('#passin').val();
-            validateUser(usrname, passwd);
-        });
-        // OR send a link to reset the password:
-        $('#redopass').on('click', function() {
-            var unused = new $.Deferred();
-            var ajaxdata = {parm: 'passwd', email: usrname};
-            sendUserMail(ajaxdata, unused);
-        });
-    }
+
     // modal function used to send email to user with user's name
     function userName(deferred) {
         $drag.detach();
         $('#sendmail').after($close);
-        $close.css('margin-left', '112px');
+        $close.css({
+            marginLeft: '48px',
+            marginTop: '-10px',
+            height: '24px',
+            width: '72px',
+            fontSize: '16px',
+            borderRadius: '4px',
+            backgroundColor: 'blanchedalmond'
+        });
+        let loginboxpos = $('#login').offset();
+        let modalloc_top = loginboxpos.top + 12;
+        let modalloc_left = loginboxpos.left + 12;
+        $('.modal').offset({
+            top: modalloc_top,
+            left: modalloc_left
+        });
+        $('#umail').focus();
         $('#sendmail').on('click', function() {
             var mailaddr = $('#umail').val();
-            var ajaxdata = {parm: 'uname', email: mailaddr};
+            var ajaxdata = {email: mailaddr};
             sendUserMail(ajaxdata, deferred);
         });
         $close.on('click', function() {
@@ -62,6 +54,7 @@ var modal = (function() {
     }
     // reusable ajax code to sendmail to user
     function sendUserMail(ajaxdata, deferred) {
+        $('#sendmail').text("Working...");
         $.ajax({
             url: 'admin/sendmail.php',
             method: "POST",
@@ -74,7 +67,7 @@ var modal = (function() {
                     alert("The information you typed\n" +
                         "is not a well-formed email addresss");
                 } else if (results === 'nofind') {
-                    alert("Your email/username could not be located in our records");
+                    alert("Your email could not be located in our records");
                 }
                 deferred.resolve();
                 modal.close();
@@ -92,6 +85,7 @@ var modal = (function() {
     // general purpose function to execute ajax based on input arguments
     function executeScript(url, ajaxdata, errtype, deferred) {
             var msgtxt = "Problem encountered " + errtype;
+            $('#preloader').show();
             $.ajax({
                 url: url,
                 method: "POST",
@@ -102,14 +96,17 @@ var modal = (function() {
                         deferred.resolve();
                         modal.close()
                         location.reload();
+                        $('#preloader').hide();
                     } else {
                         deferred.resolve();
                         alert(msgtxt);
+                        $('#preloader').hide();
                         modal.close();
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     deferred.resolve();
+                    $('#preloader').hide();
                     msg = msgtxt + ":\n" + textStatus + "; Error: " + errorThrown;
                     alert(msg);
                     modal.close();
@@ -121,10 +118,10 @@ var modal = (function() {
         return value;
     }
     // function called when settings.id == 'autopay'
-    function autopay( user, method, acct_name, row, deferred) {
+    function autopay(method, acct_name, deferred) {
+        // $close applies to all functions, so changes must be undone
         $('#modal_table').after($close);
         $close.css('margin-top', '12px');
-        $close.text("Finished");
         var divht = $content.height() + 12 + 'px';
         $modal.css({
             height: divht
@@ -144,7 +141,8 @@ var modal = (function() {
                     }
                 }
                 var payee = elements.join().trim();
-                ajaxdata = {user: user, method: method[idno], acct: acct_name[idno],
+                $close.css('margin-top', '0px');
+                ajaxdata = {method: method[idno], acct: acct_name[idno],
                     amt: payment, payee: payee};
                     executeScript('../utilities/makeAutopayment.php', ajaxdata,
                     "executing autopayment", deferred);
@@ -152,6 +150,7 @@ var modal = (function() {
         });
         $close.on('click', function () {
             deferred.resolve();
+            $close.css('margin-top', '0px');
             modal.close();
         });
     }
@@ -197,7 +196,7 @@ var modal = (function() {
                 alert("You have not entered a payee");
                 return;
             }
-            var ajaxdata = {id: 'payexp', user: g_user, acct_name: acctname,
+            var ajaxdata = {id: 'payexp', acct_name: acctname,
                 method: charge, amt: amount, payto: payee};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'making payment', deferred);
@@ -216,7 +215,7 @@ var modal = (function() {
             funds = this.value;
         });
         $('#dist').on('click', function() {
-            var ajaxdata = {id: 'income', user: g_user, funds: funds};
+            var ajaxdata = {id: 'income', funds: funds};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 "distributing income", deferred);
             modal.close();
@@ -235,8 +234,13 @@ var modal = (function() {
         $deposit.on('change', function() {
             deposit_funds = this.value
         });
+        var otd_desc = '';
+        $('#otd_desc').on('change', function() {
+            otd_desc = this.value;
+        });
         $('#depfunds').on('click', function() {
-            ajaxdata = {id: 'otdeposit', user: g_user, newfunds: deposit_funds};
+            ajaxdata = {id: 'otdeposit', newfunds: deposit_funds,
+                note: otd_desc};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 "making deposit", deferred);
         });
@@ -266,8 +270,7 @@ var modal = (function() {
             xframt = this.value;
         });
         $('#transfer').on('click', function() {
-            ajaxdata = {id: 'xfr', user: g_user, 
-                from: fromacct, to: toacct, sum: xframt};
+            ajaxdata = {id: 'xfr', from: fromacct, to: toacct, sum: xframt};
             executeScript("../edit/saveAcctEdits.php", ajaxdata,
                 "transferring funds", deferred);
         });
@@ -292,8 +295,7 @@ var modal = (function() {
                 return;
             }
             deferred.resolve();
-            var recloc = "../utilities/reconcile.php?user=" + 
-                encodeURIComponent(g_user) + "&card=" + usecd;
+            var recloc = "../utilities/reconcile.php?card=" + usecd;
             window.open(recloc, "_self");
             modal.close();
         });
@@ -330,8 +332,7 @@ var modal = (function() {
                 alert("You have not entered a day-of-month for autopay");
                 return;
             }
-            ajaxdata = {id: 'apset', user: g_user, acct: against,
-                method: use, day: dom};
+            ajaxdata = {id: 'apset', acct: against, method: use, day: dom};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'setting up autopay', deferred);
         });
@@ -351,7 +352,7 @@ var modal = (function() {
             dacct = this.value;
         });
         $('#remap').on('click', function() {
-            ajaxdata = {id: 'delapay', user: g_user, acct: dacct};
+            ajaxdata = {id: 'delapay', acct: dacct};
             executeScript('../edit/saveAcctEdits.php', ajaxdata, 
                 'deleting autopay', deferred);
         });
@@ -373,8 +374,8 @@ var modal = (function() {
             newcard = this.value;
         });
         $('#newcd').on('click', function() {
-            var ajaxdata = {id: 'addcd', user: g_user, 
-                cdname: newcard, cdtype: newtype};
+            var ajaxdata = {id: 'addcd', cdname: newcard,
+                cdtype: newtype};
             executeScript('../edit/saveAcctEdits.php', ajaxdata, 
                 'adding new card', deferred);
         });
@@ -398,7 +399,7 @@ var modal = (function() {
                 alert("You have not selected a card to delete");
                 return;
             }
-            ajaxdata = {id: 'decard', user: g_user, target: dc};
+            ajaxdata = {id: 'decard', target: dc};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'deleting Cr/Dr card', deferred);
         });
@@ -422,7 +423,7 @@ var modal = (function() {
             monthly = this.value;
         });
         $('#addit').on('click', function() {
-            var ajaxdata = {id: 'addacct', user: g_user,
+            var ajaxdata = {id: 'addacct',
                     acct_name: newacct, monthly: monthly};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'adding new account', deferred);
@@ -433,20 +434,19 @@ var modal = (function() {
         });
     }
     // modal function executed when settings.id == 'delacct'
-    function delacct(deferred) {
+    function delete_acct(deferred) {
         $('#delit').after($close);
         $close.css('margin-left', '48px');
-        var $acct = $('#delacct .partsel');
+        var $acct = $('#remacct .partsel');
         $acct[0].id = 'dacct';
         var todelete = getSelectValue($acct[0]);
         $('#dacct').on('change', function() {
             todelete = this.value;
         });
         $('#delit').on('click', function() {
-            var ans = confirm("Are you sure (is balance $0)?");
+            var ans = confirm("Are you sure? (if balance not $0, adjust other accts)");
             if (ans) { 
-                var ajaxdata = {id: 'acctdel', user: g_user,
-                    acct: todelete};
+                var ajaxdata = {id: 'acctdel', acct: todelete};
                 executeScript('../edit/saveAcctEdits.php', ajaxdata,
                     'deleting account', deferred);
             } else {
@@ -478,8 +478,7 @@ var modal = (function() {
             if (mover == ontopof) {
                 alert("From and To are the same - no action taken");
             } else {
-                var ajaxdata = {id: 'move', user: g_user, mvfrom: mover,
-                    mvto: ontopof};
+                var ajaxdata = {id: 'move', mvfrom: mover, mvto: ontopof};
                 executeScript('../edit/saveAcctEdits.php', ajaxdata,
                     'moving account', deferred);
             }
@@ -504,8 +503,7 @@ var modal = (function() {
             rname = this.value;
         });
         $('#ren').on('click', function() {
-            var ajaxdata = {id: 'rename', user: g_user,
-            newname: rname, acct: racct};
+            var ajaxdata = {id: 'rename', newname: rname, acct: racct};
             executeScript('../edit/saveAcctEdits.php', ajaxdata,
                 'renaming account', deferred);   
         });
@@ -567,23 +565,36 @@ var modal = (function() {
         });
     }
     // modal function executed when settings.id == 'morpt'
-    function monthly(deferred) {
-        $('#genmo').after($close);
-        $close.css('margin-left', '80px');
-        var $mosel = $('#rptmo');
-        var mosel = getSelectValue($mosel[0]);
-        $('#rptmo').on('change', function() {
-            mosel = this.value;
-        });
-        $('#genmo').on('click', function() {
-            var getdata = '../utilities/reports.php?id=morpt&mo=' +
-                mosel + '&user=' + encodeURIComponent(g_user);
-            window.open(getdata, "_self");
-        });
-        $close.on('click', function () {
-            deferred.resolve();
-            modal.close();
-        });
+    function reports(deferred, period) {
+        if (period === 'mo') {
+            $('#genmo').after($close);
+            $close.css('margin-left', '80px');
+            var $mosel = $('#rptmo');
+            var mosel = getSelectValue($mosel[0]);
+            $('#rptmo').on('change', function() {
+                mosel = this.value;
+            });
+            $('#genmo').on('click', function() {
+                var getdata = '../utilities/reports.php?id=morpt&mo=' + mosel;
+                window.open(getdata, "_self");
+            });
+            $close.on('click', function () {
+                deferred.resolve();
+                modal.close();
+            });
+        } else if (period = 'yr') {
+            $('#genyr').after($close);
+            $close.css('margin-left', '80px');
+            var $yrsel = $('#rptyr');
+            var yrsel = getSelectValue($yrsel[0]);
+            $('#yrsel').on('change', function() {
+                yrsel = this.value;
+            });
+            $('#genyr').on('click', function() {
+                var getdata = '../utilities/reports.php?id=yrrpt&yr=' + yrsel;
+                window.open(getdata, "_self");
+            });
+        }
     }
 
     
@@ -616,8 +627,7 @@ var modal = (function() {
             } else if (modid == 'usrmail') {
                 userName(settings.deferred);
             } else if (modid === 'autopay') {
-                autopay(settings.user, settings.method, settings.acct_name,
-                    settings.row, settings.deferred);
+                autopay(settings.method, settings.acct_name, settings.deferred);
             } else if (modid === 'expense') {
                 payExpense(settings.deferred);
             } else if (modid === 'income') {
@@ -639,7 +649,7 @@ var modal = (function() {
             } else if (modid === 'addacct') {
                 newacct(settings.deferred);
             } else if (modid === 'delacct') {
-                delacct(settings.deferred);
+                delete_acct(settings.deferred);
             } else if (modid === 'mvacct') {
                 mvacct(settings.deferred);
             } else if (modid === 'rename') {
@@ -648,7 +658,9 @@ var modal = (function() {
                 editCredit(settings.ivals, settings.chgitem, 
                     settings.chgid, settings.deferred);
             } else if (modid === 'morpt') {
-                monthly(settings.deferred);
+                reports(settings.deferred, 'mo');
+            } else if (modid === 'yrrpt') {
+                reports(settings.deferred, 'yr');
             }
         },
         close: function() {

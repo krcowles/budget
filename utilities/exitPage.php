@@ -1,3 +1,17 @@
+<?php
+/**
+ * This page allows the user to return to budget creation
+ * by clicking a link.
+ * PHP Version 7.1
+ * 
+ * @package Budget
+ * @author  Ken Cowles <krcowles29@gmail.com>
+ * @license No license to date
+ */
+session_start();
+require "../database/global_boot.php";
+$current = $_SESSION['start'];
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -17,8 +31,9 @@
     <h3>When you return to this site, you may resume data entry where 
         you left off.
     </h3>
-    <h3>You may return to the program: 
-        <a href="../index.php" target="_self">Click to Resume</a>
+    <h3>You may return to the program now: 
+        <a href="../edit/newBudgetPanels.php?pnl=<?=$current;?>"
+            target="_self">Click to Resume Data Entry</a>
     </h3>
 </div>
 <p style="clear:left;margin-left:16px;">

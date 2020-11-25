@@ -2,8 +2,8 @@
 /**
  * This script uses the email address provided by the user and verifies its
  * existence in the 'Users' table. If present, an email is sent to the user
- * providing the user either: 1) his/her login name, or 2) a link to reset
- * the user's password.
+ * providing the user the account User Name and a temporary password to reset
+ * the account.
  * PHP Version 7.1
  * 
  * @package Budget
@@ -13,55 +13,46 @@
 require "../database/global_boot.php";
 require "gmail.php";
 
-$etype = filter_input(INPUT_POST, 'parm');
-if ($etype === 'uname') {
-    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    if (!$email) {
-        echo "bad";
-        exit;
-    }
-    $registered
-        = $pdo->query('SELECT email FROM `Users`;')->fetchAll(PDO::FETCH_COLUMN);
-    if (in_array($email, $registered)) {
-        $uname = "SELECT `username` FROM `Users` WHERE `email` = :email;";
-        $stmnt = $pdo->prepare($uname);
-        $stmnt->execute(["email" => $email]);
-        $user = $stmnt->fetch(PDO::FETCH_ASSOC);
-        $mail->setFrom('webmaster@budgetizer.epizy.com', 'Do not reply');
-        $mail->addAddress($email, 'Budgetizer User');
-        $mail->Subject = 'Your Budgetizer User Name';
-        $mail->Body = "Your Budgetizer User Name is " . $user['username'];
-        $proceed = true;
-    } else {
-        $proceed = false;
-    }
-} elseif ($etype === 'passwd') {
-    $user = filter_input(INPUT_POST, 'email'); // 'email' is user name in this case
-    $umail = "SELECT `email` FROM `Users` WHERE `username` = :uid;";
-    $send = $pdo->prepare($umail);
-    $send->execute(["uid" => $user]);
-    $sendto = $send->fetch(PDO::FETCH_ASSOC);
-    if ($sendto) {
-        // in order to get the user name in the html without php or javascript:
-        $phtml = file_get_contents('passwordLink.html');
-        $href = strpos($phtml, "href");
-        $half = substr($phtml, 0, $href);
-        $whole = $half . 'href="http://budgetizer.epizy.com/admin/renew.php?user=' .
-            rawurlencode($user) . 
-            '">Reset Your Budgetizer Password</a></p>' . PHP_EOL;
-        $whole .= PHP_EOL . "</body>" . PHP_EOL . "</html>" . PHP_EOL;
-        $email = $sendto['email'];
-        file_put_contents('passwordLink.html', $whole);
-        $mail->setFrom('webmaster@budgetizer.epizy.com', 'Do not reply');
-        $mail->addAddress($email, 'Budgetizer User');
-        $mail->Subject = 'Reset Your Budgetizer Password';
-        $mail->msgHTML(file_get_contents('passwordLink.html'));
-        $proceed = true;
-    } else {
-        $proceed = false;
-    }
+// text for message body
+$msg = <<<LNK
+<h3>Do not reply to this message</h3>
+Your request to reset your Budgetizer account was received<br />
+Your User Name is:
+LNK;
+$href = '<br /><br /><a href="http://budgetizer.epizy.com/admin/renew.php?code=';
+// validate email
+$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+if (!$email) {
+    echo "bad";
+    exit;
 }
-if ($proceed) {
+
+$registered
+    = $pdo->query('SELECT email FROM `Users`;')->fetchAll(PDO::FETCH_COLUMN);
+if (in_array($email, $registered)) {
+    // get username
+    $uname = "SELECT `username` FROM `Users` WHERE `email` = :email;";
+    $stmnt = $pdo->prepare($uname);
+    $stmnt->execute(["email" => $email]);
+    $user = $stmnt->fetch(PDO::FETCH_ASSOC);
+    $msg .= ' ' . $user['username'] . '<br />';
+    // create temporary password
+    $tmp_pass = bin2hex(random_bytes(5)); // 10 hex characters
+    $hash = password_hash($tmp_pass, PASSWORD_DEFAULT);
+    $savecodeReq = "UPDATE `Users` SET `password` = ? WHERE `username` = ?;";
+    $savecode = $pdo->prepare($savecodeReq);
+    $savecode->execute([$hash, $user['username']]);
+    $msg .= 'A temporary password has been assigned: ';
+    $msg .= '<strong>' . $tmp_pass . '</strong>';
+    $href .= $tmp_pass . 
+        '"><span style="font-size:16px;">Click to activate</span></a>';
+    $msg .= $href;
+    // send it
+    $mail->isHTML(true);
+    $mail->setFrom('webmaster@budgetizer.epizy.com', 'Do not reply');
+    $mail->addAddress($email, 'Budgetizer User');
+    $mail->Subject = 'Account Reset';
+    $mail->Body = $msg;
     @$mail->send();
     echo "ok";
 } else {

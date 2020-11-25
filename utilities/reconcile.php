@@ -8,7 +8,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_GET, 'user'); // mandatory to appear prior to 'requires'
+session_start();
 $rec_cd = filter_input(INPUT_GET, 'card');
 
 require "getCards.php";
@@ -51,12 +51,10 @@ for ($i=0; $i<count($expamt); $i++) {
     <div>
         <button id="reconcile">Reconcile</button>
         <button id="rtb">Return to Budget</button><br /><br />
-        <p id="user" style="display:none;"><?= $user;?></p>
         <span id="inst">Check the items to be reconciled; when done, select
             'Reconcile' above. These items will be automatically deducted
             from your checkbook balance as if the charges have been paid.<br /><br />
         </span>
-        <input type="hidden" name="user" value="<?= $user;?>" />
         <input type="hidden" name="card" value="<?= $rec_cd;?>" />
         <table>
             <thead>

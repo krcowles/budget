@@ -8,11 +8,13 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_POST, 'user'); // mandatory prior to 'requires'
-$subj = filter_input(INPUT_POST, 'card');
+session_start();
 
+require "../database/global_boot.php";
 require "../utilities/getCards.php";
 require "../utilities/getExpenses.php";
+
+$subj = filter_input(INPUT_POST, 'card');
 
 $cardset = [];
 for ($i=0; $i<count($expamt); $i++) {
@@ -37,6 +39,5 @@ if ($paid) {
 }
 
 // encode card name as it may contain spaces
-$return = "reconcile.php?user=" . rawurlencode($user) .
-    "&card=" . rawurlencode($subj);
+$return = "reconcile.php?card=" . rawurlencode($subj);
 header("Location: {$return}");

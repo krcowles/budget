@@ -24,7 +24,7 @@ table:not(#modal_table) {
 }
 /* <div>s containing modal window content */
 #box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv, #cdadd, 
-        #reconcile, #auto, #delauto, #delcrdr, #delexisting, #morpt {
+        #reconcile, #auto, #delauto, #delcrdr, #delexisting, #morpt, #yearrpt {
     display: none;
 }
 .tdht {
@@ -63,4 +63,11 @@ input[id^=payee] {
 #rptmo {
     position: relative;
     top: 6px;
+}
+#preloader {
+    display: none;
+    position: absolute;
+    top: 90px;
+    left: 660px;
+    z-index: 999;
 }

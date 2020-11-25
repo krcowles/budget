@@ -10,9 +10,8 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+session_start();
 require_once "../database/global_boot.php";
-
-$user = filter_input(INPUT_POST, 'user');
 
 $undos = $_POST['revchg'];
 if (isset($undos)) {
@@ -27,10 +26,10 @@ if (isset($undos)) {
         $rev = $pdo->prepare($revRequest);
         $rev->execute(["expid" => $reverse]);
         $budRequest = "UPDATE `Budgets` SET `current`=`current` + {$exp} WHERE " .
-            "`user` = :user AND `budname` = :acct;";
+            "`userid` = :uid AND `budname` = :acct;";
         $budupdate = $pdo->prepare($budRequest);
-        $budupdate->execute(["user" => $user, "acct" => $acct]);
+        $budupdate->execute(["uid" => $_SESSION['userid'], "acct" => $acct]);
     }
 }
-$return = "reverseCharge.php?user=" . $user . "&paid=yes";
+$return = "reverseCharge.php?paid=yes";
 header("Location: {$return}");

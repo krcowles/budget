@@ -9,19 +9,16 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+session_start();
 require "../database/global_boot.php";
 
-$user = filter_input(INPUT_POST, 'user');
-$exit  = filter_input(INPUT_POST, 'exit3') === 'no' ? false : true;
+$exit_and_return  = filter_input(INPUT_POST, 'exit3') === 'yes' ? true : false;
 
-$oldquery = "SELECT `setup` FROM `Users` WHERE `username` = :uid;";
-$old = $pdo->prepare($oldquery);
-$old->execute(["uid" => $user]);
-$fetched = $old->fetch(PDO::FETCH_ASSOC);
-$setup = $fetched['setup'] | '001';
-$status = "UPDATE `Users` SET `setup` = :setup WHERE `username` = :uid;";
+$setup = $exit_and_return ? '001' : '111';
+$_SESSION['start'] = $setup;
+$status = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
 $newstat = $pdo->prepare($status);
-$newstat->execute(["setup" => $setup, "uid" => $user]);
+$newstat->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
 
 // get all pre-entered data, if any
 if (isset($_POST['aeeamt'])) {
@@ -65,20 +62,16 @@ $new_payees = $_POST['epay'];
 // save the new stuff to the 'Budgets' tablex
 for ($n=0; $n<count($new_amounts); $n++) {
     if (!empty($new_amounts[$n])) {
-        $new = "INSERT INTO `Charges` (`user`,`method`,`cdname`,`expdate`," .
-            "`expamt`,`payee`,`paid`) VALUES ('" . $user . "','Credit','" . 
-            $new_cards[$n] . "','" . $new_dates[$n] . "','" . $new_amounts[$n] . 
-            "','" . $new_payees[$n] . "','N');";
-        try {
-            $pdo->query($new);
-        } catch (PDOException $e) {
-            echo "Got " . $e->getMessage();
-        }
+        $new = "INSERT INTO `Charges` (`userid`,`method`,`cdname`,`expdate`," .
+            "`expamt`,`payee`,`paid`) VALUES ('" . $_SESSION['userid'] .
+            "','Credit','" . $new_cards[$n] . "','" . $new_dates[$n] . "','" .
+            $new_amounts[$n] . "','" . $new_payees[$n] . "','N');";
+        $pdo->query($new);
     }
 }
-if (!$exit) {
-    $goto = "newBudgetPanels.php?pnl={$setup}&user=" . rawurlencode($user);
+if ($setup === '111') { // don't return
+    $goto = "../main/displayBudget.php";
 } else {
-    $goto = "../utilities/exitPage.html";
+    $goto = "../utilities/exitPage.php";
 }
 header("Location: {$goto}");

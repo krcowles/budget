@@ -1,10 +1,9 @@
 <?php
 /**
  * This script extracts the user's budget data from the 'Budgets' table.
- * In order to do so, the variable $user MUST BE DEFINED BY THE CALLER.
  * The data is compiled in arrays for consumption by the caller. Also, 
  * html select drop-downs are formed for use in some of the modals which
- * request user input.
+ * may request user input.
  * PHP Version 7.1
  * 
  * @package Budget
@@ -24,9 +23,9 @@ $autopay = [];
 $day = [];
 $paid = [];
 $income = [];
-$request = "SELECT * FROM Budgets WHERE user = :user AND status = 'A';";
+$request = "SELECT * FROM `Budgets` WHERE `userid` = :uid AND status = 'A';";
 $stmnt = $pdo->prepare($request);
-$stmnt->execute(["user" => $user]);
+$stmnt->execute(["uid" => $_SESSION['userid']]);
 $bud_dat = $stmnt->fetchALL(PDO::FETCH_ASSOC);
 if (count($bud_dat) === 0) {
     // go to budget setup
@@ -54,35 +53,46 @@ if (count($bud_dat) === 0) {
     }
 }
 // copy the arrays so that they can be re-sequenced according to $positions
-$idArray  = new ArrayObject($acctid);
-$nmeArray = new ArrayObject($account_names);
-$posArray = new ArrayObject($positions);
-$budArray = new ArrayObject($budgets);
-$p0Array  = new ArrayObject($prev0);
-$p1Array  = new ArrayObject($prev1);
-$curArray = new ArrayObject($current);
-$apArray  = new ArrayObject($autopay);
-$dayArray = new ArrayObject($day);
-$pdArray  = new ArrayObject($paid);
-$incArray = new ArrayObject($income);
-$orgpos = [];
-for ($j=0; $j<count($account_names); $j++) {
-    $orgpos[$j] = $positions[$j];
-} // necessary because 'array_search' treats ArrayObject as *not* an array!
-for ($i=0; $i<count($account_names); $i++) {
-    $posval = $i + 1; // there is no 0 position
-    $pos = array_search($posval, $orgpos); // find the key for each consec. item
-    $acctid[$i] = $idArray[$pos];
-    $positions[$i] = $posArray[$pos];
-    $account_names[$i] = $nmeArray[$pos];
-    $budgets[$i] = $budArray[$pos];
-    $prev0[$i] = $p0Array[$pos];
-    $prev1[$i] = $p1Array[$pos];
-    $current[$i] = $curArray[$pos];
-    $autopay[$i] = $apArray[$pos];
-    $day[$i] = $dayArray[$pos];
-    $paid[$i] = $pdArray[$pos];
-    $income[$i] = $incArray[$pos];
+$idArrayObj  = new ArrayObject($acctid);
+$idArray = $idArrayObj->getArrayCopy();
+$nmeArrayObj = new ArrayObject($account_names);
+$nmeArray = $nmeArrayObj->getArrayCopy();
+$posArrayObj = new ArrayObject($positions);
+$posArray = $posArrayObj->getArrayCopy();
+$budArrayObj = new ArrayObject($budgets);
+$budArray = $budArrayObj->getArrayCopy();
+$p0ArrayObj  = new ArrayObject($prev0);
+$p0Array = $p0ArrayObj->getArrayCopy();
+$p1ArrayObj  = new ArrayObject($prev1);
+$p1Array = $p1ArrayObj->getArrayCopy();
+$curArrayObj = new ArrayObject($current);
+$curArray = $curArrayObj->getArrayCopy();
+$apArrayObj  = new ArrayObject($autopay);
+$apArray = $apArrayObj->getArrayCopy();
+$dayArrayObj = new ArrayObject($day);
+$dayArray = $dayArrayObj->getArrayCopy();
+$pdArrayObj  = new ArrayObject($paid);
+$pdArray = $pdArrayObj->getArrayCopy();
+$incArrayObj = new ArrayObject($income);
+$incArray = $incArrayObj->getArrayCopy();
+$orgPosObj = new ArrayObject($positions);
+$orgpos = $orgPosObj->getArrayCopy();
+asort($positions);
+$keyindx = 0;
+foreach ($positions as $sorted) {
+    $pos = array_search($sorted, $orgpos); // get positional key
+    $acctid[$keyindx] = $idArray[$pos];
+    $positions[$keyindx] = $posArray[$pos];
+    $account_names[$keyindx] = $nmeArray[$pos];
+    $budgets[$keyindx] = $budArray[$pos];
+    $prev0[$keyindx] = $p0Array[$pos];
+    $prev1[$keyindx] = $p1Array[$pos];
+    $current[$keyindx] = $curArray[$pos];
+    $autopay[$keyindx] = $apArray[$pos];
+    $day[$keyindx] = $dayArray[$pos];
+    $paid[$keyindx] = $pdArray[$pos];
+    $income[$keyindx] = $incArray[$pos];
+    $keyindx++;
 }
 $user_cnt = count($account_names);
 // get the temporary accounts (includes Undistributed Funds)
@@ -96,9 +106,10 @@ $tap = [];
 $tday = [];
 $tpd = [];
 $tinc = [];
-$treq = "SELECT * FROM Budgets WHERE `user` = :user AND `status` = 'T';";
+$treq = "SELECT * FROM `Budgets` WHERE `userid` = :uid AND `status` = 'T' " .
+    "ORDER BY `budpos`;";
 $tdat = $pdo->prepare($treq);
-$tdat->execute(["user" => $user]);
+$tdat->execute(["uid" => $_SESSION['userid']]);
 $temps = $tdat->fetchALL(PDO::FETCH_ASSOC);
 foreach ($temps as $tacct) {
     array_push($tid, $tacct['id']);

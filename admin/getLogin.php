@@ -9,35 +9,62 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-define("UX_DAY", 60*60*24); // unix timestamp value for 1 day
+session_start();
 
-$regusr = isset($_COOKIE['epiz'])   ? true : false; // registered user?
-$uname = 'none';
-$cstat = 'OK'; // changed below based on user cookie expiration data
-$start = '';
-if ($regusr) { // if no cookie, $uname remains 'none'
-    $uname = $_COOKIE['epiz'];
-    $expirationReq = "SELECT passwd_expire, setup FROM Users WHERE username = ?;";
-    $userExpire = $pdo->prepare($expirationReq);
-    $userExpire->execute([$uname]);
-    $rowcnt = $userExpire->rowCount();
-    if ($rowcnt === 0) {
-        $cstat = 'NONE';
-    } elseif ($rowcnt === 1) {
-        $fetched = $userExpire->fetch(PDO::FETCH_ASSOC);
-        $expDate = $fetched['passwd_expire'];
-        $start = $fetched['setup'];
-        $american = str_replace("-", "/", $expDate);
-        $orgDate = strtotime($american);
-        if ($orgDate <= time()) {
-            $cstat = 'EXPIRED';
-        } else {
-            $days = floor(($orgDate - time())/UX_DAY);
-            if ($days <= 5) {
-                $cstat = 'RENEW';
+// check for partial logins, e.g. when expired password
+if (!isset($_SESSION['userid']) || !isset($_SESSION['cookiestatus'])
+    || !isset($_SESSION['expire']) || !isset($_SESSION['cookies']) 
+    || !isset($_SESSION['start'])
+) {
+    unset($_SESSION['userid']);
+    unset($_SESSION['cookiestatus']);
+    unset($_SESSION['expire']);
+    unset($_SESSION['cookies']);
+    unset($_SESSION['start']);
+}
+if (!isset($_SESSION['userid'])) {
+    $cstat = "NOLOGIN"; // $cstat & $start are recorded on page for getLogin.js
+    $start = '000';
+    $regusr = isset($_COOKIE['epiz']) ? true : false; // registered user?
+    if ($regusr) {
+        $uname = $_COOKIE['epiz'];
+        $userReq = "SELECT * FROM Users WHERE username = ?;";
+        $user_dat = $pdo->prepare($userReq);
+        $user_dat->execute([$uname]);
+        $rowcnt = $user_dat->rowCount();
+        if ($rowcnt === 0) {
+            $cstat = 'NONE';
+        } elseif ($rowcnt === 1) {
+            $cstat = "OK";
+            $fetched = $user_dat->fetch(PDO::FETCH_ASSOC);
+            $start    = $fetched['setup'];
+            $expDate  = $fetched['passwd_expire'];
+            $american = str_replace("-", "/", $expDate);
+            $orgDate  = strtotime($american);
+            if ($orgDate <= time()) {
+                $cstat = 'EXPIRED';
+                // no login credentials
+            } else {
+                // establish login credentials
+                $_SESSION['userid']       = $fetched['uid'];
+                $_SESSION['expire']       = $fetched['passwd_expire'];
+                $_SESSION['cookies']      = $fetched['cookies'];
+                $_SESSION['start']        = $fetched['setup'];
+                $UX_DAY = 60*60*24; // unix timestamp value for 1 day
+                $days = floor(($orgDate - time())/$UX_DAY);
+                if ($days <= 5) {
+                    $cstat = 'RENEW';
+                }
             }
+            if ($cstat !== 'EXPIRED') {
+                $_SESSION['cookiestatus'] = $cstat; // OK or RENEW
+            }
+        } else {
+            $cstat = 'MULTIPLE';
         }
-    } else {
-        $cstat = 'MULTIPLE';
     }
+} else {
+    // login session variables already exist
+    $cstat = "OK";
+    $start = $_SESSION['start'];
 }

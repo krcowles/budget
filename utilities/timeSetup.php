@@ -39,9 +39,9 @@ for ($i=0; $i<3; $i++) {
     $month[$i] = $month_names[$month_set[$i]];
 }
 $rollover = false;
-$LCM = "SELECT `LCM` FROM `Users` WHERE `username` = :uid;";
+$LCM = "SELECT `LCM` FROM `Users` WHERE `uid` = :uid;";
 $moupdte = $pdo->prepare($LCM);
-$moupdte->execute(["uid" => $user]);
+$moupdte->execute(["uid" => $_SESSION['userid']]);
 $mo = $moupdte->fetch(PDO::FETCH_ASSOC);
 if (!empty($mo['LCM'])) {
     if ($mo['LCM'] !== $current_month) {
@@ -49,7 +49,7 @@ if (!empty($mo['LCM'])) {
     }
 }
 if (empty($mo['LCM' || $rollover])) {
-    $newup = "UPDATE `Users` SET `LCM` = :mo WHERE `username` = :uid;";
+    $newup = "UPDATE `Users` SET `LCM` = :mo WHERE `uid` = :uid;";
     $setmo = $pdo->prepare($newup);
-    $setmo->execute(["mo" => $current_month, "uid" => $user]);
+    $setmo->execute(["mo" => $current_month, "uid" => $_SESSION['userid']]);
 }

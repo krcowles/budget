@@ -7,25 +7,41 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$user = filter_input(INPUT_GET, 'user');
+session_start();
 require "../utilities/getCards.php";
 require "../utilities/getExpenses.php";
 
-$cardCharges = [];
-$allCharges = [];
-$card_cnts = [];
-for ($i=0; $i<count($cr); $i++) {
-    for ($j=0; $j<count($expmethod); $j++) {
-        if ($expmethod[$j] === 'Credit' && $expcdname[$j] === $cr[$i]) {
-                $cardCharges[] = array(
-                    'date' => $expdate[$j], 'amt' => $expamt[$j],
-                    'chgd' => $expcharged[$j], 'payee' => $exppayee[$j]
-                );
+/**
+ * XHTML requires child tags in tables, so using alt control structures
+ * did not yield good syntax. Hence, the table bodies are created in 
+ * php below.
+ */
+$counts = [];
+$tbodys = [];
+for ($j=0; $j<count($cr); $j++) {
+    $tally = 0;
+    $tbody = '<tbody>' . PHP_EOL;
+    for ($k=0; $k<count($expmethod); $k++) {
+        if ($expmethod[$k] === 'Credit' && $expcdname[$k] === $cr[$j]) {
+            $tally++;
+            $tbody .= '<tr>' . PHP_EOL;
+            $tbody .= "<td><input type='text' class='datepicker dates' " .
+                "name='cr{$j}date[]' value='{$expdate[$k]}' /></td>" . PHP_EOL;
+            $tbody .= "<td><textarea rows='1' cols='80' class='amt' " .
+                "name='cr{$j}amt[]'>{$expamt[$k]}</textarea></td>" . PHP_EOL;
+            $tbody .= "<td><textarea rows='1' cols='20' class='chgd' " .
+                "name='cr{$j}chgd[]'>{$expcharged[$k]}</textarea></td>" . PHP_EOL;
+            $tbody .= "<td><textarea  rows='1' cols='30' class='payee' " .
+                "name='cr{$j}pay[]'>{$exppayee[$k]}</textarea></td>" . PHP_EOL;
+            $tbody .= "</tr>" . PHP_EOL;
         }
     }
-    $allCharges[$i] =  $cardCharges;
-    $cardCharges = [];
-    $card_cnts[$i] = count($allCharges[$i]);
+    $tbody .= '</tbody>' . PHP_EOL;
+    if ($tally === 0) {
+        $tbody = '<tbody><tr><td colspan="4"></td></tr></tbody>';
+    }
+    array_push($counts, $tally);
+    array_push($tbodys, $tbody);
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -54,18 +70,16 @@ for ($i=0; $i<count($cr); $i++) {
 
 <body>
 <div id="main">
-    <p id="user" style="display:none;"><?= $user;?></p>
     <p class="NormalHeading">You can use this form to edit active charges
     charged to a credit card.</p>
     <form id="form" method="post" action="saveEditedCharge.php">
     <div>
         <button id="save">Save All Changes</button>
-        <button id="return" style="margin-left:80px;">
-            Return to Budget</button><br /><br />
-        <input type="hidden" name="user" value="<?= $user;?>" />
+        <button id="return" style="margin-left:80px;">Return to Budget</button>
+        <br /><br />
         <div id="existing">
         <?php for ($i=0; $i<count($cr); $i++) : ?>
-            <input type="hidden" name="cnt[]" value="<?= $card_cnts[$i];?>" />
+            <input type="hidden" name="cnt[]" value="<?= $counts[$i]?>" />
             <span class="BoldText">These are your current charges against
                 <?= $cr[$i];?>
             </span>
@@ -78,25 +92,7 @@ for ($i=0; $i<count($cr); $i++) {
                         <th>Payee:</th>
                     </tr>
                 </thead>
-                <tbody>
-                        <?php foreach ($allCharges[$i] as $card) : ?>
-                        <tr>
-                            <td><input type="text" class="datepicker dates"
-                                name="cr<?= $i;?>date[]" 
-                                value="<?= $card['date'];?>" />
-                            </td>
-                            <td><textarea rows="1" cols="80" class="amt"
-                                name="cr<?= $i;?>amt[]"><?= $card['amt'];?>
-                            </textarea></td>
-                            <td><textarea rows="1" cols="20" class="chgd"
-                                name="cr<?=$i;?>chgd[]"><?= $card['chgd'];?>
-                            </textarea></td>
-                            <td><textarea  rows="1" cols="30" class="payee"
-                            name="cr<?= $i;?>pay[]"><?= $card['payee'];?>
-                            </textarea></td>
-                        </tr>
-                        <?php endforeach; ?>
-                </tbody>
+                <?=$tbodys[$i];?>
             </table><br />
         <?php endfor; ?>
         </div>
@@ -116,8 +112,7 @@ for ($i=0; $i<count($cr); $i++) {
 <script type="text/javascript">
     $('#return').on('click', function(ev) {
         ev.preventDefault();
-        var dpg = "../main/displayBudget.php?user=" + 
-            encodeURIComponent($('#user').text());
+        var dpg = "../main/displayBudget.php";
         window.open(dpg, "_self");
     });
     $(function () {
