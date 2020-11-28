@@ -3,6 +3,14 @@
     background-color: #004a00;
     height: 48px;
 }
+#pagetop {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+}
+#types {
+    z-index: 1;
+}
 #budgeting {
     display: inline-block;
     width: 460px;
@@ -62,7 +70,7 @@ div[id^=sub] {
     position: absolute;
     display: none;
     background-color: #004a00;
-    top: 56px;
+    top: 48px;
 }
 div[id^=sub] ul {
     list-style-type: none;

@@ -36,6 +36,12 @@ $(window).resize(function() {
     }
 });
 
+if ($(window).scrollTop() > 0) {
+    $('#types').hide();
+}
+$(window).on('scroll', function() {
+    $('#types').hide();
+});
 // get date info to check for upcoming or past due autopays
 var today = new Date();
 var dd = parseInt(String(today.getDate()).padStart(2, '0'));
