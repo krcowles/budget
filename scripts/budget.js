@@ -7,29 +7,12 @@
  */
 $(function() { 
 
-/**
- * This function reports to the user when the window is too narrow
- * to see all the menus
- * 
- * @return {null}
- */
-function menuSpace() {
-    let wd = window.innerWidth;
-    if (wd < 1150) {
-        alert("Your browser window needs to expand to show all the menus:\n" +
-            "Please Widen until you see space after the Help Menu");
-    }
-    return
-}
-menuSpace();
-
 var able = true;
 $(window).resize(function() {
     if (able) {
         able = false;
         setTimeout(function() {
             able = true;
-            menuSpace();
             // the nav bar can get out of whack, so regenerate the page w/o cache
             location.reload(); // query string forces no cache access
         }, 400);
