@@ -25,7 +25,8 @@ table:not(#modal_table) {
 }
 /* <div>s containing modal window content */
 #box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv, #cdadd, 
-        #reconcile, #auto, #delauto, #delcrdr, #delexisting, #morpt, #yearrpt {
+        #reconcile, #auto, #delauto, #delcrdr, #delexisting, #morpt,
+        #yearrpt, #incyr {
     display: none;
 }
 .tdht {

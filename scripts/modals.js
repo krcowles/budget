@@ -1,3 +1,11 @@
+/**
+ * @fileoverview This module displays the various modals available to the user; 
+ * When a selection is made in the modal window, the appropriate page is invoked.
+ * 
+ * @author Ken Cowles
+ * 
+ * @version 2.0 Add income year reporting
+ */
 // modal object definition
 var modal = (function() {
     // Local/private to "modal"; invoked only on instantiation
@@ -564,6 +572,24 @@ var modal = (function() {
                 'editing charges', deferred);
         });
     }
+    // modal function to select a year for viewing income summary
+    function selectIncDate(deferred) {
+        $('#viewinc').after($close);
+        $close.css('margin-left', '24px');
+        let $incyr = $('#incyear');
+        let incyr = getSelectValue($incyr[0]);
+        $incyr.on('change', function() {
+            incyr = this.value;
+        });
+        $('#viewinc').on('click', function() {
+            let inc_rpt = '../utilities/reports.php?id=inc&incyr=' + incyr;
+            window.open(inc_rpt, "_self");
+        });
+        $close.on('click', function () {
+            deferred.resolve();
+            modal.close();
+        });
+    }
     // modal function executed when settings.id == 'morpt'
     function reports(deferred, period) {
         if (period === 'mo') {
@@ -657,6 +683,8 @@ var modal = (function() {
             } else if (modid === 'edit_chg') {
                 editCredit(settings.ivals, settings.chgitem, 
                     settings.chgid, settings.deferred);
+            } else if (modid === 'incyear') {
+                selectIncDate(settings.deferred);
             } else if (modid === 'morpt') {
                 reports(settings.deferred, 'mo');
             } else if (modid === 'yrrpt') {

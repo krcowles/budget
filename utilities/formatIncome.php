@@ -1,19 +1,74 @@
 <?php
 /**
- * This script retrieves all income and on-time deposits and reports the
- * results
+ * This script retrieves all income and one-time deposits, then reports
+ * the results in tabular form.
  * PHP Version 7.1
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$depositReq = "SELECT * FROM `Deposits` WHERE `userid` = ?;";
+$income_yr = filter_input(INPUT_GET, 'incyr');
+
+$depositReq = "SELECT * FROM `Deposits` WHERE `userid` = ? AND YEAR(`date`) = ?;";
 $depositQ = $pdo->prepare($depositReq);
-$depositQ->execute([$_SESSION['userid']]);
+$depositQ->execute([$_SESSION['userid'], $income_yr]);
 $deposits = $depositQ->fetchAll(PDO::FETCH_ASSOC);
+$sources = [];
+$latest  = [];
+foreach ($deposits as $deposit) {
+    if ($deposit['otd'] === 'N') { // this is monthly income
+        $key = "Monthly Income";
+    } else {
+        $key = $deposit['description'];
+    }
+    $srckeys = array_keys($sources);
+    if (!in_array($key, $srckeys)) {
+        $sources[$key] = $deposit['amount'];
+        $latest[$key]  = $deposit['date'];
+    } else {
+        $prevsum = $sources[$key];
+        $newsum  = $prevsum + $deposit['amount'];
+        $sources[$key] = $newsum;
+        $thisdate = explode("-", $deposit['date']);
+        $lastdate = explode("-", $latest[$key]);
+        if ($thisdate[1] > $lastdate[1]) {
+            $latest[$key] = implode("-", $thisdate);
+        } elseif ($thisdate[1] == $lastdate[1]) {
+            if ($thisdate[2] > $lastdate[2]) {
+                $latest[$key] = implode("-", $thisdate);
+            }
+        }
+    }
+}
 ?>
-<table style="margin-top:24px;margin-left:12px;">
+<div class="inc">Annual Summary:</div>
+<table style="margin-top:8px;margin-left:12px;">
+    <colgroup>
+        <col style="width:120px;" />
+        <col style="width:100px" />
+        <col style="width:320px" />
+    </colgroup>
+    <thead>   
+        <tr>
+            <th>Last Deposit</th>
+            <th>Total</th>
+            <th>Source</th>
+        </tr> 
+    </thead>
+    <tbody>
+        <?php foreach ($sources as $key => $value) :?>
+        <tr>
+            <td><?=$latest[$key];?></td>
+            <td><?=dataPrep($value, 'prev0');?></td>
+            <td><?=$key;?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<div class="inc">Activity:</div>
+<table style="margin-top:8px;margin-left:12px;">
     <colgroup>
         <col style="width:120px" />
         <col style="width:100px" />

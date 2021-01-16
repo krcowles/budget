@@ -13,7 +13,7 @@ require "../database/global_boot.php";
 require "getCards.php";
 require "timeSetup.php";
 
-$id = isset($_GET['id']) ? filter_input(INPUT_GET, 'id') : false;
+$id      = isset($_GET['id']) ? filter_input(INPUT_GET, 'id') : false;
 $monthly = $id === 'morpt' ? true : false;
 $annual  = $id === 'yrrpt' ? true : false;
 $income  = $id === 'inc' ? true : false;
@@ -94,6 +94,7 @@ if ($annual) {
         tr.even { background-color: #dfecdf; }
        td { padding: 4px 6px 4px 6px; }
        .red  { color: firebrick; }
+       .inc  { margin-left: 16px; margin-top: 16px; margin-bottom: 0px; }
     </style>
 </head>
 

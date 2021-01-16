@@ -273,14 +273,24 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             </select><br /><br />
             <button id="genmo">Generate</button>
         </div>
+        <!-- Select a report year for expense summary -->
         <div id="yearrpt">
-                Please select the report year<br />
-                <select id="rptyr" name="year">
-                    <option value="<?=$thisyear;?>"><?=$thisyear;?></option>
-                    <option value="<?=$prioryr1;?>"><?=$prioryr1;?></option>
-                    <option value="<?=$prioryr2;?>"><?=$prioryr2;?></option>
-                </select><br /><br />
-                <button id="genyr">Generate</button>
+            Please select the report year<br />
+            <select id="rptyr" name="year">
+                <option value="<?=$thisyear;?>"><?=$thisyear;?></option>
+                <option value="<?=$prioryr1;?>"><?=$prioryr1;?></option>
+                <option value="<?=$prioryr2;?>"><?=$prioryr2;?></option>
+            </select><br /><br />
+            <button id="genyr">Generate</button>
+        </div>
+        <!-- Select a report year for income summary -->
+        <div id="incyr">
+            Select a year to view:<br />
+            <select id="incyear" name="incyear">
+                <option value="<?=$thisyear;?>"><?=$thisyear;?></option>
+                <option value="<?=$prioryr1;?>"><?=$prioryr1;?></option>
+            </select><br /><br />
+            <button id="viewinc">View Income</button>
         </div>
     </div>
     <div id="preloader">

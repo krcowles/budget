@@ -203,10 +203,15 @@ $('#edcc').on('click', function() {
     return;
 });
 $('#inc').on('click', function() {
-    var inc_rpt = '../utilities/reports.php?id=inc';
-    window.open(inc_rpt, "_self");
+    let def = new $.Deferred();
+    let inc_yr = $('#incyr').detach();
+    modal.open({id: 'incyear', width: '210px', height: '130px',
+        content: inc_yr, deferred: def});
+    $.when( def ).then(function() {
+        $('#allForms').append(inc_yr);
+    });
     return;
-})
+});
 $('#vmrpt').on('click', function() {
     var def = new $.Deferred();
     var morpt = $('#morpt').detach();
