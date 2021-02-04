@@ -165,7 +165,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             Funds')<br />
             $ <input type="text" id="depo" /><br />
             Description (Optional)<br />
-            <textarea id="otd_desc" rows="2" columns="30"></textarea><br /><br />
+            <textarea id="otd_desc" rows="2" cols="30"></textarea><br /><br />
             <button id="depfunds">Deposit Funds</button>
         </div>
         <!-- transfer funds -->
