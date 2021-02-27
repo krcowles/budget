@@ -31,15 +31,146 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
         content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
-    <link href="../styles/menu.css" type="text/css" rel="stylesheet" />
-    <link href="../styles/budget.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
     <link href="../styles/charges.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/budget.css" type="text/css" rel="stylesheet" />
     <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
+    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <?php require "menu.html"; ?>
+    <nav class="navbar navbar-expand-md navbar-dark"
+        style="background-color:#004a00;">
+    <div class="container-fluid">
+        <a class="navbar-brand" style="color:#e5c063" href="#">Budgetizer</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#"
+                    id="expenses" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Expenses
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="expenses">
+                    <li><a id="chgexp" class="dropdown-item" href="#">
+                        Pay/Charge An Expense</a></li>
+                    <li><a class="dropdown-item"
+                        href="../utilities/viewCharges.php" target="_self">
+                        View/Edit Expenses</a></li>
+                    <li><a class="dropdown-item"
+                        href="../utilities/reverseCharge.php" target="_self">
+                        Reverse Credit Charge</a></li>
+                    <li><a class="dropdown-item"
+                        href="../utilities/undoExpense.php" target="_self">
+                        Undo Debit or Draft</a></li>
+                    <li><a class="dropdown-item"
+                        href="../edit/editCreditCharges.php" target="_self">
+                        Edit Current Charges</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#"
+                    id="allincome" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Income
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="allincome">
+                    <li><a id="reginc" class="dropdown-item"
+                        href="#">Monthly</a></li>
+                    <li><a id="onetimer" class="dropdown-item"
+                        href="#">Other Deposits</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a id="transfers" class="nav-link active" href="#">Transfers</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#"
+                    id="allcds" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Cards
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="allcds">
+                    <li><a id="cd2rec" class="dropdown-item"
+                        href="#">Reconcile A Card</a></li>
+                    <li><a id="addcrdr" class="dropdown-item" href="#">
+                        Add a Card</a></li>
+                    <li><a id="dac" class="dropdown-item" href="#">
+                        Delete A Card</a></li>
+                    <li><a id="addauto" class="dropdown-item" href="#">
+                        Add Autopay</a></li>
+                    <li><a id="rmap" class="dropdown-item" href="#">
+                        Delete Autopay</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#"
+                    id="budmgr" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Budget Mgr
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="budmgr">
+                    <li><a id="add1" class="dropdown-item"
+                        href="#">Add Account</a></li>
+                    <li><a id="del1" class="dropdown-item"
+                        href="#">Delete Account</a></li>
+                    <li><a id="moveit" class="dropdown-item"
+                        href="#">Move Account</a></li>
+                    <li><a id="ren1" class="dropdown-item"
+                        href="#">Rename Account</a></li>
+                    <li><a class="dropdown-item"
+                        href="../edit/budgetEditor.php">Edit Budget Amounts</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#"
+                    id="reports" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Reports
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="reports">
+                    <li><a id="mexpense" class="dropdown-item"
+                        href="#">Monthly Expenses</a></li>
+                    <li><a id="annual" class="dropdown-item"
+                        href="#">Annual Expenses</a></li>
+                    <li><a id="yrinc" class="dropdown-item"
+                        href="#">Income Report</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#"
+                    id="helper" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Help
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="helper">
+                    <li><a class="dropdown-item"
+                        href="../help/help.php?doc=FAQ.pdf" target="_blank">
+                        FAQ's</a></li>
+                    <li><a class="dropdown-item"
+                        href="../help/help.php?doc=Tools.pdf" target="_blank">
+                            Using Budgetizer</a></li>
+                    <li><a class="dropdown-item"
+                        href="../help/help.php?doc=HowToBudget.pdf" target="_blank">
+                            Intro to Budgeting</a>
+                    </li>
+                    <li><a id="chgcookie" class="dropdown-item"
+                        href="#"><span id="chglink">Reject Cookies</a></li>
+                </ul>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </nav>
     <p id="mstr" style="display:none;"><?=$admin;?></p>
     <pre><button id="admin">Admin</button></pre>
     <p id="usercookies" style="display:none"><?=$menu_item?></p>
@@ -130,169 +261,9 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             </tbody>
         </table>
     </div>
-    <!-- This div holds all the modal formas -->
-    <div id="allForms">
-        <!-- autopay -->
-        <div id="ap">
-           <p id="inst">The following items are due for auto payment. Select an item
-           to pay, and/or when done, select 'Finished'</p>
-        </div>
-        <!-- pay expense -->
-        <div id="box">
-            Deduct from:
-            <div id="fsel0"><?= $fullsel;?></div>
-            Pay with:
-            <div id="csel0"><?= $allCardsHtml;?></div>
-            Enter the amount of the expense:<br />
-            $ <input type="text" id="expamt"  /><br />
-            Paid to: <input type="text" id="payee" /><br />
-            <button id="pay">Pay</button>
-        </div>
-        <!-- monthly income -->
-        <div id="distinc">
-            Please enter the amount of monthly income you wish to distribute:
-            Note that income will be added to accounts not already having
-            received the full budgeted amount, and will stop when the funds
-            run out. Any overages will be placed in 'Undistributed Funds',
-            which can later be moved to other accounts ('Move Funds' button).
-            <br /><br />
-            Enter income: $ <input id="incamt" type="text" /><br /><br />
-            <button id="dist">Distribute</button>
-        </div>
-        <!-- one-time deposit -->
-        <div id="dep">
-            Enter the amount to be deposited (it will be placed in 'Undistributed
-            Funds')<br />
-            $ <input type="text" id="depo" /><br />
-            Description (Optional)<br />
-            <textarea id="otd_desc" rows="2" cols="30"></textarea><br /><br />
-            <button id="depfunds">Deposit Funds</button>
-        </div>
-        <!-- transfer funds -->
-        <div id="xfr">
-            Transfer the following amount:<br />$ <input type="text" 
-                id="xframt" /><br />
-            Take from:
-            <div id="xfrfrom"><?= $fullsel;?></div>
-            Place in:<br />
-            <div id="xfrto"><?= $fullsel;?></div><br />
-            <button id="transfer">Transfer</button>
-        </div>
-        <!-- reconcile credit card statement -->
-        <div id="reconcile">
-            Please select the card you wish to reconcile:<br />
-            <div id="ccsel0"><?= $ccHtml;?></div><br />
-            <button id="usecard">Reconcile</button>
-        </div>
-        <!-- schedule an autopay -->
-        <div id="auto">
-            Prompt for automatic payment of:<br />
-            <div id="apsel"><?= $fullsel;?></div>
-            Method to be applied:<br />
-            <div id="ccselap"><?= $allCardsHtml;?> on day
-            <input id="useday" type="text" /><br />
-            of each month.</div>
-            <button id="perfauto">Set up</button>
-        </div>
-        <!-- delete autopay -->
-        <div id="delauto">
-            Select the account for which you wish to delete prompted autopay:<br />
-            <div id="delapacct"><?= $fullsel;?></div><br />
-            <button id="remap">Delete Autopay</button>
-        </div>
-        <!-- add new Cr/Dr card -->
-        <div id="cdadd">
-            Enter a unique name:<br />
-            <input id="cda" type="text" /><br />
-            Select the type of card:<br />
-            <select id="cdprops">
-                <option value="Credit">Credit</option>
-                <option value="Debit">Debit</option>
-            </select><br />
-            <button id="newcd">Submit</button>
-        </div>
-        <!-- delete Cr/Dr card -->
-        <div id="delcrdr">
-            Select the card you wish to delete:<br />
-            <div id="deletecard"><?= $allCardsHtml;?></div><br />
-            <button id="godel">Delete Card</button>
-        </div>
-        <!-- add account -->
-        <div id="addacct">
-            Enter the account information for the new addition to the budget:
-            <br /><br />New Account Name:<br />
-            <input id="newacct" type="text" /><br /><br />
-            Enter the monthly amount to be budgeted to this account:<br />
-            $ <input id="mo" type="text" /><br />(Use 'Transfer Funds' to establish
-            this month's balance, or other tools to modify
-            other features.<br /><br />
-            <button id="addit">Add Account</button>
-        </div>
-        <!-- delete account -->
-        <div id="delexisting">
-            Note: you can only delete accounts you create (i.e. not 'Undistributed
-            Funds' or 'Temporary Accounts')
-            <span style="color:brown;">NOTE: Please Ensure the budget-to-delete
-            has a balance of $0.</span><br /><br />
-            <div id="remacct">Delete: <?= $partsel;?></div><br />
-            <button id="delit">Delete Account</button>
-        </div>
-        <!-- move account -->
-        <div id="mv">
-            Note: you cannot move the 'Undistributed Funds' nor any 'Temporary
-            Account'<br /><br />
-            <div id="mvfrom">Place the following account: <br />
-            <?= $partsel;?></div>
-            <div id="mvto">Directly above: <br />
-            <?= $partsel;?></div><br />
-            <button id="mvit">Move</button>
-        </div>
-        <!-- rename account -->
-        <div id="rename">
-            <span id="asel">Select the account you wish to rename: 
-            <?= $fullsel;?></span><br /><br />
-            Supply the new name: <input id="newname" type="text" /><br /><br />
-            <button id="ren">Change Name</button>
-        </div>
-        <!-- monthly report -->
-        <div id="morpt">
-            Please select the report month:<br />
-            <select id="rptmo" name="month">
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-            </select><br /><br />
-            <button id="genmo">Generate</button>
-        </div>
-        <!-- Select a report year for expense summary -->
-        <div id="yearrpt">
-            Please select the report year<br />
-            <select id="rptyr" name="year">
-                <option value="<?=$thisyear;?>"><?=$thisyear;?></option>
-                <option value="<?=$prioryr1;?>"><?=$prioryr1;?></option>
-                <option value="<?=$prioryr2;?>"><?=$prioryr2;?></option>
-            </select><br /><br />
-            <button id="genyr">Generate</button>
-        </div>
-        <!-- Select a report year for income summary -->
-        <div id="incyr">
-            Select a year to view:<br />
-            <select id="incyear" name="incyear">
-                <option value="<?=$thisyear;?>"><?=$thisyear;?></option>
-                <option value="<?=$prioryr1;?>"><?=$prioryr1;?></option>
-            </select><br /><br />
-            <button id="viewinc">View Income</button>
-        </div>
-    </div>
+
+    <?php require "bootstrapModals.html"; ?>
+
     <div id="preloader">
         <img src="../images/preload.gif" alt="waiting..." />
     </div>
@@ -302,10 +273,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             alt="Valid XHTML 1.0 Strict" height="31" width="88" />
         </a>
     </p>
-    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-    <script src="../scripts/menu.js" type="text/javascript"></script>
     <script src="../scripts/budget.js" type="text/javascript"></script>
-    <script src="../scripts/modals.js" type="text/javascript"></script>
     <script src="../scripts/jQnumberFormat.js" type="text/javascript"></script>
 </body>
 </html>

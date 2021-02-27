@@ -59,6 +59,7 @@ $noOfExp = count($chgs);
 </head>
 <body>
 <div style="margin-left:40px;">
+<p id="expcnt" style="display:none;"><?=$noOfExp;?></p>
 <h2>Select one or more expenses you wish to undo.</h2>
 <h3>This will have the effect of deleting the expense and having the deleted 
     amount placed back into the account from which it was originally drawn</h3>

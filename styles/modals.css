@@ -1,105 +1,54 @@
-#header {
-    height: 24px;
-    width: 100%;
-    font-size: 18px;
-    border-style: outset;
-    border-width: 2px;
-    background-color: #ffeecc;
-    text-align: center;
-    margin-bottom: 6px;
+.modal-header {
+    background-color:#e9f2e9;
 }
-.modal-content {
-    margin-bottom: 0px;
+.modal-footer {
+    background-color: #e9f2e9;
 }
-.modal-close {
-    position: relative;
-    margin-bottom: 0px;
+#exptbl {
+    border-collapse: collapse
 }
-#enteremail {
-    font-size: 18px;
+#exptbl tr td {
+    border: none;
 }
-#umail {
-    height: 24px;
-    width: 230px;
-    background-color: blanchedalmond;
-    font-size: 16px;
-}
-#sendmail {
-    height: 24px;
-    width: 72px;
-    border-radius: 4px;
-    background-color: blanchedalmond;
-    font-size: 16px;
-}
-#mailtxt {
-    font-size: 18px;
-}
-#acct, #cc {
-    margin-bottom: 4px;
-}
-#cc {
-    margin-top: 6px;
+.fullsel {
+    height: 28px;
 }
 #expamt {
-    height: 18px;
+    height: 24px;
     width: 70px;
     font-size: 14px;
     border-width: 1px;
     margin-bottom: 8px;
 }
-#pay {
-    margin-bottom: 0px;
-    height: 26px;
-    font-size: 16px;
+#exppayto {
+    height: 28px;
 }
-#payee {
-    height: 18px;
-    width: 200px;
-    font-size: 14px;
-    border-width: 1px;
-    margin-bottom: 8px;
-}
-#incamt {
-    height: 22px;
-    width: 110px;
-    font-size: 16px;
-    border-width: 1px;
-}
-#otd_desc {
-    width: 210px;
-}
-#doit {
-    margin-top: 8px;
-}
-#newacct {
-    height: 22px;
-    width: 260px;
-    font-size: 14px;
-}
-#mo {
-    height: 22px;
-    width: 60px;
-    font-size: 14px;
-}
-#depo {
-    width: 80px;
-    height: 22px;
-    font-size: 14px;
-    border-width: 1px;
+#onedep {
+    width: 100px;
 }
 #xframt {
-    height: 22px;
     width: 80px;
+    height: 26px;
     font-size: 14px;
-    border-width: 1px;
+    margin-bottom: 8px;
 }
-#de, #namt, #strt {
-    height: 20px;
-    font-size: 16px;
-}
-.mod {
-    padding-top: 6px;
+#xfrto {
+    position: relative;
+    top: 8px;
 }
 #cda {
-    margin-bottom: 6px;
+    width: 120px;
+}
+#adder {
+    position: relative;
+    top: 8px;
+}
+#ccselap {
+    margin-top: 8px;
+}
+#useday {
+    width: 36px;
+}
+#mo {
+    width: 56px;
 }

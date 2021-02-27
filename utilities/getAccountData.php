@@ -144,13 +144,23 @@ $income        = array_merge($income, $tinc);
 // create html for <select> drop-downs
 $fullsel = '<select class="fullsel">';
 for ($k=0; $k<count($account_names); $k++) {
-    $fullsel .= '<option value="' . $account_names[$k] . '">' .
-        $account_names[$k] . '</option>';
+    if ($k === 0) {
+        $fullsel .= '<option value="' . $account_names[$k] . 
+            '" selected>' . $account_names[$k] . '</option>';
+    } else {
+        $fullsel .= '<option value="' . $account_names[$k] . '">' .
+            $account_names[$k] . '</option>';
+    }
 }
 $fullsel .= '</select>';
 $partsel = '<select class="partsel">';
 for ($n=0; $n<$user_cnt; $n++) {
-    $partsel .= '<option value="' . $account_names[$n] . '">' .
-        $account_names[$n] . '</option>';
+    if ($n === 0) {
+        $partsel .= '<option value="' . $account_names[$n] .
+            '" selected>' . $account_names[$n] . '</option>';
+    } else {
+        $partsel .= '<option value="' . $account_names[$n] . '">' .
+            $account_names[$n] . '</option>';
+    }
 }
 $partsel .= '</select>';

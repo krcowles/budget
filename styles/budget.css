@@ -1,21 +1,20 @@
-body {
-    min-width: 1140px;
-}
-#budget {
-    margin-top: 92px;
+/* Position the budget table */
+#budget { 
+    margin-top: 24px;
     z-index: 10;
 }
-.noshow, #chgaccts {
+/* Certain items are hidden from display */
+.noshow {
     display: none;
 }
-button {
-    margin-bottom: 32px;
-}
+/* The actual budget table */
 table:not(#modal_table) {
     table-layout: fixed;
     margin-right: auto;
     margin-left: auto;
+    border: none;
 }
+/* When admin is logged in, show admin tools button */
 #admin {
     display: none;
     position: fixed;
@@ -23,53 +22,33 @@ table:not(#modal_table) {
     left: 28px;
     margin: 0px;
 }
-/* <div>s containing modal window content */
-#box, #ap, #distinc, #rename, #addacct, #dep, #xfr, #del, #mv, #cdadd, 
-        #reconcile, #auto, #delauto, #delcrdr, #delexisting, #morpt,
-        #yearrpt, #incyr {
-    display: none;
+/* Autopay modal - created in budget.js */
+#modal_table {
+    border-collapse: collapse;
 }
-.tdht {
-    height: 72px;
-    vertical-align: middle;
-}
-.modal_button {
-    width: 120px;
-    margin-bottom: 0px;
-    margin-top: 10px;
+#modal_table tr td {
+    border: none;
 }
 input[id^=amt] {
-    width: 60px;
-    border-width: 1px;
+    width: 64px;
     font-size: 14px;
 }
 input[id^=payee] {
-    border-width: 1px;
+    width: 148px;
     font-size: 14px;
-    margin-top: 6px;
 }
-#xframt, #apsel {
-    margin-bottom: 6px;
-}
-#ccsel0 {
-    margin-top: 6px;
-}
-#cdprops {
-    margin-bottom: 8px;
-}
-#useday {
-    width: 20px;
-    border-color: black;
-    border-width: 1px;
-}
-#rptmo {
-    position: relative;
-    top: 6px;
+.paybox {
+    -ms-transform: scale(1.5); /* IE */
+    -moz-transform: scale(1.5); /* FF */
+    -webkit-transform: scale(1.5); /* Safari and Chrome */
+    -o-transform: scale(1.5); /* Opera */
+    transform: scale(1.5);
+    padding: 10px;
 }
 #preloader {
     display: none;
     position: absolute;
-    top: 90px;
-    left: 660px;
+    top: 80px;
+    left: 20px;
     z-index: 999;
 }

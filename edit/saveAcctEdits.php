@@ -63,7 +63,6 @@ case 'payexp':
             $pd
         ]
     );
-    echo "OK";
     break;
 case 'income':
     $newcur = [];
@@ -123,7 +122,6 @@ case 'income':
         "`description`) VALUES (?,?,?,'N','');";
     $deposit = $pdo->prepare($depositReq);
     $deposit->execute([$_SESSION['userid'], $dbdate, $deposit_amt]);
-    echo "OK";
     break;
 case 'otdeposit':
     $funds = filter_input(INPUT_POST, 'newfunds');
@@ -142,7 +140,6 @@ case 'otdeposit':
     $deposit->execute(
         [$_SESSION['userid'], $dbdate, $funds, $note]
     );
-    echo "OK";
     break;
 case 'xfr':
     $from = filter_input(INPUT_POST, 'from');
@@ -162,7 +159,6 @@ case 'xfr':
     $toreq = "UPDATE `Budgets` SET `current` = :toc WHERE `id` = :toid;";
     $toq  = $pdo->prepare($toreq);
     $toq->execute(["toc" => $xfrin, "toid" => $toid]);
-    echo "OK";
     break;
 case 'apset':
     $charged = filter_input(INPUT_POST, 'acct');
@@ -174,7 +170,6 @@ case 'apset':
         "WHERE `id` = :uid;";
     $apset = $pdo->prepare($sql);
     $apset->execute(["ap" => $method, "moday" => $day, "uid" => $tblid]);
-    echo "OK";
     break;
 case 'delapay':
     $delacct = filter_input(INPUT_POST, 'acct');
@@ -184,7 +179,6 @@ case 'delapay':
         "WHERE `id` = :uid;";
     $da = $pdo->prepare($delauto);
     $da->execute(["uid" => $tblid]);
-    echo "OK";
     break;
 case 'addcd':
     $newcard = filter_input(INPUT_POST, 'cdname');
@@ -195,14 +189,12 @@ case 'addcd':
     $newcdentry->execute(
         ["uid" => $_SESSION['userid'], "name" => $newcard, "type" => $newtype]
     );
-    echo "OK";
     break;
 case 'decard':
     $cd2delete = filter_input(INPUT_POST, 'target');
     $delsql = "DELETE FROM `Cards` WHERE `userid` = :uid AND `cdname` = :cd;";
     $delstmnt = $pdo->prepare($delsql);
     $delstmnt->execute(["uid" => $_SESSION['userid'], "cd" => $cd2delete]);
-    echo "OK";
     break;
 case 'addacct':
     $newacct = filter_input(INPUT_POST, 'acct_name');
@@ -220,14 +212,12 @@ case 'addacct':
             "amt" => $budget
         ]
     );
-    echo "OK";
     break;
 case 'acctdel':
     $target = filter_input(INPUT_POST, 'acct');
     $delreq = "DELETE FROM `Budgets` WHERE `budname` = :bud AND `userid` = :uid;";
     $delbud = $pdo->prepare($delreq);
     $delbud->execute(["bud" => $target, "uid" => $_SESSION['userid']]);
-    echo "OK";
     break;
 case 'move':
     // $positions array holds only positions of user-created accounts
@@ -270,7 +260,6 @@ case 'move':
             $decpos->execute(["pos" => $decr, "itemid" => $acctid[$m]]);
         }
     }
-    echo "OK";
     break;
 case 'rename':
     $target = filter_input(INPUT_POST, 'acct');
@@ -280,6 +269,6 @@ case 'rename':
     $nmesql = "UPDATE `Budgets` SET `budname` = :bnme WHERE `id` = :uid;";
     $renme = $pdo->prepare($nmesql);
     $renme->execute(["bnme" => $name, "uid" => $tblid]);
-    echo "OK";
     break;
 }
+echo "OK";

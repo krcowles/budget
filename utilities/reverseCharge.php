@@ -73,6 +73,7 @@ originally drawn</h3>
 <h3 id="paid">Charge(s) Successfully Completed</h3>
 <? endif; ?>
 <form action="doReverse.php" method="post">
+    <p id="cdcnt" style="display:none;"><?=$noOfCards;?></p>
     <div>
         <button>Reverse Charges</button>
         <button id="return">Return To Budget</button>

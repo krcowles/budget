@@ -1,4 +1,5 @@
- table:not(#modal_table) {
+/* Styling for main budget table */
+table:not(#modal_table) {
 	font-size: 16px;
 	text-align: center;
     margin-top: 5px;
