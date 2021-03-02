@@ -16,6 +16,8 @@ $month_names = array('January', 'February', 'March', 'April', 'May', 'June',
 // array index is zero-based
 $thismo = intval($digits[0]) - 1;
 $current_month = $month_names[$thismo];
+$nextmo = $thismo === 12 ? 1 : $thismo + 1;
+$next_month = $month_names[$nextmo];
 switch ($thismo) {
 case 0:
     $month_set = array(10, 11, 0);
@@ -39,7 +41,7 @@ for ($i=0; $i<3; $i++) {
     $month[$i] = $month_names[$month_set[$i]];
 }
 $rollover = false;
-$LCM = "SELECT `LCM` FROM `Users` WHERE `uid` = :uid;";
+$LCM = "SELECT `LCM`,`definc` FROM `Users` WHERE `uid` = :uid;";
 $moupdte = $pdo->prepare($LCM);
 $moupdte->execute(["uid" => $_SESSION['userid']]);
 $mo = $moupdte->fetch(PDO::FETCH_ASSOC);
@@ -48,8 +50,9 @@ if (!empty($mo['LCM'])) {
         $rollover = true;
     }
 }
-if (empty($mo['LCM' || $rollover])) {
+if (empty($mo['LCM']) || $rollover) {
     $newup = "UPDATE `Users` SET `LCM` = :mo WHERE `uid` = :uid;";
     $setmo = $pdo->prepare($newup);
     $setmo->execute(["mo" => $current_month, "uid" => $_SESSION['userid']]);
 }
+$trigger_deferral = empty($mo['definc']) ? '' : $mo['definc'];

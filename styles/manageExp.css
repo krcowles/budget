@@ -65,7 +65,7 @@ td {
      position: absolute;
      color: brown;
  }
- input[type=checkbox] {
+input[type=checkbox] {
     transform: scale(1.4);
 }
  .mvcr, .mvex, .mvdr, .mvtocr, .mvtodr {

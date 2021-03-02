@@ -41,7 +41,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark"
+    <nav class="navbar navbar-expand-md navbar-dark sticky-top"
         style="background-color:#004a00;">
     <div class="container-fluid">
         <a class="navbar-brand" style="color:#e5c063" href="#">Budgetizer</a>
@@ -156,7 +156,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                     <li><a class="dropdown-item"
                         href="../help/help.php?doc=FAQ.pdf" target="_blank">
                         FAQ's</a></li>
-                    <li><a class="dropdown-item"
+                    <li><a class="dropdown-item disabled"
                         href="../help/help.php?doc=Tools.pdf" target="_blank">
                             Using Budgetizer</a></li>
                     <li><a class="dropdown-item"
@@ -174,6 +174,12 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
     <p id="mstr" style="display:none;"><?=$admin;?></p>
     <pre><button id="admin">Admin</button></pre>
     <p id="usercookies" style="display:none"><?=$menu_item?></p>
+    <!-- for deferred income -->
+    <p id="currmo" style="display:none;"><?=$current_month;?></p>
+    <p id="nextmo" style="display:none;"><?=$next_month;?></p>
+    <p id="deferral" style="display:none;"><?=$trigger_deferral;?></p>
+    <p id="defamt" style="display:none;"><?=$deferred_amount;?></p>
+
     <div id="budget">
         <table id="roll3">
             <colgroup>

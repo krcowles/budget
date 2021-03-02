@@ -175,8 +175,8 @@ case 'delapay':
     $delacct = filter_input(INPUT_POST, 'acct');
     $namekey = array_search($delacct, $account_names);
     $tblid = $acctid[$namekey];
-    $delauto = "UPDATE `Budgets` SET `autopay` = '', `moday` = '0' " .
-        "WHERE `id` = :uid;";
+    $delauto = "UPDATE `Budgets` SET `autopay` = '', `moday` = '0', " .
+        "`autopd` = '' WHERE `id` = :uid;";
     $da = $pdo->prepare($delauto);
     $da->execute(["uid" => $tblid]);
     break;
@@ -214,10 +214,17 @@ case 'addacct':
     );
     break;
 case 'acctdel':
+    $type   = filter_input(INPUT_POST, 'type');
     $target = filter_input(INPUT_POST, 'acct');
     $delreq = "DELETE FROM `Budgets` WHERE `budname` = :bud AND `userid` = :uid;";
     $delbud = $pdo->prepare($delreq);
     $delbud->execute(["bud" => $target, "uid" => $_SESSION['userid']]);
+    if ($type === 'def') {
+        // if deleting Deferred Income, clear out 'definc' in Users
+        $updateDefincReq = "UPDATE `Users` SET `definc` = ? WHERE `uid` = ?;";
+        $updateDefinc = $pdo->prepare($updateDefincReq);
+        $updateDefinc->execute(['', $_SESSION['userid']]);
+    }
     break;
 case 'move':
     // $positions array holds only positions of user-created accounts

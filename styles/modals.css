@@ -10,6 +10,9 @@
 #exptbl tr td {
     border: none;
 }
+input[type=checkbox] {
+    transform: scale(1.4);
+}
 .fullsel {
     height: 28px;
 }
