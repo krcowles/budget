@@ -42,7 +42,6 @@ require "../utilities/getAccountData.php";
 require "../utilities/getCards.php";
 require "../utilities/getExpenses.php";
 
-
 // form balances
 $balBudget  = 0;
 $balPrev0   = 0;

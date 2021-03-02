@@ -39,6 +39,57 @@ for (var j=0; j<$ren[0].options.length; j++) {
         break;
     }
 }
+/**
+ * If an income deferral was recorded earlier...
+ */
+var currmo = $('#currmo').text();
+var nxtmo  = $('#nextmo').text();
+$('#defermo').text(nxtmo);
+var trigger_mo = $('#deferral').text();
+var def_amt = $('#defamt').text();
+if (trigger_mo === currmo) {
+    // 1st, Distribute the Deferred Income:
+    let url = '../edit/saveAcctEdits.php';
+    let ajaxdata = {id: 'income', funds: def_amt};
+    $.ajax({
+        url: url,
+        method: 'post',
+        data: ajaxdata,
+        dataType: 'text',
+        success: function(results) {
+            if (results === 'OK') {
+                // Next, delete the 'Deferred Income' account
+                let deldata = {id: 'acctdel', type: 'def', acct: 'Deferred Income'};
+                $.ajax({
+                    url: url,
+                    data: deldata,
+                    method: "post",
+                    dataType: "text",
+                    success: function(result) {
+                        if (result !== 'OK') {
+                            alert("Could not delete 'Deferred Income' acct");
+                        } else {
+                            location.reload();
+                        }
+                    }, 
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        let msgtxt = "Error deleting 'Deferred Income'\n";
+                        let msg = msgtxt + ":\n" + textStatus + "; Error: " + errorThrown;
+                        alert(msg);
+                    }  
+                });
+            } else {
+                alert("Problem trying to distribute deferred income\n" +
+                    "Contact admin");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            let msgtxt = "Error distributing 'Deferred Income':\n";
+            let msg = msgtxt + textStatus + "; Error: " + errorThrown;
+            alert(msg);
+        }
+    });
+}
 
 /**
  * Set up for autopays
@@ -146,14 +197,16 @@ if (ap_candidates) {
                 dataType: 'text',
                 success: function(result) {
                     if (result === 'OK') {
-                        window.open("../index.php", "_self");
+                        location.reload();
                     } else {
                         alert("A problem was encountered with autopayment\n" +
                             "Contact support");
                     }
                 },
-                error: function() {
-                    alert("Failed to make autopayment: contact support");
+                error: function(jqXHR, textStatus, errorThrown) {
+                    let msgtxt = "Error trying to make autopayment:\n";
+                    let msg = msgtxt + textStatus + "; Error: " + errorThrown;
+                    alert(msg);
                 }
             });
         });
@@ -165,9 +218,8 @@ if (ap_candidates) {
  * All other modal operation
  */
 $('#chgexp').on('click', function() {
-    // triggering twice, don't know why:
+    // was triggering twice, don't know why, so:
     $('#pebtn').unbind('click').bind('click', function() {
-    //$('body').on('click', '#pebtn', function() {
         let $tblrows = $('#exptbl').find('tr').find('select');
         let sel1 = getSelect($tblrows[0]);
         let sel2 = getSelect($tblrows[1]);
@@ -185,11 +237,7 @@ $('#chgexp').on('click', function() {
         }
         let ajaxdata = {id: 'payexp', acct_name: sel1, method: sel2,
             amt: amt, payto: payee};
-        let expdone = $.Deferred();
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem, expdone);
-        $.when( expdone ).then( function() {
-            return;
-        });
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem);
     });
     expitem.show();
 });
@@ -199,12 +247,53 @@ $('#reginc').on('click', function() {
         if (!valAmt(reg)) {
             return false;
         }
-        let regdef = $.Deferred();
-        let ajaxdata = {id: 'income', funds: reg};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, depinc, regdef);
-        $.when( regdef ).then(function() {
+        let save_url = '../edit/saveAcctEdits.php';
+        let ajaxdata;
+        if($('#defer').is(':checked')) {
+            $('#preloader').show();
+            ajaxdata = {id: 'addacct', acct_name: 'Deferred Income', monthly: '0'};
+            // don't use 'executeScript()' here!
+            $.ajax({
+                url: save_url,
+                method: 'post',
+                data: ajaxdata,
+                dataType: 'text',
+                success: function() {
+                    let defdata = {amt: reg, til: nxtmo};
+                    let defurl  = '../edit/setDeferred.php';
+                    $.ajax({
+                        url: defurl,
+                        method: 'post',
+                        data: defdata,
+                        dataType: 'text',
+                        success: function(result) {
+                            if (result !== "OK") {
+                                alert("Could not deposit funds in 'Deferred Income'");
+                            }
+                            $('#preloader').hide();
+                            depinc.hide();
+                            location.reload();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            let msgtxt = 'Error in "setDeferred.php";\n';
+                            let msg = msgtxt + textStatus + "; Error: " + errorThrown;
+                            alert(msg);
+                            depinc.hide();
+                        }
+                    });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    let msgtxt = "Error adding 'Deferred Income' account\n";
+                    msg = msgtxt + textStatus + "; Error: " + errorThrown;
+                    alert(msg);
+                    depinc.hide();
+                }
+            });
             return;
-        });
+        } else {
+            ajaxdata = {id: 'income', funds: reg};
+            executeScript(save_url, ajaxdata, depinc);
+        }
     });
     depinc.show();
 });
@@ -215,12 +304,8 @@ $('#onetimer').on('click', function() {
             return false;
         }
         let otmemo = $('#otmemo').val();
-        let otdef = $.Deferred();
         let ajaxdata = {id: 'otdeposit', newfunds: funds, note: otmemo};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, onetdep, otdef);
-        $.when( otdef ).then( function() {
-            return;
-        });
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, onetdep);
     });
     onetdep.show();
 });
@@ -238,12 +323,8 @@ $('#transfers').on('click', function() {
             alert("You have specified the same account for 'Take from' and 'Place in'");
             return false;
         }
-        let xfrdef = $.Deferred();
         let ajaxdata = {id: 'xfr', from: xfrom, to: xfrto, sum: amt};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, xfrfund, xfrdef);
-        $.when( xfrdef ).then(function() {
-            return;
-        });
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, xfrfund);
     });
     xfrfund.show();
 });
@@ -269,12 +350,7 @@ $('#addcrdr').on('click', function() {
         let ctype = document.getElementById('cdprops');
         let type = getSelect(ctype);
         let ajaxdata = {id: 'addcd', cdname: cname, cdtype: type};
-        let acddef = $.Deferred();
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, addcard, acddef);
-        $.when( acddef ).then(function() {
-            return;
-        });
-
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, addcard);
     });
     addcard.show();
 });
@@ -288,11 +364,7 @@ $('#dac').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'decard', target: todelete};
-        let dcdef = $.Deferred();
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, delcard, dcdef);
-        $.when( dcdef ).then(function() {
-            return;
-        });
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, delcard);
     });
     delcard.show();
 });
@@ -311,12 +383,8 @@ $('#addauto').on('click', function() {
         if (!valText(day, 'a day of the month')) {
             return false;
         }
-        let addapdef = $.Deferred();
         let ajaxdata = {id: 'apset', acct: apadder, method: card, day: day};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, autopay, addapdef);
-        $.when( addapdef ).then(function() {
-            return;
-        });
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, autopay);
     });
     autopay.show();
 });
@@ -325,11 +393,7 @@ $('#rmap').on('click', function() {
         let $delap = $('#delapacct').children();
         let delapp = getSelect($delap[0]);
         let ajaxdata = {id: 'delapay', acct: delapp};
-        let dapdef = $.Deferred();
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, delauto, dapdef);
-        $.when( dapdef ).then(function() {
-            return;
-        });
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, delauto);
     });
     delauto.show();
 });
@@ -344,11 +408,7 @@ $('#add1').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'addacct', acct_name: newname, monthly: budamt}
-        let aacctdef = $.Deferred();
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, addacct, aacctdef);
-        $.when( aacctdef ).then(function() {
-            return;
-        });
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, addacct);
     });
     addacct.show();
 });
@@ -356,12 +416,8 @@ $('#del1').on('click', function() {
     $('#daccbtn').on('click', function() {
         let $acct0 = $('#remacct').children();
         let acct0 = getSelect($acct0[0]);
-        let ajaxdata = {id: 'acctdel', acct: acct0};
-        let d1def = $.Deferred();
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, delacct, d1def);
-        $.when( d1def ).then(function() {
-            return;
-        });
+        let ajaxdata = {id: 'acctdel', type: 'norm', acct: acct0};
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, delacct);
     });
     delacct.show();
 });
@@ -376,11 +432,7 @@ $('#moveit').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'move', mvfrom: from, mvto: to};
-        let mvdef = $.Deferred();
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, moveacc, mvdef);
-        $.when( mvdef ).then(function() {
-            return;
-        });
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, moveacc);
     });
     moveacc.show();
 });
@@ -393,11 +445,7 @@ $('#ren1').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'rename', acct: acct, newname: newname};
-        let rendef = $.Deferred();
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, rename, rendef);
-        $.when( rendef ).then(function() {
-            return;
-        });
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, rename);
     });
     rename.show();
 });
@@ -467,7 +515,7 @@ function getSelect(domsel) {
 }
 
 // general purpose function to execute ajax based on input arguments
-function executeScript(url, ajaxdata, modal_handle, deferred) {
+function executeScript(url, ajaxdata, modal_handle) {
     $('#preloader').show();
     $.ajax({
         url: url,
@@ -476,23 +524,21 @@ function executeScript(url, ajaxdata, modal_handle, deferred) {
         dataType: "text",
         success: function(results) {
             if (results === "OK") {
-                deferred.resolve();
                 location.reload();
                 $('#preloader').hide();
             } else {
                 alert("Problem encountered; Operation did not complete");
                 modal_handle.hide();
-                deferred.resolve();
                 $('#preloader').hide();
             }
            
         },
         error: function(jqXHR, textStatus, errorThrown) {
             $('#preloader').hide();
-            msg = msgtxt + ":\n" + textStatus + "; Error: " + errorThrown;
+            let msgtxt = "executeSript() error:\n";
+            let msg = msgtxt + textStatus + "; Error: " + errorThrown;
             alert(msg);
             modal_handle.hide();
-            deferred.reject();
         }
     });
 }

@@ -64,13 +64,16 @@
                     data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Enter Income Amount:&nbsp;&nbsp;<input id="incdep"
-                    type="text" />
+                <div>Enter Income Amount:&nbsp;&nbsp;<input id="incdep"
+                    type="text" /></div>
+                <div>Defer automatic distribution until <span id="defermo"></span>&nbsp;&nbsp;
+                    <input id="defer" type="checkbox" /><br />
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
                     data-bs-dismiss="modal">Close</button>
-                <button id="incbtn" type="button" class="btn btn-success">Pay</button>
+                <button id="incbtn" type="button" class="btn btn-success">Deposit</button>
             </div>
         </div>
     </div>

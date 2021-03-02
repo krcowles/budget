@@ -141,6 +141,11 @@ $autopay       = array_merge($autopay, $tap);
 $day           = array_merge($day, $tday);
 $paid          = array_merge($paid, $tpd);
 $income        = array_merge($income, $tinc);
+// if there is a 'Deferred Income' budget:
+$deferred_amount = '0';
+if ($key = array_search('Deferred Income', $account_names)) {
+    $deferred_amount = $current[$key];
+}
 // create html for <select> drop-downs
 $fullsel = '<select class="fullsel">';
 for ($k=0; $k<count($account_names); $k++) {
