@@ -25,6 +25,7 @@ var rename  = new bootstrap.Modal(document.getElementById('renameacct'));
 var monthly = new bootstrap.Modal(document.getElementById('moexp'));
 var yearly  = new bootstrap.Modal(document.getElementById('annexp'));
 var anninc  = new bootstrap.Modal(document.getElementById('anninc'));
+var chgpass = new bootstrap.Modal(document.getElementById('resetemail'));
 
 // Add option for 'Move Account'
 var $mvlist = $('#mvto .partsel');
@@ -478,6 +479,47 @@ $('#yrinc').on('click', function() {
         anninc.hide();
     });
     anninc.show();
+});
+$('#logout').on('click', function() {
+    $.ajax({
+        url: '../admin/logout.php',
+        method: 'get',
+        success: function() {
+            window.open('../index.php', "_self");
+        }
+    });
+});
+$('#rpass').on('click', function() {
+    chgpass.show();
+});
+$('#cpass').on('click', function() {
+    let eaddr = $('#remail').val();
+    if (eaddr === '') {
+        alert("You must enter a valid email address");
+        return false;
+    }
+    let adata = {email: eaddr};
+    $.ajax({
+        url: '../admin/sendmail.php',
+        method: 'post',
+        data: adata,
+        dataType: 'text',
+        success: function(result) {
+            if (result === 'ok') {
+                alert('An email has been sent');
+            } else if (result === 'bad') {
+                alert('The email address is not valid');
+            } else if (result === 'nofind') {
+                alert('Your email could not be located in our database');
+            }
+            chgpass.hide();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            let msgtxt = "Error sending email:\n";
+            let msg = msgtxt + textStatus + "; Error: " + errorThrown;
+            alert(msg);
+        }
+    });
 });
 
 // Initial setting in Help Menu for cookies

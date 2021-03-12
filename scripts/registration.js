@@ -18,7 +18,7 @@ function setbox() {
     let regbox_center = Math.floor($('#registration').width()/2);
     let regbox_left = window.innerWidth/2 - regbox_center; // 280 = regbox/2 width
     $('#registration').offset({
-        top: 140,
+        top: 160,
         left: regbox_left
     });
 }

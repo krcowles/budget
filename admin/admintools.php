@@ -40,6 +40,7 @@ require "../database/global_boot.php";
     </fieldset><br />
     <fieldset>
         <legend>Miscellaneous Tools</legend>
+        <button id="lo">Log out admin</button><br />
         <button id="phpinfo">PHPInfo</button><br />
     </fieldset>
     

@@ -79,6 +79,15 @@ $('#cleanPix').on('click', function() {
 $('#phpinfo').on('click', function() {
     window.open('phpInfo.php', "_blank");
 });
+$('#lo').on('click', function() {
+    $.ajax({
+        url: 'logout.php',
+        method: 'get',
+        success: function() {
+            window.open('../index.php', "_self");
+        }
+    });
+});
 /*
 $('#pub').on('click', function() {
     window.open("reldel.php?act=rel", "_blank");

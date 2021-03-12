@@ -153,6 +153,10 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                     Help
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="helper">
+                    <li><a id="logout" class="dropdown-item" href="#">
+                        Log out</a></li>
+                    <li><a id="rpass" class="dropdown-item" href="#">
+                        Change Password</a></li>
                     <li><a class="dropdown-item"
                         href="../help/help.php?doc=FAQ.pdf" target="_blank">
                         FAQ's</a></li>
@@ -164,7 +168,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                             Intro to Budgeting</a>
                     </li>
                     <li><a id="chgcookie" class="dropdown-item"
-                        href="#"><span id="chglink">Reject Cookies</a></li>
+                        href="#"><span id="chglink">Reject Cookies</span></a></li>
                 </ul>
             </li>
         </ul>

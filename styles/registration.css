@@ -4,9 +4,25 @@ body {
     margin: 0px;
     padding: 0px; 
     font-family: Arial, Verdana;
+    background-image: url('../images/backgrnd.jpg');
+}
+#ctr {
+    text-align: center;
+    margin-top: 8px;
 }
 #header {
+    display: inline-block;
     text-align: center;
+    background-color: #fcf4e8;
+    padding: 2px 4px 4px 0px;
+    width: 80%;
+}
+h2 {
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+#stmnt {
+    margin-bottom: 4px;
 }
 .user-input {
     display: inline-block;
@@ -100,7 +116,7 @@ input[type=password]:not('#upass') {
     position: fixed;
     top: 400px;
     width: 560px;
-    height: 360px;
+    height: 340px;
     padding-top: 20px;
     background-color: #fcf4e8;
     border-radius: 12px;

@@ -2,6 +2,8 @@
  * @fileoverview Allow user to renew account with new password
  * 
  * @author Ken Cowles
+ * 
+ * @version 2.1 Minor upgrade to success message
  * @version 2.0 Redesigned login for security improvement
  */
 $(function() {
@@ -82,9 +84,11 @@ $('#formsubmit').on('click', function(ev) {
         success: function(response) {
             if (response == 'NOTFOUND') {
                 alert("Could not find the One-Time Code");
-            } else {
-                alert("Successful: you will be redirected to the home page");
+            } else if (response === 'DONE') {
+                alert("Successful: You may now login with your new password");
                 window.open('../index.php');
+            } else {
+                alert("Unknown error");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {

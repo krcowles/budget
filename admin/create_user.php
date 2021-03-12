@@ -61,8 +61,8 @@ if ($submitter == 'create') {
                 // update the user info using new password,
                 // but don't log in (return to login site)
                 $userid = $user_dat['uid'];
-                $updateuser = "UPDATE `Users` SET `password`=?, `passwd_expire`=?, " .
-                    "`cookies`=? WHERE `uid`=?;";
+                $updateuser = "UPDATE `Users` SET `password`=?, " .
+                    "`passwd_expire`=?, `cookies`=? WHERE `uid`=?;";
                 $update = $pdo->prepare($updateuser);
                 $update->execute(
                     array($password, $exp_date, $choice, $userid)

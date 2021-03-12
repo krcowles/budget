@@ -9,6 +9,7 @@
  */
 session_start();
 
+setcookie('epiz', '', 0, '/');
 unset($_SESSION['userid']);
 unset($_SESSION['expire']);
 unset($_SESSION['cookiestatus']);

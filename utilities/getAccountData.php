@@ -32,7 +32,7 @@ if (count($bud_dat) === 0) {
 } else {
     foreach ($bud_dat as $acct) {
         array_push($acctid, $acct['id']);
-        array_push($account_names, $acct['budname']);
+        array_push($account_names, trim($acct['budname']));
         array_push($positions, $acct['budpos']);
         $amt = empty($acct['budamt']) ? 0 : $acct['budamt'];
         array_push($budgets, $amt);

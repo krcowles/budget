@@ -12,41 +12,40 @@
 require_once "database/global_boot.php";
 require "admin/getLogin.php";
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
+<!DOCTYPE html>
+<html lang="en-us">
 <head>
     <title>The Budgetizer</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="description"
-        content="Rolling 3-month budget tracker" />
+    <meta charset="utf-8" />
+    <meta name="description" content="Mobile site for New Mexico Hikes" />
     <meta name="author" content="Ken Cowles" />
-    <meta name="robots" content="nofollow" />
-    <link href="styles/modals.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
     <link href="index.css" type="text/css" rel="stylesheet" />
+    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </head>
 
 <body>
-
-<div class="hcontainer">
+<div id="top-part">
     <div id="sitetext">
-        <p id="maintext">The Budgetizer</p>
-        <p id="subtext">A home budget <br />creation and management tool</p>
+        <span id="maintext">The Budgetizer</span><br />
+        <span id="subtext">A home budget <br />creation and management tool</span>
+    </div><div id="money">
     </div>
-    <img src="images/dollars.jpg" alt="dollar bills" />
 </div>
-<div id="logger">
-    <div id="info" class="vcontainer">
+
+<div id="bottom-part">
+    <div id="info">
         <div id="learn">
-            <p  class="breaks">Beginner?<br />Learn <a
-                href="help/help.php?doc=HowToBudget.pdf"
-                target="_blank">How to Budget</a></p>
+            <span id="lrn">Beginner?<br />Learn <a
+            href="help/help.php?doc=HowToBudget.pdf" target="_blank">
+            How to Budget</a></span>
         </div>
         <div id="tools">
-            <p class="breaks">See also, how to use<br /><a
-                href="help/help.php?doc=Tools.pdf" target="_blank">
-                Budgetizer Tools</a></p>
+            <span id="tls">See also, how to use<br /><a
+            href="help/help.php?doc=Tools.pdf" target="_blank">
+            Budgetizer Tools</a></span>
         </div>
     </div>
     <div id="login">
@@ -79,6 +78,10 @@ require "admin/getLogin.php";
                         <td></td>
                         <td></td>
                     </tr>
+                    <tr class="spacer">
+                        <td></td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td></td>
                         <td id="button">
@@ -88,10 +91,17 @@ require "admin/getLogin.php";
                         <td></td>
                         <td></td>
                     </tr>
+                    <tr class="spacer">
+                        <td></td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td></td>
-                        <td id="forgot"><a id="resetpass" href="#">
-                            Forgot Username or Password?</a></td>
+                        <td id="forgot">
+                            <a id="resetpass"
+                                href="#">Forgot Username or Password?</a>
+                        </td>
+                       
                     </tr>
                 </tbody>
             </table>
@@ -107,17 +117,31 @@ require "admin/getLogin.php";
     <p id="cookiestatus" style="display:none;"><?=$cstat?></p>
     <p id="startpg" style="display:none;"><?=$start;?></p>
 </div>
-<div id="usr_modal">
-    <span id="enteremail">Enter your email address:</span>
-    <input id="umail" type="text" name="umail"
-        autocomplete="email" /><br /><br />
-    <span id="mailtxt">Click to reset your login:</span><br />
-    <button id="sendmail">Send</button>
+
+<div id="resetemail" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Password</h5>
+                <button type="button" class="btn-close"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="ap" class="modal-body">
+                You will be sent an email with your account name and a link
+                to reset your password.<br />
+                Your email: <input id="remail" type="email" />
+            </div>
+            <div class="modal-footer">
+                <button id="apmodbtn" type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Close</button>
+                <button id="cpass" type="button"
+                    class="btn btn-success">Send Email</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script src="scripts/jquery-1.12.1.js"></script>
 <script src="scripts/getLogin.js"></script>
-<script src="scripts/modals.js"></script>
 <script src="index.js"></script>
 
 </body>
