@@ -505,7 +505,9 @@ $('#cpass').on('click', function() {
         data: adata,
         dataType: 'text',
         success: function(result) {
+            let sent = false;
             if (result === 'ok') {
+                sent = true;
                 alert('An email has been sent');
             } else if (result === 'bad') {
                 alert('The email address is not valid');
@@ -513,6 +515,21 @@ $('#cpass').on('click', function() {
                 alert('Your email could not be located in our database');
             }
             chgpass.hide();
+            if (sent) {
+                $.ajax({
+                    url: '../admin/logout.php',
+                    method: 'get',
+                    success: function() {
+                        alert("You are logged out until the new password is entered");
+                        window.open('../index.php', "_self");
+                    },
+                    error: function() {
+                        let msgtxt = "Error logging out:\n";
+                        let msg = msgtxt + textStatus + "; Error: " + errorThrown;
+                        alert(msg);
+                    }
+                });
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             let msgtxt = "Error sending email:\n";
