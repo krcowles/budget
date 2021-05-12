@@ -1,3 +1,4 @@
+<!-- Autopay modal -->
 <div id="apmodal" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -15,6 +16,7 @@
         </div>
     </div>
 </div>
+<!-- Charge Expense Modal -->
 <div id="expmodal" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -55,6 +57,7 @@
         </div>
     </div>
 </div>
+<!-- Monthly Income Modal -->
 <div id="incmodal" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -78,6 +81,7 @@
         </div>
     </div>
 </div>
+<!-- Irregular Deposits Modal -->
 <div id="othrdeps" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -100,6 +104,33 @@
         </div>
     </div>
 </div>
+<!-- Undo an Irregular Deposit -->
+<div id="removeinc" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Undo a Deposit</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span style="font-style:italic">NOTE: This applies only to non-monthly deposits. Funds will be
+                removed from the "Undistributed Funds" account.</span><br />
+                <hr class="dropdown-divider"></hr>
+                <div id="inclist">Recent Non-monthly deposits:
+                    <table id="irdeps"></table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Close</button>
+                <button id="selinc" type="button" class="btn btn-success">
+                    Undo</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Transfer Funds Modal -->
 <div id="xfrfunds" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -123,7 +154,8 @@
             </div>
         </div>
     </div>
-</div>   
+</div> 
+<!-- Credit Card Reconciliation Modal -->
 <div id="reconcile" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -144,7 +176,8 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
+<!-- Add a Credit Card Modal -->
 <div id="addacard" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -171,6 +204,7 @@
         </div>
     </div>
 </div> 
+<!-- Delete A Credit Card Modal -->
 <div id="deletecd" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -192,6 +226,7 @@
         </div>
     </div>
 </div>   
+<!-- Add an Autopay Modal -->
 <div id="auto" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -218,6 +253,7 @@
         </div>
     </div>
 </div> 
+<!-- Delete an Autopay Modal -->
 <div id="deleteauto" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -240,6 +276,7 @@
         </div>
     </div>
 </div> 
+<!-- Add an Account Modal -->
 <div id="addacct" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -269,6 +306,7 @@
         </div>
     </div>
 </div>
+<!-- Delete an Account Modal -->
 <div id="deleteacct" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -293,6 +331,7 @@
         </div>
     </div>
 </div>
+<!-- Move an Account Modal -->
 <div id="moveacct" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -318,6 +357,7 @@
         </div>
     </div>
 </div>
+<!-- Rename an Account Modal -->
 <div id="renameacct" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -340,6 +380,7 @@
         </div>
     </div>
 </div>
+<!-- Move an Account Modal -->
 <div id="moexp" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -374,6 +415,7 @@
         </div>
     </div>
 </div>
+<!-- Annual Expenses Modal -->
 <div id="annexp" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -399,6 +441,7 @@
         </div>
     </div>
 </div>
+<!-- Annual Income Modal -->
 <div id="anninc" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -423,6 +466,7 @@
         </div>
     </div>
 </div>
+<!-- Change Password Modal -->
 <div id="resetemail" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">

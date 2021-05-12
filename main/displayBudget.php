@@ -86,6 +86,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                         href="#">Monthly</a></li>
                     <li><a id="onetimer" class="dropdown-item"
                         href="#">Other Deposits</a></li>
+                    <li><a id="undoinc" class="dropdown-item"
+                        href="#">Undo a Deposit</a></li>
                 </ul>
             </li>
             <li class="nav-item">

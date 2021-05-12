@@ -12,6 +12,7 @@ var apitems = new bootstrap.Modal(document.getElementById('apmodal'));
 var expitem = new bootstrap.Modal(document.getElementById('expmodal'));
 var depinc  = new bootstrap.Modal(document.getElementById('incmodal'));
 var onetdep = new bootstrap.Modal(document.getElementById('othrdeps'));
+var delinc  = new bootstrap.Modal(document.getElementById('removeinc'));
 var xfrfund = new bootstrap.Modal(document.getElementById('xfrfunds'));
 var reccard = new bootstrap.Modal(document.getElementById('reconcile'));
 var addcard = new bootstrap.Modal(document.getElementById('addacard'));
@@ -214,6 +215,16 @@ if (ap_candidates) {
     });
     apitems.show();  
 }
+/**
+ * Prep the data for non-monthly income (needed to 'undo' a deposit)
+ */
+var depositList;
+$.get('../utilities/getDeposits.php', function(list) {
+    depositList = JSON.parse(list);
+    for (let k=0; k<depositList.length; k++) {
+        $('#irdeps').append(depositList[k]);
+    }
+});
 
 /**
  * All other modal operation
@@ -309,6 +320,30 @@ $('#onetimer').on('click', function() {
         executeScript('../edit/saveAcctEdits.php', ajaxdata, onetdep);
     });
     onetdep.show();
+});
+$('#undoinc').on('click', function() {
+    delinc.show();
+    let $items = $('#irdeps tr').find('input[id^=incitem]');
+    $('#selinc').on('click', function() {
+        let incids = [];
+        $items.each(function() {
+            if ($(this).is(":checked")) {
+                let $row = $(this).parent().parent();
+                let $depid = $row.children().eq(4);
+                incids.push($depid.html());
+            }
+        });
+        if (incids.length === 0) {
+            alert("You have not selected any deposits");
+            return false;
+        }
+        let depids = {array: JSON.stringify(incids)};
+        $.post('../utilities/undoDeposits.php', depids, function() {
+            location.reload();
+        });
+        return;
+    });
+    return;
 });
 $('#transfers').on('click', function() {
     $('#xfrbtn').on('click', function() {

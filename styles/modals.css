@@ -29,6 +29,15 @@ input[type=checkbox] {
 #onedep {
     width: 100px;
 }
+.amtright {
+    text-align: right;
+}
+.descleft {
+    text-align: left;
+}
+.noshow {
+    display: none;
+}
 #xframt {
     width: 80px;
     height: 26px;
