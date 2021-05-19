@@ -8,11 +8,14 @@
     display: none;
 }
 /* The actual budget table */
-table:not(#modal_table) {
+#roll3 {
     table-layout: fixed;
     margin-right: auto;
     margin-left: auto;
     border: none;
+}
+#roll3 tbody tr {
+    cursor: pointer;
 }
 /* When admin is logged in, show admin tools button */
 #admin {

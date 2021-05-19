@@ -227,6 +227,28 @@ $.get('../utilities/getDeposits.php', function(list) {
 });
 
 /**
+ * CSS simply won't recognize a tr:hover for this table, so...
+ */
+let $allrows = $('#roll3').find('tbody tr');
+$allrows.each(function() {
+    let c1 = $(this).children().eq(0).text();
+    if (c1 !== 'Temporary Accounts' && c1 !== 'Credit Cards' &&
+            c1 !== 'Checkbook Balance') {
+        $(this).on('mouseover', function() {
+            let $cells = $(this).find('td')
+            $cells.each(function() {
+                $(this).css('background-color', 'gainsboro');
+            });
+        });
+        $(this).on('mouseout', function() {
+            let $cells = $(this).find('td')
+            $cells.each(function() {
+            $(this).css('background-color', 'white');
+            });
+        });
+    }
+});
+/**
  * All other modal operation
  */
 $('#chgexp').on('click', function() {

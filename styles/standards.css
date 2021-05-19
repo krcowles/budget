@@ -56,3 +56,9 @@ select {
 	height: 12px;
 	width: 40px;
 }
+tbody tr:nth-child(odd):hover {
+    background-color: #bfd9bf;
+}
+tbody tr:nth-child(even):hover {
+    background-color: #bfd9bf;
+}

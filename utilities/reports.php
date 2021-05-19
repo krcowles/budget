@@ -91,7 +91,7 @@ if ($annual) {
             solid black; border-top: 2px; border-right: 2px solid black; 
             position: sticky; top: 0; cursor: pointer;}
         th:hover {background-color: ghostwhite;}
-        tr.even { background-color: #dfecdf; }
+        tr.even { background-color: #eff5ef; }
        td { padding: 4px 6px 4px 6px; }
        .red  { color: firebrick; }
        .inc  { margin-left: 16px; margin-top: 16px; margin-bottom: 0px; }
