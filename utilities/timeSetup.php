@@ -34,7 +34,10 @@ $leapYr = intval($digits[2])%4 === 0 ? true : false;
 if ($leapYr) {
     $daysInMonth[1] = 29;
 }
-
+// setup available years for annual report:
+$thisyear = $digits[2];
+$prioryr1 = $thisyear - 1;
+$prioryr2 = $thisyear - 2;
 // column headers
 $month = [];
 for ($i=0; $i<3; $i++) {

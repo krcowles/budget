@@ -1,33 +1,13 @@
-#actions {
-    height: 48px;
-    width: 100%;
-    background-color: #004a00;
-    color: #fff5e6;
-    position: fixed;
-    top: 0;
-    z-index: 100;
+.hdr {
+    margin-left: 16px;
+    margin-right: 16px;
 }
-#mv {
-    float: left;
-    padding-top: 14px;
-    margin-left: 24px;
-    height: 100%;
-    font-size: 18px;
-    text-decoration: underline;
+.actions {
+    margin-bottom: 2px;
+    color: brown;
 }
-.sel {
-    float: left;
-    display: block;
-    padding: 14px 16px;
-    font-size: 17px;
-}
-.sel:hover {
-    cursor: pointer;
-    background-color: #fff5e6;
-    color: #004a00;
-}
-#e2c {
-    margin-left: 4px;
+.edtxt {
+    font-size: 22px;
 }
 table { 
     border-collapse: collapse;
@@ -42,6 +22,10 @@ td {
     padding: 0px 6px 0px 6px;
     border: 1px solid #ddd;
 }
+.crtbl tbody tr:hover, .drtbl tbody tr:hover {
+    background-color: #cfe2cf;
+}
+
 .col1 {
     width: 120px;
 }
@@ -52,19 +36,16 @@ td {
     width: 180px;
 }
 #ochgs, #exps {
-    width: 50%;
+    width: 48%;
     float: left;
     margin-top: 16px;
     z-index: 1;
+    margin-left: 8px;
+    margin-right: 8px;
 }
 #innerexp {
-    position: absolute
- }
- #canc {
-     display: none;
-     position: absolute;
-     color: brown;
- }
+    margin-top: 0px;
+}
 input[type=checkbox] {
     transform: scale(1.4);
 }

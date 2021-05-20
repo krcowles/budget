@@ -4,25 +4,59 @@
  * 
  * @author Ken Cowles
  * @version 2.0 Secure login
+ * @version 3.0 Added bootstrap menu at top, revised action invocation
  */
 $(function() {
 
-$('#back').on('click', function() {
-    var budpg = "../main/displayBudget.php"
-    window.open(budpg, "_self");
-});
-positionExpenses();
-function positionExpenses() {
-    var divloc = $('#exps').offset();
-    var hrpos = $('#barloc').offset();
-    $('#innerexp').css({
-        top: hrpos.top - 8,
-        left: divloc.left
+$('#exp1').addClass('active');
+// remove cancel button and save for appending during actions
+var canbtn = $('#canc').detach();
+// reset all checkboxes:
+$('.mvtocr').prop('checked', false);
+$('.mvtodr').prop('checked', false);
+$('input[id^=cr]').prop('checked', false);
+$('input[id^=dr]').prop('checked', false);
+$('input[id^=to]').prop('checked', false);
+
+/**
+ * This function appends the cancel button to the correct location on the page
+ * @param {string} xfrtype The jquery id of the <span> element to append
+ * @return {null}
+ */
+function enableCancel(location) {
+    $(location).append(canbtn);
+    $('#canc').on('click', function() {
+        // don't reload() - there may be a query string attached
+        window.open("viewCharges.php", "_self"); 
     });
+    return;
 }
-$('#edcred').on('click', function() {
+/**
+ * When a cancel button is already being displayed, a transaction is underway.
+ * If the user switches to another type of transaction without completing the 
+ * current one, the page is reloaded but with information as to the next button
+ * to be triggered. If no cancel button is in evidence, the trigger fct continues.
+ * @return {null}
+ */
+ function relocateCancel(newbtn) {
+    let retrigger = "viewCharges.php?click=" + newbtn;
+    let $e2cbtn = $('#mve2c').find('button');
+    let $c2cbtn = $('#mvc2c').find('button');
+    let $c2ebtn = $('#mvc2e').find('button');
+    if ($e2cbtn.length !== 0 || $c2cbtn.length !==0 || $c2ebtn.length !== 0) {
+        window.open(retrigger, "_self");
+    }
+    return;
+}
+
+/**
+ * bootstrap button invocations:
+ */ 
+// edit credit charges
+$('#edcr').on('click', function() {
     window.open('../edit/editCreditCharges.php');
 });
+// edit expenses
 $('#edexp').on('click', function() {
     alert("NOTE: You will be able to modify paid expense data from the last\n" +
         "30 days, including checks and debit card charges. Any changes in the\n" +
@@ -30,31 +64,10 @@ $('#edexp').on('click', function() {
     window.open('../edit/editExpenses.php', '_self');
 });
 
-// reset all checkboxes:
-$('.mvtocr').prop('checked', false);
-$('.mvtodr').prop('checked', false);
-$('input[id^=cr]').prop('checked', false);
-$('input[id^=dr]').prop('checked', false);
-$('input[id^=to]').prop('checked', false);
-// cancel button:'
-var hrpos = $('#exphr').offset();
-$('#canc').css('top', hrpos.top - 40 + 'px');
-$('#canc').css('left', hrpos.left + 4 + 'px');
-function enableCancel(xfrtype) {
-    $('#canc').css('display', 'block');
-    $('#canc').on('mouseover', function() {
-        $(this).css('color', 'white');
-    });
-    $('#canc').on('mouseout', function() {
-        $(this).css('color', 'brown');
-    });
-    $('#canc').on('click', function() {
-        window.location.reload();
-    });
-}
-// process 'move' actions
+// move expense to credit 
 $('#e2c').on('click', function() {
-    enableCancel();
+    relocateCancel('e2c');
+    enableCancel('#mve2c');
     var selected = false;
     var msg = "NOTE: Moving a paid (deducted) expense to\na credit card charge" +
         " will increase\nyour checkbook balance";
@@ -96,10 +109,14 @@ $('#e2c').on('click', function() {
                 selected = false;
             }
         });
+    } else {
+        $('#canc').trigger('click');
     }
 });
+// move from one credit card to another
 $('#c2c').on('click', function() {
-    enableCancel();
+    relocateCancel('c2c');
+    enableCancel('#mvc2c');
     var selected = false;
     var from;
     var to;
@@ -152,8 +169,10 @@ $('#c2c').on('click', function() {
         }
     });
 });
+// move a credit charge to an expense paid item
 $('#c2e').on('click', function() {
-    enableCancel();
+    relocateCancel('c2e');
+    enableCancel('#mvc2e');
     var selected = false;
     var msg = "NOTE: Moving a credit charge to a paid expense\n" +
         "will decrease your checkbook balance";
@@ -191,7 +210,12 @@ $('#c2e').on('click', function() {
         });
     }
 });
-
-$(window).resize(positionExpenses);
+// see if the page needs to trigger an action via php
+// this code must be placed AFTER the click definitions!
+let act = $('#btn2click').text();
+if (act !== 'none') {
+    $('#' + act).trigger('click');
+    // NOTE: When using '#' in a query string, the var will return empty!
+}
 
 });

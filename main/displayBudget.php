@@ -147,7 +147,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
         <img src="../images/preload.gif" alt="waiting..." />
     </div>
     <br /><br />
-    
+    <script src="../scripts/menus.js"></script>
     <script src="../scripts/budget.js"></script>
     <script src="../scripts/jQnumberFormat.js"></script>
 </body>

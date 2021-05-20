@@ -11,13 +11,14 @@
  */
 session_start();
 
+require "getAccountData.php";
 require "getCards.php";
 require "getExpenses.php";
 require "get30DayExpenses.php";
+$btnclick = isset($_GET['click']) ? filter_input(INPUT_GET, 'click') : 'none';
 /**
- * XHTML requires child tags in tables, so using alt control structures
- * did not yield good syntax. Hence, the table bodies are created in 
- * php below.
+ * The table bodies are created in php below, owing to an original attempt
+ * to use XHTML strict. This is no longer the case, but the code remains.
  */
 // setup data for credit cards
 $counts = [];
@@ -89,10 +90,9 @@ for ($p=0; $p<count($dr); $p++) {
     array_push($dbodys, $dbody);
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html lang="en">
 <head>
     <title>Current Outstanding Charges</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -100,36 +100,57 @@ for ($p=0; $p<count($dr); $p++) {
         content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet"/>
     <link href="../styles/manageExp.css" type="text/css" rel="stylesheet" />
+    <script src="../scripts/jquery-1.12.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </head>
 
 <body>
+<?php require "../main/navbar.html"; ?>
+<p id="btn2click" style="display:none"><?=$btnclick;?></p>
+<br />
+<h3 class="hdr">The following actions may be applied to the expenses below.
+    Note that the unpaid credit card charges are on the left; the debit card and
+    check/draft expenses already paid are on the right.
+</h3>
+<div class="hdr">
+<h5 class="actions">Update/Edit your data:</h5>
+<button id="edcr" type="button" class="btn btn-secondary">Edit</button>
+    <span class="edtxt">&nbsp;&nbsp;You can edit any of your Credit Charges
+    (a separate page will appear)</span><br />
+<button id="edexp" type="button" class="btn btn-secondary">Update</button>
+    <span class="edtxt">&nbsp;&nbsp; You can update any expenses already paid
+    (a separate page will appear)</span><br /><br />
 
-<!-- menu -->
-<div id="actions">
-    <a id="edcred" class="sel">Edit Credit Data</a>
-    <a id="edexp" class="sel">Edit Expenses/Debits</a>
-    <div id="mv">MOVE:</div>
-    <a id="e2c" class="sel">Expense/Debit to CrCard</a>
-    <a id="c2c" class="sel">One CrCard to Another</a>
-    <a id="c2e" class="sel">CrCard to Expense/Debit</a>
+<h5 class="actions">Move items from one place to another:</h5>
+<button id="e2c" type="button" class="btn btn-secondary">Move Expense</button>
+    <span id="mve2c" class="edtxt">&nbsp;&nbsp;
+        Move a paid expense to an unpaid Credit Card charge&nbsp;&nbsp;</span><br />
+<button id="c2c" type="button" class="btn btn-secondary">Swap</button>
+    <span id="mvc2c" class="edtxt">&nbsp;&nbsp;
+        Move a charge from one credit card to another&nbsp;&nbsp;</span><br />
+<button id="c2e" type="button" class="btn btn-secondary">Move Charge</button>
+    <span id="mvc2e" class="edtxt">&nbsp;&nbsp;
+        Move an unpaid Credit Card charge to a paid expense&nbsp;&nbsp;</span>
 </div>
-<pre><br /></pre>
-<!-- end of menu -->
+
+<button id="canc" type="button"
+    class="btn btn-danger">Cancel This Transfer</button>
 
 <div id="ochgs">
-    <h3>The following entries display the
-        current/outstanding charges to your <em style="color:brown;">credit
+    <h4>The following entries display the
+        current/outstanding charges to your <em style="color:darkgreen;">credit
         card(s)</em>.
-    </h3>
-    <button id="back">Return To Budget</button><br />
+    </h4>
     <hr id="barloc" />
 
 
 <?php for ($i=0; $i<count($cr); $i++) : ?>
-    <span class="SmallHeading">For credit card <em style="color:brown;">
-        <?=$cr[$i];?></em></span>:&nbsp;&nbsp;&nbsp;
+    <span>For credit card <em style="color:brown;">
+        <?=$cr[$i];?></em></span> :&nbsp;&nbsp;&nbsp;
     <span class="mvtocr"><strong class="disptocr">To:</strong> 
         <input id="tocr<?= $i;?>" type="checkbox" /></span><br />
     <table class="crtbl">
@@ -149,15 +170,15 @@ for ($p=0; $p<count($dr); $p++) {
 </div>
 
 <div id="exps">
-    <h3 style="padding-left:4px;">The following entries display paid
-        <em style="color:brown;">check,
-        draft, or debit card</em> expenses for the previous 30-day period.</h3>
-        <button id="canc">Cancel This Transfer</button>
+    <h4 style="padding-left:4px;">The following entries display paid
+        <em style="color:darkgreen;">check,
+        draft, or debit card</em> expenses for the previous 30-day period.
+    </h4>
+    <hr id="barloc" />
+    <span>Checks/Drafts :</span>
     <div id="innerexp">
-        <hr id="exphr" />
-        <span class="SmallHeading">Checks/Drafts:</span>&nbsp;&nbsp;&nbsp;
         <span class="mvtodr"><strong class="disptodr">To:</strong> 
-        <input id="todrcheck" type="checkbox" /></span><br />
+        <input id="todrcheck" type="checkbox" /></span>
         <table class="drtbl">
             <thead>
                 <tr>
@@ -174,7 +195,7 @@ for ($p=0; $p<count($dr); $p++) {
 
         <?php for ($i=0; $i<count($dr); $i++) : ?>
             <span class="SmallHeading">For debit card <em style="color:brown;">
-            <?=$dr[$i];?></em>:</span>&nbsp;&nbsp;&nbsp;
+            <?=$dr[$i];?></em> :</span>&nbsp;&nbsp;&nbsp;
             <span class="mvtodr"><strong class="disptodr">To:</strong> 
             <input id="todr<?= $i;?>" type="checkbox" /></span><br />
             <table class="drtbl">
@@ -193,15 +214,11 @@ for ($p=0; $p<count($dr); $p++) {
         <?php endfor; ?>
     </div>
 </div>
-<p style="clear:left;margin-left:16px;">
-    <a href="http://validator.w3.org/check?uri=referer">
-        <img src="http://www.w3.org/Icons/valid-xhtml10"
-        alt="Valid XHTML 1.0 Strict" height="31" width="88" />
-    </a>
-</p>
 
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-<script src="../scripts/manageExp.js" type="text/javascript"></script>
+<?php require "../main/bootstrapModals.html"; ?>
+
+<script src="../scripts/menus.js"></script>
+<script src="../scripts/manageExp.js"></script>
 
 </body>
 </html>

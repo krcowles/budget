@@ -9,6 +9,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
+            <li id="bp" class="nav-item">
+                <a href="../main/displayBudget.php" id="budpg"
+                    class="nav-link active">Budget Page</a>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle active" href="#"
                     id="expenses" role="button" data-bs-toggle="dropdown"
@@ -18,16 +22,16 @@
                 <ul class="dropdown-menu" aria-labelledby="expenses">
                     <li><a id="chgexp" class="dropdown-item" href="#">
                         Pay/Charge An Expense</a></li>
-                    <li><a class="dropdown-item"
+                    <li><a id="exp1" class="dropdown-item"
                         href="../utilities/viewCharges.php" target="_self">
                         View/Edit Expenses</a></li>
-                    <li><a class="dropdown-item"
+                    <li><a id="exp2" class="dropdown-item"
                         href="../utilities/reverseCharge.php" target="_self">
                         Reverse Credit Charge</a></li>
-                    <li><a class="dropdown-item"
+                    <li><a id="exp3" class="dropdown-item"
                         href="../utilities/undoExpense.php" target="_self">
                         Undo Debit or Draft</a></li>
-                    <li><a class="dropdown-item"
+                    <li><a id="exp4" class="dropdown-item"
                         href="../edit/editCreditCharges.php" target="_self">
                         Edit Current Charges</a></li>
                 </ul>
