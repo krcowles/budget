@@ -1,32 +1,51 @@
+#page {
+    margin-left: 24px;
+}
 #main {
     margin-left:48px;
+}
+#action {
+    font-size: 20px;
 }
 #carddiv {
     margin-left: 24px;
 }
-#return {
-    margin-left:40px;
-}
 #paid {
     color: brown;
 }
+.cardtxt {
+    color: brown;
+    text-decoration: underline;
+}
 input[type=checkbox] {
-    -ms-transform: scale(1.5); /* IE */
-    -moz-transform: scale(1.5); /* FF */
-    -webkit-transform: scale(1.5); /* Safari and Chrome */
-    -o-transform: scale(1.5); /* Opera */
-    transform: scale(1.5);
+    -ms-transform: scale(1.8); /* IE */
+    -moz-transform: scale(1.8); /* FF */
+    -webkit-transform: scale(1.8); /* Safari and Chrome */
+    -o-transform: scale(1.8); /* Opera */
+    transform: scale(1.8);
     padding: 10px;
 }
-.cdentry {
-    font-size: 16px;
+th {
+    background-color: darkgreen; /* #4CAF50; */
+    color: white;
 }
-.amts {
-    width: 80px;
+th, td {
+    padding: 4px 10px 4px 10px;
 }
-.dates {
-    width: 100px;
+table {
+    border-collapse: collapse;
 }
-.accts {
-    width: 200px;
+table, th {
+    border-style: ridge;
+    border-width: 1px;
+}
+td {
+    border-right-style: ridge;
+    border-right-width: 1px;
+}
+.calign {
+    text-align: center;
+}
+.ralign {
+    text-align: right;
 }

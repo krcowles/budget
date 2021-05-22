@@ -12,8 +12,9 @@
  */
 session_start();
 require_once "../database/global_boot.php";
+require_once "../utilities/timeSetup.php";
 
-$paid = isset($_GET['paid']) ? true : false;
+$chgs_paid = isset($_GET['paid']) ? true : false;
 
 $chargeRequest = "SELECT * FROM `Charges` WHERE " .
     "`userid` = :uid AND `paid` = 'N' AND `method` = 'Credit';";
@@ -21,21 +22,21 @@ $charge = $pdo->prepare($chargeRequest);
 $charge->execute(["uid" => $_SESSION['userid']]);
 $charges = $charge->fetchAll(PDO::FETCH_ASSOC);
 $noOfCards = 0;
-$cards = [];
+$cr_cards = [];
 $chgs  = [];
 if ($charges) {
     // Determine the number of cards to be able to sort according to card name
     foreach ($charges as $entry) {
-        if (!in_array($entry['cdname'], $cards)) {
-            array_push($cards, $entry['cdname']);
+        if (!in_array($entry['cdname'], $cr_cards)) {
+            array_push($cr_cards, $entry['cdname']);
         }
     }
-    $noOfCards = count($cards);
+    $noOfCards = count($cr_cards);
     // Now form arrays for each card
     for ($i=0; $i<$noOfCards; $i++) {
         $card_data = [];
         foreach ($charges as $item) {
-            if ($item['cdname'] === $cards[$i]) {
+            if ($item['cdname'] === $cr_cards[$i]) {
                 $user_item = array(
                     $item['expid'],
                     $item['expamt'],
@@ -49,10 +50,8 @@ if ($charges) {
     }
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Reverse Charge</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -60,53 +59,70 @@ if ($charges) {
         content="Reverse one or more credit card charges" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="../styles/reverseCharge.css" type="text/css" rel="stylesheet" />
- 
 </head>
-<body>
-<h2>Select one or more cards whose charges you wish to reverse.</h2>
-<h3>This will have the effect of removing the charge from the card's accumulated
-expense, and having the charge placed back into the account from which it was 
-originally drawn</h3>
-<?php if ($paid) : ?>
-<h3 id="paid">Charge(s) Successfully Completed</h3>
-<? endif; ?>
-<form action="doReverse.php" method="post">
-    <p id="cdcnt" style="display:none;"><?=$noOfCards;?></p>
-    <div>
-        <button>Reverse Charges</button>
-        <button id="return">Return To Budget</button>
-    </div>
-<?php if ($noOfCards === 0) : ?>
-    <h3>You have no outstanding credit card charges</h3>
-<?php else : ?>
-    <div id="main">
-    <?php for ($j=0; $j<$noOfCards; $j++) : ?>
-        <h3>For Credit Card <?= $cards[$j];?>:</h3>
-        <div class="carddiv">
-            <?php for ($k=0; $k<count($chgs[$j]); $k++) : ?>
-            <div id="d<?=$chgs[$j][$k][0];?>" style="margin-bottom:6px;">
-                <input type="hidden" name="card[]" value="<?=$cards[$j];?>" />
-                <input type="checkbox" name="revchg[]"
-                    value="<?=$chgs[$j][$k][0];?>" /> &nbsp;&nbsp;
-                <input class="cdentry amts" type="text"
-                    name="amt<?=$chgs[$j][$k][0];?>"
-                    value="<?=$chgs[$j][$k][1];?>" />
-                <input class="cdentry dates" type="text"
-                    value="<?=$chgs[$j][$k][3];?>" />
-                <input class="cdentry accts" type="text"
-                    name="acc<?=$chgs[$j][$k][0];?>"
-                    value="<?=$chgs[$j][$k][2];?>" />
-            </div>
-            <?php endfor; ?>
-        </div>
-    <?php endfor; ?>
-    </div>
-<?php endif; ?>
-</form>
 
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+<body>
+<?php require_once "../main/navbar.php"; ?>
+<div id="page">
+    <h3>Select charge(s) to reverse by checking the box adjacent to the charge</h3>
+    <h4>This will have the effect of removing the charge from the card's accumulated
+    expense, and having the charge placed back into the account from which it was 
+    originally drawn</h4>
+<?php if ($chgs_paid) : ?>
+    <h4 id="paid">Charge(s) Successfully Reversed</h4>
+<? endif; ?>
+    <div id="charge_data">
+        <p id="cdcnt" style="display:none;"><?=$noOfCards;?></p>
+        <div>
+            <button id="reverse" class="btn btn-secondary" type="button">
+            Reverse Charges</button>&nbsp;&nbsp;<span id="action">All checked
+                boxes will have their respective charges reversed</span>
+        </div><br />
+    <?php if ($noOfCards === 0) : ?>
+        <h3>You have no outstanding credit card charges</h3>
+    <?php else : ?>
+        <div id="main">
+        <?php for ($j=0; $j<$noOfCards; $j++) : ?>
+            <h4>For Credit Card
+                <span class="cardtxt"><?=$cr_cards[$j];?>:</span></h4>
+            <div class="carddiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Undo<br />Chg</th>
+                            <th>Amt<br />Chgd</th>
+                            <th>Date<br />Entered</th>
+                            <th>Account Charged</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php for ($k=0; $k<count($chgs[$j]); $k++) : ?>
+                        <tr>
+                            <td class="calign"><input type="checkbox" name="revchg[]"
+                                value="<?=$chgs[$j][$k][0];?>" /></td>
+                            <td class="ralign"><?=$chgs[$j][$k][1];?></td>
+                            <td class="ralign"><?=$chgs[$j][$k][3];?></td>
+                            <td><?=$chgs[$j][$k][2];?></td>
+                        </tr>
+                    <?php endfor; ?>
+                    </tbody>
+                </table><br />
+            </div>
+        <?php endfor; ?>
+        </div>
+    <?php endif; ?>
+    </div>
+    <?php require_once "../main/bootstrapModals.html"; ?>
+</div>
+<br />
+
+<script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
+<script src="../scripts/bootstrap.min.js"></script>
+<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/menus.js"></script>
 <script src="../scripts/reverseCharge.js" type="text/javascript"></script>
 </body>
 

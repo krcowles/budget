@@ -11,10 +11,10 @@
  */
 session_start();
 
-require "getAccountData.php";
-require "getCards.php";
-require "getExpenses.php";
-require "get30DayExpenses.php";
+require_once "getAccountData.php";
+require_once "getCards.php";
+require_once "getExpenses.php";
+require_once "get30DayExpenses.php";
 $btnclick = isset($_GET['click']) ? filter_input(INPUT_GET, 'click') : 'none';
 /**
  * The table bodies are created in php below, owing to an original attempt
@@ -101,15 +101,13 @@ for ($p=0; $p<count($dr); $p++) {
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous" />
+    <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="../styles/modals.css" type="text/css" rel="stylesheet"/>
     <link href="../styles/manageExp.css" type="text/css" rel="stylesheet" />
-    <script src="../scripts/jquery-1.12.1.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </head>
 
 <body>
-<?php require "../main/navbar.html"; ?>
+<?php require_once "../main/navbar.php"; ?>
 <p id="btn2click" style="display:none"><?=$btnclick;?></p>
 <br />
 <h3 class="hdr">The following actions may be applied to the expenses below.
@@ -215,8 +213,11 @@ for ($p=0; $p<count($dr); $p++) {
     </div>
 </div>
 
-<?php require "../main/bootstrapModals.html"; ?>
+<?php require_once "../main/bootstrapModals.html"; ?>
 
+<script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
+<script src="../scripts/bootstrap.min.js"></script>
+<script src="../scripts/jquery-1.12.1.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/manageExp.js"></script>
 

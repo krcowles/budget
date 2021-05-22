@@ -1,3 +1,16 @@
+<?php
+/**
+ * The variables required by the navbar are created in two scripts:
+ * getAccountData.php and getCards.php; these are required here.
+ * PHP Version 7.1
+ * 
+ * @package Budget
+ * @author  Ken Cowles <krcowles29@gmail.com>
+ * @license No license to date
+ */
+require_once "../utilities/getAccountData.php";
+require_once "../utilities/getCards.php";
+?>
 <nav class="navbar navbar-expand-md navbar-dark sticky-top"
         style="background-color:#004a00;">
     <div class="container-fluid">

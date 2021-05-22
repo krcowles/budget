@@ -9,7 +9,8 @@
  * @license No license
  */
 require_once "../database/global_boot.php";
-require "../utilities/timeSetup.php";
+require_once "../utilities/timeSetup.php";
+
 if ($_SESSION['cookies'] === 'accept') {
     $menu_item = 'Reject Cookies';
 } else {
@@ -38,9 +39,9 @@ if ($rollover) {
         );
     }
 }
-require "../utilities/getAccountData.php";
-require "../utilities/getCards.php";
-require "../utilities/getExpenses.php";
+require_once "../utilities/getAccountData.php";
+require_once "../utilities/getCards.php";
+require_once "../utilities/getExpenses.php";
 
 // form balances
 $balBudget  = 0;

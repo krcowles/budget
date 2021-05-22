@@ -5,42 +5,52 @@
  * @version 2.0 Secure login
  */
 var cardcnt = $('#cdcnt').text();
+$('#exp2').addClass('active');
 
+// collect data for posting
+var ajaxdata = [];
 $('input[type=checkbox]').each(function() {
-    $(this).on('change', function() {
-        let item = $(this).attr('value');
-        let divid = 'div[id=d' + item + ']';
+    let tblid = $(this).val();
+    let $chkbxtd = $(this).parent();
+    let $amttd = $chkbxtd.next();
+    let $datetd = $amttd.next();
+    let $accttd = $datetd.next();
+    $(this).on('click', function() {
         if ($(this).is(':checked')) {
-            $(divid).children().each(function() {
-                $(this).css('background-color', 'blanchedalmond');
-            });
+            let formdat = {id: tblid, amt: $amttd.html(), acct: $accttd.html()};
+            ajaxdata.push(formdat);
         } else {
-            $(divid).children().each(function() {
-                $(this).css('background-color', 'white');
-            });
+            for (let k=0; k<ajaxdata.length; k++) {
+                if (ajaxdata[k].id == tblid) {
+                    ajaxdata.splice(k, 1);
+                    break;
+                }
+            }
         }
+        return;
     });
 });
-$('form').on('submit', function() {
+
+$('#reverse').on('click', function() {
     if (cardcnt === '0') {
         alert("There are no card charges to reverse");
         return false;
     } else {
-        let nochecks = true
-        $('input[type=checkbox]').each(function() {
-            if ($(this).is(':checked')) {
-                nochecks = false;
-                return;
+        if (ajaxdata.length === 0) {
+            alert("There are no items checked");
+        }
+        let post_data = {rems: ajaxdata};
+        $.ajax({
+            url: "doReverse.php",
+            data: post_data,
+            method: "post",
+            success: function() {
+                window.open("reverseCharge.php?paid=yes", "_self");
+            },
+            error: function() {
+                alert("Could not complete task; contact admin");
             }
         });
-        if (nochecks) {
-            alert("There are no items checked");
-            return false;
-        }
     }
-});
-$('#return').on('click', function(ev) {
-    ev.preventDefault();
-    let bud = "../main/displayBudget.php";
-    window.open(bud, "_self");
+    return;
 });

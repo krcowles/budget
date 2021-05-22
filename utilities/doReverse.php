@@ -13,23 +13,17 @@
 session_start();
 require_once "../database/global_boot.php";
 
-$undos = $_POST['revchg'];
-if (isset($undos)) {
-    foreach ($undos as $reverse) {
-        // the checkbox value corresponds to the name id for exp & acc
-        $expid = 'amt' . $reverse;
-        $accid = 'acc' . $reverse; 
-        $exp  = filter_input(INPUT_POST, $expid);
-        $acct = filter_input(INPUT_POST, $accid);
-        $revRequest = "UPDATE `Charges` SET `expamt`='0',`paid` ='Y' " .
-            "WHERE `expid` = :expid;";
-        $rev = $pdo->prepare($revRequest);
-        $rev->execute(["expid" => $reverse]);
-        $budRequest = "UPDATE `Budgets` SET `current`=`current` + {$exp} WHERE " .
-            "`userid` = :uid AND `budname` = :acct;";
-        $budupdate = $pdo->prepare($budRequest);
-        $budupdate->execute(["uid" => $_SESSION['userid'], "acct" => $acct]);
-    }
+// The posted data will be received as an array of associative arrays
+$undos = $_POST['rems'];
+foreach ($undos as $reverse) {
+    $acct = filter_var($reverse['acct']);
+    $amt  = filter_var($reverse['amt']);
+    $exid = filter_var($reverse['id']);
+    $delReq = "DELETE FROM `Charges` WHERE `expid`=?;";
+    $del = $pdo->prepare($delReq);
+    $del->execute([$exid]);
+    $revReq = "UPDATE `Budgets` SET `current`=`current` + {$amt} WHERE " .
+        "`userid` = :uid AND `budname` = :acct; AND `status` = 'A';";
+    $rev = $pdo->prepare($revReq);
+    $rev->execute(["uid" => $_SESSION['userid'], "acct" => $acct]);
 }
-$return = "reverseCharge.php?paid=yes";
-header("Location: {$return}");
