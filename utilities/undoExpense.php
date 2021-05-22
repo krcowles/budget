@@ -11,11 +11,10 @@
  * @license No license to date
  */
 session_start();
-require_once "../database/global_boot.php";
 
-$paid = isset($_GET['paid']) ? true : false;
-$unpaid = true;
-require "get30DayExpenses.php";
+require_once "../database/global_boot.php";
+require_once "get30DayExpenses.php";
+$paid_exp = isset($_GET['paid']) ? true : false;
 
 $chgs = [];
 for ($j=0; $j<count($eid); $j++) {
@@ -42,10 +41,8 @@ for ($k=0; $k<count($did); $k++) {
 }
 $noOfExp = count($chgs);
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Undo Expense</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -53,51 +50,66 @@ $noOfExp = count($chgs);
         content="Undo one or more expense charges" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="../styles/reverseCharge.css" type="text/css" rel="stylesheet" />
  
 </head>
 <body>
+<?php require "../main/navbar.php"; ?>
+<p id="count" style="display:none;"><?=$noOfExp;?></p>
 <div style="margin-left:40px;">
-<p id="expcnt" style="display:none;"><?=$noOfExp;?></p>
-<h2>Select one or more expenses you wish to undo.</h2>
-<h3>This will have the effect of deleting the expense and having the deleted 
-    amount placed back into the account from which it was originally drawn</h3>
-<?php if ($paid) : ?>
-<h3 id="paid">Expense(s) Successfully Undone</h3>
-<? endif; ?>
-<form action="doUndo.php" method="post">
+    <h3>Select one or more expenses you wish to undo.</h3>
+    <h4>This will have the effect of deleting the expense and having the deleted 
+        amount placed back into the account from which it was originally drawn.
+        This will increase your 'Checkbook Total' by the same amount.</h4>
+    <?php if ($paid_exp) : ?>
+    <h3 id="paid">Expense(s) Successfully Undone</h3>
+    <? endif; ?>
     <div>
-        <button>Undo Expense</button>
-        <button id="return">Return To Budget</button>
-    </div>
-<?php if ($noOfExp === 0) : ?>
-    <h3>You have no outstanding expenses for the last 30 days</h3>
-<?php else : ?>
-    <div id="main">
-        <div id="carddiv">
-        <h3>Expenses From the Last 30 Days</h3>
-        <?php for ($j=0; $j<$noOfExp; $j++) : ?>
-            <div id="d<?=$chgs[$j][0];?>" style="margin-bottom:6px;">
-                <input type="checkbox" name="revexp[]"
-                    value="<?=$chgs[$j][0];?>" /> &nbsp;&nbsp;
-                <input class="cdentry" type="text" value="<?= $chgs[$j][1];?>" />
-                <input class="cdentry dates" type="text"
-                    value="<?=$chgs[$j][2];?>" />
-                <input class="cdentry amts" type="text"
-                    name="amt<?=$chgs[$j][0];?>"
-                    value="<?=$chgs[$j][3];?>" />
-                <input class="cdentry" type="text" value="<?=$chgs[$j][5];?>" />
-                <input class="cdentry accts" type="text" 
-                    name="acc<?=$chgs[$j][0];?>"
-                    value="<?=$chgs[$j][4];?>" />
-            </div>
-        <?php endfor; ?>
+        <div>
+            <button id="revexp" class="btn btn-secondary" type="button">
+                Undo Expense</button>&nbsp;&nbsp;<span id="action">All checked
+                    boxes will have their respective paid expenses reversed</span>
+        </div><br />
+        <?php if ($noOfExp === 0) : ?>
+        <h3>You have no outstanding expenses for the last 30 days</h3>
+        <?php else : ?>
+        <div id="main">
+            <h3>Expenses From the Last 30 Days</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Undo</th>
+                        <th>Debit Type</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Remarks</th>
+                        <th>Account Charged</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php for ($j=0; $j<$noOfExp; $j++) : ?>
+                    <tr>
+                        <td class="calign"><input type="checkbox"
+                            value="<?=$chgs[$j][0];?>" /></td>
+                        <td><?=$chgs[$j][1];?></td>
+                        <td><?=$chgs[$j][2];?></td>
+                        <td><?=$chgs[$j][3];?></td>
+                        <td><?=$chgs[$j][5];?></td>
+                        <td><?=$chgs[$j][4];?></td>
+                    </tr>
+                    <?php endfor; ?>
+                </tbody>
+            </table>
         </div>
+        <?php endif; ?>
     </div>
-<?php endif; ?>
-</form>
 </div>
+<?php require "../main/bootstrapModals.html"; ?>
+
+<script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
+<script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/undoExpense.js" type="text/javascript"></script>
 </body>

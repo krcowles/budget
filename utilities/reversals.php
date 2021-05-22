@@ -1,9 +1,10 @@
 <?php
 /**
- * This module is called from a form submit on reverseCharge.php.
- * It will operate on any data passed back from that page to remove
- * an expense from a credit card and apply the removed charge back
- * to the account from which it was drawn.
+ * This module is called via ajax from reverseCharge.js or undoExpense.js.
+ * It will operate on any data passed back from that page to 'reverse' either
+ * one or more credit cards charges or one or more expenses. In either case,
+ * the item is deleted from the 'Charges' Table, and the item's account is 
+ * incremented by the amount of the charge/expense.
  * PHP Version 7.1
  * 
  * @package Budget

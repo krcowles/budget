@@ -1,8 +1,9 @@
 /**
- * @fileoverview Manage reverse charge buttons and return button
+ * @fileoverview Manage reverse charge checkboxes and submit
  * 
  * @author Ken Cowles
  * @version 2.0 Secure login
+ * @version 3.0 bootstrap5 menus and removed form
  */
 var cardcnt = $('#cdcnt').text();
 $('#exp2').addClass('active');
@@ -34,14 +35,14 @@ $('input[type=checkbox]').each(function() {
 $('#reverse').on('click', function() {
     if (cardcnt === '0') {
         alert("There are no card charges to reverse");
-        return false;
     } else {
         if (ajaxdata.length === 0) {
             alert("There are no items checked");
+            return;
         }
         let post_data = {rems: ajaxdata};
         $.ajax({
-            url: "doReverse.php",
+            url: "reversals.php",
             data: post_data,
             method: "post",
             success: function() {

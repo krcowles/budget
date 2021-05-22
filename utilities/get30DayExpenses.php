@@ -1,7 +1,7 @@
 <?php
 /**
  * This utility queries the 'Charges' table to extract paid checks/drafts
- * from the previous 30-day period.
+ * and debits (debit card) from the previous 30-day period.
  * PHP Version 7.1
  * 
  * @package Budget
@@ -11,17 +11,11 @@
 require_once "../database/global_boot.php";
 require "timeSetup.php";
 
-if (isset($unpaid)) {
-    $chgdate = "SELECT * FROM `Charges` WHERE `userid` = :uid AND " .
-        "`method` = :etype AND `paid` = 'N';";
-} else {
-    $chgdate = "SELECT * FROM `Charges` WHERE `userid` = :uid AND " .
-        "`method` = :etype;";
-
-}
-$chks = $pdo->prepare($chgdate);
-$chks->execute(["uid" => $_SESSION['userid'], "etype" => 'Check']);
-$paidChecks = $chks->fetchALL(PDO::FETCH_ASSOC);
+$exp30Req = "SELECT * FROM `Charges` WHERE `userid` = :uid AND " .
+        "`method` = 'Check';";
+$chks = $pdo->prepare($exp30Req);
+$chks->execute(["uid" => $_SESSION['userid']]);
+$expenditures = $chks->fetchALL(PDO::FETCH_ASSOC);
 $prev30 = time() - (30 * 24 * 60 * 60);
 // collection of info for each qualified expense (<= previous 30 days)
 $eid = [];
@@ -29,7 +23,7 @@ $dte = [];
 $amt = [];
 $pye = [];
 $ded = [];
-foreach ($paidChecks as $pd) {
+foreach ($expenditures as $pd) {
     $rel = strtotime($pd['expdate']);
     if ($rel >= $prev30) {
         array_push($eid, $pd['expid']);
@@ -39,9 +33,9 @@ foreach ($paidChecks as $pd) {
         array_push($ded, $pd['acctchgd']);
     }
 }
-$dbdata = "SELECT * FROM `Charges` WHERE `userid` = :uid AND `method` = :deb;";
+$dbdata = "SELECT * FROM `Charges` WHERE `userid` = :uid AND `method` = 'Debit';";
 $debs = $pdo->prepare($dbdata);
-$debs->execute(["uid" => $_SESSION['userid'], "deb" => 'Debit']);
+$debs->execute(["uid" => $_SESSION['userid']]);
 $recent = $debs->fetchALL(PDO::FETCH_ASSOC);
 $did = [];
 $debname = [];
