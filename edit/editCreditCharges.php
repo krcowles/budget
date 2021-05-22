@@ -8,13 +8,13 @@
  * @license No license to date
  */
 session_start();
-require "../utilities/getCards.php";
-require "../utilities/getExpenses.php";
+require_once "../utilities/getCards.php";
+require_once "../utilities/getExpenses.php";
+require_once "../utilities/timeSetup.php";
 
 /**
- * XHTML requires child tags in tables, so using alt control structures
- * did not yield good syntax. Hence, the table bodies are created in 
- * php below.
+ * The table bodies are created in php below: originally because the goal
+ * was to use XHTML strict - no longer the case w/bootstrap.
  */
 $counts = [];
 $tbodys = [];
@@ -44,10 +44,8 @@ for ($j=0; $j<count($cr); $j++) {
     array_push($tbodys, $tbody);
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html >
+<html lang="en">
 <head>
     <title>Edit Credit Active Expenses</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -55,9 +53,9 @@ for ($j=0; $j<count($cr); $j++) {
         content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="../styles/charges.css" type="text/css" rel="stylesheet" />
-    <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
     <style type="text/css">
         textarea { height: 24px; font-size: 16px; padding-top: 4px; }
         .dates { width: 120px; height: 22px; font-size: 16px; }
@@ -69,13 +67,14 @@ for ($j=0; $j<count($cr); $j++) {
 </head>
 
 <body>
+<?php require "../main/navbar.php"; ?>
 <div id="main">
-    <p class="NormalHeading">You can use this form to edit active charges
-    charged to a credit card.</p>
+    <h3>You can use this form to edit active charges
+    charged to a credit card.</h3>
     <form id="form" method="post" action="saveEditedCharge.php">
     <div>
-        <button id="save">Save All Changes</button>
-        <button id="return" style="margin-left:80px;">Return to Budget</button>
+        <button id="svchgs" class="btn btn-secondary" type="button">
+            Save All Changes</button>
         <br /><br />
         <div id="existing">
         <?php for ($i=0; $i<count($cr); $i++) : ?>
@@ -98,29 +97,25 @@ for ($j=0; $j<count($cr); $j++) {
         </div>
     </div>
     </form>
-    <p style="clear:left;margin-left:16px;">
-        <a href="http://validator.w3.org/check?uri=referer">
-            <img src="http://www.w3.org/Icons/valid-xhtml10"
-            alt="Valid XHTML 1.0 Strict" height="31" width="88" />
-        </a>
-    </p>
 </div>
+<?php require "../main/bootstrapModals.html"; ?>
 
+<script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
+<script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
 <script src="../scripts/dbValidation.js" type="text/javascript"></script>
 <script type="text/javascript">
-    $('#return').on('click', function(ev) {
-        ev.preventDefault();
-        var dpg = "../main/displayBudget.php";
-        window.open(dpg, "_self");
-    });
     $(function () {
         $('.datepicker').datepicker({
             dateFormat: 'yy-mm-dd'
         });
         var $amount = $('.amt');
         scaleTwoNumber($amount);
+        $('#exp4').addClass('active');
+        $('#svchgs').on('click', function() {
+            $('form').trigger('submit');
+        });
     });
 </script>
 </body>
