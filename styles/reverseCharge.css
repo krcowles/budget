@@ -43,6 +43,12 @@ td {
     border-right-style: ridge;
     border-right-width: 1px;
 }
+tbody tr:nth-child(odd):hover {
+    background-color: #bfd9bf;
+}
+tbody tr:nth-child(even):hover {
+    background-color: #bfd9bf;
+}
 .calign {
     text-align: center;
 }

@@ -42,7 +42,7 @@ foreach ($deposits as $deposit) {
     }
 }
 ?>
-<div class="inc">Annual Summary:</div>
+<h4 class="inc">Annual Summary:</h4>
 <table style="margin-top:8px;margin-left:12px;">
     <colgroup>
         <col style="width:120px;" />
@@ -67,7 +67,7 @@ foreach ($deposits as $deposit) {
     </tbody>
 </table>
 
-<div class="inc">Activity:</div>
+<h4 class="inc">Activity:</h4>
 <table style="margin-top:8px;margin-left:12px;">
     <colgroup>
         <col style="width:120px" />

@@ -9,9 +9,9 @@
  * @license No license to date
  */
 session_start();
-require "../database/global_boot.php";
-require "getCards.php";
-require "timeSetup.php";
+require_once "../database/global_boot.php";
+require_once "getCards.php";
+require_once "timeSetup.php";
 
 $id      = isset($_GET['id']) ? filter_input(INPUT_GET, 'id') : false;
 $monthly = $id === 'morpt' ? true : false;
@@ -22,26 +22,26 @@ $datareq = "SELECT * FROM `Charges` WHERE `userid` = :uid;";
 $data = $pdo->prepare($datareq); 
 $data->execute(["uid" => $_SESSION['userid']]);
 $report_data = $data->fetchALL(PDO::FETCH_ASSOC);
-$method = [];
-$cdname = [];
-$date = [];
-$amt = [];
-$payee = [];
-$acct = [];
-$paid = [];
+$rmethod = [];
+$rcdname = [];
+$rdate = [];
+$ramt = [];
+$rpayee = [];
+$racct = [];
+$rpaid = [];
 if ($monthly) {
     $period = isset($_GET['mo']) ? filter_input(INPUT_GET, 'mo') : false;
     $mon = array_search($period, $month_names) + 1;
     foreach ($report_data as $item) {
         $expdate = explode("-", $item['expdate']);
         if ($expdate[0] === $digits[2] && $expdate[1] == $mon) {
-            array_push($method, $item['method']);
-            array_push($cdname, $item['cdname']);
-            array_push($date, $item['expdate']);
-            array_push($amt, $item['expamt']);
-            array_push($payee, $item['payee']);
-            array_push($acct, $item['acctchgd']);
-            array_push($paid, $item['paid']);
+            array_push($rmethod, $item['method']);
+            array_push($rcdname, $item['cdname']);
+            array_push($rdate, $item['expdate']);
+            array_push($ramt, $item['expamt']);
+            array_push($rpayee, $item['payee']);
+            array_push($racct, $item['acctchgd']);
+            array_push($rpaid, $item['paid']);
         }
     }
 } 
@@ -69,10 +69,8 @@ if ($annual) {
     }
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>User Report</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -80,27 +78,14 @@ if ($annual) {
         content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
-    <style type="text/css">
-       #page { margin-left: 16px; }
-       #back { margin-left: 10px; }
-       table { border-collapse: collapse; background-color: snow;
-               border-width: 2px; border-style: outset; border-color: black; }
-       th { text-align: left; padding: 4px 6px 4px 6px;
-            background-color: #afcfaf; border-bottom: 2px 
-            solid black; border-top: 2px; border-right: 2px solid black; 
-            position: sticky; top: 0; cursor: pointer;}
-        th:hover {background-color: ghostwhite;}
-        tr.even { background-color: #eff5ef; }
-       td { padding: 4px 6px 4px 6px; }
-       .red  { color: firebrick; }
-       .inc  { margin-left: 16px; margin-top: 16px; margin-bottom: 0px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/reports.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>
+<?php require "../main/navbar.php"; ?>
 <div id="page">
-    <button id="back">Return to Budget</button>
     <?php
     if ($monthly) {
         include "formatMonth.php";
@@ -110,24 +95,14 @@ if ($annual) {
         include "formatIncome.php";
     }
     ?>
-</div>
-<div>
-<p style="clear:left;margin-left:16px;">
-        <a href="http://validator.w3.org/check?uri=referer">
-            <img src="http://www.w3.org/Icons/valid-xhtml10"
-            alt="Valid XHTML 1.0 Strict" height="31" width="88" />
-        </a>
-</p>
-</div>
+</div><br />
+<?php require "../main/bootstrapModals.html"; ?>
 
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-<script src="../scripts/tableSort.js" type="text/javascript"></script>
-<script type="text/javascript">
-    $('#back').on('click', function() {
-        var budpg = '../main/displayBudget.php';
-        window.open(budpg, "_self");
-    });
-</script>
+<script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
+<script src="../scripts/bootstrap.min.js"></script>
+<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/menus.js"></script>
+<script src="../scripts/tableSort.js"></script>
 
 </body>
 </html>

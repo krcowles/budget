@@ -9,8 +9,8 @@
  * @license No license to date
  */
 ?>
-<p class="SmallHeading">The following charges were incurred in <?= $period;?><br />
-NOTE: You can sort by clicking the column header</p>
+<h4>The following charges were incurred in <?= $period;?><h4>
+<h5>NOTE: You can sort by clicking the column header</h5>
 <table class="sortable">
     <colgroup>
         <col style="width:120px" />
@@ -33,23 +33,23 @@ NOTE: You can sort by clicking the column header</p>
         </tr>
     </thead>
     <tbody>
-        <?php for ($k=0; $k<count($amt); $k++) : ?>
+        <?php for ($k=0; $k<count($ramt); $k++) : ?>
             <?php if ($k > 0 && $k%2 === 1) : ?>
             <tr class="even">
             <?php else: ?>
             <tr>
             <?php endif; ?>
-            <td><?= $date[$k];?></td>
-            <?php if ($paid[$k] === "Y") : ?>
+            <td><?= $rdate[$k];?></td>
+            <?php if ($rpaid[$k] === "Y") : ?>
             <td>Paid</td>
             <?php else: ?>
             <td class="red">Unpaid</td>
             <?php endif; ?>
-            <td><?= $method[$k];?></td>
-            <td><?= $cdname[$k];?></td>
-            <td><?= $amt[$k];?></td>
-            <td><?= $payee[$k];?></td>
-            <td><?= $acct[$k];?></td>
+            <td><?= $rmethod[$k];?></td>
+            <td><?= $rcdname[$k];?></td>
+            <td><?= $ramt[$k];?></td>
+            <td><?= $rpayee[$k];?></td>
+            <td><?= $racct[$k];?></td>
         </tr>
         <?php endfor; ?>
     </tbody>

@@ -1,0 +1,27 @@
+#page { 
+    margin-left: 36px;
+}
+th {
+    background-color: darkgreen;
+    color: white;
+}
+th, td {
+    padding: 4px 10px 4px 10px;
+}
+table {
+    border-collapse: collapse;
+}
+table, th {
+    border-style: ridge;
+    border-width: 1px;
+}
+td {
+    border-right-style: ridge;
+    border-right-width: 1px;
+}
+tbody tr:nth-child(odd):hover {
+    background-color: #bfd9bf;
+}
+tbody tr:nth-child(even):hover {
+    background-color: #bfd9bf;
+}

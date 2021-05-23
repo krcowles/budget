@@ -24,7 +24,7 @@ for ($j=0; $j<count($cr); $j++) {
     for ($k=0; $k<count($expmethod); $k++) {
         if ($expmethod[$k] === 'Credit' && $expcdname[$k] === $cr[$j]) {
             $tally++;
-            $tbody .= '<tr>' . PHP_EOL;
+            $tbody .= '<tr class="trhover">' . PHP_EOL;
             $tbody .= "<td><input type='text' class='datepicker dates' " .
                 "name='cr{$j}date[]' value='{$expdate[$k]}' /></td>" . PHP_EOL;
             $tbody .= "<td><textarea rows='1' cols='80' class='amt' " .
@@ -55,14 +55,15 @@ for ($j=0; $j<count($cr); $j++) {
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
-    <link href="../styles/charges.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/budgetEditor.css" type="text/css" rel="stylesheet" />
     <style type="text/css">
-        textarea { height: 24px; font-size: 16px; padding-top: 4px; }
+    textarea { height: 28px; font-size: 16px; padding-left: 5px;
+            padding-bottom: 6px; }
         .dates { width: 120px; height: 22px; font-size: 16px; }
-        .amt { width: 100px;}
+        .amt { width: 100px; }
         #main { margin-left: 24px; }
-        .left { text-align: left }
-        .right { text-align: right }
+        .left { text-align: left; }
+        .right { text-align: right; }
     </style>
 </head>
 
@@ -105,6 +106,7 @@ for ($j=0; $j<count($cr); $j++) {
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
 <script src="../scripts/dbValidation.js" type="text/javascript"></script>
+<script src="../scripts/menus.js"></script>
 <script type="text/javascript">
     $(function () {
         $('.datepicker').datepicker({

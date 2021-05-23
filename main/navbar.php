@@ -101,8 +101,8 @@ require_once "../utilities/getCards.php";
                         href="#">Move Account</a></li>
                     <li><a id="ren1" class="dropdown-item"
                         href="#">Rename Account</a></li>
-                    <li><a class="dropdown-item"
-                        href="../edit/budgetEditor.php">Edit Budget Amounts</a>
+                    <li><a class="dropdown-item" id="edbuds"
+                        href="../edit/budgetEditor.php">Edit Budget Amts &amp; Balances</a>
                     </li>
                 </ul>
             </li>

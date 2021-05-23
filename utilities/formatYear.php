@@ -9,10 +9,10 @@
  * @license No license to date
  */
 ?>
-<p class="SmallHeading">The following charges were incurred in <?= $period;?><br />
-NOTE: You can sort by clicking the column header</p>
+<h4>The following charges were incurred in <?= $period;?></h4>
+<h5>NOTE: You can sort by clicking the column header</h5>
 <?php for ($k=1; $k<=12; $k++) : ?>
-    <p>In <?=$month_names[$k-1];?>:</p>
+    <h5>In <?=$month_names[$k-1];?>:</h5>
     <table class="sortable">
         <colgroup>
             <col style="width:120px" />
@@ -55,5 +55,5 @@ NOTE: You can sort by clicking the column header</p>
             </tr>
             <?php endfor; ?>
         </tbody>
-    </table>
+    </table><br />
 <?php endfor; ?>
