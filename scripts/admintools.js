@@ -76,6 +76,18 @@ $('#cleanPix').on('click', function() {
     window.open('cleanPix.php', "_blank");
 });
 */
+$('#version').on('click', function() {
+    $.ajax({
+        url: 'version.php',
+        method: 'get',
+        success: function(result) {
+            alert(result);
+        },
+        error: function() {
+            alert("Could not retrieve PHP version info");
+        }
+    });
+});
 $('#phpinfo').on('click', function() {
     window.open('phpInfo.php', "_blank");
 });

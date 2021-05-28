@@ -30,8 +30,10 @@ $rpayee = [];
 $racct = [];
 $rpaid = [];
 if ($monthly) {
-    $period = isset($_GET['mo']) ? filter_input(INPUT_GET, 'mo') : false;
+    $templ = "Monthly.xlsx";
+    $period = isset($_GET['mo']) ? filter_input(INPUT_GET, 'mo') : 'No Month';
     $mon = array_search($period, $month_names) + 1;
+    $hdr1  = "Expenses for the month of " . $period;
     foreach ($report_data as $item) {
         $expdate = explode("-", $item['expdate']);
         if ($expdate[0] === $digits[2] && $expdate[1] == $mon) {
@@ -46,7 +48,9 @@ if ($monthly) {
     }
 } 
 if ($annual) {
+    $templ = "Annual.xlsx";
     $period = isset($_GET['yr']) ? filter_input(INPUT_GET, 'yr') : false;
+    $hdr1 = "Expense Report for " .   $period;
     $mo = [];
     for ($j=1; $j<=12; $j++) {
         $mo[$j] = [];
@@ -84,9 +88,24 @@ if ($annual) {
 </head>
 
 <body>
-<?php require "../main/navbar.php"; ?>
+<?php
+    require "../main/navbar.php";
+    require "../main/bootstrapModals.html";
+?>
 <div id="page">
-    <?php
+<?php
+    // for export to Excel...
+    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+    try {
+        $able = $reader->canRead($templ);
+    }
+    catch (Exception $ex) {
+        throw new Exception("{$templ} cannot be read by the Spreadsheet Reader");
+    } 
+    $spreadsheet = $reader->load($templ);
+    // Set main header
+    $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 1, $hdr1);
+    $rowno = 3; // data starts at row 3
     if ($monthly) {
         include "formatMonth.php";
     } elseif ($annual) {
@@ -94,15 +113,32 @@ if ($annual) {
     } elseif ($income) {
         include "formatIncome.php";
     }
-    ?>
+?>
 </div><br />
-<?php require "../main/bootstrapModals.html"; ?>
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/jquery-1.12.1.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/tableSort.js"></script>
+<script type="text/javascript">
+    $('a').on('click', function() {
+        let page = $(this).attr('href');
+        $.ajax({
+            type: 'HEAD',
+            url: page,
+        success: function() {
+                // perform click;
+                return;
+        },
+        error: function() {
+                alert("Sorry, the spreadsheet did not get produced\n" +
+                    "Admin has been advised");
+                return false;
+        }
+        });
+    });
+</script>
 
 </body>
 </html>

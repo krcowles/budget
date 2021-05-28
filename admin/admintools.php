@@ -27,9 +27,9 @@ require "../database/global_boot.php";
 <div style="margin-left:24px;margin-top:16px;" id="tools">
     <fieldset>
         <legend>Database Management</legend>
+        <p>Database Management Tools:</p>
         <button id="exall">Export All Tables</button>
             [NOTE: Creates .sql file]<br />
-        <p>Database Management Tools:</p>
         <button id="reload">Reload Database</button>&nbsp;
             [Drops All Tables and Loads All Tables]<br />
         <button id="drall">Drop All Tables</button><br />
@@ -41,6 +41,7 @@ require "../database/global_boot.php";
     <fieldset>
         <legend>Miscellaneous Tools</legend>
         <button id="lo">Log out admin</button><br />
+        <button id="version">Get Current PHP Version</button><br />
         <button id="phpinfo">PHPInfo</button><br />
     </fieldset>
     
