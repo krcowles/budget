@@ -36,7 +36,7 @@ case 'payexp':
     $budupdte = "UPDATE `Budgets` SET `current` = :bal WHERE " .
         "`userid` = :uid AND `budname` = :acct;";
     $bud = $pdo->prepare($budupdte);
-    $bud->execute(["bal" => $bal, "uid" => $_SESSION['userid'], "acct" => $acct]);
+    $bud->execute([":bal" => $bal, ":uid" => $_SESSION['userid'], ":acct" => $acct]);
     // examine method for Cr/Dr
     if (in_array($method, $cr)) {
         $dbmethod = "Credit";
@@ -200,18 +200,20 @@ case 'addacct':
     $newacct = filter_input(INPUT_POST, 'acct_name');
     $budget  = filter_input(INPUT_POST, 'monthly');
     $newpos = $user_cnt + 1;
-    $newsql = "INSERT INTO `Budgets` (`userid`,`budname`,`budpos`,`status`," .
-        "`budamt`,`prev0`,`prev1`,`current`,`autopay`,`moday`,`autopd`,`funded`)" .
-        " VALUES (:uid,:item,:pos,'A',:amt,'0','0','0','','0','','0');";
+    $newsql = "INSERT INTO `Budgets` (`user`,`userid`,`budname`,`budpos`," .
+        "`status`,`budamt`,`prev0`,`prev1`,`current`,`autopay`,`moday`," .
+        "`autopd`,`funded`) VALUES (:user,:uid,:item,:pos,'A',:amt,'0','0'," .
+        "'0','','0','','0');";
     $addinfo = $pdo->prepare($newsql);
-    $addinfo->execute(
+    $pass = $addinfo->execute(
         [
-            "uid" => $_SESSION['userid'],
-            "item" => $newacct,
-            "pos" => $newpos,
-            "amt" => $budget
+            ":user" => 'Not used',
+            ":uid"  => $_SESSION['userid'],
+            ":item" => $newacct,
+            ":pos"  => $newpos,
+            ":amt"  => $budget
         ]
-    );
+    ); 
     break;
 case 'acctdel':
     $type   = filter_input(INPUT_POST, 'type');

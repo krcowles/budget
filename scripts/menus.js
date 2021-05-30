@@ -77,7 +77,7 @@ $('#chgexp').on('click', function() {
     expitem.show();
 });
 $('#reginc').on('click', function() {
-    $('#incbtn').on('click', function() {
+    $('#incbtn').off('click').on('click', function() {
         let reg = $('#incdep').val();
         if (!valAmt(reg)) {
             return false;
@@ -86,6 +86,7 @@ $('#reginc').on('click', function() {
         let ajaxdata;
         if($('#defer').is(':checked')) {
             $('#preloader').show();
+            let nxtmo = $('#defermo').text();
             ajaxdata = {id: 'addacct', acct_name: 'Deferred Income', monthly: '0'};
             // don't use 'executeScript()' here!
             $.ajax({
