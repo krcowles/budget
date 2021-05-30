@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'claviska' => array($vendorDir . '/claviska/simpleimage/src'),
+    'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
 );

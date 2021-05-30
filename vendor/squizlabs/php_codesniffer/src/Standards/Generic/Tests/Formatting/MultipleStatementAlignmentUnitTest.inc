@@ -183,7 +183,7 @@ $var2      = 12;
 
 // Valid
 $error = false;
-while (list($h, $f) = each($handle)) {
+while (list($h, $f) = getKeyAndValue($handle)) {
     $error = true;
 }
 
@@ -403,3 +403,68 @@ $foofoo   = new Foo([
     $b = new Bar(),
     $c = new Bar(),
 ]);
+
+$i = 0;
+echo "TEST: ".($i += 1)."\n";
+
+// Valid
+$foo      = 'Hello';
+$variable = 12;
+$foo     .= ' World';
+$test     = 1;
+$test   <<= 6;
+
+// Invalid
+$foo      = 'Hello';
+$variable = 12;
+$foo      .= ' World';
+$test     = 1;
+$test     <<= 6;
+
+// phpcs:set Generic.Formatting.MultipleStatementAlignment alignAtEnd false
+
+// Valid
+$foo      = 'Hello';
+$variable = 12;
+$foo      .= ' World';
+$test     = 1;
+$test     <<= 6;
+
+// Invalid
+$foo      = 'Hello';
+$variable = 12;
+$foo     .= ' World';
+$test     = 1;
+$test   <<= 6;
+
+// phpcs:set Generic.Formatting.MultipleStatementAlignment maxPadding 8
+
+$one                = 'one';
+$varonetwo          = 'two';
+$varonetwothree     = 'three';
+$varonetwothreefour = 'four';
+
+$one       = 'one';
+$varonetwo .= 'two';
+$varonetwo = 'two';
+$varonetwo .= 'two';
+$varonetwothree     = 'three';
+$varonetwothreefour = 'four';
+
+$one         <<= 8;
+$onetwothree = 3;
+
+// phpcs:set Generic.Formatting.MultipleStatementAlignment maxPadding 1000
+
+$a        = 123;
+$model    = new class() {
+    // empty
+};
+$resource = new class() {
+    // empty
+};
+
+// phpcs:set Generic.Formatting.MultipleStatementAlignment alignAtEnd true
+
+$one       <<= 8;
+$onetwothree = 3;

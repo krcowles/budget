@@ -17,7 +17,8 @@ for ($j=0; $j<count($rdate); $j++) {
     $row = 'A' . $rowno;
     $amtcell  = 'E' . $rowno++;
     $unixTime = strtotime($rdate[$j]);
-    $monthly_excel_data[0] = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $unixTime );
+    $monthly_excel_data[0] 
+        = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($unixTime);
     $monthly_excel_data[1] = $rpaid[$j] === 'Y' ? 'Paid' : 'Unpaid';
     $monthly_excel_data[2] = $rmethod[$j];
     $monthly_excel_data[3] = $rcdname[$j];
@@ -26,17 +27,17 @@ for ($j=0; $j<count($rdate); $j++) {
     $monthly_excel_data[6] = $racct[$j];
     $spreadsheet->getActiveSheet()->fromArray(
         $monthly_excel_data,
-        NULL,
+        null,
         $row,
     );
     $spreadsheet->getActiveSheet()->getStyle($row)->getNumberFormat()
         ->setFormatCode(
             \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_XLSX15
-    );
+        );
     $spreadsheet->getActiveSheet()->getStyle($amtcell)->getNumberFormat()
         ->setFormatCode(
             \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_ACCOUNTING_USD
-    );
+        );
 }
 $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
 $writer->save("user_monthly.xlsx");

@@ -13,8 +13,9 @@
 <h4>The following charges were incurred in <?= $period;?></h4>
 <h5>NOTE: You can sort by clicking the column header</h5>
 <div style="font-size: 22px;">
-    <a href="user_annual.xlsx" download>Click to Download as Excel</a>&nbsp;&nbsp;NOTE: 
-    The report takes some time to complete... wait until tab activity has stopped.
+    <a href="user_annual.xlsx" download>Click to Download as Excel</a>
+    &nbsp;&nbsp;NOTE: The report takes some time to complete... wait until
+    tab activity has stopped.
 </div><br />
 <?php for ($k=1; $k<=12; $k++) : ?>
     <h5>In <?=$month_names[$k-1];?>:</h5>
@@ -73,7 +74,8 @@
             $row = 'A' . $rowno;
             $amtcell  = 'E' . $rowno++;
             $unixTime = strtotime($modata[2]);
-            $monthly_excel_data[0] = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel( $unixTime );
+            $monthly_excel_data[0] 
+                = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($unixTime);
             $monthly_excel_data[1] = $modata[6] === 'Y' ? 'Paid' : 'Unpaid';
             $monthly_excel_data[2] = $modata[0];
             $monthly_excel_data[3] = $modata[1];
@@ -82,17 +84,17 @@
             $monthly_excel_data[6] = $modata[5];
             $spreadsheet->getActiveSheet()->fromArray(
                 $monthly_excel_data,
-                NULL,
+                null,
                 $row,
             );
             $spreadsheet->getActiveSheet()->getStyle($row)->getNumberFormat()
                 ->setFormatCode(
                     \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_XLSX15
-            );
+                );
             $spreadsheet->getActiveSheet()->getStyle($amtcell)->getNumberFormat()
                 ->setFormatCode(
                     \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_ACCOUNTING_USD
-            );
+                );
             $indx++;
         }
     }

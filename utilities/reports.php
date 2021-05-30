@@ -94,25 +94,25 @@ if ($annual) {
 ?>
 <div id="page">
 <?php
-    // for export to Excel...
-    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-    try {
-        $able = $reader->canRead($templ);
-    }
-    catch (Exception $ex) {
-        throw new Exception("{$templ} cannot be read by the Spreadsheet Reader");
-    } 
-    $spreadsheet = $reader->load($templ);
-    // Set main header
-    $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 1, $hdr1);
-    $rowno = 3; // data starts at row 3
-    if ($monthly) {
-        include "formatMonth.php";
-    } elseif ($annual) {
-        include "formatYear.php";
-    } elseif ($income) {
-        include "formatIncome.php";
-    }
+// for export to Excel...
+$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+try {
+    $able = $reader->canRead($templ);
+}
+catch (Exception $ex) {
+    throw new Exception("{$templ} cannot be read by the Spreadsheet Reader");
+} 
+$spreadsheet = $reader->load($templ);
+// Set main header
+$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 1, $hdr1);
+$rowno = 3; // data starts at row 3
+if ($monthly) {
+    include "formatMonth.php";
+} elseif ($annual) {
+    include "formatYear.php";
+} elseif ($income) {
+    include "formatIncome.php";
+}
 ?>
 </div><br />
 
