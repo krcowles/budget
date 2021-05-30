@@ -47,6 +47,8 @@ foreach ($deposits as $excel) {
         $color = false;
     }
 }
+$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+$writer->save("user_income.xlsx");
 $sources = [];
 $latest  = [];
 foreach ($deposits as $deposit) {
