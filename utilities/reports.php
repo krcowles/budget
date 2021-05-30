@@ -72,6 +72,11 @@ if ($annual) {
         }
     }
 }
+if ($income) {
+    $templ = "Income.xlsx";
+    $period = isset($_GET['incyr']) ? filter_input(INPUT_GET, 'incyr') : 'No year';
+    $hdr1 = "Income for the Year of " .   $period;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -23,7 +23,7 @@ class FileCommentSniff implements Sniff
      */
     protected $tags = [
         '@category'   => [
-            'required'       => true,
+            'required'       => false,
             'allow_multiple' => false,
         ],
         '@package'    => [
@@ -51,7 +51,7 @@ class FileCommentSniff implements Sniff
             'allow_multiple' => false,
         ],
         '@link'       => [
-            'required'       => true,
+            'required'       => false,
             'allow_multiple' => true,
         ],
         '@see'        => [

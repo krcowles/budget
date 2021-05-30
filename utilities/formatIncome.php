@@ -8,12 +8,45 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$income_yr = filter_input(INPUT_GET, 'incyr');
-
+$income_yr = $period;
 $depositReq = "SELECT * FROM `Deposits` WHERE `userid` = ? AND YEAR(`date`) = ?;";
 $depositQ = $pdo->prepare($depositReq);
 $depositQ->execute([$_SESSION['userid'], $income_yr]);
 $deposits = $depositQ->fetchAll(PDO::FETCH_ASSOC);
+$excel_data = [];
+foreach ($deposits as $excel) {
+    $row       = 'A' . $rowno;
+    $amtcell   = 'B' . $rowno;
+    $desc_cell = 'C' . $rowno++;
+    $unixTime = strtotime($excel['date']);
+    $excel_data[0] = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($unixTime);
+    $excel_data[1] = $excel['amount'];
+    $color = false;
+    if ($excel['otd'] === 'N') {
+        $excel_data[2] = '[Regular Monthly Income]';
+        $color = true;
+    } else {
+        $excel_data[2] = $excel['description'];
+    }
+    $spreadsheet->getActiveSheet()->fromArray(
+        $excel_data,
+        null,
+        $row,
+    );
+    $spreadsheet->getActiveSheet()->getStyle($row)->getNumberFormat()
+        ->setFormatCode(
+            \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_XLSX15
+        );
+    $spreadsheet->getActiveSheet()->getStyle($amtcell)->getNumberFormat()
+        ->setFormatCode(
+            \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_ACCOUNTING_USD
+        );
+    if ($color) {
+        $spreadsheet->getActiveSheet()->getStyle($desc_cell)->getFont()->getColor()
+            ->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_DARKGREEN);
+        $color = false;
+    }
+}
 $sources = [];
 $latest  = [];
 foreach ($deposits as $deposit) {
@@ -41,9 +74,18 @@ foreach ($deposits as $deposit) {
         }
     }
 }
+$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+$writer->save("user_income.xlsx");
 ?>
-<h4 class="inc">Annual Summary:</h4>
-<table style="margin-top:8px;margin-left:12px;">
+<br />
+<div class="inc" style="font-size: 22px;">
+    <a href="user_income.xlsx" download>Click to Download as Excel</a>
+    &nbsp;&nbsp;NOTE: The report may takes some time to complete... wait until
+    tab activity has stopped.
+</div><br />
+<h4 class="inc">Annual Summary for <?=$income_yr;?>:</h4>
+<div class="inc">
+<table style="margin-top:8px;">
     <colgroup>
         <col style="width:120px;" />
         <col style="width:100px" />
@@ -66,8 +108,9 @@ foreach ($deposits as $deposit) {
         <?php endforeach; ?>
     </tbody>
 </table>
+</div>
 
-<h4 class="inc">Activity:</h4>
+<h4 class="inc">Daily Activity:</h4>
 <table style="margin-top:8px;margin-left:12px;">
     <colgroup>
         <col style="width:120px" />
