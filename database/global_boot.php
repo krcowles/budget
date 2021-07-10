@@ -51,7 +51,7 @@ $options = array(
 $format = 'mysql:host=%s;dbname=%s';
 $dsn = sprintf($format, $HOSTNAME, $DATABASE);
 try {
-    $pdo = new PDO($dsn, $USERNAME, $PASSWORD); // most basic form
+    $pdo = new PDO($dsn, $USERNAME, $PASSWORD, $options); // most basic form
 } catch (PDOException $e) {
     throw new Exception($e->getMessage(), (int)$e->getCode());
 }
