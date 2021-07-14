@@ -5,7 +5,7 @@
  * When the selection(s) is/are executed, the expense item(s) will be zeroed
  * and the charge(s) will be refunded to the originally charged account(s).
  * PHP Version 7.1
- * 
+ *
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
@@ -68,7 +68,7 @@ $noOfExp = count($chgs);
         This will increase your 'Checkbook Total' by the same amount.</h4>
     <?php if ($paid_exp) : ?>
     <h3 id="paid">Expense(s) Successfully Undone</h3>
-    <? endif; ?>
+    <?php endif; ?>
     <div>
         <div>
             <button id="revexp" class="btn btn-secondary" type="button">

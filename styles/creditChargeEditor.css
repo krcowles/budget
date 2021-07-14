@@ -1,0 +1,30 @@
+textarea {
+    height: 28px;
+    font-size: 16px;
+    padding-left: 5px;
+    padding-bottom: 6px;
+}
+#main {
+    margin-left: 24px;
+}
+.dates {
+    position: relative;
+    top: -1px;
+    width: 120px;
+    height: 28px;
+    font-size: 16px;
+}
+.amt {
+    width: 100px;
+}
+.left {
+    text-align: left;
+}
+.right {
+    text-align: right;
+}
+.fullsel {
+    position: relative;
+    top: -1px;
+    height: 28px;
+}

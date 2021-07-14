@@ -3,10 +3,10 @@
  * This module is called via ajax from reverseCharge.js or undoExpense.js.
  * It will operate on any data passed back from that page to 'reverse' either
  * one or more credit cards charges or one or more expenses. In either case,
- * the item is deleted from the 'Charges' Table, and the item's account is 
+ * the item is deleted from the 'Charges' Table, and the item's account is
  * incremented by the amount of the charge/expense.
  * PHP Version 7.1
- * 
+ *
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
@@ -24,7 +24,8 @@ foreach ($undos as $reverse) {
     $del = $pdo->prepare($delReq);
     $del->execute([$exid]);
     $revReq = "UPDATE `Budgets` SET `current`=`current` + {$amt} WHERE " .
-        "`userid` = :uid AND `budname` = :acct; AND `status` = 'A';";
+        "`userid` = :uid AND `budname` = :acct AND " .
+        "(`status` = 'A' OR `status`='T');";
     $rev = $pdo->prepare($revReq);
     $rev->execute(["uid" => $_SESSION['userid'], "acct" => $acct]);
 }

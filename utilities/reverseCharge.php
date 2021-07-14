@@ -5,7 +5,7 @@
  * will be 'reversed' so that they are removed from the credit card charge
  * list and refunded to the charged account.
  * PHP Version 7.1
- * 
+ *
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
@@ -73,7 +73,7 @@ if ($charges) {
     originally drawn</h4>
 <?php if ($chgs_paid) : ?>
     <h4 id="paid">Charge(s) Successfully Reversed</h4>
-<? endif; ?>
+<?php endif; ?>
     <div id="charge_data">
         <p id="cdcnt" style="display:none;"><?=$noOfCards;?></p>
         <div>

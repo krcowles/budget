@@ -1,0 +1,33 @@
+#main {
+    margin-left: 24px;
+}
+textarea {
+    height: 36px;
+    font-size: 16px;
+    padding-top: 4px;
+}
+input {
+    height: 32px; 
+    font-size: 16px;
+}
+.type {
+    width: 100px;
+}
+.name {
+    width: 130px;
+}
+.dates {
+    position: relative;
+    top: -1px;
+    width: 120px; 
+    height: 36px;
+    font-size: 16px;
+}
+.amt {
+    width: 100px;
+}
+.fullsel {
+    position: relative;
+    top: -1px;
+    height: 36px;
+}

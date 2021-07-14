@@ -1,9 +1,10 @@
 /**
- * @fileoverview Provide a table of expenses charged to the 
- * subject Credit Card; Mark items to be paid and process them
+ * @fileoverview Present a table of expenses charged to the 
+ * subject Credit Card; User marks items to be paid and submits them.
  * 
  * @author Ken Cowles
  * @version 2.0 Secure login
+ * @version 2.1 Changed styling - added navpanel to page
  */
 $(function() {
 
@@ -24,11 +25,8 @@ $chkbox.each(function() {
         }
     });
 });
-
-$('#rtb').on('click', function(ev) {
-    ev.preventDefault();
-    var backpg = "../main/displayBudget.php";
-    window.open(backpg, '_self');
+$('#reconcile').on('click', function() {
+    $('#form').trigger('submit');
 });
 
 });

@@ -8,9 +8,11 @@
  * @license No license to date
  */
 session_start();
+require_once "../utilities/getAccountData.php";
 require_once "../utilities/getCards.php";
 require_once "../utilities/getExpenses.php";
 require_once "../utilities/timeSetup.php";
+
 
 /**
  * The table bodies are created in php below: originally because the goal
@@ -18,31 +20,38 @@ require_once "../utilities/timeSetup.php";
  */
 $counts = [];
 $tbodys = [];
+// Set up an array for javascript which id's the initialized value for select boxes
+$crsels = [];
 for ($j=0; $j<count($cr); $j++) {
     $tally = 0;
+    $vals = [];
     $tbody = '<tbody>' . PHP_EOL;
     for ($k=0; $k<count($expmethod); $k++) {
         if ($expmethod[$k] === 'Credit' && $expcdname[$k] === $cr[$j]) {
             $tally++;
+            array_push($vals, $expcharged[$k]);
             $tbody .= '<tr class="trhover">' . PHP_EOL;
             $tbody .= "<td><input type='text' class='datepicker dates' " .
                 "name='cr{$j}date[]' value='{$expdate[$k]}' /></td>" . PHP_EOL;
             $tbody .= "<td><textarea rows='1' cols='80' class='amt' " .
                 "name='cr{$j}amt[]'>{$expamt[$k]}</textarea></td>" . PHP_EOL;
-            $tbody .= "<td><textarea rows='1' cols='20' class='chgd' " .
-                "name='cr{$j}chgd[]'>{$expcharged[$k]}</textarea></td>" . PHP_EOL;
+            $tbody .= "<td>{$fullsel}</td>" . PHP_EOL;
             $tbody .= "<td><textarea  rows='1' cols='30' class='payee' " .
                 "name='cr{$j}pay[]'>{$exppayee[$k]}</textarea></td>" . PHP_EOL;
             $tbody .= "</tr>" . PHP_EOL;
         }
     }
+    // Id items to be initialized by javascript in the 'Deducted From' column:
+    $crsels[$j] = implode("|", $vals);
     $tbody .= '</tbody>' . PHP_EOL;
+
     if ($tally === 0) {
         $tbody = '<tbody><tr><td colspan="4"></td></tr></tbody>';
     }
     array_push($counts, $tally);
     array_push($tbodys, $tbody);
 }
+$js_sels = json_encode($crsels);
 ?>
 <!DOCTYPE html >
 <html lang="en">
@@ -55,23 +64,17 @@ for ($j=0; $j<count($cr); $j++) {
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
     <link href="../styles/budgetEditor.css" type="text/css" rel="stylesheet" />
-    <style type="text/css">
-    textarea { height: 28px; font-size: 16px; padding-left: 5px;
-            padding-bottom: 6px; }
-        .dates { width: 120px; height: 22px; font-size: 16px; }
-        .amt { width: 100px; }
-        #main { margin-left: 24px; }
-        .left { text-align: left; }
-        .right { text-align: right; }
-    </style>
+    <link href="../styles/creditChargeEditor.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>
 <?php require "../main/navbar.php"; ?>
 <div id="main">
-    <h3>You can use this form to edit active charges
-    charged to a credit card.</h3>
+    <br />
+    <h3>You can use this form to edit active (not yet paid) charges
+    charged to your credit card(s).</h3>
     <form id="form" method="post" action="saveEditedCharge.php">
     <div>
         <button id="svchgs" class="btn btn-secondary" type="button">
@@ -80,9 +83,7 @@ for ($j=0; $j<count($cr); $j++) {
         <div id="existing">
         <?php for ($i=0; $i<count($cr); $i++) : ?>
             <input type="hidden" name="cnt[]" value="<?= $counts[$i]?>" />
-            <span class="BoldText">These are your current charges against
-                <?= $cr[$i];?>
-            </span>
+            <h4>These are your current charges against <?= $cr[$i];?></h4>
             <table>
                 <thead>
                     <tr>
@@ -107,19 +108,8 @@ for ($j=0; $j<count($cr); $j++) {
 <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
 <script src="../scripts/dbValidation.js" type="text/javascript"></script>
 <script src="../scripts/menus.js"></script>
-<script type="text/javascript">
-    $(function () {
-        $('.datepicker').datepicker({
-            dateFormat: 'yy-mm-dd'
-        });
-        var $amount = $('.amt');
-        scaleTwoNumber($amount);
-        $('#exp4').addClass('active');
-        $('#svchgs').on('click', function() {
-            $('form').trigger('submit');
-        });
-    });
-</script>
+<script type="text/javascript">var selinits = <?=$js_sels;?>;</script>
+<script src="../scripts/creditChargeEditor.js"></script>
 </body>
 
 </html>

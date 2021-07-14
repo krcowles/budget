@@ -46,10 +46,8 @@ foreach ($expdat as $expense) {
     }
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Edit Expenses Within 30 Days</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -57,30 +55,25 @@ foreach ($expdat as $expense) {
         content="Rolling 3-month budget tracker" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
-    <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/editExpenses.css" type="text/css" rel="stylesheet" />
     <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
-    <style type="text/css">
-        textarea { height: 24px; font-size: 16px; padding-top: 4px; }
-        .type { width: 100px; }
-        .name { width: 130px; }
-        .dates { width: 120px; height: 22px; font-size: 16px; }
-        .amt { width: 100px; }
-        
-        #main { margin-left: 24px; }
-    </style>
+    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+    <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
 </head>
 
 <body>
-
+<?php require "../main/navbar.php"; ?>
 <div id="main">
-    <p class="NormalHeading">You can use this form to edit any expense paid 
-    within the last 30 days. <strong style="color:brown;">NOTE:</strong> Changes
-    to dollar amounts will be reflected in the associated accounts</p>
+    <br />
+    <h4>You can use this form to edit any expense paid 
+    within the last 30 days.<br /><strong style="color:brown;">NOTE:</strong> Changes
+    to dollar amounts below will be reflected in the associated accounts.</h4>
     <form id="form" method="post" action="saveEditedExpenses.php">
     <div>
-        <button id="save">Save All Changes</button>
-        <button id="return" style="margin-left:80px;">Return to Budget</button>
-        <button id="viewer" style="margin-left:80px;">Return to View/Manage</button>
+        <button id="save" type="button" class="btn btn-secondary">
+            Save All Changes</button>
         <br /><br />
         <table>
             <thead>
@@ -99,15 +92,15 @@ foreach ($expdat as $expense) {
             <tbody>
                 <?php for ($i=0; $i<count($expid); $i++) : ?>
                 <tr>
-                    <td><textarea rows="1" cols="12" class="type" 
+                    <td><textarea class="type" 
                         name="type[]"><?= $exptyp[$i];?></textarea></td>
-                    <td><textarea rows="1" cols="15" class="name"
+                    <td><textarea  class="name"
                         name="cdname[]"><?= $expcrd[$i];?></textarea></td>
                     <td><input type="text" class="datepicker dates"
                         name="date[]" value="<?= $expdte[$i];?>" /></td>
-                    <td><textarea rows="1" cols="14" class="amt"
+                    <td><textarea class="amt"
                         name="amt[]"><?= $expamt[$i];?></textarea></td>
-                    <td><textarea  rows="1" cols="30" class="payee"
+                    <td><textarea  class="payee"
                         name="pay[]"><?= $exppye[$i];?></textarea></td>
                     <td><?= $newsel;?></td>
                     <td><input type="hidden" name="exid[]"
@@ -122,16 +115,10 @@ foreach ($expdat as $expense) {
         </table><br />
     </div>
     </form>
-    <p style="clear:left;margin-left:16px;">
-        <a href="http://validator.w3.org/check?uri=referer">
-            <img src="http://www.w3.org/Icons/valid-xhtml10"
-            alt="Valid XHTML 1.0 Strict" height="31" width="88" />
-        </a>
-    </p>
 </div>
 
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-<script src="../scripts/jquery-ui.js" type="text/javascript"></script>
+<script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
+<script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/dbValidation.js" type="text/javascript"></script>
 <script src="../scripts/editExpenses.js" type="text/javascript"></script>
 

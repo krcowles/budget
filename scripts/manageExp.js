@@ -5,11 +5,12 @@
  * @author Ken Cowles
  * @version 2.0 Secure login
  * @version 3.0 Added bootstrap menu at top, revised action invocation
+ * @version 3.1 Modified window.open's to target self
  */
 $(function() {
 
 $('#exp1').addClass('active');
-// remove cancel button and save for appending during actions
+// remove cancel button and save for appending during certain user actions
 var canbtn = $('#canc').detach();
 // reset all checkboxes:
 $('.mvtocr').prop('checked', false);
@@ -54,13 +55,13 @@ function enableCancel(location) {
  */ 
 // edit credit charges
 $('#edcr').on('click', function() {
-    window.open('../edit/editCreditCharges.php');
+    window.open('../edit/editCreditCharges.php', '_self');
 });
 // edit expenses
 $('#edexp').on('click', function() {
     alert("NOTE: You will be able to modify paid expense data from the last\n" +
-        "30 days, including checks and debit card charges. Any changes in the\n" +
-        "$ amounts will be reflected in the associated account(s)");
+        "30 days, including checks and debit card charges. Any changes\n" +
+        "in the $ amounts will be reflected in the associated account(s)");
     window.open('../edit/editExpenses.php', '_self');
 });
 

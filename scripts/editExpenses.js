@@ -4,27 +4,15 @@
  * 
  * @author Ken Cowles
  * @version 2.0 Secure login
+ * @version 2.1 Changed page styling - added navpanel
  */
-$(function() {
-
-$('#return').on('click', function(ev) {
-    ev.preventDefault();
-    let dpg = "../main/displayBudget.php"; 
-    window.open(dpg, "_self");
-});
-$('#viewer').on('click', function(ev) {
-    ev.preventDefault();
-    let vpg = "../utilities/viewCharges.php";
-    window.open(vpg, "_self");
-});
-$(function () {
-    $('.datepicker').datepicker({
-        dateFormat: 'yy-mm-dd'
+ $( function() {
+    $( ".datepicker" ).datepicker({
+        dateFormat: 'yy-mm-dd',
     });
     var $amount = $('.amt');
     scaleTwoNumber($amount);
-});
-
+} );
 // initialize select boxes:
 var $accts = $('span[id^=acct]');
 var init_acct = [];
@@ -37,15 +25,15 @@ $tbldat.each(function(indx) {
     $selbox.val(init_acct[indx]);
 });
 
-$('#form').submit(function(ev) {
-    $('.fullsel').each(function() {
-        if ($(this).val() === '') {
-            ev.preventDefault();
-            alert("All 'Deducted From' select boxes must have a current\n" +
-                "account selected");
-            return true;
-        }
+$('#save').on('click', function() {
+    $('#form').trigger('submit', function(ev) {
+        $('.fullsel').each(function() {
+            if ($(this).val() === '') {
+                ev.preventDefault();
+                alert("All 'Deducted From' select boxes must have a current\n" +
+                    "account selected");
+                return true;
+            }
+        });
     });
-});
-
 });
