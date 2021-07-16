@@ -1,6 +1,9 @@
 #main {
     margin-left: 24px;
 }
+td {
+    padding-bottom: 5px;
+}
 textarea {
     height: 36px;
     font-size: 16px;
@@ -26,7 +29,7 @@ input {
 .amt {
     width: 100px;
 }
-.fullsel {
+.fullsel,.tsels {
     position: relative;
     top: -1px;
     height: 36px;

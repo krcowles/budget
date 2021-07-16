@@ -4,7 +4,7 @@
  * 
  * @author Ken Cowles
  * @version 2.0 Secure login
- * @version 2.1 Changed page styling - added navpanel
+ * @version 2.1 Changed page styling & added navpanel
  */
  $( function() {
     $( ".datepicker" ).datepicker({
@@ -14,15 +14,23 @@
     scaleTwoNumber($amount);
 } );
 // initialize select boxes:
-var $accts = $('span[id^=acct]');
+var $tbldat = $('table tbody tr');
+// fullsels inits
+var $accts = $('input[name^=acct]');
 var init_acct = [];
 for (var k=0; k<$accts.length; k++) {
-    init_acct.push($accts[k].textContent);
+    init_acct.push($($accts[k]).val());
 }
-var $tbldat = $('table tbody tr');
 $tbldat.each(function(indx) {
-    var $selbox = $(this).children().eq(5).children().eq(0);
+    var $row_children = $(this).children();
+    // fullsel
+    var $selbox = $row_children.eq(4).children().eq(0);
     $selbox.val(init_acct[indx]);
+    // tsels
+    if ($row_children.eq(8).text() !== 'Check or Draft') {
+        let cardname = $row_children.eq(8).text();
+        $row_children.eq(0).children().eq(0).val(cardname);
+    }
 });
 
 $('#save').on('click', function() {

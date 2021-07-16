@@ -13,6 +13,7 @@ $rec_cd = filter_input(INPUT_GET, 'card');
 
 require "getCards.php";
 require "getExpenses.php";
+require "timeSetup.php";
  // get expenses for the chosen card:
 $card_data = [];
 for ($i=0; $i<count($expamt); $i++) {
@@ -82,9 +83,12 @@ for ($i=0; $i<count($expamt); $i++) {
     </form>
 </div>
 
+<?php require_once "../main/bootstrapModals.html"; ?>
+
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
+<script src="../scripts/menus.js"></script>
 <script src="../scripts/reconcile.js" type="text/javascript"></script>
 </body>
 

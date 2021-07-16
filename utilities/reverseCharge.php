@@ -119,6 +119,8 @@ if ($charges) {
 </div>
 <br />
 
+<?php require_once "../main/bootstrapModals.html"; ?>
+
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/jquery-1.12.1.js"></script>

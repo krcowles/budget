@@ -11,6 +11,7 @@
 session_start();
 require "../utilities/getAccountData.php";
 require "../utilities/timeSetup.php";
+require "../utilities/getCards.php";
 
 // add 'blank' option to $fullsel:
 $optloc = strpos($fullsel, "<option");
@@ -29,6 +30,8 @@ $expdte = [];
 $exppye = [];
 $expact = [];
 
+// the following variable will hold the sequential data for any debit cards present:
+$type_inits = [];
 $expreq = "SELECT * FROM `Charges` WHERE `userid` = :uid AND `method` <> 'Credit';";
 $data = $pdo->prepare($expreq);
 $data->execute(["uid" => $_SESSION['userid']]);
@@ -45,6 +48,12 @@ foreach ($expdat as $expense) {
         array_push($expact, $expense['acctchgd']);
     }
 }
+$typesel = '<select class="tsels" name="types[]"><option value="Check">' .
+    'Check or Draft</option>';
+for ($k=0; $k<count($dr); $k++) {
+    $typesel .= '<option value="' . $dr[$k] . '">' . $dr[$k] . '</option>';
+}
+$typesel .= '</select>' . PHP_EOL;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,8 +68,6 @@ foreach ($expdat as $expense) {
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="../styles/editExpenses.css" type="text/css" rel="stylesheet" />
     <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
-    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-    <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -79,11 +86,11 @@ foreach ($expdat as $expense) {
             <thead>
                 <tr>
                     <th>Type:</th>
-                    <th>[Debit Card]</th>
                     <th>Date:</th>
                     <th>Amount</th>
                     <th>Payee:</th>
                     <th>Deducted From:</th>
+                    <th style="visibility:hidden;"></th>
                     <th style="visibility:hidden;"></th>
                     <th style="visibility:hidden;"></th>
                     <th style="visibility:hidden;"></th>
@@ -92,10 +99,7 @@ foreach ($expdat as $expense) {
             <tbody>
                 <?php for ($i=0; $i<count($expid); $i++) : ?>
                 <tr>
-                    <td><textarea class="type" 
-                        name="type[]"><?= $exptyp[$i];?></textarea></td>
-                    <td><textarea  class="name"
-                        name="cdname[]"><?= $expcrd[$i];?></textarea></td>
+                    <td><?=$typesel;?></td>
                     <td><input type="text" class="datepicker dates"
                         name="date[]" value="<?= $expdte[$i];?>" /></td>
                     <td><textarea class="amt"
@@ -107,8 +111,9 @@ foreach ($expdat as $expense) {
                         value ="<?= $expid[$i];?>" /></td>
                     <td><input type="hidden" name="org[]"
                         value="<?= $expamt[$i];?>" /></td>
-                    <td style="display:none;">
-                        <span id="acct<?= $i;?>"><?= $expact[$i];?></span></td>
+                    <td><input type="hidden" name="acct[]"
+                        value="<?=$expact[$i];?>" /></td>
+                    <td style="display:none;"><?=$expcrd[$i];?></td>
                 </tr>
                 <?php endfor; ?>
             </tbody>
@@ -117,8 +122,14 @@ foreach ($expdat as $expense) {
     </form>
 </div>
 
+<?php require_once "../main/bootstrapModals.html"; ?>
+
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
+<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+<script src="../scripts/jquery-ui.js" type="text/javascript"></script>
+<script src="../scripts/menus.js"></script>
+<script src="../scripts/editExpenses.js"></script>
 <script src="../scripts/dbValidation.js" type="text/javascript"></script>
 <script src="../scripts/editExpenses.js" type="text/javascript"></script>
 
