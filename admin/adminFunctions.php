@@ -71,7 +71,8 @@ function exportDatabase($pdo, $mysqli, $name, $tables, $dwnld, $backup_name = fa
         }
         $content .= "\n\n\n";
     }
-    $backup_name = $backup_name ? $backup_name : $name.".sql";
+    // if $name is supplied, use it...
+    $backup_name = $backup_name ? $backup_name : $name . ".sql";
     if ($dwnld !== 'N') {
         // save the new db to the standard data directory
         $loc = sys_get_temp_dir() . '/' . $backup_name;
@@ -80,6 +81,13 @@ function exportDatabase($pdo, $mysqli, $name, $tables, $dwnld, $backup_name = fa
             include 'zipArchive.php';
         } elseif ($dwnld === 'S') {
             include 'buildPhar.php';
+        } elseif ($dwnld === 'A') {
+            $archive_loc = "../database/" . $backup_name;
+            file_put_contents($archive_loc, $content);
+            // Drop the table now that it is saved
+            $dropReq = "DROP TABLE {$name};";
+            $drop = $pdo->query($dropReq);
+            //$drop->execute([$saved_name]);
         } else {
             throw new Exception("Unrecognized parameter in query string");
         }

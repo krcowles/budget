@@ -18,6 +18,10 @@ if (isset($_SESSION['userid'])) {
 } else {
     die("Your session has expired");
 }
+/**
+ * NOTE: When working on other sites, the userid for admin may be different and
+ * still active! In that case, log out and re-log in (admin/logout.php)
+ */
 $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 ?>
 <!DOCTYPE html>

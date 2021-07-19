@@ -38,6 +38,9 @@ $('#drall').on('click', function() {
 $('#ldall').on('click', function() {
     window.open('load_all_tables.php', "_blank");
 });
+$('#show').on('click', function()  {
+    window.open('show_tables.php', "_blank_");
+});
 /*
 $('#swdb').on('click', function() {
     window.open('switchDb.php');
@@ -76,6 +79,54 @@ $('#cleanPix').on('click', function() {
     window.open('cleanPix.php', "_blank");
 });
 */
+var arch_rdy = true;
+$('#arch').on('click', function() {
+    if ($('#achoice').css('display') === 'none') {
+        $('#achoice').show();
+    } else {
+        $('#achoice').hide();
+    }
+});
+$('#ayr').on('change', function() {
+    let yr = $(this).val();
+    if (yr !== 'x') {
+        if (archives.indexOf(yr) !== -1) {
+            alert("This year already has been archived");
+            arch_rdy = false;
+        } else {
+            arch_rdy = true;
+        }
+    }
+});
+$('#mkarch').on('click', function() {
+    let archiveyr = $('#ayr').val();
+    if (archiveyr === 'x') {
+        alert("No year has been selected");
+        return;
+    } else {
+        if (arch_rdy) {
+            $proceed = confirm("NOTICE: The data in the 'Charges' table will\n no longer" +
+                " contain data from " + archiveyr);
+            if ($proceed) {
+                $.ajax({
+                    url: 'chargesArchive.php?yr=' + archiveyr,
+                    method: 'get',
+                    success: function() {
+                        alert(archiveyr + " has been archived and is saved in\n" +
+                            "the database directory as archive" + archiveyr + ".sql");
+                    },
+                    error: function(jqXHR) {
+                        alert("Failed to make archive");
+                    }
+                });
+            } else {
+                return;
+            }
+        } else {
+            alert("This year already has been archived");
+        }
+    }
+});
 $('#version').on('click', function() {
     $.ajax({
         url: 'version.php',
@@ -109,9 +160,6 @@ $('#lst').on('click', function() {
 });
 $('#ehdel').on('click', function() {
     window.open("reldel.php?act=del","_blank");
-});
-$('#show').on('click', function()  {
-    window.open('show_tables.php', "_blank_");
 });
 $('#drop').on('click', function() {
     var dtarg = 'drop_table.php?tbl=' + $('#dtbl').val();
