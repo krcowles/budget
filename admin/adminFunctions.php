@@ -82,8 +82,11 @@ function exportDatabase($pdo, $mysqli, $name, $tables, $dwnld, $backup_name = fa
         } elseif ($dwnld === 'S') {
             include 'buildPhar.php';
         } elseif ($dwnld === 'A') {
+            $arch = str_replace(
+                "CREATE TABLE", "CREATE TABLE IF NOT EXISTS", $content
+            );
             $archive_loc = "../database/" . $backup_name;
-            file_put_contents($archive_loc, $content);
+            file_put_contents($archive_loc, $arch);
             // Drop the table now that it is saved
             $dropReq = "DROP TABLE {$name};";
             $drop = $pdo->query($dropReq);

@@ -23,7 +23,7 @@ foreach ($db_files as $file) {
 if (count($archives) > 0) {
     $js_archs = json_encode($archives);
 } else {
-    $js_archs = '';
+    $js_archs = '""';
 }
 ?>
 <!DOCTYPE html>
@@ -73,6 +73,15 @@ if (count($archives) > 0) {
             <button id="mkarch" type="button" class="btn btn-warning">
                 Archive It</button>
         </div>
+        <button id="ldarch" type="button" class="btn btn-secondary">
+            Load Archive</button><br />
+        <div id="ldayr">
+            <select id="ldyr">
+                <option value="x">Select Year To Load</option>
+            </select>&nbsp;&nbsp;
+            <button id="larch" type="button" class="btn btn-warning">
+                Load It</button>
+        </div>
         <button id="lo" type="button" class="btn btn-secondary">
             Log out admin</button><br />
         <button id="version" type="button" class="btn btn-secondary">
@@ -80,6 +89,7 @@ if (count($archives) > 0) {
         <button id="phpinfo" type="button" class="btn btn-secondary">
             PHPInfo</button><br />
     </fieldset>
+</div>
    
 <script type="text/javascript">
     var archives = <?=$js_archs;?>;
