@@ -180,7 +180,7 @@ for ($p=0; $p<count($dr); $p++) {
         <table class="drtbl sortable">
             <thead>
                 <tr>
-                    <th data-sort="amt" class="ascending">Date Incurred</th>
+                    <th data-sort="std" class="ascending">Date Incurred</th>
                     <th data-sort="amt">Amount</th>
                     <th data-sort="std">Payee</th>
                     <th data-sort="std">Deducted From</th>
@@ -199,7 +199,7 @@ for ($p=0; $p<count($dr); $p++) {
             <table class="drtbl sortable">
                 <thead>
                     <tr>
-                        <th data-sort="amt" class="ascending">Date Incurred</th>
+                        <th data-sort="std" class="ascending">Date Incurred</th>
                         <th data-sort="amt">Amount</th>
                         <th data-sort="std">Payee</th>
                         <th data-sort="std">Deducted From</th>
