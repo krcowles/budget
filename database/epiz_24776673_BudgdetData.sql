@@ -16,74 +16,75 @@ CREATE TABLE `Budgets` (
   `autopd` varchar(10) DEFAULT NULL,
   `funded` smallint(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=82 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=latin1;
 
 
 INSERT INTO Budgets VALUES
-('1','krc','4','Tithe','1','A','180','180.00','0.00','180.00','','0','','180'),
-('2','krc','4','Mortgage','2','A','1676','26.22','26.46','26.70','','0','','1676'),
-('3','krc','4','Electric','4','A','70','211.53','228.14','209.73','','0','','70'),
-('4','krc','4','Natural Gas','5','A','50','145.95','178.61','212.41','','0','','50'),
-('5','krc','4','Auto Gas','6','A','80','376.06','334.18','388.77','','0','','80'),
-('7','krc','4','Chiro','8','A','195','12.49','13.31','14.13','Visa','20','07','195'),
-('8','krc','4','Medical/Dental','9','A','275','2895.80','1811.18','1904.96','','0','','275'),
-('9','krc','4','Cash','10','A','200','140.00','180.00','280.00','','0','','200'),
-('10','krc','4','TV/Internet','11','A','170','6.30','1.20','6.10','Wells Fargo','16','07','170'),
-('11','krc','4','Auto Insurance','13','A','130','942.97','427.46','557.46','','0','','130'),
-('12','krc','4','Auto Maintenance','14','A','100','546.77','680.04','769.28','','0','','100'),
-('13','krc','4','Appliances/Repair','15','A','100','407.67','507.67','607.67','','0','','100'),
-('14','krc','4','Home Misc','16','A','287','1362.43','1487.58','1705.07','','0','','287'),
-('15','krc','4','Verizon','17','A','70','73.65','78.71','83.77','Visa','7','07','70'),
-('16','krc','4','Combined','18','A','135','93.31','263.31','398.31','','0','','135'),
-('17','krc','4','Clothing','19','A','30','183.70','213.70','102.13','','0','','30'),
-('18','krc','4','Health Items','20','A','50','32.20','32.25','82.25','','0','','50'),
-('19','krc','4','Vision','21','A','30','502.96','532.96','551.10','','0','','30'),
-('20','krc','4','Travel','23','A','250','1538.71','1788.71','2038.71','','0','','250'),
-('21','krc','4','Charities','24','A','30','98.20','128.20','158.20','','0','','30'),
-('23','krc','4','Wine','26','A','50','27.03','14.33','64.33','','0','','50'),
-('24','krc','4','Entertainment','27','A','250','723.56','524.75','641.65','','0','','250'),
-('25','krc','4','3C Annual Fee','30','A','44','220.00','264.00','308.00','','0','','44'),
-('26','krc','4','Groceries','3','A','1000','169.31','227.98','781.25','','0','','1000'),
-('27','krc','4','Gifts','22','A','50','106.63','91.63','39.39','','0','','50'),
-('28','krc','4','Christmas','25','A','100','500.00','600.00','700.00','','0','','100'),
-('29','krc','4','Undistributed Funds','31','T','0','107.00','16268.56','16272.28','','0','','0'),
-('30','krc','4','Computer','32','T','0','0.00','47.67','47.67','','0','','0'),
-('31','krc','4','Escrow Account','30002','T','0','294.24','294.24','294.24','','0','','0'),
+('1','krc','4','Tithe','1','A','180','0.00','0.00','0.00','','0','','180'),
+('2','krc','4','Mortgage','2','A','1676','26.46','26.70','26.94','','0','','1676'),
+('3','krc','4','Electric','4','A','70','228.14','209.73','184.51','','0','','70'),
+('4','krc','4','Natural Gas','5','A','50','178.61','212.41','245.40','','0','','50'),
+('5','krc','4','Auto Gas','6','A','80','334.18','351.60','317.80','','0','','80'),
+('7','krc','4','Chiro','8','A','195','13.31','14.13','14.95','Visa','20','08','195'),
+('8','krc','4','Medical/Dental','9','A','475','1811.18','520.06','-885.39','','0','','475'),
+('9','krc','4','Cash','10','A','200','180.00','280.00','280.00','','0','','200'),
+('10','krc','4','TV/Internet','11','A','170','1.20','6.10','11.00','Wells Fargo','16','08','170'),
+('11','krc','4','Auto Insurance','13','A','130','427.46','557.46','585.24','','0','','130'),
+('12','krc','4','Auto Maintenance','14','A','100','680.04','269.28','369.28','','0','','100'),
+('13','krc','4','Appliances/Repair','15','A','100','507.67','607.67','707.67','','0','','100'),
+('14','krc','4','Home Misc','16','A','170','1487.58','104.11','252.54','','0','','170'),
+('15','krc','4','Verizon','17','A','70','78.71','83.77','88.85','Visa','7','08','70'),
+('16','krc','4','Combined','18','A','135','263.31','398.31','456.86','','0','','135'),
+('17','krc','4','Clothing','19','A','30','213.70','102.13','132.13','','0','','30'),
+('18','krc','4','Health Items','20','A','50','32.25','-17.57','32.43','','0','','50'),
+('19','krc','4','Vision','21','A','30','532.96','323.10','353.10','','0','','30'),
+('20','krc','4','Travel','23','A','250','1788.71','38.71','288.71','','0','','250'),
+('21','krc','4','Charities','24','A','30','128.20','158.20','188.20','','0','','30'),
+('23','krc','4','Wine','26','A','40','14.33','64.33','-36.91','','0','','40'),
+('24','krc','4','Entertainment','27','A','250','524.75','627.86','601.29','','0','','250'),
+('25','krc','4','3C Annual Fee','30','A','44','264.00','308.00','352.00','','0','','44'),
+('26','krc','4','Groceries','3','A','1000','227.98','561.04','330.38','','0','','1000'),
+('27','krc','4','Gifts','22','A','50','91.63','39.39','44.97','','0','','50'),
+('28','krc','4','Christmas','25','A','100','600.00','700.00','800.00','','0','','100'),
+('29','krc','4','Undistributed Funds','31','T','0','16268.56','0.28','0.82','','0','','0'),
+('30','krc','4','Computer','32','T','0','47.67','47.67','47.67','','0','','0'),
+('31','krc','4','Escrow Account','30002','T','0','294.24','294.24','0.00','','0','','0'),
 ('32','krc','4','Crowns','30003','T','0','2400.00','2400.00','2400.00','','0','','0'),
-('33','krc','4','2020 Taxes','30004','T','0','114.98','114.98','0.00','','0','','0'),
-('34','krc','4','Tires','30005','T','40','477.50','0.00','154.98','','0','','40'),
-('41','Albuquerque Gal','11','Undistributed Funds','30000','T','0','0.00','0.30','100.70','','0','','0'),
+('33','krc','4','2020 Taxes','30004','T','0','114.98','0.00','0.00','','0','','0'),
+('34','krc','4','Tires','30005','T','25','0.00','154.98','179.98','','0','','25'),
+('41','Albuquerque Gal','11','Undistributed Funds','30000','T','0','0.30','100.70','133.21','','0','','0'),
 ('42','Albuquerque Gal','11','Medicare','30001','T','0','4666.14','4666.14','4666.14','','0','','0'),
-('43','Albuquerque Gal','11','Savings','30002','T','100','2300.00','2400.00','2265.51','','0','','100'),
-('44','Albuquerque Gal','11','Computer/phone','30003','T','11','746.00','757.00','768.00','','0','','11'),
-('45','Albuquerque Gal','11','Medical ','30004','T','98','99.06','1219.99','1317.99','','0','','98'),
+('43','Albuquerque Gal','11','Savings','30002','T','100','2400.00','2265.51','2365.51','','0','','100'),
+('44','Albuquerque Gal','11','Computer/phone','30003','T','11','757.00','768.00','779.00','','0','','11'),
+('45','Albuquerque Gal','11','Medical ','30004','T','98','1219.99','1317.99','1400.69','','0','','83'),
 ('46','Albuquerque Gal','11','Tmp5','30005','T','0','0.00','0.00','0.00','','0','','0'),
-('47','Albuquerque Gal','11','cash','1','A','240','153.00','206.11','241.00','','0','','240'),
-('48','Albuquerque Gal','11','vet/cat','2','A','75','1418.90','1493.90','1516.62','','0','','75'),
-('49','Albuquerque Gal','11','hair','3','A','21','45.00','66.00','87.00','','0','','21'),
-('50','Albuquerque Gal','11','Gas','4','A','70','650.01','691.22','731.38','','0','','70'),
-('51','Albuquerque Gal','11','Class','5','A','70','456.00','384.69','454.69','','0','','70'),
-('52','Albuquerque Gal','11','Car maintenance ','6','A','70','1104.00','1174.00','1244.00','','0','','70'),
-('53','Albuquerque Gal','11','Dentist ','7','A','50','850.00','900.00','950.00','','0','','50'),
-('54','Albuquerque Gal','11','Birthday','8','A','20','301.00','275.32','295.32','','0','','20'),
-('55','Albuquerque Gal','11','Christmas','9','A','20','300.36','320.36','340.36','','0','','20'),
-('56','Albuquerque Gal','11','Glasses','10','A','20','540.00','560.00','580.00','','0','','20'),
-('57','Albuquerque Gal','11','Bird','11','A','20','83.47','81.91','101.91','','0','','20'),
-('58','Albuquerque Gal','11','Phone','12','A','67','75.00','142.00','70.00','','0','','67'),
-('59','Albuquerque Gal','11','Vitamins','13','A','20','129.25','149.25','169.25','','0','','20'),
-('60','Albuquerque Gal','11','Travel','14','A','20','265.00','285.00','305.00','','0','','20'),
-('61','Albuquerque Gal','11','Misc','15','A','50','15.00','65.00','110.83','','0','','50'),
-('62','Albuquerque Gal','11','Massage','16','A','20','280.00','300.00','320.00','','0','','20'),
+('47','Albuquerque Gal','11','cash','1','A','240','206.11','221.60','240.00','','0','','240'),
+('48','Albuquerque Gal','11','vet/cat','2','A','75','1493.90','1516.62','1500.59','','0','','75'),
+('49','Albuquerque Gal','11','hair','3','A','21','66.00','87.00','108.00','','0','','21'),
+('50','Albuquerque Gal','11','Gas','4','A','70','691.22','731.38','801.38','','0','','70'),
+('51','Albuquerque Gal','11','Class','5','A','70','384.69','454.69','524.69','','0','','70'),
+('52','Albuquerque Gal','11','Car maintenance ','6','A','70','1174.00','1244.00','1314.00','','0','','70'),
+('53','Albuquerque Gal','11','Dentist ','7','A','50','900.00','950.00','1000.00','','0','','50'),
+('54','Albuquerque Gal','11','Birthday','8','A','20','275.32','295.32','315.32','','0','','20'),
+('55','Albuquerque Gal','11','Christmas','9','A','20','320.36','340.36','360.36','','0','','20'),
+('56','Albuquerque Gal','11','Glasses','10','A','20','560.00','580.00','600.00','','0','','20'),
+('57','Albuquerque Gal','11','Bird','11','A','20','81.91','101.91','121.91','','0','','20'),
+('58','Albuquerque Gal','11','Phone','12','A','67','142.00','70.00','137.00','','0','','67'),
+('59','Albuquerque Gal','11','Vitamins','13','A','20','149.25','169.25','120.43','','0','','20'),
+('60','Albuquerque Gal','11','Travel','14','A','20','285.00','305.00','325.00','','0','','20'),
+('61','Albuquerque Gal','11','Misc','15','A','50','65.00','110.83','129.59','','0','','50'),
+('62','Albuquerque Gal','11','Massage','16','A','20','300.00','320.00','340.00','','0','','20'),
 ('72','','13','Tmp1','30001','T','0','0.00','0.00','0.00','','0','','0'),
 ('73','','13','Tmp2','30002','T','0','0.00','0.00','0.00','','0','','0'),
-('69','Albuquerque Gal','11','Amazon Prime','17','A','11','17.90','28.90','39.90','','0','','11'),
+('69','Albuquerque Gal','11','Amazon Prime','17','A','11','28.90','39.90','50.90','','0','','11'),
 ('74','','13','Tmp3','30003','T','0','0.00','0.00','0.00','','0','','0'),
 ('75','','13','Tmp4','30004','T','0','0.00','0.00','0.00','','0','','0'),
 ('76','','13','Tmp5','30005','T','0','0.00','0.00','0.00','','0','','0'),
 ('71','','13','Undistributed Funds','30000','T','0','0.00','0.00','0.00','','0','','0'),
 ('70','','4','Genworth LTC Policy','29','A','0','4.97','4.97','4.97','','0','','0'),
-('81','N/A','4','Car Loan','12','A','213','0.00','0.00','213.00','','0','','213'),
-('80','N/A','4','Hearing Aids','28','A','50','0.00','0.00','50.00','','0','','50');
+('81','N/A','4','CarMax Loan','12','A','155','0.00','213.00','368.00','','0','','155'),
+('80','N/A','4','Hearing Aids','28','A','50','0.00','50.00','400.00','','0','','50'),
+('83','Not used','11','Netflix','18','A','16','0.00','0.00','31.08','','0','','16');
 
 
 
@@ -121,15 +122,60 @@ CREATE TABLE `Charges` (
   `acctchgd` varchar(60) NOT NULL,
   `paid` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`expid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1441 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1520 DEFAULT CHARSET=latin1;
 
 
 INSERT INTO Charges VALUES
+('1486',NULL,'4','Credit','Visa','2021-08-18','36.62','Flying Star - 7/23','Entertainment','Y'),
+('1485',NULL,'4','Credit','Visa','2021-08-18','57.78','Albertsons - 7/21','Groceries','Y'),
+('1484',NULL,'4','Credit','Visa','2021-08-18','24.02','Jason\'s Deli - 7/20','Entertainment','Y'),
+('1482',NULL,'4','Credit','Visa','2021-08-18','13.42','Village Pizza','Entertainment','Y'),
+('1481',NULL,'4','Credit','Visa','2021-08-17','99.60','Albertsons','Groceries','N'),
+('1480',NULL,'4','Debit','Wells Fargo','2021-08-17','165.10','Century Link','TV/Internet','Y'),
+('1479',NULL,'11','Credit','MC','2021-08-14','19.79','Petco','vet/cat','Y'),
+('1478',NULL,'4','Credit','Visa','2021-08-14','57.43','Sprouts','Groceries','N'),
+('1477',NULL,'4','Credit','Visa','2021-08-14','58.14','Albertsons','Groceries','N'),
+('1476',NULL,'4','Credit','Visa','2021-08-13','22.72','Jason\'s Deli','Entertainment','N'),
+('1475',NULL,'4','Credit','Visa','2021-08-12','42.93','Murphy\'s','Auto Gas','N'),
+('1474',NULL,'4','Credit','Citi','2021-08-12','68.98','Costco','Groceries','N'),
+('1473',NULL,'4','Credit','Visa','2021-08-12','44.52','Albertsons','Groceries','Y'),
+('1472',NULL,'4','Credit','Visa','2021-08-10','27.06','Jaons\'s Deli','Entertainment','Y'),
+('1471',NULL,'4','Credit','Visa','2021-08-08','64.92','Verizon','Verizon','Y'),
+('1470',NULL,'11','Credit','MC','2021-08-07','30.72','amazon ricotta','cash','Y'),
+('1469',NULL,'11','Credit','MC','2021-08-07','46.29','Chewy','vet/cat','Y'),
+('1468',NULL,'4','Credit','Visa','2021-08-07','65.48','Albertsons','Groceries','Y'),
+('1467',NULL,'4','Credit','Visa','2021-08-07','12.78','Jasons Deli','Entertainment','Y'),
+('1466',NULL,'4','Debit','Wells Fargo','2021-08-07','100.00','Cash','Cash','Y'),
 ('39','Albuquerque Gal','11','Credit','Kohls','2020-03-13','76.91','Kohls','cash','Y'),
 ('40','Albuquerque Gal','11','Credit','Kohls','2020-03-12','16.16','Kohls','cash','Y'),
+('1465',NULL,'4','Check','Check or Draft','2021-08-06','58.45','Road Runner Waste','Combined','Y'),
+('1464',NULL,'4','Check','Check or Draft','2021-08-06','95.22','PNM','Electric','Y'),
+('1463',NULL,'4','Check','Check or Draft','2021-08-06','17.01','NM Gas','Natural Gas','Y'),
+('1462',NULL,'4','Credit','Visa','2021-08-05','31.28','Murphy\'s','Auto Gas','Y'),
+('1461',NULL,'4','Credit','Visa','2021-08-05','56.63','CVS','Medical/Dental','Y'),
+('1460',NULL,'4','Credit','Visa','2021-08-03','24.86','Sprouts','Groceries','Y'),
+('1459',NULL,'4','Credit','Visa','2021-08-03','61.20','Albertsons','Groceries','Y'),
+('1458',NULL,'4','Check','Check or Draft','2021-08-01','1675.76','Nationstar Mtge','Mortgage','Y'),
+('1457',NULL,'4','Credit','Visa','2021-07-31','13.79','Jasons Deli','Entertainment','Y'),
+('1456',NULL,'4','Credit','Visa','2021-07-31','57.50','Sprouts','Groceries','Y'),
+('1455',NULL,'4','Credit','Visa','2021-07-31','123.41','Albertsons','Groceries','Y'),
+('1454',NULL,'4','Credit','Visa','2021-07-30','10.22','Walgreens','Medical/Dental','Y'),
+('1453',NULL,'4','Check','Check or Draft','2021-07-29','18000.00','Carmax','Undistributed Funds','Y'),
+('1452',NULL,'4','Credit','Visa','2021-07-28','61.72','CVS','Medical/Dental','Y'),
+('1451',NULL,'4','Check','Check or Draft','2021-07-28','105.00','Karen - reimburse','Medical/Dental','Y'),
+('1450',NULL,'4','Credit','Visa','2021-07-27','37.17','Murphys','Auto Gas','Y'),
+('1449',NULL,'4','Credit','Visa','2021-07-25','39.30','Albertsons','Groceries','Y'),
+('1448',NULL,'4','Credit','Visa','2021-07-23','10.76','GNC','Health Items','Y'),
+('1447',NULL,'4','Check','Check or Draft','2021-07-22','2600.96','Andersen Windows','Home Misc','Y'),
+('1446',NULL,'4','Check','Check or Draft','2021-07-22','180.00','Adidam Midwest','Tithe','Y'),
+('1445',NULL,'11','Credit','MC','2021-07-22','19.40','amazon','cash','Y'),
+('1444',NULL,'4','Credit','Visa','2021-07-21','940.42','Presbyterian','Medical/Dental','Y'),
+('1443',NULL,'4','Credit','Visa','2021-07-21','267.54','Cottonwood Smiles','Medical/Dental','Y'),
+('1442',NULL,'4','Credit','Visa','2021-07-21','67.30','Amazon - Glyco','Health Items','Y'),
+('1441',NULL,'4','Credit','Visa','2021-07-21','21.76','Amazon - floss','Health Items','Y'),
 ('1440',NULL,'4','Debit','Wells Fargo','2021-07-21','100.00','Cash','Cash','Y'),
-('1439',NULL,'4','Credit','Visa','2021-07-21','194.18','HealthQuest','Chiro','N'),
-('1438',NULL,'11','Credit','Kohls','2021-07-19','4.17','Kohls','Misc','N'),
+('1439',NULL,'4','Credit','Visa','2021-07-21','194.18','HealthQuest','Chiro','Y'),
+('1438',NULL,'11','Credit','Kohls','2021-07-19','4.17','Kohls','Misc','Y'),
 ('86','Albuquerque Gal','11','Credit','MC','2020-01-02','34.63','Walmart','cash','Y'),
 ('87','krc','4','Credit','Citi','2020-01-02','34.93','Albertsons','Groceries','Y'),
 ('88','krc','4','Credit','Visa','2020-01-03','727.52','Geico','Auto Insurance','Y'),
@@ -179,7 +225,8 @@ INSERT INTO Charges VALUES
 ('132','Albuquerque Gal','11','Credit','MC','2020-01-16','21.05','murphys gas','cash','Y'),
 ('133','krc','4','Credit','Visa','2020-01-20','150.23','HealthQuest','Chiro','Y'),
 ('134','krc','4','Credit','Citi','2020-01-20','7.98','Sprouts','Groceries','Y'),
-('135','krc','4','Credit','Citi','2020-01-20','49.97','Albertsons','Groceries','Y'),
+('135','krc','4','Credit','Citi','2020-01-20','49.97','Albertsons','Groceries','Y');
+INSERT INTO Charges VALUES
 ('136','krc','4','Credit','Visa','2020-01-20','31.88','Stacy\'s Hallmark','Gifts','Y'),
 ('137','krc','4','Credit','Citi','2020-01-21','12.91','Petco','Groceries','Y'),
 ('138','krc','4','Credit','Citi','2020-01-21','16.95','Albertsons','Groceries','Y'),
@@ -224,8 +271,7 @@ INSERT INTO Charges VALUES
 ('177','krc','4','Credit','Visa','2020-02-05','112.48','Duluth Trading','Clothing','Y'),
 ('178','krc','4','Credit','Citi','2020-02-06','2.38','Albertsons','Groceries','Y'),
 ('179','krc','4','Credit','Citi','2020-02-06','3.94','Sprouts','Groceries','Y'),
-('180','krc','4','Credit','Visa','2020-02-07','69.03','Verizon','Verizon','Y');
-INSERT INTO Charges VALUES
+('180','krc','4','Credit','Visa','2020-02-07','69.03','Verizon','Verizon','Y'),
 ('181','krc','4','Credit','Citi','2020-02-07','43.46','Albertsons','Groceries','Y'),
 ('182','krc','4','Credit','Citi','2020-02-07','8.66','Sprouts','Groceries','Y'),
 ('183','krc','4','Check','check','2020-02-08','58.45','Road Runner Waste','Combined','N'),
@@ -280,7 +326,8 @@ INSERT INTO Charges VALUES
 ('233','krc','4','Check','check','2020-02-25','1.00','jkj','Groceries','N'),
 ('234','krc','4','Credit','Citi','2020-02-26','48.20','Sprouts','Groceries','Y'),
 ('235','krc','4','Credit','Visa','2020-02-28','42.06','Moons','Groceries','Y'),
-('236','krc','4','Credit','Visa','2020-02-28','22.29','Murphys','Auto Gas','Y'),
+('236','krc','4','Credit','Visa','2020-02-28','22.29','Murphys','Auto Gas','Y');
+INSERT INTO Charges VALUES
 ('237','krc','4','Credit','Visa','2020-02-28','6.84','Staples','2019 Taxes','Y'),
 ('238','krc','4','Credit','Citi','2020-02-28','23.65','Albertsons','Groceries','Y'),
 ('239','krc','4','Credit','Citi','2020-02-28','26.69','Sprouts','Groceries','Y'),
@@ -325,8 +372,7 @@ INSERT INTO Charges VALUES
 ('278','krc','4','Credit','Visa','2020-03-17','19.71','Jasons Deli','Entertainment','Y'),
 ('279','Albuquerque Gal','11','Credit','MC','2020-03-18','47.92','pp natures guru','cash','Y'),
 ('280','krc','4','Credit','Citi','2020-03-19','30.93','Sprouts','Groceries','Y'),
-('281','krc','4','Credit','Citi','2020-03-19','31.98','Sprouts','Groceries','Y');
-INSERT INTO Charges VALUES
+('281','krc','4','Credit','Citi','2020-03-19','31.98','Sprouts','Groceries','Y'),
 ('348','krc','4','Credit','Citi','2020-03-19','33.55','Petco','Groceries','Y'),
 ('283','krc','4','Debit','Wells Fargo','2020-03-19','120.00','ATM','Cash','N'),
 ('284','krc','4','Credit','Visa','2020-03-19','30.67','Lowe\'s - Salt','Home Misc','Y'),
@@ -381,7 +427,8 @@ INSERT INTO Charges VALUES
 ('336','Albuquerque Gal','11','Credit','MC','2020-04-13','73.86','pp karen g','cash','Y'),
 ('337','krc','4','Debit','Wells Fargo','2020-04-14','120.00','ATM','Cash','N'),
 ('338','krc','4','Credit','Visa','2020-04-14','16.69','Murphy\'s','Auto Gas','Y'),
-('339','krc','4','Debit','Wells Fargo','2020-04-16','162.37','Century Link','TV/Internet','N'),
+('339','krc','4','Debit','Wells Fargo','2020-04-16','162.37','Century Link','TV/Internet','N');
+INSERT INTO Charges VALUES
 ('340','krc','4','Credit','Visa','2020-04-16','25.07','Lowe\'s','Home Misc','Y'),
 ('341','krc','4','Credit','Citi','2020-04-16','33.75','Petco','Groceries','Y'),
 ('342','krc','4','Credit','Visa','2020-04-16','28.23','5 Guys','Entertainment','Y'),
@@ -426,8 +473,7 @@ INSERT INTO Charges VALUES
 ('385','Albuquerque Gal','11','Credit','MC','2020-05-05','95.55','PP Felix','cash','Y'),
 ('386','krc','4','Check','check','2020-05-05','58.45','Road Runner Waste','Combined','N'),
 ('387','krc','4','Credit','Visa','2020-05-05','40.99','Apple (Cables)','Undistributed Funds','Y'),
-('388','krc','4','Credit','Visa','2020-05-05','24.78','Rudy\'s BBQ','Entertainment','Y');
-INSERT INTO Charges VALUES
+('388','krc','4','Credit','Visa','2020-05-05','24.78','Rudy\'s BBQ','Entertainment','Y'),
 ('389','Albuquerque Gal','11','Credit','MC','2020-05-06','27.63','amazon mask','cash','Y'),
 ('390','krc','4','Credit','Visa','2020-05-06','44.74','Lowe\'s','Home Misc','Y'),
 ('391','krc','4','Credit','Visa','2020-05-07','69.98','Verizon','Verizon','Y'),
@@ -482,7 +528,8 @@ INSERT INTO Charges VALUES
 ('440','krc','4','Credit','Visa','2020-06-03','166.62','Duluth','Clothing','Y'),
 ('441','krc','4','Credit','Visa','2020-06-03','19.42','Flying Star','Entertainment','Y'),
 ('442','Albuquerque Gal','11','Credit','MC','2020-06-03','19.96','amazon glasses magnet','cash','Y'),
-('443','Albuquerque Gal','11','Credit','MC','2020-06-03','34.39','Pay Pal Etsy','Birthday','Y'),
+('443','Albuquerque Gal','11','Credit','MC','2020-06-03','34.39','Pay Pal Etsy','Birthday','Y');
+INSERT INTO Charges VALUES
 ('444','krc','4','Credit','Citi','2020-06-03','55.51','Sprouts','Groceries','Y'),
 ('445','krc','4','Check','check','2020-06-03','1653.02','ARC Home LLC','Mortgage','N'),
 ('446','krc','4','Check','check','2020-06-03','50.96','PNM','Electric','N'),
@@ -527,8 +574,7 @@ INSERT INTO Charges VALUES
 ('485','krc','4','Credit','Citi','2020-06-23','16.97','Sprouts','Groceries','Y'),
 ('486','krc','4','Credit','Citi','2020-06-23','38.84','Olive Oil Co','Groceries','Y'),
 ('487','krc','4','Credit','Citi','2020-06-23','61.66','Albertsons','Groceries','Y'),
-('488','krc','4','Credit','Visa','2020-06-23','5.00','The Range (Tip on 5/14)','Entertainment','Y');
-INSERT INTO Charges VALUES
+('488','krc','4','Credit','Visa','2020-06-23','5.00','The Range (Tip on 5/14)','Entertainment','Y'),
 ('489','krc','4','Credit','Visa','2020-06-23','27.43','Flying Star (5/22)','Entertainment','Y'),
 ('490','krc','4','Credit','Visa','2020-06-23','5.00','Jason\'s (forgot tip)','Entertainment','Y'),
 ('491','krc','4','Credit','Visa','2020-06-24','23.21','Jason\'s Deli','Entertainment','Y'),
@@ -583,7 +629,8 @@ INSERT INTO Charges VALUES
 ('540','krc','4','Credit','Visa','2020-07-15','59.87','Amazon - Umbrella','Home Misc','Y'),
 ('541','krc','4','Credit','Visa','2020-07-15','26.38','Flying Star','Entertainment','Y'),
 ('542','krc','4','Credit','Visa','2020-07-15','27.72','Flying Star','Entertainment','Y'),
-('543','krc','4','Credit','Visa','2020-07-15','52.83','Apple - iPad cover','Undistributed Funds','Y'),
+('543','krc','4','Credit','Visa','2020-07-15','52.83','Apple - iPad cover','Undistributed Funds','Y');
+INSERT INTO Charges VALUES
 ('544','krc','4','Credit','Visa','2020-07-15','354.70','Apple - iPad','Undistributed Funds','Y'),
 ('545','krc','4','Check','check','2020-07-15','180.00','Adidam Midwest','Tithe','N'),
 ('546','Albuquerque Gal','11','Credit','MC','2020-07-15','14.61','amazon rescue','cash','Y'),
@@ -628,8 +675,7 @@ INSERT INTO Charges VALUES
 ('585','krc','4','Credit','Visa','2020-08-03','26.65','Lowe\'s','Home Misc','Y'),
 ('592','Albuquerque Gal','11','Credit','MC','2020-08-06','461.72','big o tires','Car maintenance ','Y'),
 ('587','krc','4','Check','check','2020-08-03','18.65','NM Gas','Natural Gas','N'),
-('588','krc','4','Check','check','2020-08-03','108.08','PNM','Electric','N');
-INSERT INTO Charges VALUES
+('588','krc','4','Check','check','2020-08-03','108.08','PNM','Electric','N'),
 ('589','krc','4','Check','check','2020-08-03','333.68','ARC Home','Escrow Account','N'),
 ('590','krc','4','Check','check','2020-08-03','1675.76','ARC Home','Mortgage','N'),
 ('591','krc','4','Credit','Visa','2020-08-03','23.35','Murphy\'s','Auto Gas','Y'),
@@ -684,7 +730,8 @@ INSERT INTO Charges VALUES
 ('641','krc','4','Credit','Citi','2020-09-04','15.36','Petco','Groceries','Y'),
 ('642','krc','4','Credit','Citi','2020-09-04','44.20','Sprouts','Groceries','Y'),
 ('643','krc','4','Credit','Citi','2020-09-04','53.08','Albertsons','Groceries','Y'),
-('644','krc','4','Credit','Visa','2020-09-04','33.04','Toltec Brewing','Entertainment','Y'),
+('644','krc','4','Credit','Visa','2020-09-04','33.04','Toltec Brewing','Entertainment','Y');
+INSERT INTO Charges VALUES
 ('645','Albuquerque Gal','11','Credit','MC','2020-09-08','12.99','iTunes','cash','Y'),
 ('646','krc','4','Credit','Visa','2020-09-09','64.60','Verizon','Verizon','Y'),
 ('647','krc','4','Check','check','2020-09-09','17.14','NM Gas','Natural Gas','N'),
@@ -729,8 +776,7 @@ INSERT INTO Charges VALUES
 ('686','Albuquerque Gal','11','Credit','MC','2020-09-20','36.27','mackweldon mask','cash','Y'),
 ('687','krc','4','Check','check','2020-09-21','100.00','Kathy Cowles','Gifts','N'),
 ('688','krc','4','Credit','Visa','2020-09-22','25.08','Flying Star','Entertainment','Y'),
-('689','krc','4','Credit','Visa','2020-09-22','39.92','Amazon - sunglasses','Vision','Y');
-INSERT INTO Charges VALUES
+('689','krc','4','Credit','Visa','2020-09-22','39.92','Amazon - sunglasses','Vision','Y'),
 ('690','Albuquerque Gal','11','Credit','Kohls','2020-09-22','54.43','Kohls','cash','Y'),
 ('691','','4','Check','check','2020-09-22','0.00','Kathy','Gifts','N'),
 ('692','','4','Credit','Visa','2020-09-22','0.00','Amazon - sunglasses','Vision','Y'),
@@ -785,7 +831,8 @@ INSERT INTO Charges VALUES
 ('741','','4','Credit','Visa','2020-10-07','64.60','Verizon','Verizon','Y'),
 ('742','','11','Credit','MC','2020-10-08','19.88','Murphys','Gas','Y'),
 ('743','','4','Check','check','2020-10-08','700.00','Julio Dominguez','Home Misc','Y'),
-('744','','4','Check','check','2020-10-08','40.00','St Joseph\'s Indian School','Charities','Y'),
+('744','','4','Check','check','2020-10-08','40.00','St Joseph\'s Indian School','Charities','Y');
+INSERT INTO Charges VALUES
 ('745','','4','Credit','Visa','2020-10-08','21.59','Jaons Deli','Entertainment','Y'),
 ('746','','11','Credit','MC','2020-10-09','41.19','sprouts vits','Misc','Y'),
 ('747','','4','Credit','Citi','2020-10-09','47.27','Albertsons','Groceries','Y'),
@@ -830,8 +877,7 @@ INSERT INTO Charges VALUES
 ('786','','4','Credit','Visa','2020-10-28','130.84','Amazon - 2 x UPS','Appliances/Repair','Y'),
 ('787','','4','Credit','Visa','2020-10-29','25.58','Jasons','Entertainment','Y'),
 ('788','','4','Check','check','2020-10-29','40.00','Toys For Tots','Charities','Y'),
-('789','','4','Credit','Visa','2020-10-29','52.30','USPS','Combined','Y');
-INSERT INTO Charges VALUES
+('789','','4','Credit','Visa','2020-10-29','52.30','USPS','Combined','Y'),
 ('790','','11','Credit','MC','2020-10-30','17.77','murphy','Gas','Y'),
 ('791','','11','Credit','MC','2020-10-30','20.21','amazon rock dots','Undistributed Funds','Y'),
 ('792','','4','Credit','Visa','2020-10-30','22.42','Toltec','Entertainment','Y'),
@@ -886,7 +932,8 @@ INSERT INTO Charges VALUES
 ('841','','11','Credit','MC','2020-11-18','10.99','Guru chai','hair','Y'),
 ('842','','4','Credit','Visa','2020-11-19','21.33','Jason\'s','Entertainment','Y'),
 ('843','','4','Credit','Visa','2020-11-20','194.18','Health Quest','Chiro','Y'),
-('844','','4','Credit','Citi','2020-11-20','40.53','Sprouts','Groceries','Y'),
+('844','','4','Credit','Citi','2020-11-20','40.53','Sprouts','Groceries','Y');
+INSERT INTO Charges VALUES
 ('845','','4','Credit','Citi','2020-11-20','36.27','Albertsons','Groceries','Y'),
 ('846','','4','Credit','Visa','2020-11-20','29.13','Moon\'s Coffee','Groceries','Y'),
 ('847','','4','Credit','Visa','2020-11-20','23.70','Murphy\'s','Auto Gas','Y'),
@@ -931,8 +978,7 @@ INSERT INTO Charges VALUES
 ('886','','4','Check','check','2020-12-05','63.24','PNM','Electric','Y'),
 ('887','','4','Check','check','2020-12-05','58.40','New Mexico Gas','Natural Gas','Y'),
 ('888','','4','Credit','Visa','2020-12-07','64.63','Verizon','Verizon','Y'),
-('889','','4','Credit','Citi','2020-12-07','33.72','Sprouts','Groceries','Y');
-INSERT INTO Charges VALUES
+('889','','4','Credit','Citi','2020-12-07','33.72','Sprouts','Groceries','Y'),
 ('890','','4','Credit','Citi','2020-12-07','71.02','Albertsons','Groceries','Y'),
 ('891','','4','Credit','Visa','2020-12-07','20.31','Jason\'s Deli','Entertainment','Y'),
 ('892','','4','Credit','Visa','2020-12-09','31.95','The Range Cafe','Entertainment','Y'),
@@ -987,7 +1033,8 @@ INSERT INTO Charges VALUES
 ('941','','11','Credit','MC','2020-12-30','19.14','Murphy','Gas','Y'),
 ('942','','4','Credit','Visa','2020-12-30','27.45','Jasons Deli','Entertainment','Y'),
 ('943','','4','Check','check','2021-01-01','600.00','Karen - 1/2 Relief Paymt','Undistributed Funds','Y'),
-('944','','4','Check','check','2021-01-01','1675.76','ARC Home','Mortgage','Y'),
+('944','','4','Check','check','2021-01-01','1675.76','ARC Home','Mortgage','Y');
+INSERT INTO Charges VALUES
 ('945','','4','Credit','Citi','2020-12-23','15.64','Flying Star','Entertainment','Y'),
 ('947','','4','Credit','Citi','2021-01-01','0.00','Keller\'s','Groceries','Y'),
 ('948','','4','Credit','Citi','2020-12-22','35.51','Keller\'s','Groceries','Y'),
@@ -1032,8 +1079,7 @@ INSERT INTO Charges VALUES
 ('989','','11','Credit','MC','2021-01-21','39.95','Gail Russell','Birthday','Y'),
 ('990','','4','Debit','Wells Fargo','2021-01-21','0.02','Adjustments - VISA errors','Undistributed Funds','Y'),
 ('991','','4','Credit','Citi','2021-01-22','48.95','Albertsons','Groceries','Y'),
-('992','','4','Credit','Citi','2021-01-22','24.72','Sprouts','Groceries','Y');
-INSERT INTO Charges VALUES
+('992','','4','Credit','Citi','2021-01-22','24.72','Sprouts','Groceries','Y'),
 ('993','','4','Credit','Visa','2021-01-22','21.21','Jasons Deli','Entertainment','Y'),
 ('994','','4','Credit','Visa','2021-01-22','300.00','HealthQuest: Cleans','Combined','Y'),
 ('995','','4','Credit','Visa','2021-01-23','21.07','Murphy Express','Auto Gas','Y'),
@@ -1088,7 +1134,8 @@ INSERT INTO Charges VALUES
 ('1044','','4','Credit','Visa','2021-02-11','430.17','Balsam Fir','Christmas','Y'),
 ('1045','','4','Credit','Citi','2021-02-12','34.57','Albertsons','Groceries','Y'),
 ('1046','','4','Credit','Citi','2021-02-12','56.96','Sprouts','Groceries','Y'),
-('1047','','11','Credit','MC','2021-02-13','10.77','petco','vet/cat','Y'),
+('1047','','11','Credit','MC','2021-02-13','10.77','petco','vet/cat','Y');
+INSERT INTO Charges VALUES
 ('1048','','4','Credit','Visa','2021-02-13','6923.54','Eclipse Warer Well Svcs','Undistributed Funds','Y'),
 ('1049','','11','Credit','MC','2021-02-13','21.01','Amazon (cafton)','cash','Y'),
 ('1050','','4','Credit','Citi','2021-02-15','45.44','Albertsons','Groceries','Y'),
@@ -1133,8 +1180,7 @@ INSERT INTO Charges VALUES
 ('1089','','4','Debit','Wells Fargo','2021-02-27','0.00','Test','Cash','Y'),
 ('1090','','4','Debit','Wells Fargo','2021-02-27','0.00','Self','Cash','Y'),
 ('1091','','4','Credit','Visa','2021-03-01','28.88','Murphy\'s','Auto Gas','Y'),
-('1092','','4','Credit','Visa','2021-03-01','0.00','Murphy\'s','Auto Gas','Y');
-INSERT INTO Charges VALUES
+('1092','','4','Credit','Visa','2021-03-01','0.00','Murphy\'s','Auto Gas','Y'),
 ('1093','','11','Credit','MC','2021-03-01','87.20','Coldwater','Undistributed Funds','Y'),
 ('1094','','4','Credit','Citi','2021-03-02','27.97','Albertons','Groceries','Y'),
 ('1095','','4','Credit','Citi','2021-03-02','45.50','Sprouts','Groceries','Y'),
@@ -1189,7 +1235,8 @@ INSERT INTO Charges VALUES
 ('1144','','4','Credit','Visa','2021-03-24','25.89','Flying Star','Entertainment','Y'),
 ('1145','','4','Credit','Visa','2021-03-25','29.13','Moon\'s Coffee','Groceries','Y'),
 ('1146','','4','Check','Check or Draft','2021-03-25','180.00','Adidam Midwest','Tithe','Y'),
-('1147','','11','Credit','MC','2021-03-25','19.26','Petco','vet/cat','Y'),
+('1147','','11','Credit','MC','2021-03-25','19.26','Petco','vet/cat','Y');
+INSERT INTO Charges VALUES
 ('1148','','11','Credit','MC','2021-03-25','15.08','savers','cash','Y'),
 ('1149','','4','Credit','Citi','2021-03-26','39.87','Albertsons','Groceries','Y'),
 ('1150','','4','Credit','Citi','2021-03-26','73.58','Sprouts','Groceries','Y'),
@@ -1234,8 +1281,7 @@ INSERT INTO Charges VALUES
 ('1189','','4','Credit','Citi','2021-04-13','43.18','Smiths','Groceries','Y'),
 ('1190','','4','Check','Check or Draft','2021-04-13','180.00','Adidam Midwest','Tithe','Y'),
 ('1191','','4','Credit','Visa','2021-04-14','33.88','Toltec','Entertainment','Y'),
-('1192','','4','Credit','Visa','2021-04-14','70.72','TSC - Birdseed','Home Misc','Y');
-INSERT INTO Charges VALUES
+('1192','','4','Credit','Visa','2021-04-14','70.72','TSC - Birdseed','Home Misc','Y'),
 ('1193','','11','Credit','MC','2021-04-14','51.92','tractor supply bird','Misc','Y'),
 ('1194','','4','Debit','Wells Fargo','2021-04-16','165.10','Century Link','TV/Internet','Y'),
 ('1195','','4','Credit','Visa','2021-04-16','21.46','Jasons Deli','Entertainment','Y'),
@@ -1290,7 +1336,8 @@ INSERT INTO Charges VALUES
 ('1244','','4','Credit','Citi','2021-05-02','10.52','Albertsons','Groceries','Y'),
 ('1245','','4','Credit','Visa','2021-05-03','27.56','Murphys','Auto Gas','Y'),
 ('1246','','4','Credit','Visa','2021-05-03','15.94','5 Guys','Entertainment','Y'),
-('1247','','4','Check','Check or Draft','2021-05-05','58.45','Roadrunner Waste','Combined','Y'),
+('1247','','4','Check','Check or Draft','2021-05-05','58.45','Roadrunner Waste','Combined','Y');
+INSERT INTO Charges VALUES
 ('1248','','4','Check','Check or Draft','2021-05-05','46.63','PNM','Electric','Y'),
 ('1249','','4','Credit','Citi','2021-05-05','0.30','Under-reported','Groceries','Y'),
 ('1250','','4','Credit','Visa','2021-05-06','80.01','Walgreens','Medical/Dental','Y'),
@@ -1312,7 +1359,7 @@ INSERT INTO Charges VALUES
 ('1266','','4','Credit','Citi','2021-05-14','71.52','Albertsons','Groceries','Y'),
 ('1267','','11','Credit','MC','2021-05-14','14.06','amazon','cash','Y'),
 ('1268','','11','Credit','MC','2021-05-14','28.62','Duluth','Savings','Y'),
-('1269','','11','Credit','MC','2021-05-14','32.31','Discover Balloons','Savings','N'),
+('1269','','11','Credit','MC','2021-05-14','32.31','Discover Balloons','Savings','Y'),
 ('1270','','4','Debit','Wells Fargo','2021-05-16','165.10','Century Link','TV/Internet','Y'),
 ('1271','','4','Credit','Visa','2021-05-16','27.14','Hannah & Nate\'s','Entertainment','Y'),
 ('1272','','4','Credit','Visa','2021-05-16','91.51','Alameda Greenhouse','Home Misc','Y'),
@@ -1335,8 +1382,7 @@ INSERT INTO Charges VALUES
 ('1291','','4','Credit','Visa','2021-05-20','20.87','Jasons Deli','Entertainment','Y'),
 ('1292','','4','Credit','Citi','2021-05-22','78.61','Albertsons','Groceries','Y'),
 ('1293','','4','Credit','Citi','2021-05-22','79.73','Sprouts','Groceries','Y'),
-('1294','','4','Credit','Visa','2021-05-22','70.23','TSC','Home Misc','Y');
-INSERT INTO Charges VALUES
+('1294','','4','Credit','Visa','2021-05-22','70.23','TSC','Home Misc','Y'),
 ('1295','','4','Credit','Visa','2021-05-22','32.82','Murphys','Auto Gas','Y'),
 ('1296','','11','Credit','MC','2021-05-22','43.08','amazon','Savings','Y'),
 ('1297','','4','Credit','Visa','2021-05-23','80.90','Duncraft - bird feeder','Home Misc','Y'),
@@ -1353,13 +1399,13 @@ INSERT INTO Charges VALUES
 ('1308','','4','Credit','Visa','2021-05-29','32.89','The Range Cafe','Entertainment','Y'),
 ('1309','','4','Check','Check or Draft','2021-05-30','20.00','Reverse Test','Undistributed Funds','Y'),
 ('1310','','11','Credit','MC','2021-05-30','53.94','Yang Yang WaQi','Medical','Y'),
-('1311','','11','Credit','MC','2021-05-30','35.00','PP Mark Kelly','Misc','N'),
+('1311','','11','Credit','MC','2021-05-30','35.00','PP Mark Kelly','Misc','Y'),
 ('1312','','4','Check','Check or Draft','2021-06-01','50.00','Carter Graduation','Gifts','Y'),
 ('1313','','4','Credit','Visa','2021-06-01','300.00','Rust Presbyterian','Medical/Dental','Y'),
 ('1314','','4','Credit','Visa','2021-06-01','144.70','Total Wine','Wine','Y'),
 ('1315','','4','Credit','Visa','2021-06-01','21.44','Jason\'s Deli','Entertainment','Y'),
 ('1316','','4','Credit','Visa','2021-06-01','55.90','Amazon - 409 Cleaner','Home Misc','Y'),
-('1317','','4','Credit','Visa','2021-06-01','32.58','Amazon - Skillet','Home Misc','N'),
+('1483',NULL,'4','Credit','Visa','2021-08-18','34.64','Murphy  - 7/19','Entertainment','Y'),
 ('1318','','11','Credit','MC','2021-06-02','47.32','CVS Rx from Dr. V','Medical','Y'),
 ('1319','','4','Credit','Citi','2021-06-02','105.65','Smiths','Groceries','Y'),
 ('1320','','11','Credit','MC','2021-06-03','74.77','Walmart','Medical','Y'),
@@ -1391,7 +1437,8 @@ INSERT INTO Charges VALUES
 ('1346','','4','Credit','Visa','2021-06-11','68.09','Clafouti\'s','Entertainment','Y'),
 ('1347','','4','Credit','Visa','2021-06-11','43.95','Bandelier NMonument','Entertainment','Y'),
 ('1348','','4','Check','Check or Draft','2021-06-11','360.00','Adidam Midwest','Tithe','Y'),
-('1349','','4','Credit','Visa','2021-06-11','119.80','Canon (Ink)','Home Misc','Y'),
+('1349','','4','Credit','Visa','2021-06-11','119.80','Canon (Ink)','Home Misc','Y');
+INSERT INTO Charges VALUES
 ('1350','','4','Credit','Visa','2021-06-12','31.28','Moon\'s Coffe','Groceries','Y'),
 ('1351','','4','Credit','Visa','2021-06-12','14.72','Lowe\'s','Home Misc','Y'),
 ('1352','','4','Credit','Visa','2021-06-12','31.62','Murphy\'s','Auto Gas','Y'),
@@ -1405,7 +1452,7 @@ INSERT INTO Charges VALUES
 ('1360','','4','Credit','Visa','2021-06-15','19.72','Albertsons','Groceries','Y'),
 ('1361','','4','Debit','Wells Fargo','2021-06-16','165.10','Century Link','TV/Internet','Y'),
 ('1362','','4','Credit','Visa','2021-06-17','20.31','Jasons Deli','Entertainment','Y'),
-('1363','','11','Credit','MC','2021-06-17','74.77','Amazon gloves/towel','cash','N'),
+('1363','','11','Credit','MC','2021-06-17','74.77','Amazon gloves/towel','cash','Y'),
 ('1364','','4','Credit','Visa','2021-06-17','21.56','Best Buy - tripod attachmnt','Home Misc','Y'),
 ('1365','','4','Credit','Visa','2021-06-17','34.50','Wlagreens','Medical/Dental','Y'),
 ('1366','','4','Credit','Visa','2021-06-17','0.08','Mis-entered Alameda Greenhouse','Home Misc','Y'),
@@ -1420,8 +1467,8 @@ INSERT INTO Charges VALUES
 ('1375','','4','Credit','Visa','2021-06-20','20.00','Presbyterian Copay','Medical/Dental','Y'),
 ('1376','','4','Credit','Visa','2021-06-20','31.28','Murphy\'s','Auto Gas','Y'),
 ('1377','','4','Credit','Visa','2021-06-20','645.51','Geico','Auto Insurance','Y'),
-('1378','','11','Credit','MC','2021-06-20','44.85','arizona tubes','Birthday','N'),
-('1379','','11','Credit','MC','2021-06-21','47.92','Natures Guru','cash','N'),
+('1378','','11','Credit','MC','2021-06-20','44.85','arizona tubes','Birthday','Y'),
+('1379','','11','Credit','MC','2021-06-21','47.92','Natures Guru','cash','Y'),
 ('1380','','4','Credit','Visa','2021-06-22','21.82','Jasons Deli','Entertainment','Y'),
 ('1381','','4','Credit','Visa','2021-06-23','6.92','CVS','Medical/Dental','Y'),
 ('1382','','4','Credit','Citi','2021-06-23','8.17','Whole Foods','Groceries','Y'),
@@ -1429,55 +1476,86 @@ INSERT INTO Charges VALUES
 ('1384','','4','Credit','Visa','2021-06-25','85.10','Albertsons','Groceries','Y'),
 ('1385','','4','Credit','Visa','2021-06-25','30.33','Sprouts','Groceries','Y'),
 ('1386','','4','Check','Check or Draft','2021-06-25','120.00','Cash','Cash','Y'),
-('1387','','4','Credit','Citi','2021-06-26','25.72','Amazon - Stadium Mustard','Groceries','N'),
-('1388','','4','Credit','Citi','2021-06-28','73.79','Albertsons','Groceries','N'),
-('1389','','4','Credit','Citi','2021-06-28','31.24','Sprouts','Groceries','N'),
-('1390','','4','Credit','Citi','2021-06-28','101.34','CostCo','Groceries','N'),
+('1387','','4','Credit','Citi','2021-06-26','25.72','Amazon - Stadium Mustard','Groceries','Y'),
+('1388','','4','Credit','Citi','2021-06-28','73.79','Albertsons','Groceries','Y'),
+('1389','','4','Credit','Citi','2021-06-28','31.24','Sprouts','Groceries','Y'),
+('1390','','4','Credit','Citi','2021-06-28','101.34','CostCo','Groceries','Y'),
 ('1391','','11','Check','Check or Draft','2021-06-28','64.20','Ken - Costco','cash','Y'),
-('1392','','4','Credit','Citi','2021-06-28','64.20','CostCo - Karen','Medical/Dental','N'),
+('1392','','4','Credit','Citi','2021-06-28','64.20','CostCo - Karen','Medical/Dental','Y'),
 ('1393','','4','Credit','Visa','2021-06-29','50.00','Pres - Copay','Medical/Dental','Y'),
-('1394','','4','Check','Check or Draft','2021-07-01','50.00','Presby Copay','Medical/Dental','Y');
-INSERT INTO Charges VALUES
+('1394','','4','Check','Check or Draft','2021-07-01','50.00','Presby Copay','Medical/Dental','Y'),
 ('1395','','4','Check','Check or Draft','2021-07-01','1675.76','ARC Home','Mortgage','Y'),
 ('1396','','4','Credit','Visa','2021-07-01','23.23','Jason\'s','Entertainment','Y'),
 ('1397','','4','Credit','Visa','2021-07-02','57.83','Albertsons','Groceries','Y'),
 ('1398','','4','Credit','Visa','2021-07-02','22.35','Sprouts','Groceries','Y'),
-('1399','','11','Credit','MC','2021-07-02','94.88','amazon','Savings','N'),
-('1400','','11','Credit','MC','2021-07-02','139.61','amazon','Savings','N'),
+('1399','','11','Credit','MC','2021-07-02','94.88','amazon','Savings','Y'),
+('1400','','11','Credit','MC','2021-07-02','139.61','amazon','Savings','Y'),
 ('1404','','4','Check','Check or Draft','2021-07-03','88.41','PNM','Electric','Y'),
 ('1405','','4','Credit','Visa','2021-07-05','34.99','Walmart','Gifts','Y'),
-('1406','','11','Credit','MC','2021-07-06','23.63','amazon cap','cash','N'),
+('1406','','11','Credit','MC','2021-07-06','23.63','amazon cap','cash','Y'),
 ('1407',NULL,'4','Credit','Visa','2021-07-09','19.90','Flying Star','Entertainment','Y'),
 ('1408',NULL,'4','Credit','Visa','2021-07-09','43.13','Lowe\'s - exter. paint','Home Misc','Y'),
 ('1409',NULL,'4','Credit','Visa','2021-07-09','51.03','Albertsons','Groceries','Y'),
-('1410',NULL,'4','Credit','Citi','2021-07-09','16.17','Costco - Karen','Groceries','N'),
+('1410',NULL,'4','Credit','Citi','2021-07-09','16.17','Costco - Karen','Groceries','Y'),
 ('1411',NULL,'4','Credit','Visa','2021-07-09','2.75','Albertons Starbucks','Groceries','Y'),
 ('1412',NULL,'4','Credit','Visa','2021-07-09','11.86','Walgreens - readers','Vision','Y'),
 ('1413',NULL,'4','Credit','Visa','2021-07-09','55.00','Albertsons','Groceries','Y'),
 ('1414',NULL,'4','Credit','Visa','2021-07-09','64.94','Verizon','Verizon','Y'),
 ('1415',NULL,'4','Check','Check or Draft','2021-07-09','16.20','NM Gas','Natural Gas','Y'),
-('1416',NULL,'4','Credit','Citi','2021-07-10','3.79','Smiths','Groceries','N'),
-('1417',NULL,'4','Credit','Visa','2021-07-12','25.41','Murphy\'s','Auto Gas','N'),
-('1418',NULL,'11','Credit','MC','2021-07-12','52.28','Petco','vet/cat','N'),
-('1419',NULL,'4','Credit','Visa','2021-07-13','39.05','Olive Garden','Entertainment','N'),
-('1420',NULL,'4','Credit','Visa','2021-07-13','50.00','Presbyterian','Medical/Dental','N'),
-('1421',NULL,'4','Credit','Visa','2021-07-13','65.79','Duluth','Clothing','N'),
-('1422',NULL,'4','Credit','Visa','2021-07-13','45.28','Marmot','Clothing','N'),
-('1423',NULL,'4','Credit','Visa','2021-07-13','50.12','Albertsons','Groceries','N'),
-('1424',NULL,'4','Credit','Visa','2021-07-13','58.23','Sprouts','Groceries','N'),
-('1425',NULL,'4','Credit','Visa','2021-07-14','146.22','Cottonwood Smiles','Medical/Dental','N'),
-('1426',NULL,'4','Credit','Visa','2021-07-15','26.38','Lowe\'s - wood filler','Home Misc','N'),
-('1427',NULL,'4','Credit','Visa','2021-07-15','64.71','Total Wine - Isabella','Gifts','N'),
+('1416',NULL,'4','Credit','Citi','2021-07-10','3.79','Smiths','Groceries','Y'),
+('1417',NULL,'4','Credit','Visa','2021-07-12','25.41','Murphy\'s','Auto Gas','Y'),
+('1418',NULL,'11','Credit','MC','2021-07-12','52.28','Petco','vet/cat','Y'),
+('1419',NULL,'4','Credit','Visa','2021-07-13','39.05','Olive Garden','Entertainment','Y'),
+('1420',NULL,'4','Credit','Visa','2021-07-13','50.00','Presbyterian','Medical/Dental','Y'),
+('1421',NULL,'4','Credit','Visa','2021-07-13','65.79','Duluth','Clothing','Y'),
+('1422',NULL,'4','Credit','Visa','2021-07-13','45.28','Marmot','Clothing','Y'),
+('1423',NULL,'4','Credit','Visa','2021-07-13','50.12','Albertsons','Groceries','Y'),
+('1424',NULL,'4','Credit','Visa','2021-07-13','58.23','Sprouts','Groceries','Y'),
+('1425',NULL,'4','Credit','Visa','2021-07-14','146.22','Cottonwood Smiles','Medical/Dental','Y'),
+('1426',NULL,'4','Credit','Visa','2021-07-15','26.38','Lowe\'s - wood filler','Home Misc','Y'),
+('1427',NULL,'4','Credit','Visa','2021-07-15','64.71','Total Wine - Isabella','Gifts','Y'),
 ('1428',NULL,'4','Debit','Wells Fargo','2021-07-16','165.10','Century Link','TV/Internet','Y'),
-('1429',NULL,'4','Credit','Visa','2021-07-16','30.50','Funny Times - T-shirt','Clothing','N'),
+('1429',NULL,'4','Credit','Visa','2021-07-16','30.50','Funny Times - T-shirt','Clothing','Y'),
 ('1430',NULL,'4','Credit','Visa','2021-07-17','21.52','Flying Star','Entertainment','Y'),
-('1431',NULL,'4','Credit','Visa','2021-07-17','0.00','Amazon - clippers (2nd invoice)','Home Misc','N'),
+('1431',NULL,'4','Credit','Visa','2021-07-17','0.00','Amazon - clippers (2nd invoice)','Home Misc','Y'),
 ('1432',NULL,'4','Credit','Visa','2021-07-17','10.76','Walmart - Armorall','Auto Maintenance','Y'),
 ('1433',NULL,'4','Credit','Visa','2021-07-17','2.54','Walmart gift - tax (Tim)','Gifts','Y'),
-('1434',NULL,'4','Credit','Visa','2021-07-17','89.29','Albertsons','Groceries','N'),
-('1435',NULL,'4','Credit','Visa','2021-07-17','40.17','Sprouts','Groceries','N'),
-('1436',NULL,'4','Credit','Visa','2021-07-17','29.40','Flying Star','Entertainment','N'),
-('1437',NULL,'11','Credit','MC','2021-07-18','29.84','Murphy','Gas','N');
+('1434',NULL,'4','Credit','Visa','2021-07-17','89.29','Albertsons','Groceries','Y'),
+('1435',NULL,'4','Credit','Visa','2021-07-17','40.17','Sprouts','Groceries','Y'),
+('1436',NULL,'4','Credit','Visa','2021-07-17','29.40','Flying Star','Entertainment','Y'),
+('1437',NULL,'11','Credit','MC','2021-07-18','29.84','Murphy','Gas','Y'),
+('1487',NULL,'4','Credit','Visa','2021-08-18','18.00','Classmates.com','Combined','Y'),
+('1488',NULL,'4','Check','Check or Draft','2021-08-18','396.46','ARC Home LLC','Escrow Account','Y'),
+('1489',NULL,'4','Credit','Visa','2021-08-18','19.42','Barnes & Noble','Gifts','N'),
+('1490',NULL,'4','Credit','Visa','2021-08-18','107.15','TSC','Groceries','N'),
+('1491',NULL,'4','Credit','Visa','2021-08-18','25.00','GPSVisualizer.com','Gifts','N'),
+('1492',NULL,'4','Credit','Visa','2021-08-19','31.26','Olive Garden','Entertainment','N'),
+('1493',NULL,'11','Credit','MC','2021-08-20','64.00','CVS','cash','Y'),
+('1494',NULL,'4','Credit','Visa','2021-08-21','194.18','HealthQuest','Chiro','N'),
+('1495',NULL,'4','Credit','Visa','2021-08-21','21.72','Jasons','Entertainment','N'),
+('1496',NULL,'4','Credit','Visa','2021-08-21','41.49','Albertsons','Groceries','N'),
+('1497',NULL,'4','Credit','Visa','2021-08-21','28.02','Sprouts','Groceries','N'),
+('1498',NULL,'4','Check','Check or Draft','2021-08-21','180.00','Adidam Midwest','Tithe','Y'),
+('1499',NULL,'4','Credit','Visa','2021-08-23','16.47','Amazon - Labels','Home Misc','N'),
+('1500',NULL,'4','Credit','Visa','2021-08-24','25.30','Flying Star','Entertainment','N'),
+('1501',NULL,'4','Credit','Visa','2021-08-25','61.98','Albertsons','Groceries','N');
+INSERT INTO Charges VALUES
+('1502',NULL,'4','Credit','Visa','2021-08-25','29.38','Sprouts','Groceries','N'),
+('1503',NULL,'4','Credit','Visa','2021-08-25','600.00','Presbyterian Rust','Medical/Dental','N'),
+('1504',NULL,'11','Credit','MC','2021-08-25','24.95','Skoon - General mark','vet/cat','N'),
+('1505',NULL,'11','Credit','MC','2021-08-25','15.08','Netflix','Misc','Y'),
+('1506',NULL,'11','Credit','MC','2021-08-25','15.08','Netflix','Netflix','N'),
+('1507',NULL,'4','Credit','Visa','2021-08-26','30.21','Moon\'s Coffee','Groceries','N'),
+('1508',NULL,'4','Credit','Visa','2021-08-26','39.59','Murphy\'s','Auto Gas','N'),
+('1509',NULL,'4','Credit','Visa','2021-08-26','22.34','Jasons','Entertainment','N'),
+('1519',NULL,'4','Credit','Visa','2021-08-26','37.68','Amazon - French Press','Home Misc','N'),
+('1511',NULL,'11','Credit','MC','2021-08-27','68.82','CVS','Vitamins','N'),
+('1512',NULL,'11','Credit','MC','2021-08-28','16.16','amazon filters','Misc','N'),
+('1513',NULL,'4','Credit','Visa','2021-08-28','94.44','Albertsons','Groceries','N'),
+('1514',NULL,'4','Debit','Wells Fargo','2021-08-28','100.00','ATM','Cash','Y'),
+('1515',NULL,'4','Credit','Visa','2021-08-28','4.69','Olive Garden - Tip','Entertainment','N'),
+('1516',NULL,'4','Credit','Visa','2021-08-28','1223.82','Presbyterian','Medical/Dental','N'),
+('1517',NULL,'4','Credit','Visa','2021-08-29','141.24','Total Wine','Wine','N');
 
 
 
@@ -1490,7 +1568,7 @@ CREATE TABLE `Deposits` (
   `otd` char(1) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`depid`)
-) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=latin1;
 
 
 INSERT INTO Deposits VALUES
@@ -1555,7 +1633,12 @@ INSERT INTO Deposits VALUES
 ('59','4','2021-07-14','2455.20','N',''),
 ('60','4','2021-07-17','3.82','Y','Geico Refund'),
 ('61','11','2021-07-19','1073.70','N',''),
-('62','4','2021-07-21','0.50','Y','Interest');
+('62','4','2021-07-21','0.50','Y','Interest'),
+('63','4','2021-08-01','3450.00','N',''),
+('64','4','2021-08-11','2455.20','N',''),
+('65','4','2021-08-11','0.24','Y','Interest'),
+('66','4','2021-08-18','0.10','Y','Incorrect Visa Charge'),
+('67','11','2021-08-27','1073.70','N','');
 
 
 
@@ -1575,8 +1658,8 @@ CREATE TABLE `Users` (
 
 
 INSERT INTO Users VALUES
-('4','krcowles29@gmail.com','krc','111','July','','$2y$10$.pTJ6Rtv1HSqfcQZsAJS6u6.KKcSFgQfTQ8hp13E4lXjBg.rbJN1O','2050-12-16','accept'),
-('11','tonks130@gmail.com','Albuquerque Gal','111','July',NULL,'$2y$10$A84jihpzxHpWgB7RcKvr8u2w3exQCWPO8EbFZCBqGKeTG7DYv2kmC','2022-03-13','accept'),
+('4','krcowles29@gmail.com','krc','111','August','','$2y$10$.pTJ6Rtv1HSqfcQZsAJS6u6.KKcSFgQfTQ8hp13E4lXjBg.rbJN1O','2050-12-16','accept'),
+('11','tonks130@gmail.com','Albuquerque Gal','111','August',NULL,'$2y$10$A84jihpzxHpWgB7RcKvr8u2w3exQCWPO8EbFZCBqGKeTG7DYv2kmC','2022-03-13','accept'),
 ('13','hawk109@icloud.com','jimbob','111','March',NULL,'$2y$10$Uo6r/Yn8lUjSPLUwqNCGm.rdoxnN2I.tTsbX9wJ5cjVEHIn2IomsC','2022-03-12','reject');
 
 
