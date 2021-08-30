@@ -23,11 +23,11 @@ $btnclick = isset($_GET['click']) ? filter_input(INPUT_GET, 'click') : 'none';
 // setup data for credit cards
 $counts = [];
 $tbodys = [];
-for ($j=0; $j<count($cr); $j++) {
+foreach ($cr as $credit_acct) {
     $tally = 0;
     $tbody = '<tbody>' . PHP_EOL;
     for ($k=0; $k<count($expamt); $k++) {
-        if ($cr[$j] == $expcdname[$k]) {
+        if ($credit_acct == $expcdname[$k]) {
             $tally++;
             $tbody .= '<tr>' . PHP_EOL;
             $tbody .= "<td class='col1'>{$expdate[$k]}</td>" . PHP_EOL;
@@ -151,13 +151,13 @@ for ($p=0; $p<count($dr); $p++) {
         <?=$cr[$i];?></em></span> :&nbsp;&nbsp;&nbsp;
     <span class="mvtocr"><strong class="disptocr">To:</strong> 
         <input id="tocr<?= $i;?>" type="checkbox" /></span><br />
-    <table class="crtbl">
+    <table class="crtbl sortable">
         <thead>
             <tr>
-                <th>Date Incurred</th>
-                <th>Amount</th>
-                <th>Payee</th>
-                <th>Deducted From</th>
+                <th data-sort="std" class="ascending">Date Incurred</th>
+                <th data-sort="amt">Amount</th>
+                <th data-sort="std">Payee</th>
+                <th data-sort="std">Deducted From</th>
                 <th class="mvcr hdcr">Mv</th>
             </tr>
         </thead>
@@ -177,13 +177,13 @@ for ($p=0; $p<count($dr); $p++) {
     <div id="innerexp">
         <span class="mvtodr"><strong class="disptodr">To:</strong> 
         <input id="todrcheck" type="checkbox" /></span>
-        <table class="drtbl">
+        <table class="drtbl sortable">
             <thead>
                 <tr>
-                    <th>Date Incurred</th>
-                    <th>Amount</th>
-                    <th>Payee</th>
-                    <th>Deducted From</th>
+                    <th data-sort="amt" class="ascending">Date Incurred</th>
+                    <th data-sort="amt">Amount</th>
+                    <th data-sort="std">Payee</th>
+                    <th data-sort="std">Deducted From</th>
                     <th class="mvdr hddr">Mv</th>
                 </tr>
             </thead>
@@ -196,13 +196,13 @@ for ($p=0; $p<count($dr); $p++) {
             <?=$dr[$i];?></em> :</span>&nbsp;&nbsp;&nbsp;
             <span class="mvtodr"><strong class="disptodr">To:</strong> 
             <input id="todr<?= $i;?>" type="checkbox" /></span><br />
-            <table class="drtbl">
+            <table class="drtbl sortable">
                 <thead>
                     <tr>
-                        <th>Date Incurred</th>
-                        <th>Amount</th>
-                        <th>Payee</th>
-                        <th>Deducted From</th>
+                        <th data-sort="amt" class="ascending">Date Incurred</th>
+                        <th data-sort="amt">Amount</th>
+                        <th data-sort="std">Payee</th>
+                        <th data-sort="std">Deducted From</th>
                         <th class="mvdr hddr">Mv</th>
                     </tr>
                 </thead>
@@ -219,6 +219,7 @@ for ($p=0; $p<count($dr); $p++) {
 <script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/jquery-1.12.1.js"></script>
 <script src="../scripts/menus.js"></script>
+<script src="../scripts/tableSort.js"></script>
 <script src="../scripts/manageExp.js"></script>
 
 </body>

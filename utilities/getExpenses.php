@@ -17,20 +17,36 @@ $expmethod = [];
 $expcdname = [];
 $exppayee = [];
 $expcharged = [];
+$date_element = [];
 $chgreq = "SELECT * FROM `Charges` WHERE `userid` = :uid AND `paid` = 'N';";
 $chgdat = $pdo->prepare($chgreq);
 $chgdat->execute(["uid" => $_SESSION['userid']]);
 $charges = $chgdat->fetchALL(PDO::FETCH_ASSOC);
 $expenses = count($charges) > 0 ? true : false;
+// my brainless 'date-sort' algorithm
 if ($expenses) {
-    foreach ($charges as $expense) {
-        array_push($expid, $expense['expid']);
-        array_push($expamt, $expense['expamt']);
-        array_push($expdate, $expense['expdate']);
-        array_push($expmethod, $expense['method']);
-        array_push($expcdname, $expense['cdname']);
-        array_push($exppayee, $expense['payee']);
-        array_push($expcharged, $expense['acctchgd']);
+    // set up an associative array so a sort-retaining-key can be made
+    for ($k=0; $k<count($charges); $k++) {
+        $indx = 'indx' . $k;
+        $date_element[$indx] = $charges[$k]['expdate'];   
+    }
+    asort($date_element); // retains associative keys
+    $date_keys = array_keys($date_element);
+    $order = [];
+    foreach ($date_keys as $indx) {
+        $item_no = intval(substr($indx, 4));
+        array_push($order, $item_no); 
+    }
+    // $order is the sorted index for all charges
+    for ($j=0; $j<count($charges); $j++) {
+        $i = $order[$j];
+        array_push($expid, $charges[$i]['expid']);
+        array_push($expamt, $charges[$i]['expamt']);
+        array_push($expdate, $charges[$i]['expdate']);
+        array_push($expmethod, $charges[$i]['method']);
+        array_push($expcdname, $charges[$i]['cdname']);
+        array_push($exppayee, $charges[$i]['payee']);
+        array_push($expcharged, $charges[$i]['acctchgd']);
     }
 }
 

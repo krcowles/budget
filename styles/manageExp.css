@@ -17,6 +17,7 @@ th {
     padding: 0px 6px 0px 6px;
     border: 1px solid #ddd;
     background-color: #B8D2AF;
+    cursor: pointer;
 }
 td {
     padding: 0px 6px 0px 6px;

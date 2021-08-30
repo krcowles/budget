@@ -57,7 +57,7 @@ $('.sortable').each( function() {
 	var $controls = $table.find('th');
 	var rows = $tbody.find('tr').toArray();
 	
-	$controls.on('click', function() {
+	$controls.off('click').on('click', function() {
 		$header = $(this);
 		var order = $header.data('sort');
 		var column;
