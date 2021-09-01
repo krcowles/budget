@@ -77,7 +77,7 @@ if ($('#mstr').text() === 'yes') {
     $('#admin').addClass('btn-secondary');
     $('#admin').addClass('btn-sm');
     $('#admin').css('display', 'block');
-    $('#admin').on('click', function() {
+    $('#admin').off('click').on('click', function() {
         window.open('../admin/admintools.php', "_blank");
     });
 }

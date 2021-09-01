@@ -53,13 +53,13 @@ for ($i=0; $i<count($expamt); $i++) {
             <button id="reconcile" type="button" class="btn btn-secondary">
             Reconcile</button><br /><br />
             <input type="hidden" name="card" value="<?= $rec_cd;?>" />
-            <table>
+            <table class="sortable">
                 <thead>
                     <tr>
-                        <th>Date:</th>
-                        <th>Amount</th>
-                        <th>Deducted From:</th>
-                        <th>Payee:</th>
+                        <th data-sort="std">Date:</th>
+                        <th data-sort="amt">Amount</th>
+                        <th data-sort="std">Deducted From:</th>
+                        <th data-sort="std">Payee:</th>
                     </tr>
                 </thead>
                 <?php if (count($card_data) === 0) : ?>
@@ -89,6 +89,7 @@ for ($i=0; $i<count($expamt); $i++) {
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/menus.js"></script>
+<script src="../scripts/tableSort.js"></script>
 <script src="../scripts/reconcile.js" type="text/javascript"></script>
 </body>
 
