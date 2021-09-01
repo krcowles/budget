@@ -71,6 +71,11 @@ var mm = String(today.getMonth() + 1).padStart(2, '0'); //January was otherwise 
 var yyyy = parseInt(today.getFullYear());
 // for admin
 if ($('#mstr').text() === 'yes') {
+    $('#admin').attr('type', 'button');
+    // jquery can't add array of class names - because of bootstrap??
+    $('#admin').addClass('btn');
+    $('#admin').addClass('btn-secondary');
+    $('#admin').addClass('btn-sm');
     $('#admin').css('display', 'block');
     $('#admin').on('click', function() {
         window.open('../admin/admintools.php', "_blank");

@@ -11,13 +11,17 @@
  * @license No license to date
  */
 require "../database/global_boot.php";
+
+// Locate any existing data archives
 $db_files = scandir('../database');
 $archives = [];
+$exarchs = '';
 foreach ($db_files as $file) {
     $yrstrt = strpos($file, 'Year');
     if ($yrstrt !== false) {
-        $yr = substr($file, $yrstrt+4, 4);
+        $yr = intval(substr($file, $yrstrt+4, 4));
         array_push($archives, $yr);
+        $exarchs .= '<option value="' . $file . '">' . $file . '</option>';
     }
 }
 if (count($archives) > 0) {
@@ -25,6 +29,24 @@ if (count($archives) > 0) {
 } else {
     $js_archs = '""';
 }
+if (empty($exarchs)) {
+    $exarchs = '<option value="0">No archives saved</option>';
+}
+// Extablish archive selections
+date_default_timezone_set('America/Denver');
+$date = date("Y/m/d");
+$digits = explode("/", $date);
+$current_yr = intval($digits[0]);
+$eligible = '';
+$arch_yr = 2019;  // the earliest year data was available
+while ($arch_yr < $current_yr) {
+    if (!in_array($arch_yr, $archives)) {
+        $eligible .= '<option value="' . $arch_yr . '">Archive  ' .
+            $arch_yr . '</option>';
+    }
+    $arch_yr++;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
@@ -63,12 +85,14 @@ if (count($archives) > 0) {
         <legend class="bootshow">Miscellaneous Tools</legend><br />
         <button id="arch" type="button" class="btn btn-secondary">
             Archive Data</button>
-        &nbsp;&nbsp;[This will eliminate data in the `Charges` table]<br />
+        &nbsp;&nbsp;[This will eliminate data in the `Charges` table and create
+            a separate archive file]<br />
+        <span style="position:relative;top:6px;">Current archives:</span>
+            &nbsp;&nbsp;<select id="archs"><?=$exarchs;?></select><br />
         <div id="achoice">
             <select id="ayr">
                 <option value="x" selected>Select A Year To Archive</option>
-                <option value="2019">Archive 2019</option>
-                <option value="2020">Archive 2020</option>
+                <?=$eligible;?>
             </select>&nbsp;&nbsp;
             <button id="mkarch" type="button" class="btn btn-warning">
                 Archive It</button>

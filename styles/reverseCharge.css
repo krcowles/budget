@@ -28,6 +28,7 @@ input[type=checkbox] {
 th {
     background-color: darkgreen; /* #4CAF50; */
     color: white;
+    cursor: pointer;
 }
 th, td {
     padding: 4px 10px 4px 10px;

@@ -62,12 +62,13 @@ $noOfExp = count($chgs);
 <?php require "../main/navbar.php"; ?>
 <p id="count" style="display:none;"><?=$noOfExp;?></p>
 <div style="margin-left:40px;">
-    <h3>Select one or more expenses you wish to undo.</h3>
-    <h4>This will have the effect of deleting the expense and having the deleted 
+    <br />
+    <h4>Select one or more expenses you wish to undo.</h4>
+    <h5>This will have the effect of deleting the expense and having the deleted 
         amount placed back into the account from which it was originally drawn.
-        This will increase your 'Checkbook Total' by the same amount.</h4>
+        This will increase your 'Checkbook Total' by the same amount.</h5>
     <?php if ($paid_exp) : ?>
-    <h3 id="paid">Expense(s) Successfully Undone</h3>
+    <h4 id="paid">Expense(s) Successfully Undone</h4>
     <?php endif; ?>
     <div>
         <div>
@@ -76,19 +77,20 @@ $noOfExp = count($chgs);
                     boxes will have their respective paid expenses reversed</span>
         </div><br />
         <?php if ($noOfExp === 0) : ?>
-        <h3>You have no outstanding expenses for the last 30 days</h3>
+        <h4>You have no outstanding expenses for the last 30 days</h4>
         <?php else : ?>
         <div id="main">
-            <h3>Expenses From the Last 30 Days</h3>
-            <table>
+            <h4>Expenses From the Last 30 Days</h4>
+            <h5>Click on a header to sort; again to reverse</h5>
+            <table class="sortable">
                 <thead>
                     <tr>
                         <th>Undo</th>
-                        <th>Debit Type</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Remarks</th>
-                        <th>Account Charged</th>
+                        <th data-sort="std">Debit Type</th>
+                        <th data-sort="std">Date</th>
+                        <th data-sort="amt">Amount</th>
+                        <th data-sort="std">Remarks</th>
+                        <th data-sort="std">Account Charged</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,6 +118,7 @@ $noOfExp = count($chgs);
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/undoExpense.js" type="text/javascript"></script>
+<script src="../scripts/tableSort.js"></script>
 </body>
 
 </html>

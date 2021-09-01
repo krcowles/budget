@@ -46,7 +46,21 @@ var compare = {
 			b = noPart1 + noPart2;
 		}
 		return a - b;
-	} 
+	},
+	sel: function(a, b) {	// standard sort - literal
+		if ( a < b ) {
+			return -1;
+		} else {
+			return a > b ? 1 : 0;
+		}
+	},
+	inp: function(a, b) {	// standard sort - literal
+		if ( a < b ) {
+			return -1;
+		} else {
+			return a > b ? 1 : 0;
+		}
+	}
 };  // end of COMPARE object
 
 $( function() {  // doc.ready
@@ -70,13 +84,30 @@ $('.sortable').each( function() {
 			$header.siblings().removeClass('ascending descending');
 			if (compare.hasOwnProperty(order)) {  // compare object needs method for var order
 				column =$controls.index(this);
-				
-				rows.sort( function(a,b) {
-					a = $(a).find('td').eq(column).text();
-					b = $(b).find('td').eq(column).text();
-					return compare[order](a,b);
-				});
-				
+				if (order === 'sel') {
+					rows.sort(function(a, b) {
+						a = $(a).find('td').eq(column).children().eq(0).attr('id');
+						b = $(b).find('td').eq(column).children().eq(0).attr('id');
+						let x = '#' + a + ' option:selected';
+						let y = '#' + b + ' option:selected'; 
+						a = $(x).text();
+						b = $(y).text();
+						return compare[order](a, b);
+					});
+				} else if (order === 'inp') {
+						rows.sort(function(a, b) {
+							a = $(a).find('td').eq(column).children().eq(0).val();
+							b = $(b).find('td').eq(column).children().eq(0).val();
+							return compare[order](a, b);
+
+						});
+				} else {
+					rows.sort( function(a, b) {
+						a = $(a).find('td').eq(column).text();
+						b = $(b).find('td').eq(column).text();
+						return compare[order](a, b);
+					});
+				}
 				$tbody.append(rows);
 			}  // end compare
 		}  // end else

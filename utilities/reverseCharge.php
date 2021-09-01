@@ -88,14 +88,15 @@ if ($charges) {
         <?php for ($j=0; $j<$noOfCards; $j++) : ?>
             <h4>For Credit Card
                 <span class="cardtxt"><?=$cr_cards[$j];?>:</span></h4>
+            <h5>Click on header to sort; again to reverse</h5>
             <div class="carddiv">
-                <table>
+                <table class="sortable">
                     <thead>
                         <tr>
-                            <th>Undo<br />Chg</th>
-                            <th>Amt<br />Chgd</th>
-                            <th>Date<br />Entered</th>
-                            <th>Account Charged</th>
+                            <th>Undo</th>
+                            <th data-sort="amt">Amt<br />Chgd</th>
+                            <th data-sort="std">Date<br />Entered</th>
+                            <th data-sort="std">Account Charged</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,6 +127,7 @@ if ($charges) {
 <script src="../scripts/jquery-1.12.1.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/reverseCharge.js" type="text/javascript"></script>
+<script src="../scripts/tableSort.js"></script>
 </body>
 
 </html>

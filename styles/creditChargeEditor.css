@@ -28,3 +28,6 @@ textarea {
     top: -1px;
     height: 28px;
 }
+th {
+    cursor: pointer;
+}

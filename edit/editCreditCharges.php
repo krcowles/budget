@@ -20,8 +20,9 @@ require_once "../utilities/timeSetup.php";
  */
 $counts = [];
 $tbodys = [];
-// Set up an array for javascript which id's the initialized value for select boxes
-$crsels = [];
+// Set up an array of strings for javascript which id's the initialized value
+// for select boxes in each credit card table
+$crsels = '["';
 for ($j=0; $j<count($cr); $j++) {
     $tally = 0;
     $vals = [];
@@ -42,7 +43,8 @@ for ($j=0; $j<count($cr); $j++) {
         }
     }
     // Id items to be initialized by javascript in the 'Deducted From' column:
-    $crsels[$j] = implode("|", $vals);
+    $crsels.= implode("|", $vals);
+    $crsels .= $j === count($cr) - 1 ? '"]' : '","';
     $tbody .= '</tbody>' . PHP_EOL;
 
     if ($tally === 0) {
@@ -51,7 +53,11 @@ for ($j=0; $j<count($cr); $j++) {
     array_push($counts, $tally);
     array_push($tbodys, $tbody);
 }
-$js_sels = json_encode($crsels);
+if (count($cr) === 0) {
+    $js_sels = '[]';
+} else {
+    $js_sels = $crsels;
+}
 ?>
 <!DOCTYPE html >
 <html lang="en">
@@ -73,8 +79,8 @@ $js_sels = json_encode($crsels);
 <?php require "../main/navbar.php"; ?>
 <div id="main">
     <br />
-    <h3>You can use this form to edit active (not yet paid) charges
-    charged to your credit card(s).</h3>
+    <h4>You can use this form to edit active (not yet paid) charges
+    charged to your credit card(s).</h4>
     <form id="form" method="post" action="saveEditedCharge.php">
     <div>
         <button id="svchgs" class="btn btn-secondary" type="button">
@@ -84,13 +90,14 @@ $js_sels = json_encode($crsels);
         <?php for ($i=0; $i<count($cr); $i++) : ?>
             <input type="hidden" name="cnt[]" value="<?= $counts[$i]?>" />
             <h4>These are your current charges against <?= $cr[$i];?></h4>
-            <table>
+            <h5>Click on Header to sort; again to reverse</h5>
+            <table class="sortable">
                 <thead>
                     <tr>
-                        <th>Date:</th>
-                        <th>Amount</th>
-                        <th>Deducted From:</th>
-                        <th>Payee:</th>
+                        <th data-sort="inp">Date:</th>
+                        <th data-sort="amt">Amount</th>
+                        <th data-sort="sel">Deducted From:</th>
+                        <th data-sort="std">Payee:</th>
                     </tr>
                 </thead>
                 <?=$tbodys[$i];?>
@@ -110,6 +117,7 @@ $js_sels = json_encode($crsels);
 <script src="../scripts/menus.js"></script>
 <script type="text/javascript">var selinits = <?=$js_sels;?>;</script>
 <script src="../scripts/creditChargeEditor.js"></script>
+<script src="../scripts/tableSort.js"></script>
 </body>
 
 </html>
