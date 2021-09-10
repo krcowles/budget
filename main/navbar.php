@@ -47,6 +47,9 @@ require_once "../utilities/getCards.php";
                     <li><a id="exp4" class="dropdown-item"
                         href="../edit/editCreditCharges.php" target="_self">
                         Edit Current Charges</a></li>
+                    <li><a id="upexp" class="dropdown-item"
+                        href="../edit/editExpenses.php" target="_self">
+                        Update 30-day Expenses</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">

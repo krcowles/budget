@@ -39,7 +39,7 @@ for ($d=0; $d<count($dr); $d++) {
 $dcHtml .= '</select>';
 $allCds = array_merge($cr, $dr);
 $allCardsHtml = '<select class="allsel"><option value="">SELECT ONE:</option>' .
-    '<option value="check">Check or Draft</option>';
+    '<option value="Check or Draft">Check or Draft</option>';
 for ($a=0; $a<count($allCds); $a++) {
     $allCardsHtml .= '<option value="' . $allCds[$a] . '">' .
         $allCds[$a] . '</option>';

@@ -55,9 +55,9 @@ $.get('../utilities/getDeposits.php', function(list) {
 $('#chgexp').on('click', function() {
     // was triggering twice, don't know why, so:
     $('#pebtn').off('click').on('click', function() {
-        let $tblrows = $('#exptbl').find('tr').find('select');
-        let sel1 = getSelect($tblrows[0]);
-        let sel2 = getSelect($tblrows[1]);
+        let $tbl_selects = $('#exptbl').find('tr').find('select');
+        let sel1 = getSelect($tbl_selects[0]); // Acct to charge
+        let sel2 = getSelect($tbl_selects[1]); // 'Check or Draft' or cd name
         if (sel2 === 'SELECT ONE:') {
             alert("You must select a payment method");
             return false;
@@ -70,7 +70,7 @@ $('#chgexp').on('click', function() {
         if (!valPayee(payee)) {
             return false;
         }
-        let ajaxdata = {id: 'payexp', acct_name: sel1, method: sel2,
+        let ajaxdata = {id: 'payexp', acct_name: sel1, cdname: sel2,
             amt: amt, payto: payee};
         executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem, 'stay');
     });
@@ -420,16 +420,14 @@ $('#chgcookie').on('click', function() {
 });
 
 /**
- * Retrieve dropdown values
- * @param {string} div The div in which the drop-down resides
- * 
+ * Retrieve selected drop-down text (not value) 
+ * @param domsel 
  */
 function getSelect(domsel) {
     let opts = domsel.options;
     let indx = domsel.selectedIndex;
     let item = domsel.options[indx].label
     return item;
-
 }
 
 // general purpose function to execute ajax based on input arguments

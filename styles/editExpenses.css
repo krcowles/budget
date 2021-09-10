@@ -29,8 +29,11 @@ input {
 .amt {
     width: 100px;
 }
-.fullsel,.tsels {
+.fullsel, .meths, .drcrds {
     position: relative;
     top: -1px;
     height: 36px;
+}
+.hidden {
+    display: none;
 }
