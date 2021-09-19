@@ -29,20 +29,21 @@ switch ($id) {
 case 'payexp':
     $acct = filter_input(INPUT_POST, 'acct_name');
     // 'method' is either 'Check or Draft', or card name:
-    $cdname = filter_input(INPUT_POST, 'cdname');  // May also be 'Check or Draft'  
+    $method = filter_input(INPUT_POST, 'method');  
     $amt = filter_input(INPUT_POST, 'amt');
     $payto = filter_input(INPUT_POST, 'payto');
+    $cdname = $method;
     $item = array_search($acct, $account_names);
     $bal = floatval($current[$item]) - floatval($amt);
     $budupdte = "UPDATE `Budgets` SET `current` = :bal WHERE " .
         "`userid` = :uid AND `budname` = :acct;";
     $bud = $pdo->prepare($budupdte);
     $bud->execute([":bal" => $bal, ":uid" => $_SESSION['userid'], ":acct" => $acct]);
-    // examine $cdname as either  Cr or Dr card name
-    if (in_array($cdname, $cr)) { // a credit card
+    // examine $method as either  Cr or Dr card name
+    if (in_array($method, $cr)) { // a credit card
         $dbmethod = "Credit";
         $pd = 'N';
-    } elseif (in_array($cdname, $dr)) { // a debit card
+    } elseif (in_array($method, $dr)) { // a debit card
         $dbmethod = "Debit";
         $pd = 'Y';
     } else { // 'Check or Draft'

@@ -70,7 +70,7 @@ $('#chgexp').on('click', function() {
         if (!valPayee(payee)) {
             return false;
         }
-        let ajaxdata = {id: 'payexp', acct_name: sel1, cdname: sel2,
+        let ajaxdata = {id: 'payexp', acct_name: sel1, method: sel2,
             amt: amt, payto: payee};
         executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem, 'stay');
     });
