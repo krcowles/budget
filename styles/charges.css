@@ -63,3 +63,25 @@ td span:first-child {
 #exptbl {
     border: none;
 }
+table#aptbl {
+    box-sizing: content-box;
+    border: 2px solid darkgreen;
+    border-radius: 6px !important;
+    -moz-border-radius: 6px !important;     
+}
+table#aptbl td {
+    border: none;
+}
+table#aptbl tr.lblrow {
+    color: darkgreen;
+    margin-top: 5px;
+}
+
+table#aptbl td.lst {
+    vertical-align: middle;
+    padding: 4px 6px 7px 6px;
+}
+.aplbl {
+    font-weight: bold;
+    text-decoration: underline;
+}

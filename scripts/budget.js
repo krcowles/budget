@@ -61,9 +61,6 @@ if (trigger_mo === currmo) {
     });
 }
 
-/**
- * Set up for autopays
- */
 // get date info to check for upcoming or past due autopays
 var today = new Date();
 var dd = parseInt(String(today.getDate()).padStart(2, '0'));
@@ -81,6 +78,10 @@ if ($('#mstr').text() === 'yes') {
         window.open('../admin/admintools.php', "_blank");
     });
 }
+/**
+ * Set up for autopays
+ */
+ var ap_items = new bootstrap.Modal(document.getElementById('presentap'));
 // check autopayment status
 var payday = [];
 var paywith = []; // method of payment
@@ -127,68 +128,77 @@ $('.apday').each(function(indx) {
 });
 // user presentation of autopay candidates:
 if (ap_candidates) {
-    //  create a table of due autopays
-    let $userlist = $('<table id="modal_table"><tbody></tbody></table>');
-    // charges.css takes precedence on td, so using styled elements here
     for (let j=0; j<aname.length; j++) {
-        let apdata = '<tr><td colspan="6" style="color:darkgreen;">' +
-            '<span id="acnme' + j + '">Account: ' + aname[j] + '</span><span ' +
-            'style="float:left">&nbsp;/&nbsp;</span>' +
-            '<span id="acmeth' + j + '" style="float:left;">Pay Using: ' +
-            paywith[j] + '</span></div></td></tr>';
-        apdata += '<tr><td style="vertical-align:middle;">Amt:</td>' +
-            '<td style="vertical-align:middle;"><input id="amt' + j + '" type="text" /></td>' +
-            '<td style="vertical-align:middle;">To: </td>' +
-            '<td style="vertical-align:middle;"><input id="payee' + j + '" type="text" /></td>' +
-            '<td style="vertical-align:middle;">Due: ' + payday[j] + '</td>' +
-            '<td style="vertical-align:middle;">Pay It&nbsp;&nbsp;' +
-            '<input id="py' + j + '" class="paybox" type="checkbox" /></td></tr>';
-        $userlist.append(apdata);
+        let apdata = '<tr class="lblrow"><td colspan="6">' +
+        '<span id="tdspan">' + // a span for the entire <td>
+            '<span id="labelspan" style="float:left;">' +
+                '<span class="aplbl">Account:</span>' +
+                '<span id="acnme' + j + '">&nbsp;' + aname[j] + '</span>' +
+            '</span>' + // end of labelspan
+            '<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;</span>' +
+            '<span id="methodspan" style="float:left;">' +
+                '<span class="aplbl">Method:</span>' +
+                '<span id="acmeth' + j + '">&nbsp;' + paywith[j] + '</span>' +
+            '</span>' + // end of methodspan
+            '<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;</span>' +
+            '<span id="duedayspan" style="float:left;">' +
+                '<span class="aplbl">Billing Date:</span>&nbsp;' + payday[j] +
+            '</span>' + // end of duedayspan
+        '</span>' + // end of tdspan
+        '</td></tr>';
+        apdata += '<tr class="btmrow"><td class="lst">Amt to Pay:</td>' +
+            '<td class="lst"><input id="amt' + j + '" type="text" size="6" ' +
+            '/></td><td class="lst">Payee:</td>' +
+            '<td class="lst"><input id="payee' + j +'" type="text" size="8" ' +
+            '/></td><td class="lst">Pay</td><td class="lst">' +
+            '<input id="py' + j + '" class="paybox" type="checkbox" /></td>' +
+            '</tr>';
+        $('#apbody').append(apdata);
     }
-    $('#ap').append($userlist);
     // set up actions for making autopayments
-    $('.paybox').each(function() {
-        let payid = '#' + this.id;
-        $('body').on('click', payid, function() {
-            let idno = this.id;
-            idno = idno.substring(2);
-            let amt = $('#amt' + idno).val()
-            let pye = $('#payee' + idno).val();
-            let acct = $('#acnme' + idno).text();
-            acct = acct.substring(9);
-            let means = $('#acmeth' + idno).text();
-            means = means.substring(11);
-            if (!valAmt(amt)) {
-                return false;
-            }
-            if (!valPayee(pye)) {
-                return false;
-            }
-            let ajaxdata = {acct: acct, amt: amt, payee: pye, method: means};
-            $.ajax({
-                url: '../utilities/makeAutopayment.php',
-                method: 'post',
-                data: ajaxdata,
-                dataType: 'text',
-                success: function(result) {
-                    if (result === 'OK') {
-                        location.reload();
-                    } else {
-                        alert("A problem was encountered with autopayment\n" +
-                            "Contact support");
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    let msgtxt = "Error trying to make autopayment:\n";
-                    let msg = msgtxt + textStatus + "; Error: " + errorThrown;
-                    alert(msg);
+    $('#appaybtn').on('click', function() {
+        // collect any checkboxes that are checked
+        $('.paybox').each(function() {
+            if ($(this).is(':checked')) {
+                let idno = this.id;
+                idno = idno.substring(2);
+                let amt = $('#amt' + idno).val();
+                if (!valAmt(amt)) {
+                    return false;
                 }
-            });
+                let pye = $('#payee' + idno).val();
+                if (!valPayee(pye)) {
+                    return false;
+                }
+                let acct = $('#acnme' + idno).text();
+                acct = acct.trim();
+                let means = $('#acmeth' + idno).text();
+                means = means.trim();
+                let ajaxdata = {acct: acct, amt: amt, payee: pye, method: means};
+                $.ajax({
+                    url: '../utilities/makeAutopayment.php',
+                    method: 'post',
+                    data: ajaxdata,
+                    dataType: 'text',
+                    success: function(result) {
+                        if (result === 'OK') {
+                            location.reload();
+                        } else {
+                            alert("A problem was encountered with autopayment\n" +
+                                "Contact support");
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        let msgtxt = "Error trying to make autopayment:\n";
+                        let msg = msgtxt + textStatus + "; Error: " + errorThrown;
+                        alert(msg);
+                    }
+                });
+            }
         });
     });
-    apitems.show();  
+    ap_items.show();  
 }
-
 /**
  * CSS simply won't recognize a tr:hover for this table, so...
  */
