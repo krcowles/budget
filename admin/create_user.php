@@ -87,6 +87,6 @@ if ($submitter == 'create') {
 if ($_SESSION['cookies'] === 'accept') {
     $days = 365; // Number of days before cookie expires
     $expire = time()+60*60*24*$days;
-    setcookie("epiz", $username, $expire, "/", "", false, true);
+    setcookie("mybud", $username, $expire, "/", "", false, true);
 }
 echo "DONE";

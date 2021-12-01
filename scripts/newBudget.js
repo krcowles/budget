@@ -4,6 +4,7 @@
  * 
  * @author Ken Cowles
  * @version 2.0 Secure login
+ * @version 3.0 Modified for transfer to Mochahost
  */
 $(function() {
 

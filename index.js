@@ -3,6 +3,7 @@
  * 
  * @author Ken Cowles
  * @version 1.0 First release of new intro page
+ * @version 2.0 Transfer to Mochahost
  */
 $(function() {
 

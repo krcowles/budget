@@ -19,7 +19,7 @@ $msg = <<<LNK
 Your request to reset your Budgetizer account was received<br />
 Your User Name is:
 LNK;
-$href = '<br /><br /><a href="http://budgetizer.epizy.com/admin/renew.php?code=';
+$href = '<br /><br /><a href="https://mybudgetizer.com/admin/renew.php?code=';
 // validate email
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 if (!$email) {
@@ -49,7 +49,7 @@ if (in_array($email, $registered)) {
     $msg .= $href;
     // send it
     $mail->isHTML(true);
-    $mail->setFrom('webmaster@budgetizer.epizy.com', 'Do not reply');
+    $mail->setFrom('webmaster@mybudgetizer.com', 'Do not reply');
     $mail->addAddress($email, 'Budgetizer User');
     $mail->Subject = 'Account Reset';
     $mail->Body = $msg;

@@ -4,8 +4,8 @@
  * and toggles password visibility. Functionally, it verifies that all
  * fields in the form have been entered, and registers the member's cookie choice.
  * 
- * @author Tom Sandberg
  * @author Ken Cowles
+ * @version 2.0 Moved to mochahost
  */
 $(function() {   // document ready function
 

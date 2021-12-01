@@ -10,11 +10,11 @@
  *    the default budget items (Temporary Accounts and Undistributed Funds)
  *    are created automatically.
  *    >>> When working in this mode, setup = '100'
- * 2. The user can enter preliminary card data (simple name & type)
+ * 2. The user can then enter preliminary card data (simple name & type)
  *    >>> When working in lv2, lv1 is finished and setup = '110'
- * 3. The user can enter current outstanding/unpaid credit card charges
+ * 3. The user can then enter current outstanding/unpaid credit card charges
  *    >>> When working in lv3, lv1 & lv2 are finished and setup = '001'
- * PHP Version 7.1
+ * PHP Version 7.8
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -101,7 +101,7 @@ if ($new) {
         $lastpos = 0;
     }
     // get any card data already entered (if any)
-    include "../utilities/getCards.php";
+    include "../utilities/getCards.php"; // sets up select boxes
     $cdIds = [];
     $cdNames = [];
     $cdTypes = [];
@@ -136,9 +136,8 @@ if ($new) {
     }
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en-us">
 
 <head>
     <title>New Account Data</title>
@@ -184,6 +183,11 @@ if ($new) {
                 you will leave the site. When you later return to the Budgetizer,
                 you will be brought to this page to complete your data entry.
             </span><br /><br />
+            <div id="old">
+                <?php if (!$new) {
+                    include "enteredBudget.php";
+                } ?>
+            </div>
             <div id="new">
                 <span class="NormalHeading">Enter your new budget information
                     below. Please use whole numbers only (integers) for "Monthly
@@ -201,11 +205,6 @@ if ($new) {
                         <br /><br />
                     <?php endfor; ?>
                 </div><br />
-            </div>
-            <div id="old">
-                <?php if (!$new) {
-                    include "enteredBudget.php";
-                } ?>
             </div>
         </form>
     </div>
@@ -229,6 +228,11 @@ if ($new) {
                 you will leave the site. When you later return to the Budgetizer,
                 you will be brought to this page to complete your data entry.
             </span><br /><br />
+            <div id="cold">
+                <?php if (!$new) {
+                    include "enteredCards.php";
+                } ?>
+            </div>
             <div id="cnew">
                 <span class="NormalHeading">Enter your new card information
                     below.</span><br />
@@ -239,11 +243,6 @@ if ($new) {
                         <option value="Debit">Debit</option>
                     </select><br /><br />
                 <?php endfor; ?>
-            </div>
-            <div id="cold">
-                <?php if (!$new) {
-                    include "enteredCards.php";
-                } ?>
             </div>
         </form>
     </div>
@@ -267,6 +266,11 @@ if ($new) {
                 you will leave the site. When you later return to the Budgetizer,
                 you will be brought to this page to complete your data entry.
             </span><br /><br />
+            <div id="eold">
+                <?php if (!$new) {
+                    include "enteredCharges.php";
+                } ?>
+            </div>
             <div id="enew">
                 <span class="NormalHeading">Enter your new expense information
                     below. (Outstanding/unpaid Credit charges only)</span><br />
@@ -281,21 +285,9 @@ if ($new) {
                         class="inp" /><br /><br />
                 <?php endfor; ?>
             </div>
-            <div id="eold">
-                <?php if (!$new) {
-                    include "enteredCharges.php";
-                } ?>
-            </div>
         </form>
     </div>
 </div>
-
- <p style="clear:left;margin-left:16px;">
-    <a href="http://validator.w3.org/check?uri=referer">
-        <img src="http://www.w3.org/Icons/valid-xhtml10"
-        alt="Valid XHTML 1.0 Strict" height="31" width="88" />
-    </a>
-</p>
 
 <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
