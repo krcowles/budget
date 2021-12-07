@@ -2,7 +2,7 @@
 /**
  * This section of code gets inserted into newBudgetPanels.php only when
  * the user has already made and saved budget entries.
- * PHP Version 7.1
+ * PHP Version 7.3
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>

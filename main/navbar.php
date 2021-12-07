@@ -105,7 +105,8 @@ require_once "../utilities/getCards.php";
                     <li><a id="ren1" class="dropdown-item"
                         href="#">Rename Account</a></li>
                     <li><a class="dropdown-item" id="edbuds"
-                        href="../edit/budgetEditor.php">Edit Budget Amts &amp; Balances</a>
+                        href="../edit/budgetEditor.php">
+                        Edit Budget Amts &amp; Balances</a>
                     </li>
                 </ul>
             </li>

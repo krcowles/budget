@@ -14,21 +14,25 @@
         already entered:</span><br /><br />
     <div id="eentered">
         <?php for ($e=0; $e<count($exIds); $e++) : ?>
-        <p id="cd<?= $e;?>" 
-            style="display:none;"><?= $aeCard[$e];?></p>
-        Credit Card Used:
-        <span id="crcd<?= $e?>"><?= $ccHtml;?></span>&nbsp;&nbsp;
-        Date of Expense: <input type="text"  class="datepicker exp dates"
-            name="aeedate[]" value="<?= $aeDate[$e];?>" />&nbsp;&nbsp;
-        Amount Paid: <textarea class="amts" rows="1" cols="8"
-            name="aeeamt[]"><?= $aeAmt[$e];?></textarea>&nbsp;&nbsp;
-        Payee: <textarea rows="1" cols="30"
-            name="aeepay[]"><?= $aePayee[$e];?></textarea>&nbsp;&nbsp;
-        Delete: <input type="checkbox" name="edel[]" 
-            value="<?= $exIds[$e]?>" />
-        <input type="hidden" name="expids[]"
-            value="<?= $exIds[$e];?>" />
-        <br />
+            <p id="cd<?= $e;?>" 
+                style="display:none;"><?= $aeCard[$e];?></p>
+            Credit Card Used:
+            <span id="crcd<?= $e?>"><?= $ccHtml;?></span>&nbsp;&nbsp;
+            Date of Expense: <input type="text"  class="datepicker exp"
+                name="aeedate[]" value="<?= $aeDate[$e];?>" />&nbsp;&nbsp;
+            Amount Paid: <textarea class="amts" rows="1" cols="8"
+                name="aeeamt[]"><?= $aeAmt[$e];?></textarea>&nbsp;&nbsp;
+            Payee: <textarea rows="1" cols="20"
+                name="aeepay[]"><?= $aePayee[$e];?></textarea>&nbsp;&nbsp;
+            <div id="acctsel<?=$e;?>" style="display:inline-block;">
+                Account: <?=$budchg;?>&nbsp;&nbsp;
+                <p style="display:none;"><?=$aeAcct[$e];?></p>
+            </div>
+            Delete: <input type="checkbox" name="edel[]" 
+                value="<?= $exIds[$e]?>" />
+            <input type="hidden" name="expids[]"
+                value="<?= $exIds[$e];?>" />
+            <br />
         <?php endfor; ?>
     </div>
 <?php endif; ?>

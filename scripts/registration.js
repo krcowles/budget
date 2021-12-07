@@ -5,7 +5,7 @@
  * fields in the form have been entered, and registers the member's cookie choice.
  * 
  * @author Ken Cowles
- * @version 2.0 Moved to mochahost
+ * @version 2.0 Changes for move to Mochahost
  */
 $(function() {   // document ready function
 
@@ -23,7 +23,7 @@ function setbox() {
     });
 }
 setbox();
-$(window).resize(setbox);
+$(window).on('resize', setbox);
 
 // toggle visibility of password:
 var cbox = document.getElementsByName('password');
@@ -138,7 +138,7 @@ var spacesInName = function () {
         $(this).css('color', 'black');
     });
     // input fields: no blanks; no username spaces; valid email address
-    $("form").submit(function (ev) {
+    $("form").on('submit', function (ev) {
         ev.preventDefault();
         if (outstanding_issue) {
             alert("Please correct item(s) in red before submitting");

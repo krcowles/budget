@@ -61,7 +61,7 @@ $('#cpass').on('click', function() {
     });
 });
 
-$('form').submit(function(ev) {
+$('form').on('submit', function(ev) {
     ev.preventDefault();
     let usr = $('input[name=username]').val();
     let pass = $('input[name=password]').val();

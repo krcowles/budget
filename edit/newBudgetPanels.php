@@ -3,15 +3,16 @@
  * This page is invoked when a new user successfully signs up, or, when a new
  * user has 'returned' after having partially entered data, saved and then exited.
  * The state of initial budget completion is tracked by the 'setup' field in the 
- * 'Users' table of the database. The page allows the user to establish
- * preliminary data for the new budget in three steps:
+ * 'Users' table of the database. When registered, default accounts are established
+ * and the setup = '100'. This page allows the user to establish preliminary data
+ * for the new budget in three steps:
  * 1. The user can enter preliminary account data to display and manipulate.
  *    The budget is limited to basic data at this point. On first-time entry,
  *    the default budget items (Temporary Accounts and Undistributed Funds)
  *    are created automatically.
  *    >>> When working in this mode, setup = '100'
  * 2. The user can then enter preliminary card data (simple name & type)
- *    >>> When working in lv2, lv1 is finished and setup = '110'
+ *    >>> When working in lv2, lv1 is finished and setup = '010'
  * 3. The user can then enter current outstanding/unpaid credit card charges
  *    >>> When working in lv3, lv1 & lv2 are finished and setup = '001'
  * PHP Version 7.8
@@ -23,12 +24,13 @@
 session_start();
 require_once "../database/global_boot.php";
 
+// If the user just registered, the query string pnl=000
 $pnl    = isset($_GET['pnl'])    ? filter_input(INPUT_GET, 'pnl') : "000";
 
 // $lv_ values are used by newBudget.js to determine which panel to open
-$lv1 = $pnl === '100' ? 'yes' : 'no';
-$lv2 = $pnl === '010' ? 'yes' : 'no';
-$lv3 = $pnl === '001' ? 'yes' : 'no';
+$lv1 = $pnl[0] === '1' ? 'yes' : 'no';
+$lv2 = $pnl[1] === '1' ? 'yes' : 'no';
+$lv3 = $pnl[2] === '1' ? 'yes' : 'no';
 // first time entry only (user just registered), $pnl === '000'
 $new = $pnl === '000' ? true : false; 
 
@@ -69,15 +71,22 @@ if ($new) {
         $sql = "INSERT INTO `Budgets` (" . $columns . ") VALUES (" . $values . ");";
         $addTemp = $pdo->query($sql);
     }
-    // prevent re-creating these prelim accounts by ensuring that setup 
-    // is no longer '000'; Start with '100', and may be changed below
+    // prevent re-creating these preliminary accounts by ensuring that 'setup' 
+    // is no longer '000'; Start with '100': may change in subsequent sections
     $setup = '100';
+    $no_bud_dat = "nodat";
+    $no_crd_dat = "nocrds";
     $_SESSION['start'] = $setup;
     $initReq = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
     $init = $pdo->prepare($initReq);
     $init->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
+    // For new accounts, there are no budget options yet...
+    $budsel = '<select class="budsel" name="chgto[]">' . PHP_EOL;
+    $budsel .= '<option value="NOBUD">No Budgets Entered</option>' . PHP_EOL;
+    $budsel .= '</select>' . PHP_EOL;
 } else {
-    // get any budget data already entered (if any)
+    // get any budget data already entered (if any) - excludes default accounts
+    $setup = $pnl; // $_SESSION['start'] will already be correctly assigned
     $aeIds = [];
     $aeNames = [];
     $aeBudamt = [];
@@ -88,28 +97,41 @@ if ($new) {
     $stmnt->execute(["uid" => $_SESSION['userid']]);
     $old_dat = $stmnt->fetchALL(PDO::FETCH_ASSOC);
     $aedata = count($old_dat) > 0 ? true : false;
+    // unique name attr's required: one for new expenses, one for old
+    $budsel = '<select class="budsel" name="chgto[]">' . PHP_EOL;
+    $budsel .= '<option value="NOBUD">Select Account</option>' . PHP_EOL;
+    $budchg = '<select class="oldbud" name="oldchg[]">' . PHP_EOL;
     foreach ($old_dat as $old) {
         array_push($aeIds, $old['id']);
         array_push($aePos, intval($old['budpos']));
         array_push($aeNames, $old['budname']);
         array_push($aeBudamt, $old['budamt']);
         array_push($aeCurr, $old['current']);
+        $budsel .= '<option value="' . $old['budname'] . '">' .
+            $old['budname'] . '</option>' . PHP_EOL;
+        $budchg .= '<option value="' . $old['budname'] . '">' .
+            $old['budname'] . '</option>' . PHP_EOL;
     }
     if ($aedata) {
         $lastpos = max($aePos);
+        $no_bud_dat = "dat";
     } else {
         $lastpos = 0;
+        $no_bud_dat = "nodat";
+        $budsel .= '<option value="NOBUD">No Budgets Entered</option>' . PHP_EOL;
+        $budchg .= '<option value="NOBUD">No Budgets Entered</option>' . PHP_EOL;
     }
+    $budsel .= '</select>' . PHP_EOL;
+    $budchg .= '</select>' . PHP_EOL;
+
     // get any card data already entered (if any)
     include "../utilities/getCards.php"; // sets up select boxes
     $cdIds = [];
     $cdNames = [];
     $cdTypes = [];
-    $cds = "SELECT * FROM `Cards` WHERE `userid` = :uid;";
-    $cddat = $pdo->prepare($cds);
-    $cddat->execute(["uid" => $_SESSION['userid']]);
-    $cards = $cddat->fetchALL(PDO::FETCH_ASSOC);
+    // $cards contains all data, if any, obtained via getCards.php
     $aecards = count($cards) > 0 ? true : false;
+    $no_crd_dat = $aecards ? 'crds' : 'nocrds';
     foreach ($cards as $card) {
         array_push($cdIds, $card['cdindx']);
         array_push($cdNames, $card['cdname']);
@@ -122,6 +144,7 @@ if ($new) {
     $aeDate = [];
     $aeAmt = [];
     $aePayee = [];
+    $aeAcct = [];
     $exp = "SELECT * FROM `Charges` WHERE `userid` = :uid;";
     $expdat = $pdo->prepare($exp);
     $expdat->execute(["uid" => $_SESSION['userid']]);
@@ -133,6 +156,7 @@ if ($new) {
         array_push($aeDate, $expense['expdate']);
         array_push($aeAmt, $expense['expamt']);
         array_push($aePayee, $expense['payee']);
+        array_push($aeAcct, $expense['acctchgd']);
     }
 }
 ?>
@@ -152,19 +176,27 @@ if ($new) {
 </head>
 
 <body>
-<div id="intro">
+<div id="content">
+    <p id="pnlin"><?=$pnl;?></p>
+    <p id="curr_setup"><?=$setup;?></p>
+    <p id="no_bud_dat"><?=$no_bud_dat;?></p>
+    <p id="no_crd_dat"><?=$no_crd_dat;?></p>
     <p id="ready" class="LargeHeading">You're Ready To Start!&nbsp;&nbsp;
         <span id="help">[New to Budgeting? See
         <a href="../help/help.php?doc=HowToBudget.pdf" target="_blank">How
         to Budget</a>]</span>
     </p>
-    <h2>Click on these three simple steps (in order) to get started:
-        <span>
-            <button id="done">Completed: Go To Budget</button>
-        </span>
-    </h2>
-    
-    <div id="one" class="steps">Create the basic budget</div>
+    <h2>Click on the three simple steps below to get started</h2>
+    <h3><button id="done">Data Entry Finished</button>
+        &nbsp;&nbsp;Go to budget page</h3>
+   
+    <?php if ($new || !$aedata) : ?>
+        <div id="one" class="steps">1. Create the basic budget
+            <span class="hilite">&nbsp;&nbsp;[No User Budget Data Entered]</span>
+        </div>
+    <?php else : ?>
+        <div id="one" class="steps">Add Budget Data</div>
+    <?php endif; ?>
     <div id="budget">
         <span class="note NormalHeading">Note: If you make changes,
             be sure to 'Save'!
@@ -181,7 +213,7 @@ if ($new) {
                 saved to your budget, and new entries will become available.
                 If you 'Save and Return Later', all data will be saved and
                 you will leave the site. When you later return to the Budgetizer,
-                you will be brought to this page to complete your data entry.
+                you  may continue to add/edit data.
             </span><br /><br />
             <div id="old">
                 <?php if (!$new) {
@@ -209,7 +241,13 @@ if ($new) {
         </form>
     </div>
 
-    <div id="two" class="steps">Add Credit/Debit Cards</div>
+    <?php if ($new || !$aecards) : ?>
+        <div id="two" class="steps">2. Add Credit/Debit Cards
+            <span class="hilite">&nbsp;&nbsp;[No Credit/Debit Cards Entered]</span>
+        </div>
+    <?php else : ?>
+        <div id="two" class="steps">Add/Edit Credit/Debit Cards</div>
+    <?php endif; ?>
     <div id="cards">
         <span class="note NormalHeading">Note: If you make changes,
             be sure to 'Save'!
@@ -226,7 +264,7 @@ if ($new) {
                 saved to your budget, and new entries will become available.
                 If you 'Save and Return Later', all data will be saved and
                 you will leave the site. When you later return to the Budgetizer,
-                you will be brought to this page to complete your data entry.
+                you  may continue to add/edit data.
             </span><br /><br />
             <div id="cold">
                 <?php if (!$new) {
@@ -247,7 +285,12 @@ if ($new) {
         </form>
     </div>
 
-    <div id="three" class="steps">Enter/Edit Outstanding/Unpaid Charges</div>
+    <?php if ($new || !$aeexp) : ?>
+        <div id="three" class="steps">3. Enter Outstanding/Unpaid Charges
+            <span class="hilite">&nbsp;&nbsp;[No Charges Entered]</span></div>
+    <?php else : ?>
+        <div id="three" class="steps">Add/Edit Outstanding/Unpaid Charges</div> 
+    <?php endif; ?>
     <div id="expenses">
         <?php require "../utilities/getCards.php"; ?>
         <span class="note NormalHeading">Note: If you make changes,
@@ -256,7 +299,7 @@ if ($new) {
         <form id="edform" method="post" action="saveNewCharges.php">
             <input type="hidden" name="lv3" value="<?=$lv3;?>" />
             <input type="hidden" name="exit3" value="no" />
-            <button id="save">Save and Go to Budget</button>
+            <button id="save">Save</button>
             <span><button id="lv3">Save and Return Later</button>
             </span><br />
             <span class="selnote">Note: When you click on 'Save and Continue',
@@ -264,7 +307,7 @@ if ($new) {
                 saved to your budget, and new entries will become available.
                 If you 'Save and Return Later', all data will be saved and
                 you will leave the site. When you later return to the Budgetizer,
-                you will be brought to this page to complete your data entry.
+                you  may continue to add/edit data.
             </span><br /><br />
             <div id="eold">
                 <?php if (!$new) {
@@ -273,26 +316,28 @@ if ($new) {
             </div>
             <div id="enew">
                 <span class="NormalHeading">Enter your new expense information
-                    below. (Outstanding/unpaid Credit charges only)</span><br />
+                    below. (Outstanding/unpaid Credit charges only)</span>
+                <br /><br />
                 <?php for ($z=0; $z<4; $z++) : ?>
                     Credit Card Used:
-                    <span id="ncd<?= $z;?>"><?= $ccHtml;?></span>&nbsp;&nbsp;
+                    <span id="ncd<?=$z;?>"><?=$ccHtml;?></span>&nbsp;&nbsp;
                     Date of Expense: <input type="text" name="edate[]"
                         class="datepicker dates" />&nbsp;&nbsp;
                     Amount Paid: <input type="text" name="eamt[]" 
                         class="inp amts" />&nbsp;&nbsp;
                     Payee: <input type="text" name="epay[]" 
-                        class="inp" /><br /><br />
+                        class="inp" /><br />
+                    Charge to: <?=$budsel;?><br />
                 <?php endfor; ?>
             </div>
         </form>
     </div>
 </div>
 
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-<script src="../scripts/jquery-ui.js" type="text/javascript"></script>
-<script src="../scripts/dbValidation.js" type="text/javascript"></script>
-<script src="../scripts/newBudget.js" type="text/javascript"></script>
+<script src="../scripts/jquery.min.js"></script>
+<script src="../scripts/jquery-ui.js"></script>
+<script src="../scripts/dbValidation.js"></script>
+<script src="../scripts/newBudget.js"></script>
 
 </body>
 

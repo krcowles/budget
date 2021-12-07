@@ -2,8 +2,9 @@
 /**
  * This script saves all #cards entries into the 'Cards' table.
  * It collects any changes made to existing data, and inserts new data.
- * It then returns to the newBudget.php page.
- * PHP Version 7.1
+ * It then returns to the newBudget.php page (or exit page if 'Save and
+ * Return Later' was chosen).
+ * PHP Version 7.3
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -13,12 +14,6 @@ session_start();
 require "../database/global_boot.php";
 
 $exit  = filter_input(INPUT_POST, 'exit2') === 'no' ? false : true;
-
-$setup = '010';
-$_SESSION['start'] = $setup;
-$status = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
-$newstat = $pdo->prepare($status);
-$newstat->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
 
 // get all pre-entered data, if any
 if (isset($_POST['svdcard'])) {
@@ -58,12 +53,24 @@ $new_types = $_POST['ctype'];
 // save the new stuff to the 'Budgets' table
 for ($n=0; $n<count($new_cards); $n++) {
     if (!empty($new_cards[$n])) {
-        $new = "INSERT INTO `Cards` (`userid`,`cdname`,`type`) " .
-            "VALUES ('" . $_SESSION['userid'] . "','" . $new_cards[$n] .
-            "','" . $new_types[$n] . "');";
-        $pdo->query($new);
+        $new = "INSERT INTO `Cards` (`userid`,`cdname`,`type`) VALUES (?,?,?);";
+        $newcds = $pdo->prepare($new);
+        $newcds->execute([$_SESSION['userid'], $new_cards[$n], $new_types[$n]]);
     }
 }
+// get the current stored setup value
+$getSetupReq = "SELECT `setup` FROM `Users` WHERE `uid`=?;";
+$getSetup = $pdo->prepare($getSetupReq);
+$getSetup->execute([$_SESSION['userid']]);
+$setupRow = $getSetup->fetch(PDO::FETCH_NUM);
+$setup = $setupRow[0];
+$setup[1] = '1';
+$_SESSION['start'] = $setup;
+
+$status = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
+$newstat = $pdo->prepare($status);
+$newstat->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
+
 if (!$exit) {
     $redir = "newBudgetPanels.php?pnl={$setup}";
 } else {

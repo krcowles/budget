@@ -18,7 +18,7 @@ require "../database/global_boot.php";
 $username = filter_input(INPUT_POST, 'usr_name');
 $userpass = filter_input(INPUT_POST, 'usr_pass');
 
-$usr_req = "SELECT * FROM `Users` WHERE `username` = :usr;";
+$usr_req = "SELECT * FROM `Users` WHERE BINARY `username` = :usr;";
 $auth = $pdo->prepare($usr_req);
 $auth->bindValue(":usr", $username);
 $auth->execute();
