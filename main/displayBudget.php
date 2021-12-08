@@ -5,7 +5,7 @@
  * no Userform support!! This program allows a user to create, setup, and manage
  * his/her own personal budget online. Management tools are presented on the home 
  * page ('main/budget.php').
- * PHP Version 7.1
+ * PHP Version 7.3
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -152,7 +152,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
-<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/budget.js"></script>
 <script src="../scripts/jQnumberFormat.js"></script>

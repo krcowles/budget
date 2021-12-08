@@ -138,11 +138,11 @@ $drcards .= '</select>' . PHP_EOL;
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-<script src="../scripts/jquery-ui.js" type="text/javascript"></script>
+<script src="../scripts/jquery.min.js"></script>
+<script src="../scripts/jquery-ui.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/editExpenses.js"></script>
-<script src="../scripts/dbValidation.js" type="text/javascript"></script>
+<script src="../scripts/dbValidation.js"></script>
 
 </body>
 </html>

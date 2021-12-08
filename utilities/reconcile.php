@@ -2,7 +2,7 @@
 /**
  * This module allows the user to reconcile a credit card statement against
  * the chosen credit card.
- * PHP Version 7.1
+ * PHP Version 7.3
  *
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -50,7 +50,7 @@ for ($i=0; $i<count($expamt); $i++) {
         charges.</h4>
     <form id="form" method="post" action="saveReconciledCharges.php">
         <div>
-            <button id="reconcile" type="button" class="btn btn-secondary">
+            <button id="reconcile_chgs" type="button" class="btn btn-secondary">
             Reconcile</button><br /><br />
             <input type="hidden" name="card" value="<?= $rec_cd;?>" />
             <table class="sortable">
@@ -60,6 +60,7 @@ for ($i=0; $i<count($expamt); $i++) {
                         <th data-sort="amt">Amount</th>
                         <th data-sort="std">Deducted From:</th>
                         <th data-sort="std">Payee:</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <?php if (count($card_data) === 0) : ?>
@@ -85,12 +86,12 @@ for ($i=0; $i<count($expamt); $i++) {
 
 <?php require_once "../main/bootstrapModals.html"; ?>
 
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/tableSort.js"></script>
-<script src="../scripts/reconcile.js" type="text/javascript"></script>
+<script src="../scripts/reconcile.js"></script>
 </body>
 
 </html>

@@ -123,10 +123,10 @@ if ($monthly) {
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
-<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/tableSort.js"></script>
-<script type="text/javascript">
+<script>
     $('a').on('click', function() {
         let page = $(this).attr('href');
         $.ajax({

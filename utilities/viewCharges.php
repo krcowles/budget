@@ -143,7 +143,7 @@ for ($p=0; $p<count($dr); $p++) {
         current/outstanding charges to your <em style="color:darkgreen;">credit
         card(s)</em>.
     </h4>
-    <hr id="barloc" />
+    <hr />
 
 
 <?php for ($i=0; $i<count($cr); $i++) : ?>
@@ -172,7 +172,7 @@ for ($p=0; $p<count($dr); $p++) {
         <em style="color:darkgreen;">check,
         draft, or debit card</em> expenses for the previous 30-day period.
     </h4>
-    <hr id="barloc" />
+    <hr />
     <span>Checks/Drafts :</span>
     <div id="innerexp">
         <span class="mvtodr"><strong class="disptodr">To:</strong> 
@@ -217,7 +217,7 @@ for ($p=0; $p<count($dr); $p++) {
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
-<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/tableSort.js"></script>
 <script src="../scripts/manageExp.js"></script>
