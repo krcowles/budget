@@ -39,7 +39,7 @@ $username = isset($_SESSION['username']) && empty($tmpcode) ?
         <input id="usr" type="hidden" name="username" value="<?=$username;?>" />
         <input id="usrchoice" type="hidden" name="cookies" value="nochoice" />
         <table>
-            <tbody>
+            <tbody id="p_reset">
                 <?php if (!empty($tmpcode)) : ?>
                 <tr>
                     <td>One-time Code</td>
