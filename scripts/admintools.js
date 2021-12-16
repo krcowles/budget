@@ -19,6 +19,7 @@ for (let j=0; j<archives.length; j++) {
 // Export database
 $('#exall').on('click', function() {
     window.open('export_all_tables.php?dwnld=N', "_blank");
+    $(this).blur();
 });
 
 function retrieveDwnldCookie(dcname) {
@@ -44,19 +45,23 @@ $('#reload').on('click', function() {
         }, 1000)
         */
        window.open('drop_all_tables.php', "_blank");
+       $(this).blur();
     }
 });
 
 $('#drall').on('click', function() {
     if (confirm("Do you really want to drop all tables?")) {
         window.open('drop_all_tables.php?no=all', "_blank");
+        $(this).blur();
     }
 });
 $('#ldall').on('click', function() {
     window.open('load_all_tables.php', "_blank");
+    $(this).blur();
 });
 $('#show').on('click', function()  {
     window.open('show_tables.php', "_blank_");
+    $(this).blur();
 });
 var arch_rdy = true;
 $('#arch').on('click', function() {
@@ -65,6 +70,7 @@ $('#arch').on('click', function() {
     } else {
         $('#achoice').hide();
     }
+    $(this).blur();
 });
 $('#ayr').on('change', function() {
     let yr = $(this).val();
@@ -105,6 +111,7 @@ $('#mkarch').on('click', function() {
             alert("This year already has been archived");
         }
     }
+    $(this).blur();
 });
 $('#ldarch').on('click', function() {
     if ($('#ldayr').css('display') === 'none') {
@@ -112,6 +119,7 @@ $('#ldarch').on('click', function() {
     } else {
         $('#ldayr').hide();
     }
+    $(this).blur();
 });
 $('#larch').on('click', function() {
     let loadyr = $('#ldyr').val();
@@ -120,6 +128,7 @@ $('#larch').on('click', function() {
         return;
     }
     let script = 'loadArchive.php?arch=' + loadyr;
+    var $btn = $(this);
     $.ajax({
         url: script,
         method: 'get',
@@ -138,6 +147,7 @@ $('#larch').on('click', function() {
             } else {
                 alert("Problem: " + result);
             }
+            $btn.blur();
         },
         error: function() {
             alert("Ajax error");
@@ -145,11 +155,13 @@ $('#larch').on('click', function() {
     });
 });
 $('#version').on('click', function() {
+    var $btn = $(this);
     $.ajax({
         url: 'version.php',
         method: 'get',
         success: function(result) {
             alert(result);
+            $btn.blur();
         },
         error: function() {
             alert("Could not retrieve PHP version info");
@@ -158,13 +170,16 @@ $('#version').on('click', function() {
 });
 $('#phpinfo').on('click', function() {
     window.open('phpInfo.php', "_blank");
+    $(this).blur();
 });
 $('#lo').on('click', function() {
+    var $btn = $(this);
     $.ajax({
         url: 'logout.php',
         method: 'get',
         success: function() {
             window.open('../index.php', "_self");
+            $btn.blur();
         }
     });
 });
