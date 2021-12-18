@@ -4,23 +4,23 @@
 #back {
     margin-left: 10px;
 }
-table {
+table:not(#exptbl) {
     border-collapse: collapse; background-color: snow;
     border-width: 2px; border-style: outset; border-color: black;
 }
-th {
+table:not(#exptbl) th {
     text-align: left; padding: 4px 6px 4px 6px;
     background-color: #afcfaf; border-bottom: 2px 
     solid black; border-top: 2px; border-right: 2px solid black; 
     position: sticky; top: 0; cursor: pointer;
 }
-th:hover {
+table:not(#exptbl) th:hover {
     background-color: ghostwhite;
 }
-tr.even {
+table:not(#exptbl) tr.even {
     background-color: #eff5ef;
 }
-td {
+table:not(#exptbl) td {
     padding: 4px 6px 4px 6px;
 }
 .red  {
@@ -29,6 +29,6 @@ td {
 .inc  {
     margin-left: 16px; margin-top: 16px; margin-bottom: 0px;
 }
-tbody tr:hover {
+table:not(#exptbl) tbody tr:hover {
     background-color: #bfd9bf;
 }

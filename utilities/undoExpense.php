@@ -52,10 +52,11 @@ $noOfExp = count($chgs);
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <link href="../styles/reverseCharge.css" type="text/css" rel="stylesheet" />
     <style>
-        tbody tr:nth-child(odd):hover {background-color: #bfd9bf;}
-        tbody tr:nth-child(even):hover {background-color: #bfd9bf;}
+      table:not(#exptbl) tbody tr:nth-child(odd):hover {background-color: #bfd9bf;}
+      table:not(#exptbl) tbody tr:nth-child(even):hover {background-color: #bfd9bf;}
     </style>
 </head>
 <body>

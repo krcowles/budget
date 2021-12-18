@@ -72,6 +72,7 @@ $drcards .= '</select>' . PHP_EOL;
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <link href="../styles/editExpenses.css" type="text/css" rel="stylesheet" />
     <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
 </head>

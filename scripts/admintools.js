@@ -183,5 +183,17 @@ $('#lo').on('click', function() {
         }
     });
 });
+$('#newusr').on('click', function() {
+    let newid = $('#auid').val();
+    if (newid == '') {
+        alert("OOPS - No id specified!");
+    } else {
+        let newlogin = "../admin/logout.php?newuser=" + newid;
+        $.get(newlogin, function() {
+            window.open('../index.php');
+        });
+    }
+    return;
+});
 
 });  // end of doc loaded

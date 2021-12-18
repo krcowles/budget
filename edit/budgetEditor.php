@@ -22,6 +22,7 @@ require_once "../utilities/timeSetup.php";
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <link href="../styles/budgetEditor.css" type="text/css" rel="stylesheet" />
     <style>
         td { padding-bottom: 0px; }

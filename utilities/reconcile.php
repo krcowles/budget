@@ -36,6 +36,7 @@ for ($i=0; $i<count($expamt); $i++) {
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <link href="../styles/charges.css" type="text/css" rel="stylesheet" />
     <link href="../styles/reconcile.css" type="text/css" rel="stylesheet" />
 </head>

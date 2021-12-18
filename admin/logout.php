@@ -9,9 +9,14 @@
  */
 session_start();
 
-setcookie('mybud', '', 0, '/');
-unset($_SESSION['userid']);
-unset($_SESSION['expire']);
-unset($_SESSION['cookiestatus']);
-unset($_SESSION['cookies']);
-unset($_SESSION['start']);
+if (!isset($_GET['newuser'])) {
+    setcookie('mybud', '', 0, '/');
+    unset($_SESSION['userid']);
+    unset($_SESSION['expire']);
+    unset($_SESSION['cookiestatus']);
+    unset($_SESSION['cookies']);
+    unset($_SESSION['start']);
+} else {
+    $newid = filter_input(INPUT_GET, 'newuser');
+    $_SESSION['userid'] = $newid;
+}

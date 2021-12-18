@@ -72,6 +72,7 @@ if (count($cr) === 0) {
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
     <link href="../styles/budgetEditor.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <link href="../styles/creditChargeEditor.css" type="text/css" rel="stylesheet" />
 </head>
 
