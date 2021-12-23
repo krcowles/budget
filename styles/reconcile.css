@@ -20,7 +20,7 @@ input[type=checkbox]
 #inst {
   font-size: 18px;
 }
-th {
+th:not(#exptbl) {
   background-color: #004a00;
   color: white;
   cursor: pointer;

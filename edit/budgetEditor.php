@@ -22,8 +22,9 @@ require_once "../utilities/timeSetup.php";
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <link href="../styles/budgetEditor.css" type="text/css" rel="stylesheet" />
-    <style type="text/css">
+    <style>
         td { padding-bottom: 0px; }
     </style>
 </head>
@@ -67,9 +68,9 @@ require_once "../utilities/timeSetup.php";
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
-<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/menus.js"></script>
-<script type="text/javascript">
+<script>
     $('#edbuds').addClass('active');
     $('#save').on('click', function() {
         $('form').trigger('submit');

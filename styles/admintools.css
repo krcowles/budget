@@ -58,3 +58,7 @@ input[type=file]:hover {
 #achoice, #ldayr {
     display: none;
 }
+.dshift {
+    position: relative;
+    top: 6px;
+}

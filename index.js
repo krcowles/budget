@@ -3,7 +3,38 @@
  * 
  * @author Ken Cowles
  * @version 1.0 First release of new intro page
+ * @version 2.0 Transfer to Mochahost
  */
+// need global for getLogin.js
+var chg_pass = new bootstrap.Modal(document.getElementById('resetemail'));
+const wait_time = 60 * 60 * 1000; // 60 minutes, in milliseconds
+
+/**
+ * For failed login attempts, establish a storage record to avoid simply refreshing the page
+ * in order to regain access to the login page. When the password is reset, the storage item
+ * will be cleared, otherwise it will persist until a fixed time has passed.
+ */
+var failures = window.localStorage.getItem('fails');  // null if non-existent
+if (failures) {
+    var lockout = parseInt(failures);
+    var curr_time = Date.now();
+    if ((curr_time - lockout) > wait_time) {
+        window.localStorage.removeItem('fails');
+    } else {
+        alert("Wait 60 Minutes before retrying login");
+        var $usrname = $('input[name=username]');
+        $usrname.val('');
+        $usrname.css('background-color', 'lightgray');
+        $usrname.attr('disabled', 'disabled');
+        var $passwd = $('input[name=password]');
+        $passwd.val('');
+        $passwd.css('background-color', 'lightgray');
+        $passwd.attr('disabled', 'disabled');
+        $('#submit').css('background-color', 'lightgray');
+        $('#submit').attr('disabled', 'disabled');
+    }
+}
+
 $(function() {
 
 /** 
@@ -29,7 +60,6 @@ $(window).on('resize', function() {
     divset();
 });
 
-var chg_pass = new bootstrap.Modal(document.getElementById('resetemail'));
 $('#resetpass').on('click', function() {
     chg_pass.show();
 });
@@ -60,7 +90,7 @@ $('#cpass').on('click', function() {
     });
 });
 
-$('form').submit(function(ev) {
+$('form').on('submit', function(ev) {
     ev.preventDefault();
     let usr = $('input[name=username]').val();
     let pass = $('input[name=password]').val();

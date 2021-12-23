@@ -1,4 +1,4 @@
-#intro {
+#content {
     margin-left: 16px;
 }
 #ready {
@@ -14,8 +14,6 @@ h2 {
 #done {
     height: 32px;
     font-size: 18px;
-    position: relative;
-    left: 40px;
 }
 #lv1 {
   margin-top: 4px;
@@ -29,7 +27,7 @@ h2 {
     cursor: pointer;
     margin-bottom: 12px;
 }
-#budget, #cards, #expenses {
+#budget, #cards, #expenses, #pnlin, #curr_setup, #no_bud_dat, #no_crd_dat {
     display: none;
 }
 .note {
@@ -84,15 +82,30 @@ textarea {
 input[type=checkbox] {
     transform: scale(1.6);
 }
-.inp {
+.inp, .exp {
     height: 20px;
     font-size: 16px;
 }
+.exp {
+    width: 100px;
+}
 .dates {
     height: 20px;
-    width: 120px;
+    width: 100px;
     font-size: 16px;
 }
 .amts {
     width: 100px;
+}
+.hilite {
+    color: gold;
+}
+.budsel, .oldbud {
+    margin-top: 3px;
+    margin-bottom: 9px;
+}
+.btnoff, .btnoff:hover {
+    background-color: gainsboro;
+    color: dimgray;
+    cursor: auto;
 }

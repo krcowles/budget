@@ -22,7 +22,7 @@ require "admin/getLogin.php";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="index.css" type="text/css" rel="stylesheet" />
-    <script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+    <script src="../scripts/jquery.min.js"></script>
 </head>
 
 <body>
@@ -72,7 +72,7 @@ require "admin/getLogin.php";
                     <tr>
                         <td></td>
                         <td><input class="userinput" type="password" name="password"
-                            placeholder="Password" autocomplete="password" />
+                            placeholder="Password" autocomplete="current-password" />
                         </td>
                     </tr>
                     <tr class="spacer">
@@ -142,8 +142,8 @@ require "admin/getLogin.php";
     </div>
 </div>
 
-<script src="scripts/getLogin.js"></script>
 <script src="index.js"></script>
+<script src="scripts/getLogin.js"></script>
 
 </body>
 </html>

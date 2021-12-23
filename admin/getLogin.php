@@ -1,9 +1,9 @@
 <?php
 /**
- * If there are cookies on the client's browser for this site (epizy),
+ * If there are cookies on the client's browser for this site (mochahost),
  * then they are used. If the cookie has expired, the user has the opportunity
  * to renew.
- * PHP Version 7.1
+ * PHP Version 7.8
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -25,9 +25,9 @@ if (!isset($_SESSION['userid']) || !isset($_SESSION['cookiestatus'])
 if (!isset($_SESSION['userid'])) {
     $cstat = "NOLOGIN"; // $cstat & $start are recorded on page for getLogin.js
     $start = '000';
-    $regusr = isset($_COOKIE['epiz']) ? true : false; // registered user?
+    $regusr = isset($_COOKIE['mybud']) ? true : false; // registered user?
     if ($regusr) {
-        $uname = $_COOKIE['epiz'];
+        $uname = $_COOKIE['mybud'];
         $userReq = "SELECT * FROM Users WHERE username = ?;";
         $user_dat = $pdo->prepare($userReq);
         $user_dat->execute([$uname]);

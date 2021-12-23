@@ -16,7 +16,7 @@ $month_names = array('January', 'February', 'March', 'April', 'May', 'June',
 // array index is zero-based
 $thismo = intval($digits[0]) - 1;
 $current_month = $month_names[$thismo];
-$nextmo = $thismo === 12 ? 1 : $thismo + 1;
+$nextmo = $thismo === 11 ? 0 : $thismo + 1; // 11 => December, so rollover nextmo
 $next_month = $month_names[$nextmo];
 switch ($thismo) {
 case 0:

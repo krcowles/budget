@@ -4,22 +4,61 @@
  * 
  * @author Ken Cowles
  * @version 2.0 Secure login
+ * @version 3.0 Modified for transfer to Mochahost
+ * @version 3.1 Initialization modifications for sections
  */
 $(function() {
 
-// date picker:
+/**
+ * Some initialization is required...
+ */
+// Check 'pnl' in query string [#pnlin], if '000' => read and update query string:
+if ($('#pnlin').text() === '000') {
+    let curr_setup = '?pnl=' + $('#curr_setup').text();
+    let url = window.location.href;       
+    let urlSplit = url.split( "?" );       
+    let obj = { Title : "New Budget Entry", Url: urlSplit[0] + curr_setup};       
+    history.pushState(obj, obj.Title, obj.Url);
+}
+
+// initialize date picker:
 $('.datepicker').datepicker({
     dateFormat: 'yy-mm-dd'
 });
 
-// accordion panels
-if ($('input[name=lv1]').attr('value') === 'yes') {
-     $('#budget').show();
-} else if ($('input[name=lv2]').attr('value') === 'yes') {
-    $('#cards').show();
-} else if ($('input[name=lv3]').attr('value') === 'yes') {
-    $('#expenses').show();
+// for section 3, items identifying whether or not budget and card data already exist
+var nobud = $('#no_bud_dat').text() === 'nodat' ? true : false;
+var nocds = $('#no_crd_dat').text() === 'nocrds' ? true : false;
+function selcheck() {
+    var selsok = true;
+    if ($('#eentered').length !== 0) {
+        $('span[id^=crcd').each(function() {
+            let $crsel = $(this).children().eq(0);
+            let choices = $crsel[0].options;
+            let opt = $crsel[0].selectedIndex;
+            let choice = choices[opt].value;
+            if (choice == '') {
+                alert("A credit card name has changed: please re-select\n" +
+                    "a card for existing charges that are now blank");
+                selsok = false;
+                return false;
+            }
+        });
+        $('.oldbud').each(function() {
+            let accsels = this.options;
+            let indx = this.selectedIndex;
+            if (indx === -1) {
+                alert("A budget account name has changed: please re-select\n" +
+                    "an account for existing charges that are now blank");
+                selsok = false;
+                return false;
+            }
+        });
+    }
+    return selsok;
 }
+
+// div click behavior
 $('#one').on('click', function() {
     $('#budget').toggle();
     $('#cards').hide();
@@ -31,17 +70,61 @@ $('#two').on('click', function() {
     $('#expenses').hide();
 });
 $('#three').on('click', function() {
-    $('#expenses').toggle();
+    if ($('#expenses').is(':hidden')) {
+        var btnstate = true;
+        if (nobud && nocds) {
+            alert("You must have entered both Budget and Card information\n" +
+                "in order to complete this section");
+            btnstate = false;
+        } else if (nobud) {
+            alert("You must have entered budgets to complete this section");
+            btnstate = false;
+        } else if (nocds) {
+            alert("You must have entered cards to complete this section");
+            btnstate = false;
+        }
+        $('#expenses').show();
+        if (btnstate) {
+            $('#save').removeClass('btnoff');
+            $('#save').prop('disabled', false);
+            $('#lv3').removeClass('btnoff');
+            $('#lv3').prop('disabled', false);
+        } else {
+            $('#save').addClass('btnoff');
+            $('#save').prop('disabled', true);
+            $('#lv3').addClass('btnoff');
+            $('#lv3').prop('disabled', true);
+        }
+    } else {
+        $('#expenses').hide();
+    }
     $('#budget').hide();
     $('#cards').hide();
+    var check = selcheck();
 });
+// initial accordion panel states
+if ($('#no_bud_dat').text() === 'nodat') {
+    $('#budget').show();
+} else if ($('input[name=lv2]').attr('value') === 'no') {
+    $('#cards').show();
+} else if ($('input[name=lv3]').attr('value') === 'no') {
+    document.getElementById("three").click()
+}
 
-// initialization of select boxes: 1st is 'old cards'
+// initialization of select boxes for existing card data
 $('p[id^=oc]').each(function() {
     var selid = "#sel" + this.id;
     var cardType = $(this).text();
     $(selid).val(cardType);
 });
+// initialization of select boxes for existing expense data
+if ($('#eentered').length !== 0) {
+    $('div[id^=acctsel').each(function() {
+        let pel = $(this).children().eq(1).text();
+        let $sel = $(this).children().eq(0);
+        $sel.val(pel);
+    });
+}
 // next step is to add the 'name' attribute to the card selects in Expenses tab
 $('span[id^=ncd]').each(function() {
     $(this).children().eq(0).attr('name', 'newcds[]');
@@ -55,12 +138,14 @@ var cdvals = [];
 $('p[id^=cd]').each(function(indx) {
     cdvals[indx] = $(this).text();
 });
-// set the select display per values above
+// set the select display for old cards per values above
 $('span[id^=crcd]').each(function(i) {
     $(this).children().eq(0).val(cdvals[i]);
 });
-
-// these functions set up 'on change' events to examine data entry
+// gray out budget select in section three if no budgets entered yet
+if ($('#no_bud_dat').text() === 'nodat') {
+    $('.budsel').prop('disabled', 'disabled');
+}
 // validate data in budget section
 var $buddata = $('.bud');
 var $baldata = $('.bal');
@@ -125,63 +210,76 @@ const dataComplete = (section) => {
         case 'two': // no checks are done on credit/debit card names
             return true;
         case 'three': // outstanding credit card expenses
-            let gotcards = true;
-            let states = [0b0000, 0b0000, 0b0000, 0b0000];
+            if (!selcheck()) {
+                return false;
+            }
+            let states = [0b00000, 0b00000, 0b00000, 0b00000];
             let missing    = [];
-            let selects    = [];
-            let $wrappers  = $('span[id^=ncd]');
+            // for the new entries only:
+            let $wrappers  = $('span[id^=ncd]'); // for cdselects
+            let cdselects  = [];
             let $chg_dates = $('.dates');
             let $chg_amts  = $('input[name^=eamt]');
             let $payees    = $('input[name^=epay]');
+            let $chgtos    = $('.budsel');
+            let actselects = [];
             $wrappers.each(function() {
-                let $selbox = $(this).children(":first");
+                let $selbox = $(this).children().eq(0);
                 let choices = $selbox[0].options;
-                if (choices.length === 1) {
-                    gotcards = false;
-                    return;
-                }
                 let opt = $selbox[0].selectedIndex;
                 let choice = choices[opt].label;
-                selects.push(choice);
+                cdselects.push(choice);
             });
-            if (!gotcards) {
-                alert("You have not saved any cards yet to which you can charge");
-                return false;
-            }
-            for (let i=0; i<4; i++) {
-                if (selects[i] !== 'SELECT ONE:') {
+            $chgtos.each(function() {
+                let acct  = this.options;
+                let aindx = this.selectedIndex;
+                let achoice = acct[aindx].label;
+                actselects.push(achoice);
+            });
+            for (let i=0; i<4; i++) { // a check for each of the new data entries
+                if (cdselects[i] === 'SELECT ONE:') {
+                    states[i] = states[i] | 16;
+                }
+                if ($chg_dates[i].value == '') {
                     states[i] = states[i] | 8;
                 }
-                if ($chg_dates[i].value !== '') {
+                if ($chg_amts[i].value == '') {
                     states[i] = states[i] | 4;
                 }
-                if ($chg_amts[i].value !== '') {
+                if ($payees[i].value == '') {
                     states[i] = states[i] | 2;
                 }
-                if ($payees[i].value !== '') {
+                if (actselects[i] === 'Select Account') {
                     states[i] = states[i] | 1;
                 }
             }
+            //let got_old = $('#eentered').length === 0 ? false : true;
             states.forEach(function(state, indx) {
-                if (state !== 0) {
-                    let e1 = state >> 3;
-                    let e2 = state & 4;
-                    let e3 = state & 2;
-                    let e4 = state & 1;
-                    if (e1 == 0) {
+                if (state !== 0 && state !== 31) { // don't bother with lines having no data
+                    let e1 = (state & 16) >> 4;
+                    let e2 = (state & 8) >> 3;
+                    let e3 = (state & 4) >> 2;
+                    let e4 = (state & 2) >> 1;
+                    let e5 = state & 1;
+                    if (e1 == 1 && state !== 15) {
                         missing.push("You have not selected a card for Line " + (indx+1));
                     }
-                    if (e2 == 0) {
+                    if (e2 == 1) {
                         missing.push("You are missing a date on Line " + (indx+1));
                     }
-                    if (e3 == 0) {
+                    if (e3 == 1) {
                         missing.push("You have not entered an amount on Line " + (indx+1));
                     }
-                    if (e4 == 0) {
+                    if (e4 == 1) {
                         missing.push("You have not specified a payee on Line " + (indx+1));
+                    }
+                    if (e5 == 1) {
+                        missing.push("You have not selected an account to charge on Line " +
+                            (indx+1));
                     }
                 }
             });
+            
             let notes = '';
             for (let j=0; j<missing.length; j++) {
                 notes += missing[j] + "\n";
@@ -273,6 +371,7 @@ $('#nocds').on('click', function(ev) {
         alert("Data has already been entered\n" +
             "If you wish, you may delete it");
     }
+    return;
 });
 
 // force return to budget page

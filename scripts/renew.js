@@ -86,7 +86,7 @@ $('#formsubmit').on('click', function(ev) {
                 alert("Could not find the One-Time Code");
             } else if (response === 'DONE') {
                 alert("Successful: You may now login with your new password");
-                window.open('../index.php');
+                window.open('../index.php', "_self");
             } else {
                 alert("Unknown error");
             }

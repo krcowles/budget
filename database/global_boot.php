@@ -17,7 +17,7 @@ $root = $_SERVER['DOCUMENT_ROOT'];
 $lead = getcwd() === $root ? '' : '../';
 
 require $lead . "vendor/autoload.php";
-require $lead . "database/settings.php";
+require $lead . "../bud_settings.php";
 require $lead . "database/sql_modes.php";
 require $lead . "utilities/budgetFunctions.php";
 require $lead . "database/errFunctions.php";

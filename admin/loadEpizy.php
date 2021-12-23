@@ -1,17 +1,17 @@
 <?php
 /**
- * This script is the essence of the action for loading all tables.
- * Alternately, it can be called to simply drop all tables when a query
- * string parameter is specified.
- * PHP Version 7.1
+ * This script will load the new budget_data database with data
+ * from the old 'epizy' site. This script is not for use on the local
+ * machine, but on the host server.
+ * PHP Version 7.8
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require_once "../database/global_boot.php";
+require "../database/global_boot.php";
 
-$dbFile = "../database/nmhikesc_budget_data.sql";
+$dbFile = "../database/epiz_24776673_BudgdetData.sql";
 $lines = file($dbFile);
 if (!$lines) {
     throw new Exception(
@@ -19,6 +19,7 @@ if (!$lines) {
         " Failed to read database from file: {$dbFile}."
     );
 }
+/*
 $totalQs = 0; // total Queries
 // doing this twice, once just to get info for the progress bar:
 foreach ($lines as $line) {
@@ -31,8 +32,9 @@ foreach ($lines as $line) {
     }
 }
 echo "<script type='text/javascript'>var totq = {$totalQs};</script>";
+*/
 $qcnt = 0;
-$msg_out = false;
+//$msg_out = false;
 $line_cnt = count($lines);
 for ($i=0; $i<$line_cnt; $i++) {
     // Skip it if it's empty or a comment
@@ -61,14 +63,19 @@ for ($i=0; $i<$line_cnt; $i++) {
     } else {
         throw new Exception("Unrecognized table entry at db line " . $i . "<br />" . $lines[$i]);
     }
+    /*
     if (!$msg_out) {
         echo "<script type='text/javascript'>var qcnt = {$qcnt};</script>";
         echo "<br />Completed " . $msg . " at: " . date('l jS \of F Y h:i:s A');
         flush();
         $msg_out = false;
     }
+    */
 }
+echo "Loaded";
+/*
 echo '<script type="text/javascript">
     var doneid = document.getElementById("done");
     doneid.style.display = "block";
     </script>';
+*/

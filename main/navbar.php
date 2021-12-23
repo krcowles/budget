@@ -105,7 +105,8 @@ require_once "../utilities/getCards.php";
                     <li><a id="ren1" class="dropdown-item"
                         href="#">Rename Account</a></li>
                     <li><a class="dropdown-item" id="edbuds"
-                        href="../edit/budgetEditor.php">Edit Budget Amts &amp; Balances</a>
+                        href="../edit/budgetEditor.php">
+                        Edit Budget Amts &amp; Balances</a>
                     </li>
                 </ul>
             </li>
@@ -139,9 +140,9 @@ require_once "../utilities/getCards.php";
                     <li><a class="dropdown-item"
                         href="../help/help.php?doc=FAQ.pdf" target="_blank">
                         FAQ's</a></li>
-                    <li><a class="dropdown-item disabled"
+                    <li><a class="dropdown-item"
                         href="../help/help.php?doc=Tools.pdf" target="_blank">
-                            Using Budgetizer</a></li>
+                            Budgetizer Tools & Tips</a></li>
                     <li><a class="dropdown-item"
                         href="../help/help.php?doc=HowToBudget.pdf" target="_blank">
                             Intro to Budgeting</a>

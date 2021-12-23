@@ -113,6 +113,14 @@ while ($arch_yr < $current_yr) {
         <button id="phpinfo" type="button" class="btn btn-secondary">
             PHPInfo</button><br />
     </fieldset>
+    <fieldset class="bootshow">
+        <legend>Debug Tools</legend>
+        <span class="dshift">Userid: <input id="auid" type="text" size="4" />
+        </span>&nbsp;&nbsp;
+        <button id="newusr" type="button" class="btn btn-warning">
+            Switch User</button>
+        <br />
+    </fieldset>
 </div>
    
 <script type="text/javascript">
@@ -120,7 +128,7 @@ while ($arch_yr < $current_yr) {
 </script>
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
-<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/admintools.js"></script>
 
 </body>

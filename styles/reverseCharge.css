@@ -25,7 +25,7 @@ input[type=checkbox] {
     transform: scale(1.8);
     padding: 10px;
 }
-th {
+th:not(#exptbl) {
     background-color: darkgreen; /* #4CAF50; */
     color: white;
     cursor: pointer;
@@ -36,18 +36,18 @@ th, td {
 table {
     border-collapse: collapse;
 }
-table, th {
+table:not(#exptble), table:not(#exptbl) th {
     border-style: ridge;
     border-width: 1px;
 }
-td {
+table:not(#exptbl) td {
     border-right-style: ridge;
     border-right-width: 1px;
 }
-tbody tr:nth-child(odd):hover {
+table:not(#exptbl) tbody tr:nth-child(odd):hover {
     background-color: #bfd9bf;
 }
-tbody tr:nth-child(even):hover {
+table:not(#exptbl) tbody tr:nth-child(even):hover {
     background-color: #bfd9bf;
 }
 .calign {

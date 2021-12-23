@@ -62,17 +62,20 @@ $('#chgexp').on('click', function() {
             alert("You must select a payment method");
             return false;
         }
-        let amt = $('#expamt').val()
+        let amtin = "#expamt";
+        let amt = $(amtin).val()
         if (!valAmt(amt)) {
             return false;
         }
-        let payee = $('#exppayto').val()
+        let payin = "#exppayto";
+        let payee = $(payin).val()
         if (!valPayee(payee)) {
             return false;
         }
+        let clean_obj = {ids:[amtin, payin], sels:[$tbl_selects[0], $tbl_selects[1]]};
         let ajaxdata = {id: 'payexp', acct_name: sel1, method: sel2,
             amt: amt, payto: payee};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem, 'stay');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem, 'stay', clean_obj);
     });
     expitem.show();
 });
@@ -128,7 +131,7 @@ $('#reginc').on('click', function() {
             return;
         } else {
             ajaxdata = {id: 'income', funds: reg};
-            executeScript(save_url, ajaxdata, depinc, 'home');
+            executeScript(save_url, ajaxdata, depinc, 'home', {});
         }
     });
     depinc.show();
@@ -141,7 +144,7 @@ $('#onetimer').on('click', function() {
         }
         let otmemo = $('#otmemo').val();
         let ajaxdata = {id: 'otdeposit', newfunds: funds, note: otmemo};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, onetdep, 'home');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, onetdep, 'home', {});
     });
     onetdep.show();
 });
@@ -184,7 +187,7 @@ $('#transfers').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'xfr', from: xfrom, to: xfrto, sum: amt};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, xfrfund, 'home');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, xfrfund, 'home', {});
     });
     xfrfund.show();
 });
@@ -210,7 +213,7 @@ $('#addcrdr').on('click', function() {
         let ctype = document.getElementById('cdprops');
         let type = getSelect(ctype);
         let ajaxdata = {id: 'addcd', cdname: cname, cdtype: type};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, addcard, 'stay');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, addcard, 'stay', {});
     });
     addcard.show();
 });
@@ -224,7 +227,7 @@ $('#dac').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'decard', target: todelete};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, delcard, 'stay');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, delcard, 'stay', {});
     });
     delcard.show();
 });
@@ -244,7 +247,7 @@ $('#addauto').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'apset', acct: apadder, method: card, day: day};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, autopay, 'home');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, autopay, 'home', {});
     });
     autopay.show();
 });
@@ -253,7 +256,7 @@ $('#rmap').on('click', function() {
         let $delap = $('#delapacct').children();
         let delapp = getSelect($delap[0]);
         let ajaxdata = {id: 'delapay', acct: delapp};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, delauto, 'home');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, delauto, 'home', {});
     });
     delauto.show();
 });
@@ -268,7 +271,7 @@ $('#add1').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'addacct', acct_name: newname, monthly: budamt}
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, addacct, 'home');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, addacct, 'home', {});
     });
     addacct.show();
 });
@@ -277,7 +280,7 @@ $('#del1').on('click', function() {
         let $acct0 = $('#remacct').children();
         let acct0 = getSelect($acct0[0]);
         let ajaxdata = {id: 'acctdel', type: 'norm', acct: acct0};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, delacct, 'home');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, delacct, 'home', {});
     });
     delacct.show();
 });
@@ -292,7 +295,7 @@ $('#moveit').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'move', mvfrom: from, mvto: to};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, moveacc, 'home');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, moveacc, 'home', {});
     });
     moveacc.show();
 });
@@ -305,7 +308,7 @@ $('#ren1').on('click', function() {
             return false;
         }
         let ajaxdata = {id: 'rename', acct: acct, newname: newname};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, rename, 'home');
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, rename, 'home', {});
     });
     rename.show();
 });
@@ -424,14 +427,13 @@ $('#chgcookie').on('click', function() {
  * @param domsel 
  */
 function getSelect(domsel) {
-    let opts = domsel.options;
     let indx = domsel.selectedIndex;
     let item = domsel.options[indx].label
     return item;
 }
 
 // general purpose function to execute ajax based on input arguments
-function executeScript(url, ajaxdata, modal_handle, loc) {
+function executeScript(url, ajaxdata, modal_handle, loc, cleanup) {
     $('#preloader').show();
     $.ajax({
         url: url,
@@ -441,6 +443,9 @@ function executeScript(url, ajaxdata, modal_handle, loc) {
         success: function(results) {
             if (results === "OK") {
                 $('#preloader').hide();
+                if (Object.keys(cleanup).length > 0) {
+                    resetModalContents(cleanup);
+                }
                 if (loc === 'stay') {
                     location.reload();
                 } else {
@@ -494,4 +499,14 @@ function valText(item, type) {
         return false;
     }
     return true;
+}
+function resetModalContents(items) {
+    let jqids  = items.ids;
+    let jqsels = items.sels;
+    for (let j=0; j<jqids.length; j++) {
+        $(jqids[j]).val("");
+    }
+    for (let k=0; k<jqsels.length; k++) {
+        jqsels[k].selectedIndex = 0;
+    }
 }

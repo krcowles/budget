@@ -1,6 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en-us">
 
 <head>
     <title>New User Registration</title>
@@ -8,13 +7,53 @@
     <meta name="description" content="New user sign-up" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="../styles/standards.css" type="text/css" rel="stylesheet" />
     <link href="../styles/jquery-ui.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <link href="../styles/registration.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>
-
+<!-- Password Status Details Modal -->
+<div id="show_pword_details" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Password Status</h5>
+                <button type="button" class="btn-close"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table id="ptable">
+                    <tbody>
+                        <tr>
+                            <td>Characters:</td>
+                            <td id="total">0</td>
+                            <td colspan="6"></td>
+                        </tr>
+                        <tr>
+                            <td>Lower case:</td>
+                            <td id="lc">0</td>
+                            <td>Upper case:</td>
+                            <td id="uc">0</td>
+                            <td>Numbers:</td>
+                            <td id="nm">0</td>
+                            <td>Special:</td>
+                            <td id="sp">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="chgclose" type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
 <div id="ctr">
     <div id="header">
         <h2 class="NormalHeading">
@@ -36,7 +75,7 @@
                 <div id="line3" class="lines"></div>
                 <input id="uname" class="signup" type="text"
                     placeholder="User Name" name="username"
-                    autocomplete="username" />
+                    autocomplete="off" />
             </div>
             <div class="user-input">
                 <div class="pseudo-legend">Email</div>
@@ -46,16 +85,26 @@
                     autocomplete="email" />
             </div><br />
 
+            <div id="pexpl">
+                **&nbsp;Your password must 11 characters or more and contain upper and lower
+                case letters and at least 1 number and 1 special character
+            </div>
             <div class="user-input leftmost">
                 <div class="pseudo-legend">Password</div>
                 <div id="line5" class="lines"></div>
-                <input id="pword" class="signup" type="password"
-                    placeholder="Password" name="password"
-                    autocomplete="new-password" />
+                <input id="pword" class="signup weak" type="password"
+                    placeholder="Password" name="password" autocomplete="off" />
             </div>
-            <span id="showit">&nbsp;&nbsp;Show password:<input id="cb"
-                    type="checkbox" /></span>
-            <button id="submit">Submit</button>    
+            <div id="pwddiv">
+                <div id="usrinfo">
+                   <span id="wk">Weak</span>
+                   <span id="st">Strong</span>&nbsp;&nbsp;
+                   <button id="showdet">Show Why</button>
+                </div>
+                <span id="showit">Show password:&nbsp;&nbsp;<input id="cb"
+                        type="checkbox" /></span>
+            </div>
+            <button id="submit">Submit</button>  
         </div>
     </form>
 </div>
@@ -72,8 +121,11 @@
     </div>
 </div>
 
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
-<script src="../scripts/registration.js" type="text/javascript"></script>
+<script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
+<script src="../scripts/bootstrap.min.js"></script>
+<script src="../scripts/jquery.min.js"></script>
+<script src="../scripts/passwordStrength.js"></script>"
+<script src="../scripts/registration.js"></script>
 
 </body>
 </html>

@@ -25,7 +25,7 @@ $chkbox.each(function() {
         }
     });
 });
-$('#reconcile').on('click', function() {
+$('#reconcile_chgs').on('click', function() {
     $('#form').trigger('submit');
 });
 

@@ -52,10 +52,11 @@ $noOfExp = count($chgs);
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <link href="../styles/reverseCharge.css" type="text/css" rel="stylesheet" />
-    <style type="text/css">
-        tbody tr:nth-child(odd):hover {background-color: #bfd9bf;}
-        tbody tr:nth-child(even):hover {background-color: #bfd9bf;}
+    <style>
+      table:not(#exptbl) tbody tr:nth-child(odd):hover {background-color: #bfd9bf;}
+      table:not(#exptbl) tbody tr:nth-child(even):hover {background-color: #bfd9bf;}
     </style>
 </head>
 <body>
@@ -115,9 +116,9 @@ $noOfExp = count($chgs);
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/menus.js"></script>
-<script src="../scripts/undoExpense.js" type="text/javascript"></script>
+<script src="../scripts/undoExpense.js"></script>
 <script src="../scripts/tableSort.js"></script>
 </body>
 

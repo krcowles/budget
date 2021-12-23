@@ -1,7 +1,8 @@
 <?php
 /**
- * Thi
- * PHP Version 7.1
+ * This script will set the browser cookie when a user logins in and
+ * is authenticated, assuming they have designated "accept cookies".
+ * PHP Version 7.8
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -11,4 +12,4 @@ $username = filter_input(INPUT_POST, 'username');
 
 $days = 365; // Number of days before cookie expires
 $expire = time()+60*60*24*$days;
-setcookie("epiz", $username, $expire, "/", "", false, true);
+setcookie("mybud", $username, $expire, "/", "", false, true);

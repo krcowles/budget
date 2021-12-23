@@ -1,9 +1,12 @@
 <?php
 /**
- * This script saves all budget entries into the 'Budgets' table.
- * It collects any changes made to existing data, and inserts new data.
- * It then returns to the newBudget.php page.
- * PHP Version 7.1
+ * This script saves all budget entries into the 'Budgets' table. It collects any
+ * changes made to existing data, and also inserts new data. It then returns to the
+ * newBudgetPanels.php page, or if the 'Save and Return Later' button was clicked by
+ * the user [i.e. 'exit1' is set], it exits to the exit page. Since the 'setup' field
+ * already has the first bit set due to forming tmp accounts (or adding data), there
+ * is no need to update it.
+ * PHP Version 7.3
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -14,13 +17,6 @@ require "../database/global_boot.php";
 
 $pos   = filter_input(INPUT_POST, 'lastpos', FILTER_VALIDATE_INT);
 $exit  = filter_input(INPUT_POST, 'exit1') === 'no' ? false : true;
-
-// as long as user is editing lv1, setup = '100'
-$setup = '100';
-$_SESSION['start'] = $setup;
-$status = "UPDATE `Users` SET `setup` = :setup WHERE `uid` = :uid;";
-$newstat = $pdo->prepare($status);
-$newstat->execute(["setup" => $setup, "uid" => $_SESSION['userid']]);
 
 // get all pre-entered data, if any
 if (isset($_POST['svdname'])) {
@@ -62,15 +58,24 @@ $next = $pos + 1;
 // save the new stuff to the 'Budgets' table
 for ($n=0; $n<count($new_accounts); $n++) {
     if (!empty($new_accounts[$n])) {
-        $new = "INSERT INTO `Budgets` (`userid`,`budname`,`budpos`,`status`," .
-        "`budamt`,`prev0`,`prev1`,`current`,`autopay`,`moday`,`autopd`,`funded`) " .
-        "VALUES ('" . $_SESSION['userid'] . "','" . $new_accounts[$n] . "','" .
-        $next . "','A','" . $new_budgets[$n] . "','0','0','" . $new_balances[$n] .
-        "','','0','','0');";
-        $pdo->query($new);
+        $newReq = "INSERT INTO `Budgets` (`userid`,`budname`,`budpos`,`status`," .
+            "`budamt`,`prev0`,`prev1`,`current`,`autopay`,`moday`,`autopd`," .
+            "`funded`) VALUES (?,?,?,'A',?,'0','0',?,'','0','','0');";
+        $new = $pdo->prepare($newReq);
+        $new->execute(
+            [$_SESSION['userid'], $new_accounts[$n], $next,
+            $new_budgets[$n], $new_balances[$n]]
+        );
         $next++;
     }
 }
+
+// retrieve current value of 'setup'
+$getSetupReq = "SELECT `setup` FROM `Users` WHERE `uid`=?;";
+$getSetup = $pdo->prepare($getSetupReq);
+$getSetup->execute([$_SESSION['userid']]);
+$setupRow = $getSetup->fetch(PDO::FETCH_ASSOC);
+$setup = $setupRow['setup'];
 
 if (!$exit) { // 'normal' form submit
     $next = "newBudgetPanels.php?pnl={$setup}";

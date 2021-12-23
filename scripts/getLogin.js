@@ -110,14 +110,36 @@ function validateUser(usr_name, usr_pass) {
                 } else {
                     renewPassword('norenew', 'expired');
                 }
-            } else if (status.indexOf('BADPASSWD') !== -1) {
-                var msg = "The password you entered does not match " +
-                    "your registered password;\nPlease try again";
-                alert(msg);
-                $('#passin').val('');
-            } else { // no such user in USERS table
-                var msg = "Your registration info cannot be uniquely located:\n" +
-                    "Please click on the 'Sign me up!' link to register";
+            } else if (status.indexOf('FAIL') !== -1) { // Something went wrong: multiple entries, bad username/password
+                var fpos = status.indexOf('&') + 1;
+                var no_of_fails = status.substr(fpos);
+                if (no_of_fails > 2) {
+                    var fails = "There have been 3 failed attempts:\n" +
+                        "You will need to reset your password";
+                    alert(fails);
+                    // prevent needless reloading to attempt bypass of this failure mode
+                    var time = Date.now();
+                    window.localStorage.setItem('fails', time);
+                    // block page items
+                    var $usrname = $('input[name=username]');
+                    $usrname.val('');
+                    $usrname.css('background-color', 'lightgray');
+                    $usrname.attr('disabled', 'disabled');
+                    var $passwd = $('input[name=password]');
+                    $passwd.val('');
+                    $passwd.css('background-color', 'lightgray');
+                    $passwd.attr('disabled', 'disabled');
+                    $('#submit').css('background-color', 'lightgray');
+                    $('#submit').attr('disabled', 'disabled');
+                    chg_pass.show();
+                } else {
+                    var msg = "Invalid credentials, please try again";
+                    alert(msg);
+                    $('#user').val('');
+                    $('#passin').val('');
+                }
+            } else {
+                alert("Something went wrong - please try again!");
                 alert(msg);
                 $('#user').val('');
                 $('#passin').val('');

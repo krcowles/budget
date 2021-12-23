@@ -31,7 +31,7 @@ body {
     font-weight: bold;
 }
 /* buttons & drop-downs */
-button {
+button:not(.btn) {
     height: 28px;
     border-radius: 8px;
     font-size: 16px;
@@ -40,7 +40,7 @@ button {
     background-color: white;
     cursor: pointer;
 }
-button:hover {
+button:not(.btn):hover {
     font-size: 16px;
     background-color: black;
     color: white;
@@ -56,9 +56,9 @@ select {
 	height: 12px;
 	width: 40px;
 }
-tbody tr:nth-child(odd):hover {
+tbody:not(#p_reset) tr:nth-child(odd):hover {
     background-color: #bfd9bf;
 }
-tbody tr:nth-child(even):hover {
+tbody:not(#p_reset) tr:nth-child(even):hover {
     background-color: #bfd9bf;
 }

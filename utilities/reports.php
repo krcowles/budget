@@ -89,6 +89,7 @@ if ($income) {
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="../styles/modals.css" type="text/css" rel="stylesheet" />
     <link href="../styles/reports.css" type="text/css" rel="stylesheet" />
 </head>
 
@@ -123,10 +124,10 @@ if ($monthly) {
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
-<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/tableSort.js"></script>
-<script type="text/javascript">
+<script>
     $('a').on('click', function() {
         let page = $(this).attr('href');
         $.ajax({

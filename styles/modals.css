@@ -5,7 +5,8 @@
     background-color: #e9f2e9;
 }
 #exptbl {
-    border-collapse: collapse
+    border-collapse: collapse;
+    border: none;
 }
 #exptbl tr td {
     border: none;
