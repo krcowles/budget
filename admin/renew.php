@@ -107,7 +107,7 @@ $username = isset($_SESSION['username']) && empty($tmpcode) ?
     </div>
 </div>
 
-<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/renew.js"></script>
 </body>
 </html>

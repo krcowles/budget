@@ -48,7 +48,7 @@ foreach ($allTables as $table) {
     <p>DONE</p>
 </div>
 
-<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/jquery-ui.js"></script>
 <script src="../scripts/menus.js"></script>
 

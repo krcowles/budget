@@ -31,7 +31,7 @@ body {
     font-weight: bold;
 }
 /* buttons & drop-downs */
-button {
+button:not(.btn) {
     height: 28px;
     border-radius: 8px;
     font-size: 16px;
@@ -40,7 +40,7 @@ button {
     background-color: white;
     cursor: pointer;
 }
-button:hover {
+button:not(.btn):hover {
     font-size: 16px;
     background-color: black;
     color: white;

@@ -128,7 +128,7 @@ while ($arch_yr < $current_yr) {
 </script>
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
-<script src="../scripts/jquery-1.12.1.js"></script>
+<script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/admintools.js"></script>
 
 </body>

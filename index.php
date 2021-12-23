@@ -142,8 +142,8 @@ require "admin/getLogin.php";
     </div>
 </div>
 
-<script src="scripts/getLogin.js"></script>
 <script src="index.js"></script>
+<script src="scripts/getLogin.js"></script>
 
 </body>
 </html>

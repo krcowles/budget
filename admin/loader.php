@@ -9,13 +9,9 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+require_once "../database/global_boot.php";
 
-// Because of screw-up in db naming between localhost and server:
-if ($using === 'server') {
-    $dbFile = "../database/epiz_24776673_BudgdetData.sql";
-} else {
-    $dbFile = "../database/epiz_24776673_BudgdetData.sql";
-}
+$dbFile = "../database/nmhikesc_budget_data.sql";
 $lines = file($dbFile);
 if (!$lines) {
     throw new Exception(
