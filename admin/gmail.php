@@ -20,4 +20,4 @@ $mail->Port = 587; // Which port to use, 587 is the default port for TLS securit
 $mail->SMTPSecure = 'tls'; // Which security method to use. TLS is most secure.
 $mail->SMTPAuth = true;
 $mail->Username = "krcowles29@gmail.com";
-$mail->Password = "qctpoevpvfiszlps"; // App Specific Password.
+$mail->Password = GMAIL_ID; // App Specific Password.
