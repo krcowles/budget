@@ -63,7 +63,8 @@ $('#chgexp').on('click', function() {
             return false;
         }
         let amtin = "#expamt";
-        let amt = $(amtin).val()
+        let amt = $(amtin).val();
+        amt = amt.trim();
         if (!valAmt(amt)) {
             return false;
         }
@@ -82,6 +83,7 @@ $('#chgexp').on('click', function() {
 $('#reginc').on('click', function() {
     $('#incbtn').off('click').on('click', function() {
         let reg = $('#incdep').val();
+        reg = reg.trim();
         if (!valAmt(reg)) {
             return false;
         }
@@ -139,6 +141,7 @@ $('#reginc').on('click', function() {
 $('#onetimer').on('click', function() {
     $('#otbtn').on('click', function() {
         let funds = $('#onedep').val();
+        funds = funds.trim();
         if (!valAmt(funds)) {
             return false;
         }
@@ -175,6 +178,7 @@ $('#undoinc').on('click', function() {
 $('#transfers').on('click', function() {
     $('#xfrbtn').on('click', function() {
         let amt = $('#xframt').val();
+        amt = amt.trim();
         if (!valAmt(amt)) {
             return false;
         }
@@ -207,6 +211,7 @@ $('#cd2rec').on('click', function() {
 $('#addcrdr').on('click', function() {
     $('#addcdbtn').on('click', function() {
         let cname = $('#cda').val();
+        cname = cname.trim();
         if (!valText(cname, 'a card name')) {
             return false;
         }
@@ -243,6 +248,7 @@ $('#addauto').on('click', function() {
             return false;
         }
         let day = $('#useday').val();
+        day = day.trim();
         if (!valText(day, 'a day of the month')) {
             return false;
         }
@@ -263,10 +269,12 @@ $('#rmap').on('click', function() {
 $('#add1').on('click', function() {
     $('#addactbtn').on('click', function() {
         let newname = $('#newacct').val();
+        newname = newname.trim();
         if (!valText(newname, ' a name for the account')) {
             return false;
         }
         let budamt  = $('#mo').val();
+        budamt = budamt.trim();
         if (!valAmt(budamt)) {
             return false;
         }
@@ -304,6 +312,7 @@ $('#ren1').on('click', function() {
         let $acct = $('#asel').children();
         let acct  = getSelect($acct[0]);
         let newname = $('#newname').val();
+        newname = newname.trim();
         if (!valText(newname, ' a new account name')) {
             return false;
         }
