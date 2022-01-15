@@ -4,24 +4,11 @@
  * @author Ken Cowles
  * @version 1.0 First release of new intro page
  * @version 2.0 Transfer to Mochahost
+ * @version 3.0 Add login security/lockout mechanism
  */
-// need global for getLogin.js
-var chg_pass = new bootstrap.Modal(document.getElementById('resetemail'));
-const wait_time = 60 * 60 * 1000; // 60 minutes, in milliseconds
-
-/**
- * For failed login attempts, establish a storage record to avoid simply refreshing the page
- * in order to regain access to the login page. When the password is reset, the storage item
- * will be cleared, otherwise it will persist until a fixed time has passed.
- */
-var failures = window.localStorage.getItem('fails');  // null if non-existent
-if (failures) {
-    var lockout = parseInt(failures);
-    var curr_time = Date.now();
-    if ((curr_time - lockout) > wait_time) {
-        window.localStorage.removeItem('fails');
-    } else {
-        alert("Wait 60 Minutes before retrying login");
+$.get('accounts/lockStatus.php', function(status) {
+    if (status !== "ok") {
+        alert("Your 60 minute lockout period has not expired;\nTry again later");
         var $usrname = $('input[name=username]');
         $usrname.val('');
         $usrname.css('background-color', 'lightgray');
@@ -33,10 +20,12 @@ if (failures) {
         $('#submit').css('background-color', 'lightgray');
         $('#submit').attr('disabled', 'disabled');
     }
-}
+}, "text"); 
+
+var chg_pass = new bootstrap.Modal(document.getElementById('resetemail'));
+var sec_ques = new bootstrap.Modal(document.getElementById('twofa'));
 
 $(function() {
-
 /** 
  * This establishes space occupied by major elements on the page
  * 
@@ -66,20 +55,24 @@ $('#resetpass').on('click', function() {
 
 $('#cpass').on('click', function() {
     let eaddr = $('#remail').val();
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!regex.test(eaddr)) {
+        alert("You must enter a valid email address");
+        return false;
+    }
+    eaddr.toLowerCase();
     let adata = {email: eaddr};
     $.ajax({
-        url: '../admin/sendmail.php',
+        url: '../accounts/sendmail.php',
         method: 'post',
         data: adata,
         dataType: 'text',
         success: function(result) {
             if (result === 'ok') {
                 alert('An email has been sent');
-            } else if (result === 'bad') {
-                alert('The email address is not valid');
-            } else if (result === 'nofind') {
-                alert('Your email could not be located in our database');
-            }
+            } else {
+                alert('The email failed');
+            } 
             chg_pass.hide();
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -99,7 +92,7 @@ $('form').on('submit', function(ev) {
         return false;
     }
     if (pass == '') {
-        alert("Please supply a valid passworkd");
+        alert("Please supply a valid password");
         return false;
     }
     validateUser(usr, pass);

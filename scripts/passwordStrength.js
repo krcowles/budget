@@ -17,7 +17,6 @@ var sp = 0;
 var total = 0;
 var focus = false;
 var current_password = '';
-var submittable = false;
 $('.signup').val('');
 
 const addKey = (type, key) => {
@@ -53,7 +52,6 @@ const addKey = (type, key) => {
             $('#wk').hide();
             $('#st').show();
             $('#showdet').css('display', 'none');
-            submittable = true;
         }
     }
 };

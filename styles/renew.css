@@ -6,11 +6,35 @@ body {
     font-family: Arial, Verdana;
     background-image: url('../images/backgrnd.jpg');
 }
+/* Show Details Modal */
+.modal-header {
+    background-color:#e9f2e9;
+}
+.modal-footer {
+    background-color: #e9f2e9;
+}
+#ptable {
+    border-collapse: collapse;
+}
+#ptable tr td {
+    padding-left: 8px;
+}
+#total, #lc, #uc, #nm, #sp {
+    color: maroon;
+    font-weight: bold;
+}
+.ques {
+    margin-right: 8px;
+}
+input[name^=ans] {
+    margin-bottom: 5px;
+}
+/*  End modal styling */
 #container {
     position: fixed;
     top: 140px;
     width: 640px;
-    height: 330px;
+    height: 380px;
     padding-top: 20px;
     background-color: #fcf4e8;
     border-radius: 12px;
@@ -18,21 +42,53 @@ body {
     font-size: 20px;
     color: #b47b31;
 }
-.space {
-    min-width: 16px;
+#header, #link {
+    margin-bottom: 8px;
+    text-align: center;
 }
-table {
-    margin-left: auto;
-    margin-right: auto;
+#pexpl {
+    display: inline-block;
+    width: 500px;
+    color: black;
+    font-size: 16px;
+    font-style: italic;
+}
+#newbie {
+    width: 100%;
+    text-align: left;
+    position: relative;
+    top: -8px;
+}
+.cola {
+    display: inline-block;
+    position: relative;
+    left: 32px;
+    width: 150px;
+}
+.colb {
+    display: inline-block;
+    position: relative;
+    left: 32px;
+    width: 180px;
+}
+.colc {
+    display: inline-block;
+    position: relative;
+    left:60px;
+    top: 12px;
+    width: 200px;
+}
+.otc {
+    top: 20px;
 }
 input[name=password], input[name=confirm], input[name=oldpass] {
     height: 32px;
     width: 180px;
     font-size: 18px;
     border-radius: 8px;
-    background-color: ghostwhite;
+    margin-bottom: 12px;
 }
-input[name=password]:focus, input[name=confirm]:focus, input[name=oldpass]:focus  {
+input[name=oldpass]:focus  {
     outline: none;
     border-color: navy;
     border-width: 2px;
@@ -46,6 +102,47 @@ input[name=password]:focus, input[name=confirm]:focus, input[name=oldpass]:focus
     -webkit-transform: scale(1.6); /* Safari and Chrome */
     -o-transform: scale(1.6); /* Opera */
     padding: 10px;
+}
+.weak {
+    background-color: #fce8e8;
+    border: 2px solid indianred;
+}
+.strong {
+    background-color: ghostwhite;
+    border: 2px solid seagreen;
+}
+#pwddiv {
+    display: inline-block;
+    width: 190px;
+    text-align: left;
+}
+#usrinfo { 
+    display: inline-block;
+    position: relative;
+    font-size: 16px;
+}
+#wk {
+    color: maroon;
+}
+#st {
+    display: none;
+    color: darkgreen;
+}
+#showdet {
+    background-color: #fcf4e8;
+    color: #b47b31;
+}
+#showdet:hover {
+    background-color: #b47b31;
+    color: white;
+}
+#showit {
+    position: relative;
+    display: inline-block;
+    width: 201px;
+    z-index: 200;
+    font-size: 18px;
+    color: #b47b31;
 }
 #cookie_banner {
     position: fixed;
@@ -73,7 +170,9 @@ input[name=password]:focus, input[name=confirm]:focus, input[name=oldpass]:focus
     margin-left: 40px;
 }
 #formsubmit {
-    width: 160px;
+    width: 240px;
     height: 36px;
     font-size: 20px;
+    background-color: #b47b31;
+    color: white;
 }

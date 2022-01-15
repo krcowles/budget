@@ -65,3 +65,8 @@ input[type=checkbox] {
 #mo {
     width: 56px;
 }
+input[id^=q] {
+    padding-left: 6px;
+    margin-left: 8px;
+    margin-bottom: 6px;
+}

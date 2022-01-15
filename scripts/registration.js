@@ -2,17 +2,18 @@
 /**
  * @fileoverview Visually, this script positions the login boxes on the page
  * and toggles password visibility. Functionally, it verifies that all
- * fields in the form have been entered, and registers the member's cookie choice.
- * See scripts/passwordStrength.js for determination of password strength
+ * fields in the form have been entered, and registers the member's security
+ * questions and cookie choice. See scripts/passwordStrength.js for determination
+ * of password strength
  * 
  * @author Ken Cowles
  * @version 2.0 Changes for move to Mochahost
- * @version 3.0 Upgraded password/username security
+ * @version 3.0 Upgraded password/username security; simplified verification process
  */
 $(function() {   // document ready function
 
 /**
- * position the registration box on the page
+ * Function to position the registration box on the page
  * 
  * @return {null}
  */ 
@@ -28,36 +29,9 @@ function setbox() {
 setbox();
 $(window).on('resize', setbox);
 
-var spdetails = new bootstrap.Modal(document.getElementById('show_pword_details'));
-$('#showdet').on('click', function(ev) {
-    ev.preventDefault();
-    spdetails.show();
-});
+const email_test_pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-// toggle visibility of password:
-var cbox = document.getElementsByName('password');
-$('#cb').on('click', function() {
-    if ($(this).is(':checked')) {
-        cbox[0].type = "text";
-    } else {
-        cbox[0].type = "password";
-    }
-    return;
-});
-
-// registrant's cookie choice:
-$('#accept').on('click', function() {
-    $('#cookie_banner').hide(); 
-    $('#usrchoice').val("accept");
-    return;
-});
-$('#reject').on('click', function() {
-    $('#cookie_banner').hide();
-    $('#usrchoice').val("reject");
-    return;
-});
-
-// Prevent inadvertent form submission via enter
+// Prevent inadvertent form submission via Enter Key
 $('document').on('keydown', function(e) {
     if (e.keyCode == 13) {
         e.stopPropagation();
@@ -65,111 +39,99 @@ $('document').on('keydown', function(e) {
     }
 });
 
-// NOTE: email validation performed by HTML5, and again by server
+// clear inputs on reload:
+$('#uname').val("");
+$('#email').val("");
+
 /**
- * For username problems, notify user immediately
+ * ---- Username validation: notify user as soon as entered ----
  */
-var outstanding_issue = false;
-// no spaces in user name:
-var nonamespaces = true;
-// unique user name:
-var goodname = true;
-var uniqueness = $.Deferred();
-/**
- * Ensure the user name has no embedded spaces
- * @return {null}
- */
-var spacesInName = function () {
+var valid_username = false;
+ /**
+  * Ensure the username has no embedded spaces, is min length
+  * and not a duplicate of an existing username
+  * @return {null}
+  */
+$('#uname').on('change', function () { // allows immediate feedback
+    var checkDef = $.Deferred();
     var uname = $('#uname').val();
-    var res = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    var usrisemail = res.test(uname);
-    var problem = false;
     if (uname.indexOf(' ') !== -1) {
         alert("No spaces in user name please");
-        problem = true;
-    } else if (usrisemail) {
-        alert("Do not use email for user name");
-        problem = true;
+        valid_username = false;
     } else if (uname.length < 6) {
         alert("User names must be at least 6 characters");
-        problem = true;
-    }else {
-        if (goodname) {
-            outstanding_issue = false;
-        }
-    }
-    if (problem) {
+        valid_username = false;
+    } else {
+        valid_username = true;
         $('#uname').focus();
-        $('#uname').css('color', 'red');
-        nonamespaces = false;
-        outstanding_issue = true;
+        $('#uname').css('color', 'black');
     }
-    return;
-};
-/**
- * Make sure user name is unique;
- * NOTE: TypeScript won't allow a function's return value to be boolean! "you
- * must return a value": hence the return values specified below
- *
- * @return {boolean}
- */
-var uniqueuser = function () {
-    var data = $('#uname').val();
-    var ajaxdata = { username: data };
-    var current_users = 'getUsers.php';
-    $.ajax(current_users, {
-        data: ajaxdata,
+    $.ajax({
+        url: '../accounts/getDups.php',
         method: 'post',
-        success: function (match) {
-            if (match === "NO") {
-                goodname = true;
+        data: {username: uname},
+        dataType: 'text',
+        success: function(match) {
+            if (match === "YES") {
+                valid_username = false;
+                alert("Please select a different user name");
             }
-            else {
-                goodname = false;
-            }
-            uniqueness.resolve();
+            checkDef.resolve(); 
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            uniqueness.reject();
-            var newDoc = document.open();
-            newDoc.write(jqXHR.responseText);
-            newDoc.close();
+        error: function() {
+            alert("Error encountered checking username");
+            valid_username = false;
+            checkDef.resolve();
+        }   
+    });
+    $.when(checkDef).then(function() {
+        if (!valid_username) {
+            $('#uname').focus();
+            $('#uname').css('color', 'red');
+        }
+    }); 
+    return;
+ });
+ 
+/**
+ * ---- Email validation: validated when entry is completed, and again via html form checks ----
+ */
+var valid_email = false;
+$('#email').on('change', function() {
+    var checkDef = $.Deferred();
+    let msg = '';
+    let uemail = $(this).val();
+    valid_email = email_test_pattern.test(uemail);
+    if (valid_email) {
+        var adata = {email: uemail};
+        $.post('getDups.php', adata, function(match) {
+            if (match === 'YES') {
+                msg = "Cannot complete request with this email";
+                valid_email = false;
+            }
+            checkDef.resolve();
+        });
+    } else {
+        msg = "Please enter a valid email address";
+        checkDef.resolve();
+    }
+    $.when(checkDef).then(function() {
+        if (!valid_email) {
+            alert(msg);
+            $('#email').focus();
+            $('#email').css('color', 'red');
+        } else {
+            $('#email').css('color', 'black');
         }
     });
-};
-$('#uname').on('change', function () {
-    spacesInName();
-    if (nonamespaces) {
-        uniqueuser();
-        $.when(uniqueness).then(function () {
-            if (!goodname) {
-                alert("This user name is already taken");
-                $('#uname').css('color', 'red');
-                outstanding_issue = true;
-            }
-            else {
-                if (nonamespaces) {
-                    outstanding_issue = false;
-                }
-            }
-            uniqueness = $.Deferred(); // re-establish for next event
-        });
-    }
 });
-$('#uname').on('focus', function () {
-    $(this).css('color', 'black');
-});
-// input fields: no blanks; no username spaces; valid email address
+
+/**
+ * Final checks when form is submitted
+ */
 $("form").on('submit', function (ev) {
     ev.preventDefault();
-    if (!submittable) {
-        alert("You must enter an acceptable password");
-        return false;
-    }
-    if (outstanding_issue) {
-        alert("Please correct item(s) in red before submitting");
-        return false;
-    }
+    $('#submit').css('background-color', 'gray');
     var allinputs = document.getElementsByClassName('signup');
     for (var i = 0; i < allinputs.length; i++) {
         var inputbox = allinputs[i];
@@ -178,31 +140,45 @@ $("form").on('submit', function (ev) {
             return false;
         }
     }
-    if ($('#cookie_banner').css('display') !== 'none') {
-        alert("Please accept or reject cookis");
+    if (!valid_username || !valid_email) {
+        alert("Please correct item(s) in red before submitting");
         return false;
     }
-    // check for a valid email address:
-    let usremail = $('input[name=email]').val();
-    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (!regex.test(usremail)) {
-        alert("Please enter a valid email address");
-        $('input[name=username]').val("");
-        return false;
-    }
-    let cookies  = $('input[name=cookies]').val();
+ 
+    let usremail = $('#email').val();
+    usremail = usremail.toLowerCase();
     let username = $('input[name=username]').val();
-    let password = $('input[name=password]').val();
-    var ajaxdata = {submitter: 'create', username: username, password: password,
-        cookies: cookies, email: usremail};
+    let newreg   = 'y';
+    var ajaxdata = {submitter: 'create', username: username, email: usremail};
     $.ajax({
         url: 'create_user.php',
         method: 'post',
         dataType: 'text',
         data: ajaxdata,
         success: function(response) {
-            if (response == 'DONE') {
-                window.open('../index.php', '_self');
+            if (response === 'DONE') {
+                // Send an email to registrant with security code & link
+                $.ajax({
+                    url: '../accounts/sendmail.php',
+                    method:'post',
+                    data:{newreg: newreg, email: usremail},
+                    success: function(result) {
+                        $('#submit').css('background-color', '#b47b31');
+                        if (result === 'ok') {
+                            alert("An email has been sent");
+                        } else if (result === 'bad') {
+                            alert("Email was not valid");
+                        } else if (result === 'nofind') {
+                            alert("Could not find registration:\n" +
+                                "Please try again");
+                        }
+                    },
+                    error: function(jqXHR, textStatus) {
+                        alert("FAILED: " + textStatus);
+                    }
+                });
+            } else if (response === 'bademail') {
+                alert("The email you sent was not valid");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
