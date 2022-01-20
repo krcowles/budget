@@ -18,6 +18,11 @@
 session_start();
 require "../database/global_boot.php";
 require "../accounts/accountFunctions.php";
+chdir('../phpseclib1.0.20');
+require "Crypt/RSA.php";
+$rsa = new Crypt_RSA();
+$publickey  = file_get_contents('../database/puclasskey.txt');
+$rsa->loadKey($publickey);
 
 $username = filter_input(INPUT_POST, 'usr_name');
 $userpass = filter_input(INPUT_POST, 'usr_pass');
@@ -53,55 +58,62 @@ if (count($entries) === 0) {
         $adduser->execute([$ip]);
     }
 }
+
 // validate user info (prior to security questions)
-$usr_req = "SELECT * FROM `Users` WHERE BINARY `username` = :usr;";
-$auth = $pdo->prepare($usr_req);
-$auth->bindValue(":usr", $username);
-$auth->execute();
-$rowcnt = $auth->rowCount();
-if ($rowcnt === 1) {  // located single instance of user
-    $user_dat = $auth->fetch(PDO::FETCH_ASSOC);
-    if (password_verify($userpass, $user_dat['password'])) {
-        $return_data = [];
-        $expiration = $user_dat['passwd_expire'];
-        $american = str_replace("-", "/", $expiration);
-        $expdate = strtotime($american);
-        if ($expdate <= time()) {
-            // remove user from Users table
-            $expiredUser = "DELETE FROM `Users` WHERE `uid`=?;";
-            $removeUser = $pdo->prepare($expiredUser);
-            $removeUser->execute([$user_dat['uid']]);
-            $return_data['status'] = 'EXPIRED';
-            echo json_encode($return_data);
-            exit;
-        } else {
-            $_SESSION['userid']  = $user_dat['uid'];
-            // check for renewal status
-            $UX_DAY = 60*60*24; // unix timestamp value for 1 day
-            $days = floor(($expdate - time())/$UX_DAY);
-            if ($days <= 5) {
-                $return_data['status'] = 'RENEW';
-                echo json_encode($return_data);
-                exit;
-            }
-            // establish session, even if renewal is to take place
-            $_SESSION['cookies'] = $user_dat['cookies'];
-            $_SESSION['start']   = $user_dat['setup'];
-            if (count($entries) === 1) {
-                $pdo->query("DROP TABLE `Locks`;");
-            } else {
-                $dropLocks = $pdo->prepare("DELETE FROM `Locks` WHERE `ipaddr`=?;");
-                $dropLocks->execute([$ip]);
+$nomatch = true;
+$user_dat = $pdo->query("SELECT * FROM `Users`")->fetchAll(PDO::FETCH_ASSOC);
+foreach ($user_dat as $user) {
+    if (strlen($user['username']) > 30) {
+        $cipher = hex2bin($user['username']);
+        $decrypted = $rsa->decrypt($cipher);
+        $uid = $user['uid'];
+        if ($decrypted === $username) {
+            if (password_verify($userpass, $user['password'])) {
+                $nomatch = false;
+                $expiration = $user['passwd_expire'];
+                $american = str_replace("-", "/", $expiration);
+                $expdate = strtotime($american);
+                if ($expdate <= time()) {
+                    // remove user from Users table
+                    $expiredUser = "DELETE FROM `Users` WHERE `uid`=?;";
+                    $removeUser = $pdo->prepare($expiredUser);
+                    $removeUser->execute([$user['uid']]);
+                    $return_data['status'] = 'EXPIRED';
+                    echo json_encode($return_data);
+                    exit;
+                } else {
+                    $_SESSION['userid']  = $user['uid'];
+                    // check for renewal status
+                    $UX_DAY = 60*60*24; // unix timestamp value for 1 day
+                    $days = floor(($expdate - time())/$UX_DAY);
+                    if ($days <= 5) {
+                        $return_data['status'] = 'RENEW';
+                        echo json_encode($return_data);
+                        exit;
+                    }
+                    // establish session, even if renewal is to take place
+                    $_SESSION['cookies'] = $user['cookies'];
+                    $_SESSION['start']   = $user['setup'];
+                    if (count($entries) === 1) {
+                        $pdo->query("DROP TABLE `Locks`;");
+                    } else {
+                        $dropLocks = $pdo->prepare(
+                            "DELETE FROM `Locks` WHERE `ipaddr`=?;"
+                        );
+                        $dropLocks->execute([$ip]);
+                    }
+                }
+                $return_data = array(
+                    'status' => 'LOCATED',
+                    'start' => $user['setup'],
+                    'cookies' => $user['cookies'],
+                    'ix' => $user['uid']
+                ); 
             }
         }
-        $return_data = array('status' => 'LOCATED', 'start' => $user_dat['setup'],
-            'cookies' => $user_dat['cookies'], 'ix' => $user_dat['uid']); 
-    } else {  // user exists, but password doesn't match:
-        updateFailures(++$fails, $ip, $pdo);
-        $return_data['status'] = 'FAIL';
-        $return_data['fail_cnt'] = $fails;
     }
-} else {  // either bad username [rowcnt = 0], or multiple entries (shouldn't happen)
+}
+if ($nomatch) { // no user or bad password
     updateFailures(++$fails, $ip, $pdo);
     $return_data['status'] = 'FAIL';
     $return_data['fail_cnt'] = $fails;

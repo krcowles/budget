@@ -23,6 +23,8 @@ require "accounts/getLogin.php";
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="index.css" type="text/css" rel="stylesheet" />
     <script src="../scripts/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.1.0/jsencrypt.min.js" integrity="sha512-Tl9i44ZZYtGq56twOViooxyXCSNNkEkRmDMnPAmgU+m8B8A8LXJemzkH/sZ7y4BWi5kVVfkr75v+CQDU6Ug+yw==" crossorigin="anonymous">
+</script>
 </head>
 
 <body>

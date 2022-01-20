@@ -181,7 +181,7 @@ $('#formsubmit').on('click', function(ev) {
         }
     });
     let ques = qnos.join();
-    let uans = answ.join();
+    let uans = answ.join("|"); // in case there's a comma in an answer...
     var ajaxData = {
         submitter: submit,
         userid: userid,

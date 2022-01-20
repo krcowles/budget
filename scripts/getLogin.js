@@ -23,13 +23,15 @@ var completed3 = startpg.charAt(2) === '1' ? true : false;
  * login validateUser() method
  */
  const checkRenewal = () => {
-    var ans = confirm("Your password is about to expire\n" + 
-        "Would you like to renew?");
+    let msg = "Your password is about to expire:\n" + 
+        "You will no longer be able to login unless you renew";
+    alert(msg);
+    var ans = confirm("Would you like to renew?");
     if (ans) {
         var renewpg = "accounts/renew.php";
         window.open(renewpg, "_self");
     } else {
-        alert("You will no longer be able to login\nUnless you renew")
+        alert()
         window.open('index.php', '_self');
     }
 };
@@ -58,7 +60,7 @@ if (cookies) {
     // else "NOLOGIN" or unexpected string => do nothing
 } else {
     // cookies disabled
-    alert("The use of this site requires having cookies enabled\n" +
+    alert("The use of this site requires having cookies enabled on the browser,\n" +
         "even though you may choose to reject the use of personal cookies\n" +
         "When rejected, no cookie information is saved on the browser.");
 }
@@ -121,7 +123,13 @@ $('#submit_answer').on('click', function() {
     }, 'text');
 });
 
-// login authentication
+/**
+ * This function takes the login information submitted by the user and determines
+ * if the user is registered. Note that the usr_name is not encrypted at this point.
+ * 
+ * @param {string} usr_name As entered by user on login page
+ * @param {string} usr_pass As entered by user on login page
+ */
 function validateUser(usr_name, usr_pass) {
     $.ajax( {
         url: "accounts/authenticate.php",

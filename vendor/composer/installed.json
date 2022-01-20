@@ -1081,6 +1081,57 @@
             "install-path": "../squizlabs/php_codesniffer"
         },
         {
+            "name": "sy-records/php-rsa",
+            "version": "v1.1",
+            "version_normalized": "1.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/IhadPHP/php-rsa.git",
+                "reference": "af77a5ac829ea7a5318716bfb99330ee7cd7e05d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/IhadPHP/php-rsa/zipball/af77a5ac829ea7a5318716bfb99330ee7cd7e05d",
+                "reference": "af77a5ac829ea7a5318716bfb99330ee7cd7e05d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.4.0"
+            },
+            "time": "2018-07-22T04:32:55+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "syrecords\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Shen Yan",
+                    "email": "52o@qq52o.cn",
+                    "homepage": "https://qq52o.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP class that uses RSA algorithm for encryption and decryption.",
+            "keywords": [
+                "php",
+                "php-rsa",
+                "rsa"
+            ],
+            "support": {
+                "email": "52o@qq52o.cn",
+                "issues": "https://github.com/IhadPHP/php-rsa/issues",
+                "source": "https://github.com/IhadPHP/php-rsa/tree/master"
+            },
+            "install-path": "../sy-records/php-rsa"
+        },
+        {
             "name": "symfony/polyfill-mbstring",
             "version": "v1.23.0",
             "version_normalized": "1.23.0.0",

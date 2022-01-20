@@ -12,6 +12,10 @@
  */
 require "../database/global_boot.php";
 require "gmail.php";
+chdir('../phpseclib1.0.20');
+require "Crypt/RSA.php";
+$publickey  = file_get_contents('../database/puclasskey.txt');
+$rsa = new Crypt_RSA();
 
 $new_registration = isset($_POST['newreg']) ? true : false;
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -45,29 +49,34 @@ $registered
     = $pdo->query('SELECT email FROM `Users`;')->fetchAll(PDO::FETCH_COLUMN);
 if (in_array($email, $registered)) {
     // get username
-    $unameReq = "SELECT `uid`,`username` FROM `Users` WHERE `email` = :email;";
-    $uname = $pdo->prepare($unameReq);
-    $uname->execute(["email" => $email]);
-    $user = $uname->fetch(PDO::FETCH_ASSOC);
+    $udatReq = "SELECT `uid`,`username` FROM `Users` WHERE `email` = :email;";
+    $udat = $pdo->prepare($udatReq);
+    $udat->execute(["email" => $email]);
+    $user_data = $udat->fetch(PDO::FETCH_ASSOC);
+    $uid = $user_data['uid'];
+    $rsa->loadKey($publickey);
+    $uname = $user_data['username'];
+    $newcipher = hex2bin($uname);
+    $orgname = $rsa->decrypt($newcipher);
     // save temporary secure password
-    $savecodeReq = "UPDATE `Users` SET `password` = ? WHERE `username` = ?;";
+    $savecodeReq = "UPDATE `Users` SET `password` = ? WHERE `uid` = ?;";
     $savecode = $pdo->prepare($savecodeReq);
-    $savecode->execute([$hash, $user['username']]);
+    $savecode->execute([$hash, $uid]);
 } else {
     echo "nofind";
 }
 if (!$new_registration) {   
-    $msg .= ' ' . $user['username'] . '</p>';
+    $msg .= ' ' . $orgname . '</p>';
     $msg .= '<p>A temporary password has been assigned: ';
     $msg .= '<strong>' . $tmp_pass . '</strong></p>';
-    $href .= $tmp_pass . '&ix=' . $user['uid'] .
+    $href .= $tmp_pass . '&ix=' . $uid .
         '"><span style="font-size:16px;">Click to reset your password</span></a>';
     $msg .= $href;
     $user_msg = $msg;
     $subject = "Password Update";
 } else { // new registration
-    $newreg .= $user['username'] . '<br />Your temporary login code is ' . $tmp_pass;
-    $newreg .= $post . $href . $tmp_pass . '&ix=' . $user['uid'] .
+    $newreg .= $orgname . '<br />Your temporary login code is ' . $tmp_pass;
+    $newreg .= $post . $href . $tmp_pass . '&ix=' . $uid .
         '&reg=y">New Account Link</a>';
     $user_msg = $newreg;
     $subject = "New Account";

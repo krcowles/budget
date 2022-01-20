@@ -71,6 +71,10 @@ class ComposerStaticInit73bf35c94649aac792ae1ea6ca6ccbd2
     );
 
     public static $prefixLengthsPsr4 = array (
+        's' => 
+        array (
+            'syrecords\\' => 10,
+        ),
         'Z' => 
         array (
             'ZipStream\\' => 10,
@@ -106,6 +110,10 @@ class ComposerStaticInit73bf35c94649aac792ae1ea6ca6ccbd2
     );
 
     public static $prefixDirsPsr4 = array (
+        'syrecords\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sy-records/php-rsa/src',
+        ),
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',

@@ -161,7 +161,7 @@ $("form").on('submit', function (ev) {
                 $.ajax({
                     url: '../accounts/sendmail.php',
                     method:'post',
-                    data:{newreg: newreg, email: usremail},
+                    data:{newreg: newreg, email: usremail, uname: username},
                     success: function(result) {
                         $('#submit').css('background-color', '#b47b31');
                         if (result === 'ok') {

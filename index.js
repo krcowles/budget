@@ -24,6 +24,10 @@ $.get('accounts/lockStatus.php', function(status) {
 
 var chg_pass = new bootstrap.Modal(document.getElementById('resetemail'));
 var sec_ques = new bootstrap.Modal(document.getElementById('twofa'));
+//var cryptofunction = new JSEncrypt();
+//var publickey;    // form submit: get public key
+//var login_user;   // form submit: retrieve user name
+//var encrypt_user; // form submit: encrypt user name w/public key
 
 $(function() {
 /** 
@@ -49,7 +53,7 @@ $(window).on('resize', function() {
     divset();
 });
 
-$('#resetpass').on('click', function() {
+$('#resetpass').on('click', function() { // "Forgot User name and/or Password" link
     chg_pass.show();
 });
 
@@ -83,11 +87,13 @@ $('#cpass').on('click', function() {
     });
 });
 
+
 $('form').on('submit', function(ev) {
     ev.preventDefault();
-    let usr = $('input[name=username]').val();
-    let pass = $('input[name=password]').val();
-    if (usr == '') {
+    
+    user = $('input[name=username]').val();
+    let pass   = $('input[name=password]').val();
+    if (user == '') {
         alert("Please supply a valid username");
         return false;
     }
@@ -95,7 +101,7 @@ $('form').on('submit', function(ev) {
         alert("Please supply a valid password");
         return false;
     }
-    validateUser(usr, pass);
+    validateUser(user, pass);
 });
 
 });

@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'syrecords\\' => array($vendorDir . '/sy-records/php-rsa/src'),
     'ZipStream\\' => array($vendorDir . '/maennchen/zipstream-php/src'),
     'Whoops\\Handler\\' => array($vendorDir . '/whoops/soap/src'),
     'Whoops\\' => array($vendorDir . '/filp/whoops/src/Whoops'),

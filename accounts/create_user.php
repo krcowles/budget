@@ -13,9 +13,14 @@ session_start();
 require_once "../database/global_boot.php";
 require "../accounts/accountFunctions.php";
 
-// always posted, regardless of 'create' or 'change'
-$submitter = filter_input(INPUT_POST, 'submitter');
+// RSA encryption:
+chdir("../phpseclib1.0.20");
+require "Crypt/RSA.php";
+$rsa = new Crypt_RSA();
+$privatekey  = file_get_contents('../database/prclasskey.txt');
+$rsa->loadKey($privatekey);
 
+$submitter = filter_input(INPUT_POST, 'submitter');
 // response is based on caller [$submitter]:
 if ($submitter == 'create') {
     // 'create': Registration: enter minimal data, complete later via email link
@@ -25,13 +30,18 @@ if ($submitter == 'create') {
         exit;
     }
     $username  = filter_input(INPUT_POST, 'username');
+    // encrypt username
+    $ciphertext = $rsa->encrypt($username);
+    $dbuser = bin2hex($ciphertext);
+    // starting month
     $today = getdate();
     $month_string = $today['month'];
+    // save first portion of user data
     $newuser = "INSERT INTO `Users` (`email`,`username`,`setup`,`LCM`) " .
         "VALUES (:email,:uname,'000','{$month_string}');";
     $user = $pdo->prepare($newuser);
     $user->execute(
-        array( ":email" => $email, ":uname" =>  $username)
+        array( ":email" => $email, ":uname" =>  $dbuser)
     );
 } elseif ($submitter == 'change') {
     // 'change': New registrant or update of password (forgot/change/renew)
@@ -57,7 +67,7 @@ if ($submitter == 'create') {
          * Verify the one-time code before proceeding
          */
         $baseDatReq
-            = "SELECT `password` FROM `Users` WHERE `uid`=?;";
+            = "SELECT * FROM `Users` WHERE `uid`=?;";
         $baseDat = $pdo->prepare($baseDatReq);
         $baseDat->execute([$user]);
         $user_dat = $baseDat->fetch(PDO::FETCH_ASSOC);
@@ -85,11 +95,29 @@ if ($submitter == 'create') {
     } else { // a renewal process
         $uid = $user == '0' ? $_SESSION['userid'] : $user;
     }
+    // encrypt answers
+    $dbans = [];
+    $ans_array = explode("|", $answers);
+    foreach ($ans_array as $answer) {
+        $cipher_answer = $rsa->encrypt($answer);
+        $hex_answer = bin2hex($cipher_answer);
+        array_push($dbans, $hex_answer);
+    }
     $updateuser = "UPDATE `Users` SET `password`=?,`passwd_expire`=?," .
-        "`cookies`=?,`questions`=?,`answers`=? WHERE `uid`=?;";
+        "`cookies`=?,`questions`=?,`answers`=?,`an1`=?,`an2`=?,`an3`=? ".
+        "WHERE `uid`=?;";
     $update = $pdo->prepare($updateuser);
     $update->execute(
-        array($password, $exp_date, $choice, $questions, $answers, $uid)
+        array(
+            $password,
+            $exp_date,
+            $choice,
+            $questions,
+            $answers,
+            $dbans[0],
+            $dbans[1],
+            $dbans[2],
+            $uid)
     );
     if ($choice === 'accept') {
         // need username
