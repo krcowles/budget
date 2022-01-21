@@ -17,7 +17,7 @@ require "../accounts/accountFunctions.php";
 chdir("../phpseclib1.0.20");
 require "Crypt/RSA.php";
 $rsa = new Crypt_RSA();
-$privatekey  = file_get_contents('../database/prclasskey.txt');
+$privatekey  = file_get_contents('../../budprivate/privatekey.pem');
 $rsa->loadKey($privatekey);
 
 $submitter = filter_input(INPUT_POST, 'submitter');

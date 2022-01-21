@@ -16,6 +16,6 @@ require "Crypt/RSA.php";
 
 $rsa = new Crypt_RSA();
 extract($rsa->createKey());
-file_put_contents('../database/puclasskey.txt', $publickey);
-file_put_contents('../database/prclasskey.txt', $privatekey);
+file_put_contents('../../budprivate/publickey.pem', $publickey);
+file_put_contents('../../budprivate/privatekey.pem', $privatekey);
 echo "DONE";

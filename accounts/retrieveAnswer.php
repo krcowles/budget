@@ -12,7 +12,7 @@ session_start();
 require_once "../database/global_boot.php";
 chdir('../phpseclib1.0.20');
 require "Crypt/RSA.php";
-$publickey  = file_get_contents('../database/puclasskey.txt');
+$publickey  = file_get_contents('../../budprivate/publickey.pem');
 $rsa = new Crypt_RSA();
 $rsa->loadKey($publickey);
 

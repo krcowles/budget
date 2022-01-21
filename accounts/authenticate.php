@@ -21,7 +21,7 @@ require "../accounts/accountFunctions.php";
 chdir('../phpseclib1.0.20');
 require "Crypt/RSA.php";
 $rsa = new Crypt_RSA();
-$publickey  = file_get_contents('../database/puclasskey.txt');
+$publickey  = file_get_contents('../../budprivate/publickey.pem');
 $rsa->loadKey($publickey);
 
 $username = filter_input(INPUT_POST, 'usr_name');
