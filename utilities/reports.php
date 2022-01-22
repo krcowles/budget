@@ -57,7 +57,7 @@ if ($annual) {
     }
     foreach ($report_data as $item) {
         $expdate = explode("-", $item['expdate']);
-        if ($expdate[0] === $digits[2]) {
+        if ($expdate[0] === $period) {
             $month_item = array(
                 $item['method'],
                 $item['cdname'],
