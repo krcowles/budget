@@ -1232,7 +1232,7 @@ INSERT INTO Deposits VALUES
 CREATE TABLE `Users` (
   `uid` int(10) NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL,
-  `username` varchar(40) NOT NULL,
+  `username` varchar(4096) NOT NULL,
   `setup` varchar(7) DEFAULT NULL,
   `LCM` varchar(12) DEFAULT NULL,
   `definc` varchar(12) DEFAULT NULL,
@@ -1241,17 +1241,20 @@ CREATE TABLE `Users` (
   `cookies` varchar(6) DEFAULT NULL,
   `questions` varchar(10) DEFAULT NULL,
   `answers` varchar(200) DEFAULT NULL,
+  `an1` varchar(4096) DEFAULT NULL,
+  `an2` varchar(4096) DEFAULT NULL,
+  `an3` varchar(4096) DEFAULT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 
 INSERT INTO Users VALUES
-('4','krcowles29@gmail.com','krc','111','January','','$2y$10$5Xsa9BD76VSvF5n78V3rXu/okKh8ICjMsCJ21.oT74srAF2EynoAi','2022-12-11','accept','3,5,6','lathrop,collins,kokomo'),
-('11','tonks130@gmail.com','Albuquerque Gal','111','January',NULL,'$2y$10$A84jihpzxHpWgB7RcKvr8u2w3exQCWPO8EbFZCBqGKeTG7DYv2kmC','2022-03-13','accept',NULL,NULL),
-('19','hawk109@icloud.com','jimbob','111','January',NULL,'$2y$10$e4vtqhQT.FL0goVjptAVrO4WQDMuljV2Ke5G6bdVD3RpTp3zLDhv.','2023-01-15','accept','3,5,6','lathrop,collins,kokomo'),
-('14','coTam@elo.com','test','111','November',NULL,'$2y$10$Bl.KBPV38rDxjMncgIOrx.HO//LVUiPWuVlMju5Xxy6WESE4TmIJW','2022-11-07','accept',NULL,NULL),
-('16','greenalex@sbcglobal.net','a','111','January',NULL,'$2y$10$uNAEyaazz5owMqUKwU9irOGbaHNbBTgccFZvfplpDBU7eI2cq0kZy','2022-12-14','nochoi',NULL,NULL),
-('17','ag0422339@gmail.com','budget','100','December',NULL,'$2y$10$q/4TAephNoolVnX2Y8gS.eEBREN1rKDXpWKo2dSaexEM817asgY1C','2022-12-27','nochoi',NULL,NULL),
-('18','greenalex@sbcglobal.net','abcdefg','111','January',NULL,'$2y$10$CQQzUzJZFjpJKwIl4vSCvOSPys0DV1hz9aJAX6SxIZY8eCvHLLVNS','2023-01-03','nochoi',NULL,NULL);
+('4','krcowles29@gmail.com','krc','111','January','abcdefg','$2y$10$5Xsa9BD76VSvF5n78V3rXu/okKh8ICjMsCJ21.oT74srAF2EynoAi','2022-12-11','accept','3,5,6','lathrop,collins,kokomo','1','2','3'),
+('11','tonks130@gmail.com','Albuquerque Gal','111','January',NULL,'$2y$10$A84jihpzxHpWgB7RcKvr8u2w3exQCWPO8EbFZCBqGKeTG7DYv2kmC','2022-03-13','accept',NULL,NULL,'1','2','3'),
+('19','hawk109@icloud.com','jimbob','111','January',NULL,'$2y$10$e4vtqhQT.FL0goVjptAVrO4WQDMuljV2Ke5G6bdVD3RpTp3zLDhv.','2023-01-15','accept','3,5,6','lathrop,collins,kokomo','1','2','3'),
+('14','coTam@elo.com','test','111','November',NULL,'$2y$10$Bl.KBPV38rDxjMncgIOrx.HO//LVUiPWuVlMju5Xxy6WESE4TmIJW','2022-11-07','accept',NULL,NULL,'1','2','3'),
+('16','greenalex@sbcglobal.net','a','111','January',NULL,'$2y$10$uNAEyaazz5owMqUKwU9irOGbaHNbBTgccFZvfplpDBU7eI2cq0kZy','2022-12-14','nochoi',NULL,NULL,'1','2','3'),
+('17','ag0422339@gmail.com','budget','100','December',NULL,'$2y$10$q/4TAephNoolVnX2Y8gS.eEBREN1rKDXpWKo2dSaexEM817asgY1C','2022-12-27','nochoi',NULL,NULL,'1','2','3'),
+('18','greenalex@sbcglobal.net','abcdefg','111','January',NULL,'$2y$10$CQQzUzJZFjpJKwIl4vSCvOSPys0DV1hz9aJAX6SxIZY8eCvHLLVNS','2023-01-03','nochoi',NULL,NULL,'1','2','3');
 
 
