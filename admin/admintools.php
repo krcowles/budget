@@ -79,6 +79,10 @@ while ($arch_yr < $current_yr) {
         &nbsp;&nbsp;[NOTE: Tables must not exist]<br />
         <button id="show" type="button" class="btn btn-secondary">
             Show All Tables</button><br />
+        <button id="ld_sgl" type="button" class="btn btn-secondary">
+            Load Single Table</button>
+        &nbsp;&nbsp;Table to Load:&nbsp;&nbsp;
+        <input id="tblname" type="text" size="16" /><br />
         <!-- End of Show/Set div w/form -->
     </fieldset><br />
     <fieldset class="bootshow">

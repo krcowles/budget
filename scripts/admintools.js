@@ -63,6 +63,20 @@ $('#show').on('click', function()  {
     window.open('show_tables.php', "_blank_");
     $(this).blur();
 });
+$('#ld_sgl').on("click", function() {
+   let tbl = $('#tblname').val();
+   if (tbl === '') {
+       alert("No table specified");
+       return false;
+   }
+   let ajaxdata = {table: tbl};
+   $.post("../database/load_sgl_table.php", ajaxdata, function(result) {
+        if (result !== "ok") {
+            alert("Error occurred, try again");
+        }
+   }, "text");
+
+});
 var arch_rdy = true;
 $('#arch').on('click', function() {
     if ($('#achoice').css('display') === 'none') {
