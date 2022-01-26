@@ -149,6 +149,7 @@ if (!$new) {
 </div>
 
 <div id="container">
+    <input type="hidden" name="userid" value="<?=$user;?>" />
     <p id="new" style="display:none;"><?=$jsnew;?></p>
     <h3 id="header">Please enter and confirm a new password:</h3>
     <form id="form" method="POST" action="create_user.php">
