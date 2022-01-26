@@ -6,7 +6,7 @@
  *     code and userid ($_GET['reg'] is also set)
  *  -- a user may either click on 'Forgot Password', or request a change to his/her
  *     password (MyAccount->Change Password), directing the user to this page
- *     via an email link and a one-time code and userid ($_GET['reg'] is not set)
+ *     via an email link with a one-time code and userid ($_GET['reg'] is not set)
  *  -- when a 'renew' is the result of logging in (either via cookies or via 
  *     login), session variables are already set.
  * PHP Version 7.4
@@ -18,6 +18,11 @@
 session_start();
 require "../database/global_boot.php";
 require "../accounts/security_questions.php";
+chdir('../phpseclib1.0.20');
+require "Crypt/RSA.php";
+$publickey  = file_get_contents('../../budprivate/publickey.pem');
+$rsa = new Crypt_RSA();
+$rsa->loadKey($publickey);
 
 $new = isset($_GET['reg']) ? true : false;
 $jsnew = $new ? 'new' : 'not';
@@ -25,27 +30,31 @@ if (isset($_GET['code'])) {
     // new registration or forgot/change password, 'code' & 'ix' are both set in url 
     $tmpcode = filter_input(INPUT_GET, 'code');
     $user = filter_input(INPUT_GET, 'ix');
-    $form_type = 'login';
 } else {
     // renew via logging in => session variables already assigned
     $user = $_SESSION['userid'];
-    $form_type = 'nolog';
 }
 
 if (!$new) {
-    $getQsAndAsReq = "SELECT `questions`,`answers` FROM `Users` WHERE `uid`=?;";
+    $getQsAndAsReq = "SELECT `questions`,`an1`,`an2`,`an3` FROM `Users` ".
+        "WHERE `uid`=?;";
     $getQsAndAs = $pdo->prepare($getQsAndAsReq);
     $getQsAndAs->execute([$user]);
     $UQAs = $getQsAndAs->fetch(PDO::FETCH_ASSOC);
     $Qs = explode(",", $UQAs['questions']);
-    $As = explode(",", $UQAs['answers']);
+    $an1cipher = hex2bin($UQAs['an1']);
+    $an2cipher = hex2bin($UQAs['an2']);
+    $an3cipher = hex2bin($UQAs['an3']);
+    $an[0] = $rsa->decrypt($an1cipher);
+    $an[1] = $rsa->decrypt($an2cipher);
+    $an[2] = $rsa->decrypt($an3cipher);
 }
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
     <title><?php if ($new) : ?>Account Registration
-           <?php else : ?>Login Reset
+           <?php else : ?>Password Reset
            <?php endif; ?>
     </title>
     <meta charset="utf-8" />
@@ -114,7 +123,7 @@ if (!$new) {
                     <span class="ques"><?=$questions[$j];?></span>
                     <?php if (in_array($j, $Qs)) : ?>
                         <input id="q<?=$j;?>" style="padding-left:6px;"
-                        type="text" name="ans[]" value="<?=$As[$a++];?>" /><br />
+                        type="text" name="ans[]" value="<?=$an[$a++];?>" /><br />
                     <?php else : ?>
                         <input id="q<?=$j;?>" style="padding-left:6px;" 
                         type="text" name="ans[]" /><br />
@@ -141,12 +150,10 @@ if (!$new) {
 
 <div id="container">
     <p id="new" style="display:none;"><?=$jsnew;?></p>
-    <p id="logstat" style="display:none;"><?=$form_type;?></p>
     <h3 id="header">Please enter and confirm a new password:</h3>
     <form id="form" method="POST" action="create_user.php">
         <div id="inputs">
             <input type="hidden" name="submitter"  value="change" />
-            <input id="usr" type="hidden" name="userid" value="<?=$user;?>" />
             <input id="usrchoice" type="hidden" name="cookies" value="nochoice" />
             <div id="pexpl">
                 **&nbsp;Your password must be 11 characters or more and contain

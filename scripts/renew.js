@@ -90,7 +90,6 @@ const countAns = () => {
  * registration is occurring. Check the value of #new.
  */
 var registration = $('#new').text() === 'new' ? true : false;
-var loggedout = $('#logstat').text() === 'login' ? true : false;
 
 $('#sq').on('click', function(ev) {
     ev.preventDefault();
@@ -137,7 +136,7 @@ $('#formsubmit').on('click', function(ev) {
     let confirm = $('input[name=confirm]').val();
     let userid  = $('input[name=userid]').val();
     if (userid == '') {
-        alert("User not found");
+        alert("No user found");
         $(this).css('background-color', '#b47b31');
         return false;
     }
