@@ -202,7 +202,7 @@ $('#newusr').on('click', function() {
     if (newid == '') {
         alert("OOPS - No id specified!");
     } else {
-        let newlogin = "../admin/logout.php?newuser=" + newid;
+        let newlogin = "../accounts/logout.php?newuser=" + newid;
         $.get(newlogin, function() {
             window.open('../index.php');
         });
