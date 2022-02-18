@@ -84,7 +84,7 @@ require "../utilities/getAccountData.php";
     </p>
 </div>
 
-<script src="../scripts/jquery-1.12.1.js" type="text/javascript"></script>
+<script src="../scripts/jquery.min.js" type="text/javascript"></script>
 <script src="../scripts/jquery-ui.js" type="text/javascript"></script>
 <script src="../scripts/dbValidation.js" type="text/javascript"></script>
 <script src="../scripts/addCreditCharges.js" type="text/javascript"></script>

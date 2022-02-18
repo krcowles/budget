@@ -13,11 +13,26 @@ session_start();
 
 require_once "../database/global_boot.php";
 
+chdir('../phpseclib1.0.20');
+require "Crypt/RSA.php";
+$rsa = new Crypt_RSA();
+$privatekey  = file_get_contents('../../budprivate/privatekey.pem');
+$rsa->loadKey($privatekey);
+
 $ques_str = filter_input(INPUT_POST, 'questions');
 $ans_str  = filter_input(INPUT_POST, 'answers');
+$answers  = explode("|", $ans_str);
 
-$UpdateReq = "UPDATE `Users` SET `questions`=?,`answers`=? WHERE `uid`=?;";
+$cipher1 =  $rsa->encrypt($answers[0]);
+$an1 = bin2hex($cipher1);
+$cipher2 =  $rsa->encrypt($answers[1]);
+$an2 = bin2hex($cipher2);
+$cipher2 =  $rsa->encrypt($answers[2]);
+$an3 = bin2hex($cipher2);
+
+$UpdateReq = "UPDATE `Users` SET `questions`=?,`an1`=?,`an2`=?,`an3`=? " .
+    " WHERE `uid`=?;";
 $update = $pdo->prepare($UpdateReq);
-$update->execute([$ques_str, $ans_str, $_SESSION['userid']]);
+$update->execute([$ques_str, $an1, $an2, $an3, $_SESSION['userid']]);
 
 echo "ok";

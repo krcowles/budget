@@ -445,7 +445,7 @@ $('#closesec').on('click', function() {
             }
         });
         let ques = modq.join();
-        let uans = moda.join();
+        let uans = moda.join("|");
         let ajaxdata = {questions: ques, answers: uans};
         $.post('../accounts/updateQandA.php', ajaxdata, function(result) {
             if (result === 'ok') {
