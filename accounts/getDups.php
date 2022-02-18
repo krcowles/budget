@@ -9,6 +9,11 @@
  * @license No license to date
  */
 require "../database/global_boot.php";
+chdir('../phpseclib1.0.20');
+require "Crypt/RSA.php";
+$publickey  = file_get_contents('../../budprivate/publickey.pem');
+$rsa = new Crypt_RSA();
+$rsa->loadKey($publickey);
 
 $name = isset($_POST['username']) ? filter_input(INPUT_POST, 'username') : false;
 $mail = isset($_POST['email']) ? filter_input(INPUT_POST, 'email') : false;
@@ -19,7 +24,9 @@ $users = $pdo->query($getDB_dataReq)->fetchAll(PDO::FETCH_KEY_PAIR);
 if ($name !== false) {
     // Get current list of usernames: 
     foreach ($users as $key => $email) {
-        if ($key == $name) {
+        $cipher = hex2bin($key);
+        $existing = $rsa->decrypt($cipher);
+        if ($existing == $name) {
             $match = "YES";
             break;
         }
