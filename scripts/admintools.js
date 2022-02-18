@@ -189,7 +189,7 @@ $('#phpinfo').on('click', function() {
 $('#lo').on('click', function() {
     var $btn = $(this);
     $.ajax({
-        url: 'logout.php',
+        url: '../accounts/logout.php',
         method: 'get',
         success: function() {
             window.open('../index.php', "_self");

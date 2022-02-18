@@ -5,6 +5,7 @@
  * 
  * @author Ken Cowles
  * @version 1.0 First pass checker
+ * @version 2.0 Added coverage for selected range deletion
  */
 var lcalpha = /[a-z]/;
 var ucalpha = /[A-Z]/;
@@ -15,10 +16,9 @@ var uc = 0;
 var nm = 0;
 var sp = 0;
 var total = 0;
-var focus = false;
 var current_password = '';
+var latest_password = '';
 $('.signup').val('');
-
 const addKey = (type, key) => {
     let cnt = 0;
     switch(type) {
@@ -44,6 +44,7 @@ const addKey = (type, key) => {
     total++;
     $('#total').text(total);
     current_password += key;
+    latest_password = current_password;
     let $pbox = $('#pword');
     if (total >= 11 && lc > 0 && uc > 0 && nm > 0 && sp > 0) {
         if ($pbox.hasClass('weak')) {
@@ -55,11 +56,57 @@ const addKey = (type, key) => {
         }
     }
 };
+var deleteKey = function (keychar) {
+    $('#total').text(total);
+    if (total < 10) {
+        $('#total').css('color', 'maroon');
+    }
+    if (ucalpha.test(keychar)) {
+        uc -= 1;
+        $('#uc').text(uc);
+        if (uc === 0) {
+            $('#sp').css('color', 'maroon');
+        }
+    }
+    else if (lcalpha.test(keychar)) {
+        lc -= 1;
+        $('#lc').text(lc);
+        if (lc === 0) {
+            $('#lc').css('color', 'maroon');
+        }
+    }
+    else if (numchar.test(keychar)) {
+        nm -= 1;
+        $('#nm').text(nm);
+        if (nm === 0) {
+            $('#nm').css('color', 'maroon');
+        }
+    }
+    else if (spcchar.test(keychar)) {
+        sp -= 1;
+        $('#sp').text(sp);
+        if (sp === 0) {
+            $('#sp').css('color', 'maroon');
+        }
+    }
+    if (total < 11 || uc === 0 || lc === 0 || nm === 0 || sp === 0) {
+        $('#wk').show();
+        $('#st').hide();
+        $('#showdet').show();
+    }
+};
 const keyChecker = (ev) => {
     let thiskey = ev.key;
     if (thiskey !== "Shift") {
+        /**
+         * When the user clicks on a backspace, track the changes!
+         */
         if (thiskey === "Backspace") {
-            current_password = current_password.slice(0, -1);    
+            let lastchar = latest_password.slice(-1);
+            total -= 1;
+            deleteKey(lastchar);
+            current_password = current_password.slice(0, -1);
+            latest_password = current_password;
         } else if (thiskey.length === 1) {
             if (lcalpha.test(thiskey)) {
                 addKey('lc', thiskey);
@@ -74,16 +121,34 @@ const keyChecker = (ev) => {
     }
     return;
 };
+/**
+ * When a range of text is selected and deleted, this function will adjust
+ * the counts. Note: document.getSelection() does not apply to input text
+ */
+ var rangeCheck = function (ev) {
+    var thiskey = ev.key;
+    if (thiskey === 'Backspace') {
+        var newword = $('#pword').val();
+        if (newword !== current_password) {
+            var lgth = newword.length;
+            var deleted = current_password.substring(lgth);
+            total -= deleted.length;
+            for (var j = 0; j < deleted.length; j++) {
+                deleteKey(deleted[j]);
+            }
+            current_password = newword;
+            latest_password = newword;
+        }
+    }
+};
 $('#pword').on('focus', function() {
-    focus = true;
     document.addEventListener('keydown', keyChecker);
+    document.addEventListener('keyup', rangeCheck);
     return;
 
 });
 $('#pword').on('blur', function() {
-    if (focus) {
-        document.removeEventListener('keydown', keyChecker);
-    }
-    focus = false;
+    document.removeEventListener('keydown', keyChecker);
+    document.removeEventListener('keyup', rangeCheck);
     return;
 });

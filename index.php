@@ -23,14 +23,12 @@ require "accounts/getLogin.php";
     <link href="../styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="index.css" type="text/css" rel="stylesheet" />
     <script src="../scripts/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.1.0/jsencrypt.min.js" integrity="sha512-Tl9i44ZZYtGq56twOViooxyXCSNNkEkRmDMnPAmgU+m8B8A8LXJemzkH/sZ7y4BWi5kVVfkr75v+CQDU6Ug+yw==" crossorigin="anonymous">
-</script>
 </head>
 
 <body>
 <!-- You CANNOT place bootstrap in the <head> element! -->
-
 <script src="../scripts/bootstrap.min.js"></script>
+
 <div id="top-part">
     <div id="sitetext">
         <span id="maintext">The Budgetizer</span><br />
@@ -112,7 +110,7 @@ require "accounts/getLogin.php";
             </form>
         </div>
         <div id="register">
-            <p>Or:&nbsp;&nbsp;<a href="accounts/registration.php">
+            <p>Or:&nbsp;&nbsp;<a href="accounts/registration.html">
                 Sign up and start your new budget!</a></p>
         </div>
     </div>
@@ -123,7 +121,6 @@ require "accounts/getLogin.php";
     <p id="startpg" style="display:none;"><?=$start;?></p>
 </div>
 
-<!--                             Modals                            -->
 <!-- Security Question Modal -->
 <div id="twofa" class="modal" tabindex="-1">
     <div class="modal-dialog">

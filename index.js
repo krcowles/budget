@@ -24,10 +24,6 @@ $.get('accounts/lockStatus.php', function(status) {
 
 var chg_pass = new bootstrap.Modal(document.getElementById('resetemail'));
 var sec_ques = new bootstrap.Modal(document.getElementById('twofa'));
-//var cryptofunction = new JSEncrypt();
-//var publickey;    // form submit: get public key
-//var login_user;   // form submit: retrieve user name
-//var encrypt_user; // form submit: encrypt user name w/public key
 
 $(function() {
 /** 
