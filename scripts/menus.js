@@ -24,13 +24,14 @@ var monthly = new bootstrap.Modal(document.getElementById('moexp'));
 var yearly  = new bootstrap.Modal(document.getElementById('annexp'));
 var anninc  = new bootstrap.Modal(document.getElementById('anninc'));
 var chgpass = new bootstrap.Modal(document.getElementById('resetemail'));
+var secques = new bootstrap.Modal(document.getElementById('security'));
 
-// Add option for 'Move Account'
+// Add 'Undistributed Funds' as an option for 'Move Account'
 var $mvlist = $('#mvto .partsel');
 var undisopt = document.createElement('option');
 undisopt.text = "Undistributed Funds";
 $mvlist[0].add(undisopt);
-// disable Undistributed Funds for 'Rename Account':
+// Disable 'Undistributed Funds' for 'Rename Account':
 var $ren = $('#asel .fullsel');
 for (var j=0; j<$ren[0].options.length; j++) {
     if ($ren[0].options[j].text == 'Undistributed Funds') {
@@ -38,9 +39,7 @@ for (var j=0; j<$ren[0].options.length; j++) {
         break;
     }
 }
-/**
- * Prep the data for non-monthly income (needed to 'undo' a deposit)
- */
+// Prep the data for non-monthly income (needed to 'undo' a deposit)
 var depositList;
 $.get('../utilities/getDeposits.php', function(list) {
     depositList = JSON.parse(list);
@@ -48,7 +47,7 @@ $.get('../utilities/getDeposits.php', function(list) {
         $('#irdeps').append(depositList[k]);
     }
 });
- 
+
 /**
  * All other modal operation
  */
@@ -351,9 +350,10 @@ $('#yrinc').on('click', function() {
     });
     anninc.show();
 });
+
 $('#logout').on('click', function() {
     $.ajax({
-        url: '../admin/logout.php',
+        url: '../accounts/logout.php',
         method: 'get',
         success: function() {
             window.open('../index.php', "_self");
@@ -365,42 +365,33 @@ $('#rpass').on('click', function() {
 });
 $('#cpass').on('click', function() {
     let eaddr = $('#remail').val();
+    eaddr = eaddr.toLowerCase();
     if (eaddr === '') {
         alert("You must enter a valid email address");
         return false;
     }
     let adata = {email: eaddr};
     $.ajax({
-        url: '../admin/sendmail.php',
+        url: '../accounts/sendmail.php',
         method: 'post',
         data: adata,
         dataType: 'text',
         success: function(result) {
-            let sent = false;
-            if (result === 'ok') {
-                sent = true;
-                alert('An email has been sent');
-            } else if (result === 'bad') {
-                alert('The email address is not valid');
-            } else if (result === 'nofind') {
-                alert('Your email could not be located in our database');
-            }
+            alert('An email has been sent');
             chgpass.hide();
-            if (sent) {
-                $.ajax({
-                    url: '../admin/logout.php',
-                    method: 'get',
-                    success: function() {
-                        alert("You are logged out until the new password is entered");
-                        window.open('../index.php', "_self");
-                    },
-                    error: function() {
-                        let msgtxt = "Error logging out:\n";
-                        let msg = msgtxt + textStatus + "; Error: " + errorThrown;
-                        alert(msg);
-                    }
-                });
-            }
+            $.ajax({
+                url: '../accounts/logout.php',
+                method: 'get',
+                success: function() {
+                    alert("You are logged out until the new password is entered");
+                    window.open('../index.php', "_self");
+                },
+                error: function() {
+                    let msgtxt = "Error logging out:\n";
+                    let msg = msgtxt + textStatus + "; Error: " + errorThrown;
+                    alert(msg);
+                }
+            }); 
         },
         error: function(jqXHR, textStatus, errorThrown) {
             let msgtxt = "Error sending email:\n";
@@ -408,6 +399,72 @@ $('#cpass').on('click', function() {
             alert(msg);
         }
     });
+});
+/**
+ * Security Questions Modal operation
+ */
+const requiredAnswers = 3;
+/**
+ * This function  counts the number of security questions and returns
+ * true is correct, false (with user alers) if not
+ * 
+ * @return {boolean}
+ */
+const countAns = () => {
+     var acnt = 0;
+     $('input[id^=q]').each(function() {
+         if ($(this).val() !== '') {
+             acnt++
+         }
+     });
+     if (acnt > requiredAnswers) {
+         alert("You have supplied more than " + requiredAnswers + " answers");
+         return false;
+     } else if (acnt < requiredAnswers) {
+         alert("Please supply answers to " + requiredAnswers + " questions");
+         return false;
+     } else {
+         return true;
+     }
+ }
+$('#ed_sec').on('click', function() {
+    $('#uques').empty();
+    $.get('../accounts/usersQandA.php', function(body) {
+        $('#uques').append(body);
+        secques.show();
+    }, "html");
+});
+$('#resetans').on('click', function() {
+    $('input[id^=q]').each(function() {
+        $(this).val("");
+    });
+});
+$('#closesec').on('click', function() {
+    modq = [];
+    moda = [];
+    if (countAns()) {
+        $('input[id^=q]').each(function() {
+            var answer = $(this).val();
+            if (answer !== '') {
+                let qid = this.id;
+                qid = qid.substring(1);
+                modq.push(qid);
+                answer = answer.toLowerCase();
+                moda.push(answer);
+            }
+        });
+        let ques = modq.join();
+        let uans = moda.join("|");
+        let ajaxdata = {questions: ques, answers: uans};
+        $.post('../accounts/updateQandA.php', ajaxdata, function(result) {
+            if (result === 'ok') {
+                alert("Updated Security Questions");
+            } else {
+                alert("Error: could not update Security Questions");
+            }
+        }, "text");
+        secques.hide();
+    }
 });
 
 // Initial setting in Help Menu for cookies

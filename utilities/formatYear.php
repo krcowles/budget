@@ -63,6 +63,8 @@
         </tbody>
     </table><br />
     <?php
+    /*
+    ---------------- THIS SEEMS TO CONSUME TOO MUCH MEMORY ------------
     // Setup Excel Spreadsheet
     if (file_exists("user_annual.xlsx")) {
         unlink("user_annual.xlsx");
@@ -100,5 +102,6 @@
     }
     $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
     $writer->save("user_annual.xlsx");
+    */
     ?>
 <?php endfor; ?>

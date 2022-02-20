@@ -1,6 +1,7 @@
 <?php
 /**
- * Log out of the budgetizer app
+ * Log out of the budgetizer app; newuser is the admin's option
+ * to switch to a new userid.
  * PHP Version 7.8
  * 
  * @package Budget
@@ -8,12 +9,11 @@
  * @license No license
  */
 session_start();
+require "../database/global_boot.php";
 
 if (!isset($_GET['newuser'])) {
     setcookie('mybud', '', 0, '/');
     unset($_SESSION['userid']);
-    unset($_SESSION['expire']);
-    unset($_SESSION['cookiestatus']);
     unset($_SESSION['cookies']);
     unset($_SESSION['start']);
 } else {

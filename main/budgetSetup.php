@@ -16,25 +16,25 @@ if ($_SESSION['cookies'] === 'accept') {
 } else {
     $menu_item = 'Accept Cookies';
 }
-// if month has rolled over:
+// if month has rolled over: get all current balances for each budget item
 if ($rollover) {
-    $getMos = "SELECT `id`,`prev0`,`prev1`,`current` FROM `Budgets` " .
+    $getBals = "SELECT `id`,`prev0`,`prev1`,`current` FROM `Budgets` " .
         "WHERE `userid` = :uid;";
-    $modat = $pdo->prepare($getMos);
-    $modat->execute(["uid" => $_SESSION['userid']]);
-    $allmos = $modat->fetchALL(PDO::FETCH_ASSOC);
+    $buddat = $pdo->prepare($getBals);
+    $buddat->execute(["uid" => $_SESSION['userid']]);
+    $all_accounts = $buddat->fetchALL(PDO::FETCH_ASSOC);
     $tblids = [];
-    foreach ($allmos as &$mo) {
-        array_push($tblids, $mo['id']);
-        $mo['prev0'] = $mo['prev1'];
-        $mo['prev1'] = $mo['current'];
+    foreach ($all_accounts as &$acct) {
+        array_push($tblids, $acct['id']);
+        $acct['prev0'] = $acct['prev1'];
+        $acct['prev1'] = $acct['current'];
     }
-    for ($k=0; $k<count($allmos); $k++) {
-        $putMos = "UPDATE `Budgets` SET `prev0` = :p0,`prev1` = :p1,`funded` = '0'" .
+    for ($k=0; $k<count($all_accounts); $k++) {
+        $putBals = "UPDATE `Budgets` SET `prev0` = :p0,`prev1` = :p1,`funded` = '0'" .
             "WHERE `id` = :uid;";
-        $newdat = $pdo->prepare($putMos);
+        $newdat = $pdo->prepare($putBals);
         $newdat->execute(
-            ["p0" => $allmos[$k]['prev0'], "p1" => $allmos[$k]['prev1'],
+            ["p0" => $all_accounts[$k]['prev0'], "p1" => $all_accounts[$k]['prev1'],
             "uid" => $tblids[$k]]
         );
     }

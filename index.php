@@ -10,7 +10,7 @@
  * @license No license to date
  */
 require_once "database/global_boot.php";
-require "admin/getLogin.php";
+require "accounts/getLogin.php";
 ?>
 <!DOCTYPE html>
 <html lang="en-us">
@@ -28,6 +28,7 @@ require "admin/getLogin.php";
 <body>
 <!-- You CANNOT place bootstrap in the <head> element! -->
 <script src="../scripts/bootstrap.min.js"></script>
+
 <div id="top-part">
     <div id="sitetext">
         <span id="maintext">The Budgetizer</span><br />
@@ -109,16 +110,40 @@ require "admin/getLogin.php";
             </form>
         </div>
         <div id="register">
-            <p>Or:&nbsp;&nbsp;<a href="admin/registration.html">
-                sign up and start your new budget!</a></p>
+            <p>Or:&nbsp;&nbsp;<a href="accounts/registration.html">
+                Sign up and start your new budget!</a></p>
         </div>
     </div>
 </div>
-<div>
+
+<div> <!-- login status variables passed to javascript -->
     <p id="cookiestatus" style="display:none;"><?=$cstat?></p>
     <p id="startpg" style="display:none;"><?=$start;?></p>
 </div>
 
+<!-- Security Question Modal -->
+<div id="twofa" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Security Question</h5>
+                <button type="button" class="btn-close"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="ap" class="modal-body">
+               <p id="the_question"></p>
+               <input id="the_answer" type="text" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Close</button>
+                <button id="submit_answer" type="button"
+                    class="btn btn-success">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Email Modal -->
 <div id="resetemail" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -128,6 +153,7 @@ require "admin/getLogin.php";
                     data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="ap" class="modal-body">
+                <p id="passtype" style="display:none;">lockout</p>
                 You will be sent an email with your account name and a link
                 to reset your password.<br />
                 Your email: <input id="remail" type="email" />

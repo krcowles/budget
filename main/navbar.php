@@ -110,6 +110,7 @@ require_once "../utilities/getCards.php";
                     </li>
                 </ul>
             </li>
+
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle active" href="#"
                     id="reports" role="button" data-bs-toggle="dropdown"
@@ -128,15 +129,31 @@ require_once "../utilities/getCards.php";
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle active" href="#"
+                    id="myacct" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    My Account
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="myacct">
+                    <li><a id="logout" class="dropdown-item" href="#">
+                        Log out</a></li>
+                    <li><a id="rpass" class="dropdown-item" href="#">
+                        Change Password</a></li>
+                    <li><a id="ed_sec" class="dropdown-item" href="#">
+                        Update Sec. Questions</a></li>
+                    <li><a id="chgcookie" class="dropdown-item"
+                        href="#"><span id="chglink">Reject Cookies</span></a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#"
                     id="helper" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     Help
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="helper">
-                    <li><a id="logout" class="dropdown-item" href="#">
-                        Log out</a></li>
-                    <li><a id="rpass" class="dropdown-item" href="#">
-                        Change Password</a></li>
+                    <li><a id="ppolicy" class="dropdown-item" target="_blank"
+                        href="../help/help.php?doc=PrivacyPolicy.pdf">
+                        Privacy Policy</a></li>
                     <li><a class="dropdown-item"
                         href="../help/help.php?doc=FAQ.pdf" target="_blank">
                         FAQ's</a></li>
@@ -147,8 +164,6 @@ require_once "../utilities/getCards.php";
                         href="../help/help.php?doc=HowToBudget.pdf" target="_blank">
                             Intro to Budgeting</a>
                     </li>
-                    <li><a id="chgcookie" class="dropdown-item"
-                        href="#"><span id="chglink">Reject Cookies</span></a></li>
                 </ul>
             </li>
         </ul>

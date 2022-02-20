@@ -53,7 +53,7 @@ if (file_exists($credit_data)) {
         textarea {height: 24px; width:46px;}
         select {width: 100%;}
     </style>
-    <script src="../scripts/jquery-1.12.1.js"></script>
+    <script src="../scripts/jquery.min.js"></script>
 </head>
 
 <body>
