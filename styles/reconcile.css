@@ -25,3 +25,13 @@ th:not(#exptbl) {
   color: white;
   cursor: pointer;
 }
+.rsum_hdr {
+  font-style: italic;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.sum {
+  font-style: italic;
+  font-weight: bold;
+  color: darkgreen;
+}

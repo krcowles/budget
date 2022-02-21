@@ -83,6 +83,12 @@ for ($i=0; $i<count($expamt); $i++) {
             </table><br />
         </div>
     </form>
+    <div id="rsum">
+        <span class="rsum_hdr">Current sum of reconciled charges:</span><br />
+        <span class="sum">$ <span id="sumtxt"></span></span><br />
+        <span class="rsum_hdr">Unreconciled:</span><br />
+        <span class="sum">$ <span id="rectxt"></span></span>
+    </div>
 </div>
 
 <?php require_once "../main/bootstrapModals.html"; ?>
