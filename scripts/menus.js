@@ -3,6 +3,7 @@
  * 
  * @author Ken Cowles
  * @version 2.0 Separated out from budget.js
+ * @version 2.1 Corrected and improved valAmt() function
  */
 // Modal handles:
 var apitems = new bootstrap.Modal(document.getElementById('apmodal'));
@@ -61,13 +62,13 @@ $('#chgexp').on('click', function() {
             alert("You must select a payment method");
             return false;
         }
-        let amtin = "#expamt";
-        let amt = $(amtin).val();
-        amt = amt.trim();
-        if (!valAmt(amt)) {
+        let amtin = "#expamt"; // required in clean_obj
+        let chgamt = $(amtin).val();
+        let amt = valAmt(chgamt, true);
+        if (amt === 0) {
             return false;
         }
-        let payin = "#exppayto";
+        let payin = "#exppayto"; // required in clean_obj
         let payee = $(payin).val()
         if (!valPayee(payee)) {
             return false;
@@ -81,9 +82,9 @@ $('#chgexp').on('click', function() {
 });
 $('#reginc').on('click', function() {
     $('#incbtn').off('click').on('click', function() {
-        let reg = $('#incdep').val();
-        reg = reg.trim();
-        if (!valAmt(reg)) {
+        let moamt = $('#incdep').val();
+        reg = valAmt(moamt, true);
+        if (reg === 0) {
             return false;
         }
         let save_url = '../edit/saveAcctEdits.php';
@@ -139,9 +140,9 @@ $('#reginc').on('click', function() {
 });
 $('#onetimer').on('click', function() {
     $('#otbtn').on('click', function() {
-        let funds = $('#onedep').val();
-        funds = funds.trim();
-        if (!valAmt(funds)) {
+        let otamt = $('#onedep').val();
+        funds = valAmt(otamt, true);
+        if (funds === 0) {
             return false;
         }
         let otmemo = $('#otmemo').val();
@@ -176,9 +177,9 @@ $('#undoinc').on('click', function() {
 });
 $('#transfers').on('click', function() {
     $('#xfrbtn').on('click', function() {
-        let amt = $('#xframt').val();
-        amt = amt.trim();
-        if (!valAmt(amt)) {
+        let xframt = $('#xframt').val();
+        amt = valAmt(xframt, true);
+        if (amt === 0) {
             return false;
         }
         let $from = $('#xfrfrom').children();
@@ -272,9 +273,9 @@ $('#add1').on('click', function() {
         if (!valText(newname, ' a name for the account')) {
             return false;
         }
-        let budamt  = $('#mo').val();
-        budamt = budamt.trim();
-        if (!valAmt(budamt)) {
+        let budval  = $('#mo').val();
+        budamt = valAmt(budval, false);
+        if (budamt === 0) {
             return false;
         }
         let ajaxdata = {id: 'addacct', acct_name: newname, monthly: budamt}
@@ -490,15 +491,27 @@ $('#chgcookie').on('click', function() {
 
 /**
  * Retrieve selected drop-down text (not value) 
- * @param domsel 
+ * 
+ * @param {Node} domsel The DOM node of the select box
+ * 
+ * @returns {string}
  */
 function getSelect(domsel) {
     let indx = domsel.selectedIndex;
     let item = domsel.options[indx].label
     return item;
 }
-
-// general purpose function to execute ajax based on input arguments
+/**
+ * This is a general purpose function to execute ajax based on input arguments
+ * 
+ * @param {string} url 
+ * @param {object} ajaxdata 
+ * @param {modal_handle} modal_handle 
+ * @param {string} loc 
+ * @param {object} cleanup 
+ * 
+ * @returns {null}
+ */
 function executeScript(url, ajaxdata, modal_handle, loc, cleanup) {
     $('#preloader').show();
     $.ajax({
@@ -532,26 +545,48 @@ function executeScript(url, ajaxdata, modal_handle, loc, cleanup) {
             modal_handle.hide();
         }
     });
+    return;
+}
+// ------- Data Validation Functions ------ //
+const dollars = "Amount must be in dollars";
+const cents   = " (or dollars.cents)\nCents must contain one or two digits only";
+
+/**
+ * Validate the amount entered
+ * 
+ * @param {string}  user_entry    Value (as string) entered by user
+ * @param {boolean} cents_allowed May/may not have cents value
+ * 
+ * @returns {number}
+ */
+function valAmt(user_entry, cents_allowed) {
+    let amt = user_entry.trim();
+    if (amt === '') {
+        alert("There is no entry for Amount");
+        return 0;
+    }
+    // dollars:       at least one digit; 
+    // dollars.cents: at least one digit + opt '.' + 1 or 2 digits
+    pattern = cents_allowed ? /^\d+\.?[0-9]?[0-9]?$/ : /^\d+$/;
+    msg = cents_allowed ? dollars + cents : dollars + " only";
+    if (pattern.test(amt) === false) {
+        alert(msg + "\nNo commas or other non-numeric characters are allowed");
+            return 0;
+    }
+    let checkval = parseFloat(amt);
+    if (checkval === 0) {
+        alert("An entry amount of 0 will not be applied");
+        return 0;
+    }
+    return checkval;
 }
 /**
- * Data validation functions
- *
+ * Validate that there is an entry for payee
+ * 
+ * @param {string} payee 
+ * 
+ * @returns {boolean} 
  */
-function valAmt(amt) {
-    if (Number(amt) === 'NaN' || amt === '') {
-        alert("You must enter a valid sum for the Amount");
-        return false;
-    }
-    let dot = amt.indexOf('.');
-    if (dot !== -1) {
-        let cents = amt.substring(dot+1);
-        if (cents.length > 2) {
-            alert("You have specified more than two digits for 'cents'");
-            return false;
-        }
-    }
-    return true;
-}
 function valPayee(payee) {
     if (payee === '') {
         alert("You have not entered a payee");
@@ -559,6 +594,14 @@ function valPayee(payee) {
     }
     return true;
 }
+/**
+ * Validate that there is text (not an empty string)
+ * 
+ * @param {string} item 
+ * @param {string} type 
+ * 
+ * @returns {boolean}
+ */
 function valText(item, type) {
     if (item === '') {
         alert("You must enter " + type);
@@ -566,6 +609,13 @@ function valText(item, type) {
     }
     return true;
 }
+/**
+ * Clear out previous entries in a modal
+ * 
+ * @param {string[]} items 
+ * 
+ * @returns {null}
+ */
 function resetModalContents(items) {
     let jqids  = items.ids;
     let jqsels = items.sels;
