@@ -163,7 +163,7 @@ if (ap_candidates) {
                 let idno = this.id;
                 idno = idno.substring(2);
                 let amt = $('#amt' + idno).val();
-                if (!valAmt(amt)) {
+                if (!valAmt(amt, true)) {
                     return false;
                 }
                 let pye = $('#payee' + idno).val();
