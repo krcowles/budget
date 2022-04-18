@@ -4,7 +4,33 @@
  * @author Ken Cowles
  * @version 2.0 Separated out from budget.js
  * @version 2.1 Corrected and improved valAmt() function
+ * @version 3.0 Added check for user activity
  */
+/**
+ * Check for user activity: all user pages use this menus.js script, 
+ * hence it was deemed appropriate for inclusion here instead of adding it
+ * as a separate module
+ */
+const activity_timeout = 15 * 60 * 1000; // 15 minutes of inactivity
+var activity = setTimeout(function() {
+    $.get('../accounts/logout.php');
+    window.open('expired.html', '_self');
+}, activity_timeout);
+$('body').on('mousemove', function()  {
+    clearTimeout(activity);
+    activity = setTimeout(function() {
+        $.get('../accounts/logout.php');
+        window.open('expired.html', '_self');
+    }, activity_timeout);
+});
+$('body').on('keydown', function() {
+    clearTimeout(activity);
+    activity = setTimeout(function() {
+        $.get('../accounts/logout.php');
+        window.open('expired.html', '_self');
+    }, activity_timeout);
+});
+
 // Modal handles:
 var apitems = new bootstrap.Modal(document.getElementById('apmodal'));
 var expitem = new bootstrap.Modal(document.getElementById('expmodal'));
