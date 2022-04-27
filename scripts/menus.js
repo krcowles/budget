@@ -91,6 +91,9 @@ $('#chgexp').on('click', function() {
         let amtin = "#expamt"; // required in clean_obj
         let chgamt = $(amtin).val();
         let amt = valAmt(chgamt, true);
+        if (amt < 0) {
+            alert("Nagative amount will act as a credit towards " + sel1);
+        }
         if (amt === 0) {
             return false;
         }
@@ -578,7 +581,9 @@ const dollars = "Amount must be in dollars";
 const cents   = " (or dollars.cents)\nCents must contain one or two digits only";
 
 /**
- * Validate the amount entered
+ * Validate the amount entered:
+ * Dollars must be at least one digit (no decimal value); Dollar.cents must be at least
+ * one digit followed by an optional '.' and optionally 1 or 2 digits
  * 
  * @param {string}  user_entry    Value (as string) entered by user
  * @param {boolean} cents_allowed May/may not have cents value
@@ -591,11 +596,10 @@ function valAmt(user_entry, cents_allowed) {
         alert("There is no entry for Amount");
         return 0;
     }
-    // dollars:       at least one digit; 
-    // dollars.cents: at least one digit + opt '.' + 1 or 2 digits
+    let test_amt = Math.abs(amt);
     pattern = cents_allowed ? /^\d+\.?[0-9]?[0-9]?$/ : /^\d+$/;
     msg = cents_allowed ? dollars + cents : dollars + " only";
-    if (pattern.test(amt) === false) {
+    if (pattern.test(test_amt) === false) {
         alert(msg + "\nNo commas or other non-numeric characters are allowed");
             return 0;
     }
