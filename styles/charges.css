@@ -3,7 +3,8 @@ table:not(#exptbl) {
 	font-size: 16px;
 	text-align: center;
     margin-top: 5px;
-    background-color: #dfdfdf; 
+    /* this will provide color for 'solid' rows, like headers, 'Temporary Accounts', etc */
+    background-color: #dfdfdf;
     border-color: black;
     border-width: 2px;
     border-style: solid;
@@ -44,9 +45,14 @@ td span:first-child {
 .camt {
     color: black;
 }
-#tmphd .grayCell, #cchd .grayCell, #balances .grayCell {
-    font-weight: bold;
-    background-color: #dfdfdf;
+.tableHdrColor {
+    background-color: #dfecdf;
+}
+#tmphd .tmp_color {
+    background-color: #ecdfec;
+}
+#cchd .cc_color {
+    background-color: #fcfce8;
 }
 #balances .balance {
     font-weight: bold;
@@ -55,33 +61,15 @@ td span:first-child {
 #balances .heavyTop {
     border-top-width: 2px;
     border-bottom-width: 2px;
+    background-color: #dfecdf;
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 #roll3 tbody .apcolor, .apdaycolor {
     background-color: #F8FFFA;
 }
-/* modal for charging expense */
-#exptbl {
-    border: none;
-}
-table#aptbl {
-    box-sizing: content-box;
-    border: 2px solid darkgreen;
-    border-radius: 6px !important;
-    -moz-border-radius: 6px !important;     
-}
-table#aptbl td {
-    border: none;
-}
-table#aptbl tr.lblrow {
-    color: darkgreen;
-    margin-top: 5px;
-}
-
-table#aptbl td.lst {
-    vertical-align: middle;
-    padding: 4px 6px 7px 6px;
-}
-.aplbl {
+.BoldText {
+    font-family: Arial, Tahoma, Verdana;
+    font-size: 16px;
     font-weight: bold;
-    text-decoration: underline;
 }

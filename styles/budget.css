@@ -25,33 +25,13 @@
     left: 28px;
     margin: 0px;
 }
-/* Autopay modal - created in budget.js */
-#modal_table {
-    border-collapse: collapse;
-}
-#modal_table tr td {
-    border: none;
-}
-input[id^=amt] {
-    width: 64px;
-    font-size: 14px;
-}
-input[id^=payee] {
-    width: 148px;
-    font-size: 14px;
-}
-.paybox {
-    -ms-transform: scale(1.5); /* IE */
-    -moz-transform: scale(1.5); /* FF */
-    -webkit-transform: scale(1.5); /* Safari and Chrome */
-    -o-transform: scale(1.5); /* Opera */
-    transform: scale(1.5);
-    padding: 10px;
-}
 #preloader {
     display: none;
     position: absolute;
     top: 80px;
     left: 20px;
     z-index: 999;
+}
+.amt {
+    color: #006600;
 }

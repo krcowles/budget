@@ -70,3 +70,48 @@ input[id^=q] {
     margin-left: 8px;
     margin-bottom: 6px;
 }
+/* modal for charging expense */
+#exptbl {
+    border: none;
+}
+table#aptbl {
+    box-sizing: content-box;
+    border: 2px solid darkgreen;
+    margin-left: auto;
+    margin-right: auto;     
+}
+table#aptbl tr.lblrow {
+    color: darkgreen;
+}
+table#aptbl td {
+    border: none;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+table#aptbl td.lst {
+    vertical-align: middle;
+    padding: 4px 6px 7px 6px;
+}
+.aplbl {
+    font-weight: bold;
+    text-decoration: underline;
+    padding-right: 1px;
+}
+.paybox {
+    -ms-transform: scale(1.5); /* IE */
+    -moz-transform: scale(1.5); /* FF */
+    -webkit-transform: scale(1.5); /* Safari and Chrome */
+    -o-transform: scale(1.5); /* Opera */
+    transform: scale(1.5);
+    padding: 10px;
+    margin-right: 6px;
+}
+input[id^=amt] {
+    width: 64px;
+    font-size: 14px;
+}
+input[id^=payee] {
+    width: 148px;
+    font-size: 14px;
+}

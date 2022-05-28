@@ -32,7 +32,6 @@ $('body').on('keydown', function() {
 });
 
 // Modal handles:
-var apitems = new bootstrap.Modal(document.getElementById('apmodal'));
 var expitem = new bootstrap.Modal(document.getElementById('expmodal'));
 var depinc  = new bootstrap.Modal(document.getElementById('incmodal'));
 var onetdep = new bootstrap.Modal(document.getElementById('othrdeps'));

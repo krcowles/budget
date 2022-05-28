@@ -42,14 +42,14 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 
 <body>
 <?php require "navbar.php"; ?>
-<p id="mstr" style="display:none;"><?=$admin;?></p>
+<p id="mstr" class="noshow""><?=$admin;?></p>
 <pre><button id="admin">Admin</button></pre>
-<p id="usercookies" style="display:none"><?=$menu_item?></p>
+<p id="usercookies" class="noshow"><?=$menu_item?></p>
 <!-- for deferred income -->
-<p id="currmo" style="display:none;"><?=$current_month;?></p>
-<p id="nextmo" style="display:none;"><?=$next_month;?></p>
-<p id="deferral" style="display:none;"><?=$trigger_deferral;?></p>
-<p id="defamt" style="display:none;"><?=$deferred_amount;?></p>
+<p id="currmo" class="noshow"><?=$current_month;?></p>
+<p id="nextmo" class="noshow"><?=$next_month;?></p>
+<p id="deferral" class="noshow"><?=$trigger_deferral;?></p>
+<p id="defamt" class="noshow"><?=$deferred_amount;?></p>
 
 <div id="budget">
     <table id="roll3">
@@ -66,13 +66,13 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
         </colgroup>
         <thead>
             <tr>
-                <th>Budget Acct Name</th>
-                <th class="heavy-right">Monthly Budget</th>
-                <th><?= $month[0];?></th>
-                <th><?= $month[1];?></th>
-                <th><?= $month[2];?></th>
-                <th>AutoPay</th>
-                <th>Day</th>
+                <th class="tableHdrColor">Budget Acct Name</th>
+                <th class="tableHdrColor heavy-right">Monthly Budget</th>
+                <th class="tableHdrColor"><?= $month[0];?></th>
+                <th class="tableHdrColor"><?= $month[1];?></th>
+                <th class="tableHdrColor"><?= $month[2];?></th>
+                <th class="tableHdrColor">AutoPay With</th>
+                <th class="tableHdrColor">Day of Month</th>
                 <th class="noshow">Paid</th>
                 <th class="noshow">Income</th>
             </tr>
@@ -81,14 +81,14 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             <?php for($j=0; $j<count($account_names); $j++) : ?>
                 <?php if ($j === $user_cnt + 1) : ?>
                 <tr id="tmphd">
-                    <td class="BoldText grayCell"
+                    <td class="BoldText tmp_color"
                         style="text-align:center;">Temporary Accounts</td>
-                    <td class="amt grayCell"></td>
-                    <td class="mo1 grayCell"></td>
-                    <td class="mo2 grayCell"></td>
-                    <td class="mo3 grayCell"></td>
-                    <td class="ap grayCell"></td>
-                    <td class="apday grayCell"></td>
+                    <td class="amt tmp_color"></td>
+                    <td class="mo1 tmp_color"></td>
+                    <td class="mo2 tmp_color"></td>
+                    <td class="mo3 tmp_color"></td>
+                    <td class="ap tmp_color"></td>
+                    <td class="apday tmp_color"></td>
                     <td class="noshow"></td>
                     <td class="noshow"></td>
                 </tr>
@@ -110,8 +110,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                 </tr>
             <?php endfor; ?>
             <tr id="cchd">
-                <td class="BoldText grayCell">Credit Cards</td>
-                <td colspan="6" class="grayCell" style="text-align:left;">
+                <td class="BoldText cc_color">Credit Cards</td>
+                <td colspan="6" class="cc_color" style="text-align:left;">
                     &nbsp;&nbsp;-- Not deducted from Balance until
                     reconciled --</td>
                 <td class="noshow"></td>
@@ -130,14 +130,14 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                 </tr>
             <?php endfor; ?>
             <tr id="balances">
-                <td class="BoldText heavyTop grayCell">Checkbook Balance</td>
+                <td class="BoldText heavyTop">Checkbook Balance</td>
                 <td class="balance heavyTop"><?= $balBudget;?></td>
                 <td class="balance heavyTop"><?= $balPrev0;?></td>
                 <td class="balance heavyTop"><?= $balPrev1;?></td>
                 <td class="balance heavyTop"><?= $balCurrent;?></td>
-                <td class="grayCell heavyTop" colspan="2"></td>
-                <td class="noshow grayCell"></td>
-                <td class="noshow grayCell"></td>
+                <td class="heavyTop" colspan="2"></td>
+                <td class="noshow heavyTop"></td>
+                <td class="noshow heavyTop"></td>
             </tr>
         </tbody>
     </table>

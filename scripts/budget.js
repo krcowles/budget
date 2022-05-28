@@ -129,19 +129,19 @@ $('.apday').each(function(indx) {
 // user presentation of autopay candidates:
 if (ap_candidates) {
     for (let j=0; j<aname.length; j++) {
-        let apdata = '<tr class="lblrow"><td colspan="6">' +
-        '<span id="tdspan">' + // a span for the entire <td>
-            '<span id="labelspan" style="float:left;">' +
+        let apdata = '<tr class="lblrow"><td colspan="6">' +  // the item description ('label')
+        '<span class="tdspan">' + // a span for the entire 'label' <td>
+            '<span class="labelspan" style="float:left;">' +
                 '<span class="aplbl">Account:</span>' +
                 '<span id="acnme' + j + '">&nbsp;' + aname[j] + '</span>' +
             '</span>' + // end of labelspan
             '<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;</span>' +
-            '<span id="methodspan" style="float:left;">' +
+            '<span class="methodspan" style="float:left;">' +
                 '<span class="aplbl">Method:</span>' +
                 '<span id="acmeth' + j + '">&nbsp;' + paywith[j] + '</span>' +
             '</span>' + // end of methodspan
             '<span style="float:left">&nbsp;&nbsp;&nbsp;&nbsp;</span>' +
-            '<span id="duedayspan" style="float:left;">' +
+            '<span class="duedayspan" style="float:left;">' +
                 '<span class="aplbl">Billing Date:</span>&nbsp;' + payday[j] +
             '</span>' + // end of duedayspan
         '</span>' + // end of tdspan
