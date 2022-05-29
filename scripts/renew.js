@@ -190,12 +190,14 @@ $('#formsubmit').on('click', function(ev) {
         ques: ques,
         answ: uans
     };
+    $('#pending').show();
     $.ajax({
         url: 'create_user.php',
         method: "post",
         data: ajaxData,
         dataType: "text",
         success: function(response) {
+            $('#pending').hide();
             $('#formsubmit').css('background-color', '#b47b31');
             if (response == 'NOTFOUND') {
                 alert("Could not find the One-Time Code");
@@ -209,6 +211,7 @@ $('#formsubmit').on('click', function(ev) {
             }
         },
         error: function(_jqXHR, textStatus, errorThrown) {
+            $('#pending').hide();
             var badresult = _jqXHR.textResponse;
             alert("Error encountered: " + textStatus + "; Errno " + errorThrown);
             return false;

@@ -42,6 +42,9 @@ input[name^=ans] {
     font-size: 20px;
     color: #b47b31;
 }
+#pending {
+    display: none;
+}
 #header, #link {
     margin-bottom: 8px;
     text-align: center;
@@ -143,6 +146,10 @@ input[name=oldpass]:focus  {
     z-index: 200;
     font-size: 18px;
     color: #b47b31;
+}
+#last {
+    position: relative;
+    top: -6px;
 }
 #cookie_banner {
     position: fixed;

@@ -151,6 +151,7 @@ if (!$new) {
 <div id="container">
     <input type="hidden" name="userid" value="<?=$user;?>" />
     <p id="new" style="display:none;"><?=$jsnew;?></p>
+    <img id="pending" src="../images/preload.gif" alt="waiting" />
     <h3 id="header">Please enter and confirm a new password:</h3>
     <form id="form" method="POST" action="create_user.php">
         <div id="inputs">
@@ -183,12 +184,15 @@ if (!$new) {
                 <input id="confirm" class="colb" type="password" name="confirm" 
                     autocomplete="new-password" size="20" /><br /> 
             </div>
-        </div>    
-        <span id="link"><a id="sq" href="#">
-            <?php if ($new) : ?>Select 3 Security Questions
-            <?php else : ?>Review/Change Security Questions
-            <?php endif; ?></a>
-        </span><br /><br />
+        </div> 
+        <div id="last">   
+            <span id="link"><a id="sq" href="#">
+                <?php if ($new) : ?>Select 3 Security Questions
+                <?php else : ?>Review/Change Security Questions
+                <?php endif; ?></a>
+            </span><br />
+            <span id="cnote">Please accept/reject cookies below to proceed</span>
+        </div>
         <button id="formsubmit">Click Once</button>
     </form>
 </div>   <!-- end of container -->

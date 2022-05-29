@@ -131,9 +131,6 @@ $('#email').on('change', function() {
  */
 $("form").on('submit', function (ev) {
     ev.preventDefault();
-    $('#pending').show();
-    var mailFin = $.Deferred();
-    $('#submit').css('background-color', 'gray');
     var allinputs = document.getElementsByClassName('signup');
     for (var i = 0; i < allinputs.length; i++) {
         var inputbox = allinputs[i];
@@ -146,7 +143,8 @@ $("form").on('submit', function (ev) {
         alert("Please correct item(s) in red before submitting");
         return false;
     }
- 
+    $('#submit').css('background-color', 'gray');
+    $('#pending').show();
     let usremail = $('#email').val();
     usremail = usremail.toLowerCase();
     let username = $('input[name=username]').val();
@@ -165,34 +163,36 @@ $("form").on('submit', function (ev) {
                     method:'post',
                     data:{newreg: newreg, email: usremail},
                     success: function(result) {
-                        $('#submit').css('background-color', '#b47b31');
-                        mailFin.resolve();
+                        $('#pending').hide();
                         if (result === 'ok') {
+                            $('#submit').prop('disabled', true);
                             alert("An email has been sent");
                         } else if (result === 'bad') {
+                            $('#submit').css('background-color', '#b47b31');
                             alert("Email was not valid");
                         } else if (result === 'nofind') {
+                            $('#submit').css('background-color', '#b47b31');
                             alert("Could not find registration:\n" +
                                 "Please try again");
                         }
                     },
                     error: function(jqXHR, textStatus) {
-                        mailFin.resolve();
-                        alert("FAILED: " + textStatus);
+                        $('#pending').hide();
+                        $('#submit').css('background-color', '#b47b31');
+                        alert("Failed to send email: " + textStatus);
                     }
                 });
             } else if (response === 'bademail') {
+                $('#pending').hide();
+                $('#submit').css('background-color', '#b47b31');
                 alert("The email you sent was not valid");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            mailFin.resolve();
+            $('#pending').hide();
+            $('#submit').css('background-color', '#b47b31');
             alert("Unsuccessful: " + textStatus + "; " + errorThrown);
         }
-    });
-    $.when( mailFin ).then(function() {
-        // remove wait gif
-        $('#pending').hide();
     });
 });
 
