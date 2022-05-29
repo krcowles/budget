@@ -160,3 +160,10 @@ input:focus {
     position: relative;
     top: 8px;
 }
+#pending {
+    display: none;
+}
+#wait {
+    position: relative;
+    left: 64px;
+}

@@ -170,3 +170,6 @@ require_once "../utilities/getCards.php";
         </div>
     </div>
 </nav>
+<div id="preloader">
+    <img src="../images/preload.gif" alt="waiting..." />
+</div>

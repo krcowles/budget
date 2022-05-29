@@ -381,10 +381,12 @@ $('#yrinc').on('click', function() {
 });
 
 $('#logout').on('click', function() {
+    $('#preloader').show();
     $.ajax({
         url: '../accounts/logout.php',
         method: 'get',
         success: function() {
+            $('#preloader').hide();
             window.open('../index.php', "_self");
         }
     });
@@ -400,12 +402,14 @@ $('#cpass').on('click', function() {
         return false;
     }
     let adata = {email: eaddr};
+    $('#preloader').show();
     $.ajax({
         url: '../accounts/sendmail.php',
         method: 'post',
         data: adata,
         dataType: 'text',
         success: function(result) {
+            $('#preloader').hide();
             alert('An email has been sent');
             chgpass.hide();
             $.ajax({
@@ -423,6 +427,7 @@ $('#cpass').on('click', function() {
             }); 
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            $('#preloader').hide();
             let msgtxt = "Error sending email:\n";
             let msg = msgtxt + textStatus + "; Error: " + errorThrown;
             alert(msg);

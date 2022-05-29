@@ -131,6 +131,8 @@ $('#email').on('change', function() {
  */
 $("form").on('submit', function (ev) {
     ev.preventDefault();
+    $('#pending').show();
+    var mailFin = $.Deferred();
     $('#submit').css('background-color', 'gray');
     var allinputs = document.getElementsByClassName('signup');
     for (var i = 0; i < allinputs.length; i++) {
@@ -164,6 +166,7 @@ $("form").on('submit', function (ev) {
                     data:{newreg: newreg, email: usremail},
                     success: function(result) {
                         $('#submit').css('background-color', '#b47b31');
+                        mailFin.resolve();
                         if (result === 'ok') {
                             alert("An email has been sent");
                         } else if (result === 'bad') {
@@ -174,6 +177,7 @@ $("form").on('submit', function (ev) {
                         }
                     },
                     error: function(jqXHR, textStatus) {
+                        mailFin.resolve();
                         alert("FAILED: " + textStatus);
                     }
                 });
@@ -182,8 +186,13 @@ $("form").on('submit', function (ev) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            mailFin.resolve();
             alert("Unsuccessful: " + textStatus + "; " + errorThrown);
         }
+    });
+    $.when( mailFin ).then(function() {
+        // remove wait gif
+        $('#pending').hide();
     });
 });
 

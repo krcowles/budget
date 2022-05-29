@@ -144,10 +144,6 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 </div>
 
 <?php require "bootstrapModals.html"; ?>
-
-<div id="preloader">
-    <img src="../images/preload.gif" alt="waiting..." />
-</div>
 <br /><br />
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
