@@ -30,6 +30,8 @@ setbox();
 $(window).on('resize', setbox);
 
 const email_test_pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+var email_status;
+var uname_status;
 
 // Prevent inadvertent form submission via Enter Key
 $('document').on('keydown', function(e) {
@@ -43,28 +45,29 @@ $('document').on('keydown', function(e) {
 $('#uname').val("");
 $('#email').val("");
 
+// when input text turns red (due to error), focus on input returns to black text
+$('#uname').focus(function() {
+    $(this).css('color', 'black');
+});
+$('#email').focus(function() {
+    $(this).css('color', 'black');
+});
 /**
- * ---- Username validation: notify user as soon as entered ----
+ * ---- Username validation ----
+ *
+ * Ensure the username has no embedded spaces, is min length
+ * and not a duplicate of an existing username
  */
-var valid_username = false;
- /**
-  * Ensure the username has no embedded spaces, is min length
-  * and not a duplicate of an existing username
-  * @return {null}
-  */
-$('#uname').on('change', function () { // allows immediate feedback
-    var checkDef = $.Deferred();
+const validateUser = (deferred) => {
     var uname = $('#uname').val();
     if (uname.indexOf(' ') !== -1) {
-        alert("No spaces in user name please");
-        valid_username = false;
+        uname_status = "No spaces in user name please";
+        deferred.resolve();
+        return;
     } else if (uname.length < 6) {
-        alert("User names must be at least 6 characters");
-        valid_username = false;
-    } else {
-        valid_username = true;
-        $('#uname').focus();
-        $('#uname').css('color', 'black');
+        uname_status = "User names must be at least 6 characters";
+        deferred.resolve();
+        return;
     }
     $.ajax({
         url: '../accounts/getDups.php',
@@ -73,58 +76,39 @@ $('#uname').on('change', function () { // allows immediate feedback
         dataType: 'text',
         success: function(match) {
             if (match === "YES") {
-                valid_username = false;
-                alert("Please select a different user name");
+                uname_status = "Please select a different user name";
             }
-            checkDef.resolve(); 
+            deferred.resolve(); 
         },
         error: function() {
-            alert("Error encountered checking username");
-            valid_username = false;
-            checkDef.resolve();
+            uname_status = "Error encountered checking username";
+            deferred.resolve();
         }   
     });
-    $.when(checkDef).then(function() {
-        if (!valid_username) {
-            $('#uname').focus();
-            $('#uname').css('color', 'red');
-        }
-    }); 
     return;
- });
+};
  
 /**
- * ---- Email validation: validated when entry is completed, and again via html form checks ----
+ * ---- Email validation ----
+ * 
+ * email meets criterion specified for emails; no duplicate emails allowed
  */
-var valid_email = false;
-$('#email').on('change', function() {
-    var checkDef = $.Deferred();
-    let msg = '';
-    let uemail = $(this).val();
-    valid_email = email_test_pattern.test(uemail);
+const validateEmail = (deferred) => {
+    let uemail = $('#email').val();
+    let valid_email = email_test_pattern.test(uemail);
     if (valid_email) {
         var adata = {email: uemail};
         $.post('getDups.php', adata, function(match) {
             if (match === 'YES') {
-                msg = "Cannot complete request with this email";
-                valid_email = false;
+                email_status = "Cannot complete request with this email";
             }
-            checkDef.resolve();
+            deferred.resolve();
         });
     } else {
-        msg = "Please enter a valid email address";
-        checkDef.resolve();
+        email_status = "Please enter a valid email address";
+        deferred.resolve();
     }
-    $.when(checkDef).then(function() {
-        if (!valid_email) {
-            alert(msg);
-            $('#email').focus();
-            $('#email').css('color', 'red');
-        } else {
-            $('#email').css('color', 'black');
-        }
-    });
-});
+};
 
 /**
  * Final checks when form is submitted
@@ -139,61 +123,79 @@ $("form").on('submit', function (ev) {
             return false;
         }
     }
-    if (!valid_username || !valid_email) {
-        alert("Please correct item(s) in red before submitting");
-        return false;
-    }
-    $('#submit').css('background-color', 'gray');
-    $('#pending').show();
-    let usremail = $('#email').val();
-    usremail = usremail.toLowerCase();
-    let username = $('input[name=username]').val();
-    let newreg   = 'y';
-    var ajaxdata = {submitter: 'create', username: username, email: usremail};
-    $.ajax({
-        url: 'create_user.php',
-        method: 'post',
-        dataType: 'text',
-        data: ajaxdata,
-        success: function(response) {
-            if (response === 'DONE') {
-                // Send an email to registrant with security code & link
-                $.ajax({
-                    url: '../accounts/sendmail.php',
-                    method:'post',
-                    data:{newreg: newreg, email: usremail},
-                    success: function(result) {
-                        $('#pending').hide();
-                        if (result === 'ok') {
-                            $('#submit').prop('disabled', true);
-                            alert("An email has been sent");
-                        } else if (result === 'bad') {
-                            $('#submit').css('background-color', '#b47b31');
-                            alert("Email was not valid");
-                        } else if (result === 'nofind') {
-                            $('#submit').css('background-color', '#b47b31');
-                            alert("Could not find registration:\n" +
-                                "Please try again");
-                        }
-                    },
-                    error: function(jqXHR, textStatus) {
+    let usermsg = '';
+    let emailDeferred = $.Deferred();
+    let unameDeferred = $.Deferred();
+    uname_status = '';
+    email_status = '';
+    validateUser(unameDeferred);
+    validateEmail(emailDeferred);
+    $.when( unameDeferred, emailDeferred ).then(function() {
+        if (uname_status !== '') {
+            usermsg += uname_status + "\n";
+            $('#uname').css('color', 'red');
+        }
+        if (email_status !== '') {
+            usermsg += email_status;
+            $('#email').css('color', 'red');
+        }
+        if (usermsg !== '') {
+            alert(usermsg);
+            return false;
+        } else {
+            $('#submit').css('background-color', 'gray');
+            $('#pending').show();
+            let usremail = $('#email').val();
+            usremail = usremail.toLowerCase();
+            let username = $('input[name=username]').val();
+            let newreg   = 'y';
+            var ajaxdata = {submitter: 'create', username: username, email: usremail};
+            $.ajax({
+                url: 'create_user.php',
+                method: 'post',
+                dataType: 'text',
+                data: ajaxdata,
+                success: function(response) {
+                    if (response === 'DONE') {
+                        // Send an email to registrant with security code & link
+                        $.ajax({
+                            url: '../accounts/sendmail.php',
+                            method:'post',
+                            data:{newreg: newreg, email: usremail},
+                            success: function(result) {
+                                $('#pending').hide();
+                                if (result === 'ok') {
+                                    $('#submit').prop('disabled', true);
+                                    alert("An email has been sent");
+                                } else if (result === 'bad') {
+                                    $('#submit').css('background-color', '#b47b31');
+                                    alert("Email was not valid");
+                                } else if (result === 'nofind') {
+                                    $('#submit').css('background-color', '#b47b31');
+                                    alert("Could not find registration:\n" +
+                                        "Please try again");
+                                }
+                            },
+                            error: function(jqXHR, textStatus) {
+                                $('#pending').hide();
+                                $('#submit').css('background-color', '#b47b31');
+                                alert("Failed to send email: " + textStatus);
+                            }
+                        });
+                    } else if (response === 'bademail') {
                         $('#pending').hide();
                         $('#submit').css('background-color', '#b47b31');
-                        alert("Failed to send email: " + textStatus);
+                        alert("The email you sent was not valid");
                     }
-                });
-            } else if (response === 'bademail') {
-                $('#pending').hide();
-                $('#submit').css('background-color', '#b47b31');
-                alert("The email you sent was not valid");
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $('#pending').hide();
-            $('#submit').css('background-color', '#b47b31');
-            alert("Unsuccessful: " + textStatus + "; " + errorThrown);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $('#pending').hide();
+                    $('#submit').css('background-color', '#b47b31');
+                    alert("Unsuccessful: " + textStatus + "; " + errorThrown);
+                }
+            });
         }
     });
 });
-
+           
 });
