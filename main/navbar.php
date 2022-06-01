@@ -11,6 +11,15 @@
 require_once "../utilities/getAccountData.php";
 require_once "../utilities/getCards.php";
 ?>
+<style type="text/css">
+    #preloader {
+        display: none;
+        position: absolute;
+        top: 80px;
+        left: 20px;
+        z-index: 999;
+    }
+</style>
 <nav class="navbar navbar-expand-md navbar-dark sticky-top"
         style="background-color:#004a00;">
     <div class="container-fluid">
@@ -171,5 +180,5 @@ require_once "../utilities/getCards.php";
     </div>
 </nav>
 <div id="preloader">
-    <img src="../images/preload.gif" alt="waiting..." />
+    <img src="../images/preload.gif" alt="waiting..." style="display:none;" />
 </div>
