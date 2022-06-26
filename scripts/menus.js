@@ -80,14 +80,14 @@ $.get('../utilities/getDeposits.php', function(list) {
 $('#chgexp').on('click', function() {
     // was triggering twice, don't know why, so:
     $('#pebtn').off('click').on('click', function() {
-        let $tbl_selects = $('#exptbl').find('tr').find('select');
+        let $tbl_selects = $('#exptbl').find('tr').find('select'); // modal body data
         let sel1 = getSelect($tbl_selects[0]); // Acct to charge
         let sel2 = getSelect($tbl_selects[1]); // 'Check or Draft' or cd name
         if (sel2 === 'SELECT ONE:') {
             alert("You must select a payment method");
             return false;
         }
-        let amtin = "#expamt"; // required in clean_obj
+        let amtin = "#expamt"; // required in clean_obj, below
         let chgamt = $(amtin).val();
         let amt = valAmt(chgamt, true);
         if (amt < 0) {

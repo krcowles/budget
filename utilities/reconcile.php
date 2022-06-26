@@ -43,6 +43,7 @@ for ($i=0; $i<count($expamt); $i++) {
 
 <body>
 <?php require "../main/navbar.php"; ?>
+
 <div style="margin-left:16px;" id="container">
     <br />
     <h4 class="NormalHeading">This form will allow you to reconcile  
@@ -74,7 +75,7 @@ for ($i=0; $i<count($expamt); $i++) {
                         <td class="right chgamt"><?= $card_data[$j]['amt'];?></td>
                         <td class="left cgto"><?= $card_data[$j]['acct'];?></td>
                         <td class="left chgpayee"><?= $card_data[$j]['payee'];?></td>
-                        <td><input type="checkbox" name="del[]" id="chg<?= $j;?>"
+                        <td><input type="checkbox" name="del[]" id="chg<?=$j;?>"
                             value="<?= $card_data[$j]['tblid'];?>" /></td>
                     </tr>
                     <?php endfor; ?>
