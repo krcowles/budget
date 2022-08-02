@@ -107,6 +107,8 @@ require_once "../utilities/getCards.php";
                 <ul class="dropdown-menu" aria-labelledby="budmgr">
                     <li><a id="add1" class="dropdown-item"
                         href="#">Add Account</a></li>
+                    <li><a id="combo" class="dropdown-item"
+                        href="#">Add Non-Monthlies Account</a></li>
                     <li><a id="del1" class="dropdown-item"
                         href="#">Delete Account</a></li>
                     <li><a id="moveit" class="dropdown-item"

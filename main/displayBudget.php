@@ -1,9 +1,7 @@
 <?php
 /**
- * This is an effort to replace the broken and impossible to maintain (thanks
- * to Microsoft) 'budget.xlsm'. The latest insult is that MacOS Excel 2016 has
- * no Userform support!! This program allows a user to create, setup, and manage
- * his/her own personal budget online. Management tools are presented on the home 
+ * This program allows a user to create, setup, and manage his/her own
+ * personal budget online. Management tools are presented on the home 
  * page ('main/budget.php').
  * PHP Version 7.3
  * 
@@ -27,10 +25,10 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Budget Tracker</title>
+    <title>Personal Budget</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="description"
-        content="Rolling 3-month budget tracker" />
+        content="Personal Budget management" />
     <meta name="author" content="Ken Cowles" />
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -50,6 +48,9 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <p id="nextmo" class="noshow"><?=$next_month;?></p>
 <p id="deferral" class="noshow"><?=$trigger_deferral;?></p>
 <p id="defamt" class="noshow"><?=$deferred_amount;?></p>
+<?php if ($nonmonthly) : ?>
+<p id="combo_acct" class="noshow"><?=$expected;?></p>                  
+<?php endif; ?>
 
 <div id="budget">
     <table id="roll3">
@@ -152,6 +153,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/budget.js"></script>
 <script src="../scripts/jQnumberFormat.js"></script>
+
 </body>
 
 </html>

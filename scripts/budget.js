@@ -10,6 +10,29 @@ $(function() {
 
 $('#bp').css('display', 'none'); // not needed on home (budget) page
 /**
+ * Look for a non-monthlies account; if present, adjust navbar & calculate
+ * expected balance.
+ */
+if ($('#combo_acct').length > 0) {
+    $('#combo').text("Manage Non-Monthlies Account");
+    var ebal = parseInt($('#combo_acct').text());
+    if (ebal > 0) {
+        $('.acct').each(function() {
+            if ($(this).text() === 'Non-Monthlies') {
+                var $ctd  = $(this).siblings().filter(".mo3");
+                var cbal = parseFloat($ctd.children().eq(1).text());
+                if (cbal < ebal) {
+                    $(this).css('background-color', '#ffe8e6');
+                    $(this).on('mouseover', function() {
+                        alert('The account expected balance is: ' + ebal);
+                    });
+                }
+                return false;
+            }
+        });
+    }
+}
+/**
  * If an income deferral was recorded earlier...
  */
 var currmo = $('#currmo').text();
@@ -81,13 +104,14 @@ if ($('#mstr').text() === 'yes') {
 /**
  * Set up for autopays
  */
- var ap_items = new bootstrap.Modal(document.getElementById('presentap'));
+var ap_items = new bootstrap.Modal(document.getElementById('presentap'));
 // check autopayment status
 var payday = [];
 var paywith = []; // method of payment
 var aname = []; // account name of autopay candidate
 var rowno = []; // budget rowno in which AP occurs
 var ap_candidates = false;
+
 // get all autopays having dates; find those that are due
 $('.apday').each(function(indx) {
     if ($(this).text() !== "") {
@@ -199,6 +223,7 @@ if (ap_candidates) {
     });
     ap_items.show();  
 }
+
 /**
  * CSS simply won't recognize a tr:hover for this table, so...
  */
@@ -210,14 +235,18 @@ $allrows.each(function() {
         $(this).on('mouseover', function() {
             let $cells = $(this).find('td')
             $cells.each(function() {
-                $(this).css('background-color', 'gainsboro');
+                if ($(this).text() !== 'Non-Monthlies') {
+                    $(this).css('background-color', 'gainsboro');
+                }
             });
         });
         $(this).on('mouseout', function() {
             let $cells = $(this).find('td')
             $cells.each(function(i) {
                 if (i < 5) {
-                    $(this).css('background-color', 'white');
+                    if ($(this).text() !== 'Non-Monthlies') {
+                        $(this).css('background-color', 'white');
+                    }
                 } else {
                     $(this).css('background-color', '#F8FFFA');
                 }

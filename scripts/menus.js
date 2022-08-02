@@ -311,6 +311,9 @@ $('#add1').on('click', function() {
     });
     addacct.show();
 });
+$('#combo').on('click', function() {
+    window.open('../edit/combo.php', "_blank");
+});
 $('#del1').on('click', function() {
     $('#daccbtn').on('click', function() {
         let $acct0 = $('#remacct').children();

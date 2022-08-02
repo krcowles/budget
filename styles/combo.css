@@ -1,0 +1,34 @@
+
+#content {
+    margin-top: 1rem;
+    margin-left: 2rem;
+}
+table {
+    table-layout: fixed;
+    width: 75%;
+    border: 2px solid darkgreen;
+    margin-left: auto;
+    margin-right: auto;
+}
+table th {
+    color: darkgreen;
+    padding: 0.5rem;
+    min-height: 1rem;
+    border: 1px solid darkgreen;
+    text-decoration: underline;
+}
+table td {
+    padding: 4px;
+    min-height: 1rem;
+    border: 1px solid dimgray;
+}
+table input {
+    border: none;
+}
+.add2, .add4 {
+    text-align: center;
+}
+input[name^=orec], input[name^=oitem], input[name^=oamt],
+input[name^=item], input[name^=amt], input[name^=osa_yr] {
+    width: 96%;
+}

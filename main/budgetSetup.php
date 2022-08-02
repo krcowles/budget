@@ -43,6 +43,12 @@ require_once "../utilities/getAccountData.php";
 require_once "../utilities/getCards.php";
 require_once "../utilities/getExpenses.php";
 
+$nonmonthly = false;
+// If there is a non-monthlies account, get the expected balance 
+if (in_array('Non-Monthlies', $account_names)) {
+    $nonmonthly = true;
+    $expected = getExpectedBalance($pdo, $month_names, $thisyear, $thismo);
+}
 // form balances
 $balBudget  = 0;
 $balPrev0   = 0;
