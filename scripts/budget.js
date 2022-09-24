@@ -84,11 +84,6 @@ if (trigger_mo === currmo) {
     });
 }
 
-// get date info to check for upcoming or past due autopays
-var today = new Date();
-var dd = parseInt(String(today.getDate()).padStart(2, '0'));
-var mm = String(today.getMonth() + 1).padStart(2, '0'); //January was otherwise 0!
-var yyyy = parseInt(today.getFullYear());
 // for admin
 if ($('#mstr').text() === 'yes') {
     $('#admin').attr('type', 'button');
@@ -115,8 +110,10 @@ var ap_candidates = false;
 // get all autopays having dates; find those that are due
 $('.apday').each(function(indx) {
     if ($(this).text() !== "") {
+        let grayit = false;
         let apday = parseInt($(this).text());
-        if (apday <= dd) {
+        let appd  = $(this).next().text();
+        if (apday <= dd && appd === '') {
             $rowtds = $(this).siblings();
             let pd = $rowtds.eq(6).text().trim();
             if (pd !== mm) {
@@ -144,9 +141,12 @@ $('.apday').each(function(indx) {
                 aname.push($acct.text());
                 ap_candidates = true;
             } else {
-                $(this).css('color', 'darkgray');
-                $(this).prev().css('color', 'darkgray');
+               grayit = true;
             }
+        }
+        if (grayit || (dd << apday && appd === mm)) {
+            $(this).css('color', 'darkgray');
+            $(this).prev().css('color', 'darkgray');
         }
     }
 });

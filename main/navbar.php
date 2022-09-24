@@ -92,10 +92,21 @@ require_once "../utilities/getCards.php";
                         Add a Card</a></li>
                     <li><a id="dac" class="dropdown-item" href="#">
                         Delete A Card</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#"
+                    id="allcds" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Autopay
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="allcds">
                     <li><a id="addauto" class="dropdown-item" href="#">
                         Add Autopay</a></li>
                     <li><a id="rmap" class="dropdown-item" href="#">
                         Delete Autopay</a></li>
+                    <li><a id="modauto" class="dropdown-item" href="#">
+                        Modify Exisitng Autopay</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">

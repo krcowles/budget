@@ -48,6 +48,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <p id="nextmo" class="noshow"><?=$next_month;?></p>
 <p id="deferral" class="noshow"><?=$trigger_deferral;?></p>
 <p id="defamt" class="noshow"><?=$deferred_amount;?></p>
+
 <?php if ($nonmonthly) : ?>
 <p id="combo_acct" class="noshow"><?=$expected;?></p>                  
 <?php endif; ?>
@@ -153,6 +154,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/budget.js"></script>
 <script src="../scripts/jQnumberFormat.js"></script>
+<script type="text/javascript">var existingAPs = <?=$jsAPAccts;?></script>
 
 </body>
 

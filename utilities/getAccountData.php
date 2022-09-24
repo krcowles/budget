@@ -169,3 +169,14 @@ for ($n=0; $n<$user_cnt; $n++) {
     }
 }
 $partsel .= '</select>';
+// list any accounts that have currently assigned autopays for menu.js
+$apaccts = [];
+for ($k=0; $k<count($account_names); $k++) {
+    if (!empty($autopay[$k])) {
+        $appd = empty($paid[$k]) ? 'false' : 'true';
+        $jsItem = '{acct:"' . $account_names[$k] . '",day:' .
+            $day[$k] . ',paid:'  . $appd . '}';
+        array_push($apaccts, $jsItem);
+    }
+}
+$jsAPAccts = '[' . implode(",", $apaccts) . ']';

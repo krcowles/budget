@@ -40,6 +40,7 @@ var xfrfund = new bootstrap.Modal(document.getElementById('xfrfunds'));
 var reccard = new bootstrap.Modal(document.getElementById('reconcile'));
 var addcard = new bootstrap.Modal(document.getElementById('addacard'));
 var delcard = new bootstrap.Modal(document.getElementById('deletecd'));
+var modauto = new bootstrap.Modal(document.getElementById('modap'));
 var autopay = new bootstrap.Modal(document.getElementById('auto'));
 var delauto = new bootstrap.Modal(document.getElementById('deleteauto'));
 var addacct = new bootstrap.Modal(document.getElementById('addacct'));
@@ -74,6 +75,25 @@ $.get('../utilities/getDeposits.php', function(list) {
     }
 });
 
+// Utility function for autopay modals
+const apacctExists = (apacct) => {
+    let match = false;
+    let indx  = 0;
+    for (let j=0; j<existingAPs.length; j++) {
+        if (existingAPs[j].acct === apacct) {
+            indx = j;
+            match = true;
+            break;
+        }
+    }
+    results = [match, indx];
+    return results;
+}
+// get date info to check for upcoming or past due autopays
+var today = new Date();
+var dd = parseInt(String(today.getDate()).padStart(2, '0'));
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January was otherwise 0!
+var yyyy = parseInt(today.getFullYear());
 /**
  * All other modal operation
  */
@@ -264,12 +284,60 @@ $('#dac').on('click', function() {
     });
     delcard.show();
 });
+$('#modauto').on('click', function() {
+    let $apchoices = $('#maselap').children();
+    $apchoices[0].options[1].disabled = true;
+    $('#modapbtn').on('click', function() {
+        let $moditem   = $('#mapitem').children();
+        let modifyap   = getSelect($moditem[0]);
+        // does this account have an existing autopay?
+        let acctCheck = apacctExists(modifyap);
+        // advise immediately if not an existing autopay account
+        if (!acctCheck[0]) {
+            alert("This account has no existing autopay:\nNo modifications can be made");
+            return false;
+        }
+        let $modmethod = $('#maselap').children();
+        let modmeans   = getSelect($modmethod[0]);
+        if (modmeans === 'SELECT ONE:') {
+            alert('You must select a payment means');
+            return false;
+        }
+        let modday     = $('#newapday').val();
+        modday = modday.trim();
+        if (!valText(modday, 'a day of the month')) {
+            return false;
+        }
+        if (!valDay(modday)) {
+            return false;
+        }
+        if (acctCheck[0]) {
+            if (existingAPs[acctCheck[1]].paid && modday > dd) {
+                msg = "NOTE: " + modifyap + " has already been paid for the current month";
+                alert(msg);
+            }
+        } 
+        let ids = ['#newapday'];
+        let sels = [$moditem[0], $modmethod[0]];
+        let ajaxdata = {id: 'apmod', acct: modifyap, method: modmeans, day: modday};
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, modauto, 'stay', {ids: ids, sels: sels});
+    });
+    modauto.show();
+});
 $('#addauto').on('click', function() {
     let $card = $('#ccselap').children();
     $card[0].options[1].disabled = true;
     $('#addapbtn').on('click', function() {
         let $addap = $('#apsel').children();
         let apadder = getSelect($addap[0]);
+        // is there already an autopay specified?
+        let acctCheck = apacctExists(apadder);
+        if (acctCheck[0]) {
+            let msg = "There is already an autopay specified for this account\n";
+            msg += "You may use Modify Autopay instead";
+            alert(msg);
+            return false;
+        }
         let card = getSelect($card[0]);
         if (card === 'SELECT ONE:') {
             alert("You must select a means for payment");
@@ -278,6 +346,9 @@ $('#addauto').on('click', function() {
         let day = $('#useday').val();
         day = day.trim();
         if (!valText(day, 'a day of the month')) {
+            return false;
+        }
+        if (!valDay(day)) {
             return false;
         }
         let ajaxdata = {id: 'apset', acct: apadder, method: card, day: day};
@@ -289,6 +360,13 @@ $('#rmap').on('click', function() {
     $('#delapbtn').on('click', function() {
         let $delap = $('#delapacct').children();
         let delapp = getSelect($delap[0]);
+        // is there an autopay specified for this account?
+        let acctCheck = apacctExists(delapp);
+        if (!acctCheck[0]) {
+            let msg = "There is no autopay specified for this account";
+            alert(msg);
+            return false;
+        }
         let ajaxdata = {id: 'delapay', acct: delapp};
         executeScript('../edit/saveAcctEdits.php', ajaxdata, delauto, 'home', {});
     });
@@ -642,6 +720,26 @@ function valPayee(payee) {
 function valText(item, type) {
     if (item === '') {
         alert("You must enter " + type);
+        return false;
+    }
+    return true;
+}
+function valDay(day) {
+    if (isNaN(day)) {
+        alert("Please enter a numeric value from 1 to 28");
+        return false;
+    }
+    let testday = parseFloat(day);
+    if (!Number.isInteger(testday)) {
+        alert("Please enter an integer value from 1 to 28");
+        return false;
+    } else if (testday < 1) {
+        alert("The day of the month cannot be 0 or negative");
+        return false;
+    } else if (testday > 28) {
+        let msg = "This day will not work in some months: \n";
+        msg += "Please enter a day of the month from 1 to 28";
+        alert(msg);
         return false;
     }
     return true;

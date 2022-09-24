@@ -162,6 +162,17 @@ case 'xfr':
     $toq  = $pdo->prepare($toreq);
     $toq->execute(["toc" => $xfrin, "toid" => $toid]);
     break;
+case 'apmod':
+    $apaccount = filter_input(INPUT_POST, 'acct');
+    $apmethod  = filter_input(INPUT_POST, 'method');
+    $apday     = filter_input(INPUT_POST, 'day');
+    $acctindx = array_search($apaccount, $account_names);
+    $tblid = $acctid[$acctindx];
+    $sql = "UPDATE `Budgets` SET `autopay` = :ap,`moday` = :moday " .
+        "WHERE `id` = :uid;";
+    $apset = $pdo->prepare($sql);
+    $apset->execute(["ap" => $apmethod, "moday" => $apday, "uid" => $tblid]);
+    break;
 case 'apset':
     $charged = filter_input(INPUT_POST, 'acct');
     $method  = filter_input(INPUT_POST, 'method');
