@@ -107,44 +107,47 @@ var aname = []; // account name of autopay candidate
 var rowno = []; // budget rowno in which AP occurs
 var ap_candidates = false;
 
-// get all autopays having dates; find those that are due
+/**
+ * Get autopay data, where `moday` (day-of-the-month) is not equal to 0
+ * The .apday class is assigned to `moday`, and next sibling is `autopd`,
+ * the latter being the month in which the last autopay was made.
+ * `moday`  => integer; `autopd` => 2-char string; but all read from HTML
+ * as strings by jQuery: dd, mm, yyyy are set in menus.js and are ints.
+ * NOTE: budget home page is loaded with empty strings where `moday` is 0,
+ * and where `autopd` is empty 
+ */ 
 $('.apday').each(function(indx) {
-    if ($(this).text() !== "") {
-        let grayit = false;
-        let apday = parseInt($(this).text());
-        let appd  = $(this).next().text();
-        if (apday <= dd && appd === '') {
+    if ($(this).text() !== "") { // this is `moday` or empty string
+        // assumption: if not empty string, 'next' is also not empty
+        let apday = parseInt($(this).text()); // `moday` as int
+        let appd  = parseInt($(this).next().text()); // `autopd` (month) as int
+        if (apday <= dd && appd !== modig) { // dd & modig are day/month ints
             $rowtds = $(this).siblings();
-            let pd = $rowtds.eq(6).text().trim();
-            if (pd !== mm) {
-                rowno.push(indx);
-                let $paywith = $rowtds.eq(5);
-                let $acct = $rowtds.eq(0);
-                let dueday = parseInt($(this).text());
-                let ordinal;
-                switch (dueday) {
-                    case 1:
-                        ordinal = 'st';
-                        break;
-                    case 2: 
-                        ordinal = 'nd';
-                        break;
-                    case 3:
-                        ordinal = 'rd';
-                        break;
-                    default:
-                        ordinal = 'th';
-                }
-                dueday += ordinal;
-                payday.push(dueday);
-                paywith.push($paywith.text().trim());
-                aname.push($acct.text());
-                ap_candidates = true;
-            } else {
-               grayit = true;
+            // siblings do not include 'this' (moday td)
+            rowno.push(indx);
+            let $paywith = $rowtds.eq(5);
+            let $acct = $rowtds.eq(0);
+            let dueday = apday;
+            let ordinal;
+            switch (dueday) {
+                case 1:
+                    ordinal = 'st';
+                    break;
+                case 2: 
+                    ordinal = 'nd';
+                    break;
+                case 3:
+                    ordinal = 'rd';
+                    break;
+                default:
+                    ordinal = 'th';
             }
-        }
-        if (grayit || (dd << apday && appd === mm)) {
+            dueday += ordinal;
+            payday.push(dueday);
+            paywith.push($paywith.text().trim());
+            aname.push($acct.text());
+            ap_candidates = true;
+        } else if (appd === modig) {
             $(this).css('color', 'darkgray');
             $(this).prev().css('color', 'darkgray');
         }

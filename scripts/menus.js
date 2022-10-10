@@ -94,6 +94,7 @@ var today = new Date();
 var dd = parseInt(String(today.getDate()).padStart(2, '0'));
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January was otherwise 0!
 var yyyy = parseInt(today.getFullYear());
+var modig = parseInt(mm);
 /**
  * All other modal operation
  */
