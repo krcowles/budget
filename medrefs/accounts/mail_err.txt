@@ -1,0 +1,111 @@
+2022-10-18 16:08:28 SERVER -&gt; CLIENT: 220 smtp.gmail.com ESMTP p7-20020a92c607000000b002f9a7dc2e1fsm1100036ilm.53 - gsmtp<br>
+2022-10-18 16:08:28 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 16:08:28 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-STARTTLS250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 16:08:28 CLIENT -&gt; SERVER: STARTTLS<br>
+2022-10-18 16:08:28 SERVER -&gt; CLIENT: 220 2.0.0 Ready to start TLS<br>
+2022-10-18 16:08:28 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 16:08:28 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 16:08:28 CLIENT -&gt; SERVER: AUTH LOGIN<br>
+2022-10-18 16:08:29 SERVER -&gt; CLIENT: 334 VXNlcm5hbWU6<br>
+2022-10-18 16:08:29 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 16:08:29 SERVER -&gt; CLIENT: 334 UGFzc3dvcmQ6<br>
+2022-10-18 16:08:29 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 16:08:29 SERVER -&gt; CLIENT: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials p7-20020a92c607000000b002f9a7dc2e1fsm1100036ilm.53 - gsmtp<br>
+2022-10-18 16:08:29 SMTP ERROR: Password command failed: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials p7-20020a92c607000000b002f9a7dc2e1fsm1100036ilm.53 - gsmtp<br>
+SMTP Error: Could not authenticate.<br>
+2022-10-18 16:08:29 CLIENT -&gt; SERVER: QUIT<br>
+2022-10-18 16:08:29 SERVER -&gt; CLIENT: 221 2.0.0 closing connection p7-20020a92c607000000b002f9a7dc2e1fsm1100036ilm.53 - gsmtp<br>
+SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting<br>
+Mailer Error: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-10-18 16:11:55 SERVER -&gt; CLIENT: 220 smtp.gmail.com ESMTP q1-20020a027b01000000b003636c046e73sm1153650jac.95 - gsmtp<br>
+2022-10-18 16:11:55 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 16:11:55 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-STARTTLS250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 16:11:55 CLIENT -&gt; SERVER: STARTTLS<br>
+2022-10-18 16:11:55 SERVER -&gt; CLIENT: 220 2.0.0 Ready to start TLS<br>
+2022-10-18 16:11:55 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 16:11:55 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 16:11:55 CLIENT -&gt; SERVER: AUTH LOGIN<br>
+2022-10-18 16:11:55 SERVER -&gt; CLIENT: 334 VXNlcm5hbWU6<br>
+2022-10-18 16:11:55 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 16:11:55 SERVER -&gt; CLIENT: 334 UGFzc3dvcmQ6<br>
+2022-10-18 16:11:55 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 16:11:56 SERVER -&gt; CLIENT: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials q1-20020a027b01000000b003636c046e73sm1153650jac.95 - gsmtp<br>
+2022-10-18 16:11:56 SMTP ERROR: Password command failed: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials q1-20020a027b01000000b003636c046e73sm1153650jac.95 - gsmtp<br>
+SMTP Error: Could not authenticate.<br>
+2022-10-18 16:11:56 CLIENT -&gt; SERVER: QUIT<br>
+2022-10-18 16:11:56 SERVER -&gt; CLIENT: 221 2.0.0 closing connection q1-20020a027b01000000b003636c046e73sm1153650jac.95 - gsmtp<br>
+SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting<br>
+Mailer Error: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+
+2022-10-18 16:17:33 SERVER -&gt; CLIENT: 220 smtp.gmail.com ESMTP h3-20020a926c03000000b002f956529892sm1132124ilc.2 - gsmtp<br>
+2022-10-18 16:17:33 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 16:17:33 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-STARTTLS250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 16:17:33 CLIENT -&gt; SERVER: STARTTLS<br>
+2022-10-18 16:17:34 SERVER -&gt; CLIENT: 220 2.0.0 Ready to start TLS<br>
+2022-10-18 16:17:34 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 16:17:34 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 16:17:34 CLIENT -&gt; SERVER: AUTH LOGIN<br>
+2022-10-18 16:17:34 SERVER -&gt; CLIENT: 334 VXNlcm5hbWU6<br>
+2022-10-18 16:17:34 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 16:17:34 SERVER -&gt; CLIENT: 334 UGFzc3dvcmQ6<br>
+2022-10-18 16:17:34 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 16:17:34 SERVER -&gt; CLIENT: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials h3-20020a926c03000000b002f956529892sm1132124ilc.2 - gsmtp<br>
+2022-10-18 16:17:34 SMTP ERROR: Password command failed: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials h3-20020a926c03000000b002f956529892sm1132124ilc.2 - gsmtp<br>
+SMTP Error: Could not authenticate.<br>
+2022-10-18 16:17:34 CLIENT -&gt; SERVER: QUIT<br>
+2022-10-18 16:17:34 SERVER -&gt; CLIENT: 221 2.0.0 closing connection h3-20020a926c03000000b002f956529892sm1132124ilc.2 - gsmtp<br>
+SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting<br>
+Mailer Error: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshootingbadnofindnofindnofindnofindnofind2022-10-18 17:55:51 SERVER -&gt; CLIENT: 220 smtp.gmail.com ESMTP m26-20020a02a15a000000b003641323267csm1248104jah.142 - gsmtp<br>
+2022-10-18 17:55:51 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 17:55:51 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-STARTTLS250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 17:55:51 CLIENT -&gt; SERVER: STARTTLS<br>
+2022-10-18 17:55:51 SERVER -&gt; CLIENT: 220 2.0.0 Ready to start TLS<br>
+2022-10-18 17:55:51 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 17:55:51 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 17:55:51 CLIENT -&gt; SERVER: AUTH LOGIN<br>
+2022-10-18 17:55:51 SERVER -&gt; CLIENT: 334 VXNlcm5hbWU6<br>
+2022-10-18 17:55:51 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 17:55:51 SERVER -&gt; CLIENT: 334 UGFzc3dvcmQ6<br>
+2022-10-18 17:55:51 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 17:55:51 SERVER -&gt; CLIENT: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials m26-20020a02a15a000000b003641323267csm1248104jah.142 - gsmtp<br>
+2022-10-18 17:55:51 SMTP ERROR: Password command failed: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials m26-20020a02a15a000000b003641323267csm1248104jah.142 - gsmtp<br>
+SMTP Error: Could not authenticate.<br>
+2022-10-18 17:55:51 CLIENT -&gt; SERVER: QUIT<br>
+2022-10-18 17:55:51 SERVER -&gt; CLIENT: 221 2.0.0 closing connection m26-20020a02a15a000000b003641323267csm1248104jah.142 - gsmtp<br>
+SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting<br>
+Mailer Error: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-10-18 17:55:53 SERVER -&gt; CLIENT: 220 smtp.gmail.com ESMTP w186-20020a022ac3000000b003633848da58sm1267161jaw.41 - gsmtp<br>
+2022-10-18 17:55:53 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 17:55:53 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-STARTTLS250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 17:55:53 CLIENT -&gt; SERVER: STARTTLS<br>
+2022-10-18 17:55:53 SERVER -&gt; CLIENT: 220 2.0.0 Ready to start TLS<br>
+2022-10-18 17:55:53 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 17:55:53 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 17:55:53 CLIENT -&gt; SERVER: AUTH LOGIN<br>
+2022-10-18 17:55:53 SERVER -&gt; CLIENT: 334 VXNlcm5hbWU6<br>
+2022-10-18 17:55:53 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 17:55:53 SERVER -&gt; CLIENT: 334 UGFzc3dvcmQ6<br>
+2022-10-18 17:55:53 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 17:55:53 SERVER -&gt; CLIENT: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials w186-20020a022ac3000000b003633848da58sm1267161jaw.41 - gsmtp<br>
+2022-10-18 17:55:53 SMTP ERROR: Password command failed: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials w186-20020a022ac3000000b003633848da58sm1267161jaw.41 - gsmtp<br>
+SMTP Error: Could not authenticate.<br>
+2022-10-18 17:55:53 CLIENT -&gt; SERVER: QUIT<br>
+2022-10-18 17:55:53 SERVER -&gt; CLIENT: 221 2.0.0 closing connection w186-20020a022ac3000000b003633848da58sm1267161jaw.41 - gsmtp<br>
+SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting<br>
+Mailer Error: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-10-18 17:57:30 SERVER -&gt; CLIENT: 220 smtp.gmail.com ESMTP s18-20020a02cc92000000b00363ca583572sm1238032jap.158 - gsmtp<br>
+2022-10-18 17:57:30 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 17:57:30 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-STARTTLS250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 17:57:30 CLIENT -&gt; SERVER: STARTTLS<br>
+2022-10-18 17:57:30 SERVER -&gt; CLIENT: 220 2.0.0 Ready to start TLS<br>
+2022-10-18 17:57:30 CLIENT -&gt; SERVER: EHLO localhost<br>
+2022-10-18 17:57:30 SERVER -&gt; CLIENT: 250-smtp.gmail.com at your service, [97.123.86.236]250-SIZE 35882577250-8BITMIME250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH250-ENHANCEDSTATUSCODES250-PIPELINING250-CHUNKING250 SMTPUTF8<br>
+2022-10-18 17:57:30 CLIENT -&gt; SERVER: AUTH LOGIN<br>
+2022-10-18 17:57:30 SERVER -&gt; CLIENT: 334 VXNlcm5hbWU6<br>
+2022-10-18 17:57:30 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 17:57:30 SERVER -&gt; CLIENT: 334 UGFzc3dvcmQ6<br>
+2022-10-18 17:57:30 CLIENT -&gt; SERVER: [credentials hidden]<br>
+2022-10-18 17:57:30 SERVER -&gt; CLIENT: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials s18-20020a02cc92000000b00363ca583572sm1238032jap.158 - gsmtp<br>
+2022-10-18 17:57:30 SMTP ERROR: Password command failed: 535-5.7.8 Username and Password not accepted. Learn more at535 5.7.8  https://support.google.com/mail/?p=BadCredentials s18-20020a02cc92000000b00363ca583572sm1238032jap.158 - gsmtp<br>
+SMTP Error: Could not authenticate.<br>
+2022-10-18 17:57:30 CLIENT -&gt; SERVER: QUIT<br>
+2022-10-18 17:57:30 SERVER -&gt; CLIENT: 221 2.0.0 closing connection s18-20020a02cc92000000b00363ca583572sm1238032jap.158 - gsmtp<br>
+SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting<br>
+Mailer Error: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting

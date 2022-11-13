@@ -1,0 +1,64 @@
+body { 
+    background-color: #eaeaea;
+    font-size: 16px;
+    margin: 0px;
+}
+fieldset.bootshow {
+    border: 1px groove darkgreen  !important;
+    padding: 0.5em 1.4em 1.4em 1.4em !important;
+    margin: 0 1em 0.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+            box-shadow:  0px 0px 0px 0px #000;
+}
+legend.bootshow {
+    width: inherit; /* Or auto */
+    padding: 0 10px; /* To give a bit of padding on the left and right */
+    border-bottom: none;
+    color: darkgreen;
+    font-style: italic;
+}
+#sitemode {
+    font-size: 16px;
+}
+#currstate {
+    color: blue;
+}
+#tools {
+    margin-left: 24px;
+    font-size: 16px;
+}
+select {
+    position: relative;
+    top: 5px;
+    height: 32px;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+button {
+    margin-top: 5px;
+}
+input[type=submit] {
+    font-size: 18px;
+    color: DarkBlue;
+    cursor: pointer;
+}
+input[type=submit]:hover {
+    background-color: BlanchedAlmond;
+}
+input[type=file] {
+    font-size: 18px;
+    color: brown;
+}
+input[type=file]:hover {
+    cursor: pointer;
+}
+.ged {
+    margin-left: 24px;
+}
+#achoice, #ldayr {
+    display: none;
+}
+.dshift {
+    position: relative;
+    top: 6px;
+}

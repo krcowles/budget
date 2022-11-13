@@ -17,13 +17,15 @@
 #roll3 tbody tr {
     cursor: pointer;
 }
+#ubtns {
+    position: fixed;
+    top: 72px;
+    left: 14px;
+}
 /* When admin is logged in, show admin tools button */
 #admin {
     display: none;
-    position: fixed;
-    top: 72px;
-    left: 28px;
-    margin: 0px;
+    margin-top: 1rem;
 }
 .amt {
     color: #006600;

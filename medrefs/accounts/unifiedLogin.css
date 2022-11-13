@@ -1,0 +1,281 @@
+/* "global" colors: local exceptions are contained in their respective modules */
+/* scss standard definitions */
+body {
+    min-width: 960px;
+    background-color: #eaeaea;
+    margin: 0;
+    font-family: arial, verdana;
+    font-size: 16px;
+}
+
+/* Overflow definitions when needed to prevent scroll bars */
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+#bg {
+    background-image: url(../images/med-bg.jpg);
+    background-size: cover;
+    width: 100%;
+    height: 900px;
+}
+/* Page Top */
+#logo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 42px;
+    background-color: steelblue;
+    color: white;
+    z-index: 2;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#pgheader {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+#leftside {
+    margin-top: 5px;
+}
+#leftie {
+    margin-left: 12px;
+    vertical-align: middle;
+}
+#ltxt {
+    vertical-align: middle;
+}
+#center {
+    position: relative;
+    font-size: 22px;
+    font-weight: bold;
+}
+#rightside {
+    margin-top: 5px
+}
+#rightie {
+    margin-right: 12px;
+    vertical-align: middle;
+}
+#rtxt {
+    vertical-align: middle;
+}
+.noshow {
+    display: none;
+}
+
+/* ALL FORMS */
+#container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    background-color: #c8daea;
+    border-style: solid;
+    border-color: gainsboro;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 20px;
+    color: black;
+    padding-top: 10px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+@media only screen and (max-width: 500px) {
+    #container {
+        width: 75%;
+    }
+}
+form:not(#ckbox) {
+    text-align: center;
+}
+input:not(#ckbox) {
+    width: calc(100% - 40px) !important;
+    padding-left: 6px;
+    height: 38px;
+    border-radius: 8px;
+}
+/* Unable to set autofill-color for Firefox, using standard yellow */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    /* Chrome, Safari */
+    -webkit-text-fill-color: black;
+    -webkit-box-shadow: 0 0 0 1000px ghostwhite inset;
+    box-shadow: 0 0 0 1000px ghostwhite inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+input:focus {
+    outline: none;
+    border-color: #325d81;;
+    border-width: 2px;
+    border-style: solid;
+    transition: border-color 1s;
+}
+::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: gray;
+    opacity: 1;
+    /* Firefox */
+}
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: gray;
+}
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: gray;
+}
+#formsubmit {
+    position: relative;
+    display: inline-block;
+    width: calc(100% - 60px);
+    height: 42px;
+    background-color: #c8daea;
+    line-height: 1.5em;
+    font-size: 18px;
+    border-radius: 8px;
+    color: black;
+    font-weight: bold;
+    vertical-align: middle;
+}
+#formsubmit:hover, #submit:hover {
+    cursor: pointer;
+    background-color: #325d81;
+    color: white;
+}
+#cbuttons {
+    margin-bottom: 12px;
+}
+#accept {
+    position: relative;
+    left: -16px;
+}
+
+#reject {
+    margin-left: 40px;
+}
+
+/* LOGIN CSS */
+button {
+    height: 36px;
+}
+#forgot {
+    position: relative;
+    top: 6px;
+    border-style: solid;
+    border-radius: 8px;
+    border-width: 2px;
+    padding-left: 6px;
+}
+#send {
+    width: 160px;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+/* REGISTRATION CSS */
+#reg_hdr {
+    margin-bottom: 8px;
+    line-height: 1.4rem;
+}
+#policylnk {
+    font-size: 14px;
+}
+.pseudo-legend {
+    position: relative;
+    top: 8px;
+    left: 36px;
+    font-size: 14px;
+    color: gray;
+    z-index: 400;
+    text-align: left;
+}
+.lines {
+    position: relative;
+    left: 34px;
+    top: 2px;
+    width: 76px;
+    height: 2px;
+    background-color: #fcf4e8;
+    z-index: 300;
+}
+#line4 {
+    width: 44px;
+}
+#sub {
+    position: relative;
+    top: -18px;
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+#un_note {
+    margin-top: 8px;
+}
+#un {
+    position: relative;
+    top: -16px;
+}
+#uem {
+    position: relative;
+    top: -16px;
+}
+/* RESET PASSWORD CSS */
+#ckbox {
+    /* Double-sized Checkboxes */
+    -ms-transform: scale(1.5);
+    /* IE */
+    -moz-transform: scale(1.5);
+    /* FF */
+    -webkit-transform: scale(1.5);
+    /* Safari and Chrome */
+    -o-transform: scale(1.5);
+    /* Opera */
+    transform: scale(1.5);
+    padding: 5px;
+}
+#pexpl {
+    margin-top: 1.3rem;
+    line-height: 1.2rem;
+}
+#pass {
+    margin-top: 0.5rem;
+}
+#usrinfo {
+    margin-top: 0.4rem;
+}
+#wk {
+    color: red;
+}
+#st {
+    color: green;
+    display: none;
+}
+/* modals */
+.modal-header, .modal-footer {
+    background-color: #dfe9e3;
+    color: black;
+}
+
+.modal-body {
+    color: black;
+    text-align: left;
+}
+
+input[id^=q] {
+    margin-bottom: 4px;
+}
+
+/*# sourceMappingURL=unifiedLogin.css.map */

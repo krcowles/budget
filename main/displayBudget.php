@@ -41,7 +41,11 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <body>
 <?php require "navbar.php"; ?>
 <p id="mstr" class="noshow""><?=$admin;?></p>
-<pre><button id="admin">Admin</button></pre>
+<div id="ubtns">
+<button id="medpg" type="button" class="btn btn-secondary btn-sm">
+    Medical Refs</button>
+<button id="admin" type="button" class="btn btn-secondary btn-sm">Admin</button>
+</div>
 <p id="usercookies" class="noshow"><?=$menu_item?></p>
 <!-- for deferred income -->
 <p id="currmo" class="noshow"><?=$current_month;?></p>

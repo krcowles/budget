@@ -8,7 +8,7 @@
  * @license No license to date
  */
 $mode_str = 'SET sql_mode = "';
-$file = $root . "/database/sql_modes.ini";
+$file = $documentRoot . "database/sql_modes.ini";
 $modes = file($file, FILE_IGNORE_NEW_LINES);
 foreach ($modes as $setting) {
     if (substr($setting, 0, 1) == 'Y') {

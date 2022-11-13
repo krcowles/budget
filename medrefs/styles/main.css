@@ -1,0 +1,74 @@
+body {
+    background-color: #efefef;
+}
+#content {
+    margin-top: 2rem;
+    margin-left: 2rem;
+}
+.noshow {
+    display: none;
+}
+#edit {
+    margin-top: 1.2rem;
+}
+
+button[type=submit], #addem {
+    margin-top: 1.2rem;
+    margin-left: 1rem;
+}
+/* table styling */
+#active_display table {
+    border-style: solid;
+    border-width: 2px;
+    border-color: darkblue;
+    border-collapse: collapse;
+}
+#active_display tbody tr td {
+    height: 2.4rem;
+}
+#active_display tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+#active_display tr:hover {
+    background-color: #ddd;
+}
+#active_display td, #active_display th {
+    border: 1px solid #ddd;
+    padding-left: 8px;
+    padding-bottom: 3px;
+}
+#active_display th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: lightblue;
+}
+/* textareas */
+.tas {
+    height: 2rem;
+    padding-left: 4px;
+}
+/* list cells */
+.td1 {
+    width: 200px;
+}
+.td2 {
+    width: 220px;
+}
+.td3, .td4 {
+    width: 300px;
+}
+textarea[id^=ed] {
+    width: 230px;
+}
+.rcbs {
+    transform: scale(1.6);
+    position: relative;
+    top: -6px;
+    left: 16px;
+}
+.adj {
+    position: relative;
+    left: 28px;
+    top: -6px;
+}

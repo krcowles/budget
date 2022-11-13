@@ -1,0 +1,60 @@
+body {
+    background-color: #efefef;
+}
+.brown {
+    color: brown;
+    font-style: italic;
+}
+#form_data {
+    margin-top: 2rem;
+    margin-left: 1.4rem;
+}
+label {
+    font-weight: bold;
+}
+#chkbox {
+    width: 140px;
+    margin-bottom: 1rem;
+}
+#refs tbody:before {
+    line-height:1em;
+    content:"\200C";
+    display:block;
+}
+.b1, .b2, .b3, .b4, .colhdrs {
+    height: 2rem;
+    margin-right: 12px;
+}
+#return {
+    width: 100px;
+}
+#user_data {
+    width: 96%;
+}
+#refs {
+    border-spacing: 10px;
+}
+#toggled {
+    visibility: hidden;
+}
+td.box4 {
+    display: none;
+}
+textarea[id^=r], #col1 {
+    width: 200px;
+}
+textarea[id^=d], #col2 {
+    width: 220px;
+}
+textarea[id^=q], #col3 {
+    width: 300px;
+}
+.b4, textarea[name^=box4], #col4 {
+    width: 300px;
+}
+#add_col {
+    transform: scale(1.5);
+}
+.noshow {
+    display: none;
+}

@@ -1,0 +1,38 @@
+<?php
+/**
+ * This script is required to generate mail via gmail.
+ * PHP Version 7.1
+ *
+ * @package MedRefs
+ * @author  Ken Cowles <krcowles29@gmail.com>
+ * @license No license to date
+ */
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+// for reasons unknown, the vendor autoloader in global_boot.php
+// doesn't set this up properly...
+require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+$mail = new PHPMailer; // if not immediately following, seems to not work...
+require '../vendor/phpmailer/phpmailer/src/Exception.php';
+require '../vendor/phpmailer/phpmailer/src/SMTP.php';
+
+date_default_timezone_set('America/Denver');
+
+$mail->isSMTP();
+//$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+/*
+ * Server Configuration
+//$mail->isSMTP();
+$mail->Host = 'localhost';
+$mail->SMTPAuth = false;
+$mail->SMTPAutoTLS = false; 
+$mail->Port = 25; 
+*/
+$mail->Host = 'smtp.gmail.com'; // Which SMTP server to use.
+$mail->Port = 587; // Which port to use, 587 is the default port for TLS security.
+$mail->SMTPSecure = 'tls'; // Which security method to use. TLS is most secure.
+//$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+$mail->SMTPAuth = true;
+$mail->Username = ADMIN_EMAIL;
+$mail->Password = GMAIL_ID; // App Specific Password.
