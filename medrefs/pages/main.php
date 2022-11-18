@@ -9,6 +9,7 @@
  */
 session_start();
 require_once "../../database/global_boot.php";
+$new = isset($_GET['new']) ? true : false;
 ?>
 <!DOCTYPE html>
 <html lang="en-us">

@@ -10,6 +10,15 @@
  */
 require_once "../../database/global_boot.php";
 
+if ($new) {
+    // setup a new default `Settings` for this user
+    $newmenu   = 'My Doctors|Prescriptions|Emergency Contacts';
+    $newactive = 1;
+    $newReq    = "INSERT INTO `Settings` (`userid`,`menu`,`active`) VALUES " . 
+      "(?,?,?);";
+    $newSetting = $mdo->prepare($newReq);
+    $newSetting->execute([$_SESSION['userid'], $newmenu, $newactive]);
+} 
 // Prepare data for javascript access via HTML:
 $menu_setup_req = "SELECT `menu`,`active` FROM `Settings` WHERE `userid`=:id;";
 $menu_setup = $mdo->prepare($menu_setup_req);

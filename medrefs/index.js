@@ -16,7 +16,7 @@ $('#begin').on('click', function(ev) {
    startup.show();
 });
 $('#newlist').on('click', function() {
-   window.open("pages/main.php", "_self");
+   window.open("pages/main.php?new=y", "_self");
 });
 
 });

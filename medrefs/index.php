@@ -12,7 +12,7 @@
 session_start();
 require "../database/global_boot.php";
 
-$checkUserReq = "SELECT @ FROM `Settings` WHERE `userid`=?;";
+$checkUserReq = "SELECT * FROM `Settings` WHERE `userid`=?;";
 $checkUser = $mdo->prepare($checkUserReq);
 $checkUser->execute([$_SESSION['userid']]);
 $userState = $checkUser->fetch(PDO::FETCH_ASSOC);
