@@ -13,10 +13,11 @@ require_once "../database/global_boot.php";
 require_once "getCards.php";
 require_once "timeSetup.php";
 
-$id      = isset($_GET['id']) ? filter_input(INPUT_GET, 'id') : false;
-$monthly = $id === 'morpt' ? true : false;
-$annual  = $id === 'yrrpt' ? true : false;
-$income  = $id === 'inc' ? true : false;
+$id       = isset($_GET['id']) ? filter_input(INPUT_GET, 'id') : false;
+$monthly  = $id === 'morpt' ? true : false;
+$annual   = $id === 'yrrpt' ? true : false;
+$user_inc = $id === 'inc' ? true : false;
+$xfrs     = $id === 'xfr' ? true : false;
 
 $datareq = "SELECT * FROM `Charges` WHERE `userid` = :uid;";
 $data = $pdo->prepare($datareq); 
@@ -72,10 +73,36 @@ if ($annual) {
         }
     }
 }
-if ($income) {
+if ($user_inc) {
     $templ = "Income.xlsx";
     $period = isset($_GET['incyr']) ? filter_input(INPUT_GET, 'incyr') : 'No year';
     $hdr1 = "Income for the Year of " .   $period;
+}
+if ($xfrs) {
+    $templ = "Transfers.xlsx";
+    $period = isset($_GET['xfryr']) ? filter_input(INPUT_GET, 'xfryr') : false;
+    $hdr1 = "Transfers for the Year of " . $period;
+    // set reporting timeframe:
+    $start = "{$period}-01-01";
+    $end   = "{$period}-12-31";
+    $yr_start = strtotime($start);
+    $yr_end   = strtotime($end);
+    $getXfrsReq = "SELECT * FROM `Transfers` WHERE `userid`=?;";
+    $getXfrs = $pdo->prepare($getXfrsReq);
+    $getXfrs->execute([$_SESSION['userid']]);
+    $userXfrs = $getXfrs->fetchAll(PDO::FETCH_ASSOC);
+    $transfers = [];
+    foreach ($userXfrs as $tran) {
+        $xfd = strtotime($tran['xfr_date']);
+        if ($xfd >= $yr_start && $xfd <= $yr_end) {
+            $thistran = [];
+            $thistran['from'] = $tran['from_acct'];
+            $thistran['to']   = $tran['to_acct'];
+            $thistran['amt']  = $tran['amount'];
+            $thistran['date'] = $tran['xfr_date'];
+            array_push($transfers, $thistran);
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -116,8 +143,10 @@ if ($monthly) {
     include "formatMonth.php";
 } elseif ($annual) {
     include "formatYear.php";
-} elseif ($income) {
+} elseif ($user_inc) {
     include "formatIncome.php";
+} elseif ($xfrs) {
+    include "formatTransfers.php";
 }
 ?>
 </div><br />
