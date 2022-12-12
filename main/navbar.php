@@ -193,5 +193,5 @@ require_once "../utilities/getCards.php";
     </div>
 </nav>
 <div id="preloader">
-    <img src="../images/preload.gif" alt="waiting..." style="display:none;" />
+    <img src="../images/preload.gif" alt="waiting..." />
 </div>
