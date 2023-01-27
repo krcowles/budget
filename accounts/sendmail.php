@@ -64,6 +64,7 @@ if (in_array($email, $registered)) {
     $savecode->execute([$hash, $uid]);
 } else {
     echo "nofind";
+    exit;
 }
 if (!$new_registration) {   
     $msg .= ' ' . $orgname . '</p>';

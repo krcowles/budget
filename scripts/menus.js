@@ -492,21 +492,25 @@ $('#cpass').on('click', function() {
         dataType: 'text',
         success: function(result) {
             $('#preloader').hide();
-            alert('An email has been sent');
-            chgpass.hide();
-            $.ajax({
-                url: '../accounts/logout.php',
-                method: 'get',
-                success: function() {
-                    alert("You are logged out until the new password is entered");
-                    window.open('../index.php', "_self");
-                },
-                error: function() {
-                    let msgtxt = "Error logging out:\n";
-                    let msg = msgtxt + textStatus + "; Error: " + errorThrown;
-                    alert(msg);
-                }
-            }); 
+            if (result === 'ok') {
+                alert('An email has been sent');
+                chgpass.hide();
+                $.ajax({
+                    url: '../accounts/logout.php',
+                    method: 'get',
+                    success: function() {
+                        alert("You are logged out until the new password is entered");
+                        window.open('../index.php', "_self");
+                    },
+                    error: function() {
+                        let msgtxt = "Error logging out:\n";
+                        let msg = msgtxt + textStatus + "; Error: " + errorThrown;
+                        alert(msg);
+                    }
+                });
+            } else {
+                alert('The email failed');
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             $('#preloader').hide();

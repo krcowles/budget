@@ -8,9 +8,14 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 date_default_timezone_set('America/Denver');
-require '../PHPMailer/PHPMailerAutoload.php';
+
 $mail = new PHPMailer;
+//$mail->SMTPDebug = SMTP::DEBUG_SERVER;
 $mail->isSMTP();
 /*
  * Server Configuration
