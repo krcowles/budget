@@ -14,7 +14,7 @@ use PHPMailer\PHPMailer\Exception;
 
 date_default_timezone_set('America/Denver');
 
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
 $mail->isSMTP();
 /*
