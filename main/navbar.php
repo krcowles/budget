@@ -147,6 +147,9 @@ require_once "../utilities/getCards.php";
                     <li><a id="yrinc" class="dropdown-item"
                         href="#">Income Report</a>
                     </li>
+                    <li><a id="xfrrpt" class="dropdown-item"
+                        href="#">Transfers</a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item dropdown">

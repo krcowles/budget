@@ -15,7 +15,7 @@
             </div>
             <div class="modal-footer">
                 <button id="appaybtn" type="button" class="btn btn-secondary">
-                    Make Payment</button>
+                    Pay Checked Items</button>
                 <button id="payap" type="button" class="btn btn-secondary"
                     data-bs-dismiss="modal">Close</button>
             </div>
@@ -494,6 +494,31 @@
                 <button type="button" class="btn btn-secondary"
                     data-bs-dismiss="modal">Close</button>
                 <button id="aincbtn" type="button" class="btn btn-success">
+                    Generate Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Transfer History Modal -->
+<div id="annxfrs" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yearly Transfers</h5>
+                <button type="button" class="btn-close"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Select a year to view:<br />
+                <select id="xfryr" name="xfryr">
+                    <option value="<?=$thisyear;?>"><?=$thisyear;?></option>
+                    <option value="<?=$prioryr1;?>"><?=$prioryr1;?></option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Close</button>
+                <button id="yrlyXfrbtn" type="button" class="btn btn-success">
                     Generate Report</button>
             </div>
         </div>

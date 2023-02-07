@@ -50,6 +50,7 @@ var rename  = new bootstrap.Modal(document.getElementById('renameacct'));
 var monthly = new bootstrap.Modal(document.getElementById('moexp'));
 var yearly  = new bootstrap.Modal(document.getElementById('annexp'));
 var anninc  = new bootstrap.Modal(document.getElementById('anninc'));
+var annxfrs = new bootstrap.Modal(document.getElementById('annxfrs'));
 var chgpass = new bootstrap.Modal(document.getElementById('resetemail'));
 var secques = new bootstrap.Modal(document.getElementById('security'));
 
@@ -241,6 +242,14 @@ $('#transfers').on('click', function() {
         }
         let ajaxdata = {id: 'xfr', from: xfrom, to: xfrto, sum: amt};
         executeScript('../edit/saveAcctEdits.php', ajaxdata, xfrfund, 'home', {});
+        // register transfer in 'Transfers' database
+        let xfrdata  ={from: xfrom, to: xfrto, amt: amt};
+        $.post('../utilities/transfers.php', xfrdata, function(result) {
+            if (result !== 'ok') {
+                alert("Failed to register transfer in database");
+            }
+        });
+
     });
     xfrfund.show();
 });
@@ -460,6 +469,16 @@ $('#yrinc').on('click', function() {
         anninc.hide();
     });
     anninc.show();
+});
+$('#xfrrpt').on('click', function() {
+    $('#yrlyXfrbtn').on('click', function() {
+        let xfryr = document.getElementById('xfryr');
+        let year = getSelect(xfryr);
+        let getxfrs = '../utilities/reports.php?id=xfr&xfryr=' + year;
+        window.open(getxfrs, "_blank");
+        annxfrs.hide();
+    });
+    annxfrs.show();
 });
 
 $('#logout').on('click', function() {
