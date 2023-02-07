@@ -240,14 +240,8 @@ $('#transfers').on('click', function() {
             alert("You have specified the same account for 'Take from' and 'Place in'");
             return false;
         }
-        let xfrdata  ={from: xfrom, to: xfrto, amt: amt};
-        $.post('../utilities/transfers.php', xfrdata, function(result) {
-            if (result !== 'ok') {
-                alert("Failed to register transfer in database");
-            }
-        });
         let ajaxdata = {id: 'xfr', from: xfrom, to: xfrto, sum: amt};
-        //executeScript('../edit/saveAcctEdits.php', ajaxdata, xfrfund, 'home', {});
+        executeScript('../edit/saveAcctEdits.php', ajaxdata, xfrfund, 'home', {});
     });
     xfrfund.show();
 });
@@ -508,22 +502,26 @@ $('#cpass').on('click', function() {
         data: adata,
         dataType: 'text',
         success: function(result) {
-            $('#preloader').hide();
-            alert('An email has been sent');
-            chgpass.hide();
-            $.ajax({
-                url: '../accounts/logout.php',
-                method: 'get',
-                success: function() {
-                    alert("You are logged out until the new password is entered");
-                    window.open('../index.php', "_self");
-                },
-                error: function() {
-                    let msgtxt = "Error logging out:\n";
-                    let msg = msgtxt + textStatus + "; Error: " + errorThrown;
-                    alert(msg);
-                }
-            }); 
+            if (result === 'ok') {
+                $('#preloader').hide();
+                alert('An email has been sent');
+                chgpass.hide();
+                $.ajax({
+                    url: '../accounts/logout.php',
+                    method: 'get',
+                    success: function() {
+                        alert("You are logged out until the new password is entered");
+                        window.open('../index.php', "_self");
+                    },
+                    error: function() {
+                        let msgtxt = "Error logging out:\n";
+                        let msg = msgtxt + textStatus + "; Error: " + errorThrown;
+                        alert(msg);
+                    }
+                }); 
+            } else {
+                alert("The email failed");
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             $('#preloader').hide();
