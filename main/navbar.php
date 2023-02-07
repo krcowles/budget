@@ -77,7 +77,8 @@ require_once "../utilities/getCards.php";
                 </ul>
             </li>
             <li class="nav-item">
-                <a id="transfers" class="nav-link active" href="#">Transfers</a>
+                <a id="transfers" class="nav-link active" href="#">
+                    Transfers</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle active" href="#"
