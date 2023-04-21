@@ -9,14 +9,14 @@
  * @license No license to date
  */
 session_start();
-require "../php/global_boot.php";
+require "../../database/global_boot.php";
 
 $action = filter_input(INPUT_POST, 'action');
 $data   = isset($_POST['data'])   ? filter_input(INPUT_POST, 'data') : false;
 $select = isset($_POST['select']) ? filter_input(INPUT_POST, 'select') : false;
 
 $settingsReq = "SELECT `menu` FROM `Settings` WHERE `userid`=?;";
-$settings = $pdo->prepare($settingsReq);
+$settings = $mdo->prepare($settingsReq);
 $settings->execute([$_SESSION['userid']]);
 $menuRow = $settings->fetch(PDO::FETCH_ASSOC);
 $menu_array = explode("|", $menuRow['menu']);
@@ -46,12 +46,12 @@ if ($action === 'home') {
     $menu_change = false;
     $newhome = array_search($select, $menu_array) + 1;
     $mod_activeReq = "UPDATE `Settings` SET `active`=? WHERE `userid`=?;";
-    $mod_active = $pdo->prepare($mod_activeReq);
+    $mod_active = $mdo->prepare($mod_activeReq);
     $mod_active->execute([$newhome, $_SESSION['userid']]);
 }
 if ($menu_change) {
     $mod_menuReq = "UPDATE `Settings` SET `menu`=? WHERE `userid`=?;";
-    $mod_menu = $pdo->prepare($mod_menuReq);
+    $mod_menu = $mdo->prepare($mod_menuReq);
     $mod_menu->execute([$new_menu, $_SESSION['userid']]);
 }
 
