@@ -10,7 +10,7 @@ $(function() {
 
 $('#bp').css('display', 'none'); // not needed on home (budget) page
 /**
- * Look for a non-monthlies account; if present, adjust navbar & calculate
+ * Look for a non-monthlies account; if present, adjust navbar text & calculate
  * expected balance.
  */
 if ($('#combo_acct').length > 0) {
@@ -19,14 +19,12 @@ if ($('#combo_acct').length > 0) {
     if (ebal > 0) {
         $('.acct').each(function() {
             if ($(this).text() === 'Non-Monthlies') {
+                $(this).css('background-color', '#fff5e6');
                 var $ctd  = $(this).siblings().filter(".mo3");
-                var cbal = parseFloat($ctd.children().eq(1).text());
-                if (cbal < ebal) {
-                    $(this).css('background-color', '#ffe8e6');
-                    $(this).on('mouseover', function() {
-                        alert('The account expected balance is: ' + ebal);
-                    });
-                }
+                //var cbal = parseFloat($ctd.children().eq(1).text());
+                $(this).on('click', function() {
+                    alert('The account expected balance is: ' + ebal);
+                });
                 return false;
             }
         });
@@ -226,7 +224,7 @@ if (ap_candidates) {
 }
 
 /**
- * CSS simply won't recognize a tr:hover for this table, so...
+ * CSS doesn't recognize a tr:hover for this table, so...
  */
 let $allrows = $('#roll3').find('tbody tr');
 $allrows.each(function() {
@@ -248,12 +246,11 @@ $allrows.each(function() {
                     if ($(this).text() !== 'Non-Monthlies') {
                         $(this).css('background-color', 'white');
                     }
-                } else {
+                }  else {
                     $(this).css('background-color', '#F8FFFA');
                 }
             });
         });
     }
 });
-
 }); // end page loaded

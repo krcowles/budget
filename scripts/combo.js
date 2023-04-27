@@ -9,7 +9,11 @@
 var parent = window.opener;
 
 // Form submission check:
+$('#review').on('click', function() {
+    $('#return_type').val("self");
+});
 $('#savit').on('click', function() {
+    $('#return_type').val("budget");
     // check for unfilled cells
     if (cell1 || cell2 || cell3 || cell4) {
         var msg = "You have a partially filled last row; Click 'OK' to clear it." +
@@ -184,3 +188,34 @@ function addRow() {
     lastRowSetup();
     return;
 }
+$('.rms').each(function() {
+    let $td = $(this);
+    let $chkbox = $td.children().eq(0);
+    $chkbox.on('click', function() {
+        if ($(this).is(':checked')) {
+            let $allTds = $td.parent().children();
+            $allTds.each(function(i) {
+                if (i > 0) {
+                    let $contents = $(this).children().eq(0);
+                    $contents.css({
+                        color: 'grey',
+                        backgroundColor: 'gainsboro'
+                    });
+                }
+            });
+            $td.parent().css('background-color', 'gainsboro');
+        } else {
+            let $allTds = $td.parent().children();
+            $allTds.each(function(i) {
+                if (i > 0) {
+                    let $contents = $(this).children().eq(0);
+                    $contents.css({
+                        color: 'black',
+                        backgroundColor: 'white'
+                    });
+                }
+            });
+            $td.parent().css('background-color', 'white');
+        }
+    });
+});

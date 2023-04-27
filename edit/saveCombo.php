@@ -22,25 +22,33 @@ $relations = array( // no of payments in one year
     "Bi-Monthly"    => 6
 );
 
-$old_recno = isset($_POST['orec'])   ? $_POST['orec']    : false;
+$return_to = filter_input(INPUT_POST, 'return_type');
+$old_recno = isset($_POST['orec'])   ? $_POST['orec']   : false;
 $old_items = isset($_POST['oitem'])  ? $_POST['oitem']  : false;
 $old_freqs = isset($_POST['ofreq'])  ? $_POST['ofreq']  : false;
 $old_amts  = isset($_POST['oamt'])   ? $_POST['oamt']   : false;
 $old_first = isset($_POST['ofirst']) ? $_POST['ofirst'] : false;
 $old_SA_yr = isset($_POST['osa_yr']) ? $_POST['osa_yr'] : false;
+$old_dels  = isset($_POST['rms'])    ? $_POST['rms']    : false;
 $old_count = $old_items ? count($old_items) : 0;
 if ($old_count > 0) {
     for ($j=0; $j<$old_count; $j++) {
-        $saveItem = 'UPDATE `Irreg` SET `item`=?, `freq`=?, `amt`=?,' .
-            '`first`=?,`SA_yr`=? WHERE `record`=?;';
-        $update = $pdo->prepare($saveItem);
-        $update->execute(
-            [$old_items[$j], $old_freqs[$j], $old_amts[$j], $old_first[$j], 
-            $old_SA_yr[$j], $old_recno[$j]]
-        );
-        $payments = $relations[$old_freqs[$j]];
-        $ann_bud  = $payments * $old_amts[$j];
-        $budget  += $ann_bud/12;
+        if (!$old_dels || !in_array($old_recno[$j], $old_dels)) {
+            $saveItem = 'UPDATE `Irreg` SET `item`=?, `freq`=?, `amt`=?,' .
+                '`first`=?,`SA_yr`=? WHERE `record`=?;';
+            $update = $pdo->prepare($saveItem);
+            $update->execute(
+                [$old_items[$j], $old_freqs[$j], $old_amts[$j], $old_first[$j], 
+                $old_SA_yr[$j], $old_recno[$j]]
+            );
+            $payments = $relations[$old_freqs[$j]];
+            $ann_bud  = $payments * $old_amts[$j];
+            $budget  += $ann_bud/12;
+        } elseif ($old_dels && in_array($old_recno[$j], $old_dels)) {
+            $deleteReq = "DELETE FROM `Irreg` WHERE `record`=?";
+            $deletion = $pdo->prepare($deleteReq);
+            $deletion->execute([$old_recno[$j]]);
+        }
     }
 } else { // need to add this account to user's budget
     $addbud = true;
@@ -94,4 +102,8 @@ if ($addbud) { // a Non-Monthlies account does not yet exist
     $budUpdte = $pdo->prepare($budUpdteReq);
     $budUpdte->execute([$budget, $user, 'Non-Monthlies']);
 }
-header("Location: ../main/displayBudget.php");
+if ($return_to === 'self') {
+    header("Location: combo.php");
+} else {
+    header("Location: ../main/displayBudget.php");
+}

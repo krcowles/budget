@@ -12,6 +12,7 @@ session_start();
 $user = $_SESSION['userid'];
 require "../database/global_boot.php";
 require "../utilities/timeSetup.php";
+require "../utilities/getAccountData.php";
 
 // define payment frequency options
 $old_payopts = '<select name="ofreq[]">';
@@ -46,6 +47,13 @@ $current = $pdo->prepare($itemReq);
 $current->execute([$user]);
 $items = $current->fetchAll();
 $noOfItems = count($items); // items already in database
+if ($noOfItems > 0) {
+    $action = "edit or add items to your current 'Non-Monthly Expenses' account";
+    $saving = "Return to Budget";
+} else {
+    $action = "create a list of non-monthly expenses to track in a single account";
+    $saving = "Add to Budget";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,113 +70,109 @@ $noOfItems = count($items); // items already in database
 </head>
 
 <body>
-
-<?php
-require "../utilities/getAccountData.php";
-if ($noOfItems > 0) {
-    $action = "edit or add items to your current 'Non-Monthly Expenses' account";
-    $saving = "Return to Budget";
-} else {
-    $action = "create a list of non-monthly expenses to track in a single account";
-    $saving = "Add to Budget";
-}
-?>
-
 <div id="content">
-<form method="post" action="saveCombo.php">
-    <h4>This page allows you to <?=$action;?>. The following data must be entered
-    or modified - no field is optional. Rows will be added automatically.
-    Please select the 'Save' button to save the results and place/keep the account
-    on your budget page. You can exit without saving by selecting the
-    "Return: Don't Save" button
-    </h4>
+    <form method="post" action="saveCombo.php">
+        <h4>This page allows you to <?=$action;?>. The following data must be
+        entered or modified - no field is optional. Rows will be added automatically.
+        Please select the 'Save' button to save the results and place/keep the
+        account on your budget page. You can exit without saving by selecting the
+        "Return: Don't Save" button
+        </h4>
 
-    <button id="savit" type="submit" class="btn btn-success">
-        Save and <?=$saving;?></button>
-    <button id="nosave" type="button" class="btn btn-secondary">
-        Return: Don't Save</button><br /><br />
-    <input id="newbies" type="hidden" name="newvals" value="0" />
+        <button id="review" type="submit" class="btn btn-success">
+            Save and Review Edits</button>
+        <button id="savit" type="submit" class="btn btn-success">
+            Save / <?=$saving;?></button>
+        <button id="nosave" type="button" class="btn btn-secondary">
+            Return: Don't Save</button><br /><br />
+        <input id="return_type" type="hidden" name="return_type"
+            value="" />
+        <input id="newbies" type="hidden" name="newvals" value="0" />
 
-    <p id="oldcnt" style="display:none;"><?=$noOfItems;?></p>
-    <?php if ($noOfItems > 0) : ?>
-    <div>
-        <h5>The following items may be edited:</h5>
-    </div>
-    <table id="old_entries">
-        <colgroup>
-        
-            <col span="1" style="width: 30%;">
-            <col span="1" style="width: 20%;">
-            <col span="1" style="width: 15%;">
-            <col span="1" style="width: 15%;">
-            <col span="1" style="width: 15%;">
-        </colgroup>
-        <thead>
-            <tr>  
-                <th>Expense Item</th>
-                <th>Occurrence</th>
-                <th>Each Payment</th>
-                <th>1st Payment Mo</th>
-                <th>Pay [ ] Years</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php for ($i=0; $i<$noOfItems; $i++) : ?>
-            <tr id="old<?=$i;?>"class="itemrow">
-                <td style="display:none;"><input type="text" name="orec[]"
-                    value="<?=$items[$i]['record'];?>" /></td>
-                <td class="add1"><input type="text" name="oitem[]"
-                    value="<?=$items[$i]['item'];?>"</td>
-                <td class="add2"><?=$old_payopts;?>
-                    <input id="op<?=$i;?>" style="display:none"
-                        value="<?=$items[$i]['freq'];?>" /></td>
-                <td class="add3"><input type="text" name="oamt[]"
-                    value="<?=$items[$i]['amt'];?>"</td>
-                <td class="add4"><?=$old_opts;?>
-                    <input id="of<?=$i;?>" style="display:none;"
-                        value="<?=$items[$i]['first'];?>" /></td>
-                <td class="sayr"><input type="text" name="osa_yr[]"
-                    value="<?=$items[$i]['SA_yr'];?>"</td>
-            </tr>
-            <?php endfor; ?>
-        </tbody>
-    </table>
-    <br />
-    <?php endif; ?>
+        <p id="oldcnt" style="display:none;"><?=$noOfItems;?></p>
+        <?php if ($noOfItems > 0) : ?>
+        <div>
+            <h5>The following items may be edited:</h5>
+        </div>
+        <table id="old_entries">
+            <colgroup>
+                <col span="1" style="width: 28%;">
+                <col span="1" style="width: 20%;">
+                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 7%;">
+            </colgroup>
+            <thead>
+                <tr>  
+                    <!-- first cell is hidden / no header here -->
+                    <th>Expense Item</th>
+                    <th>Occurrence</th>
+                    <th>Each Payment</th>
+                    <th>1st Payment Mo</th>
+                    <th>Pay [ ] Years</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php for ($i=0; $i<$noOfItems; $i++) : ?>
+                <tr id="old<?=$i;?>"class="itemrow">
+                    <td style="display:none;"><input type="text" name="orec[]"
+                        value="<?=$items[$i]['record'];?>" /></td>
+                    <td class="add1"><input type="text" name="oitem[]"
+                        value="<?=$items[$i]['item'];?>" /></td>
+                    <td class="add2"><?=$old_payopts;?>
+                        <input id="op<?=$i;?>" style="display:none"
+                            value="<?=$items[$i]['freq'];?>" /></td>
+                    <td class="add3"><input type="text" name="oamt[]"
+                        value="<?=$items[$i]['amt'];?>" /></td>
+                    <td class="add4"><?=$old_opts;?>
+                        <input id="of<?=$i;?>" style="display:none;"
+                            value="<?=$items[$i]['first'];?>" /></td>
+                    <td class="sayr"><input type="text" name="osa_yr[]"
+                        value="<?=$items[$i]['SA_yr'];?>" /></td>
+                    <td class="rms"><input type="checkbox" name="rms[]"
+                        value="<?=$items[$i]['record'];?>" /></td>
+                </tr>
+                <?php endfor; ?>
+            </tbody>
+        </table>
+        <br />
+        <?php endif; ?>
 
-    <div>
-        <h5>You may add entries here...</h5>
-    </div>
-    <table id="new_entries">
-        <colgroup>
-            <col span="1" style="width: 40%;">
-            <col span="1" style="width: 25%;">
-            <col span="1" style="width: 20%;">
-            <col span="1" style="width: 15%;">
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Expense Item</th>
-                <th>Occurrence</th>
-                <th>Each Payment</th>
-                <th>1st Payment Mo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr id="new1" class="itemrow">
-                <td class="add1"><input type="text" name="item[]"
-                    placeholder="Expense Item" />
-                <td class="add2">
-                    <?=$new_payopts;?>
-                    <input type="hidden" name="alts[]" value=""/>
-                </td>
-                <td class="add3"><input type="text" name="amt[]"
-                    placeholder="Amount" /></td>
-                <td class="add4"><?=$new_opts;?></td>
-            </tr>
-        </tbody>
-    </table>
-</form>
+        <div>
+            <h5>You may add entries here...</h5>
+        </div>
+        <table id="new_entries">
+            <colgroup>
+                <col span="1" style="width: 40%;">
+                <col span="1" style="width: 25%;">
+                <col span="1" style="width: 20%;">
+                <col span="1" style="width: 15%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Expense Item</th>
+                    <th>Occurrence</th>
+                    <th>Each Payment</th>
+                    <th>1st Payment Mo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="new1" class="itemrow">
+                    <td class="add1"><input type="text" name="item[]"
+                        placeholder="Expense Item" />
+                    <td class="add2">
+                        <?=$new_payopts;?>
+                        <input type="hidden" name="alts[]" value=""/>
+                    </td>
+                    <td class="add3"><input type="text" name="amt[]"
+                        placeholder="Amount" /></td>
+                    <td class="add4"><?=$new_opts;?></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
 </div>
 
 
