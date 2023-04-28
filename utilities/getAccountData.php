@@ -171,12 +171,20 @@ for ($n=0; $n<$user_cnt; $n++) {
 $partsel .= '</select>';
 // list any accounts that have currently assigned autopays for menu.js
 $apaccts = [];
+$apcards = [];
+$apcdlst = [];
 for ($k=0; $k<count($account_names); $k++) {
     if (!empty($autopay[$k])) {
+        // js for main budget page
         $appd = empty($paid[$k]) ? 'false' : 'true';
         $jsItem = '{acct:"' . $account_names[$k] . '",day:' .
             $day[$k] . ',paid:'  . $appd . '}';
         array_push($apaccts, $jsItem);
+        // js for deleting ap when card is deleted
+        $jsCdDel = '{budrec:"' . $acctid[$k] . '",card:"' . $autopay[$k] .
+            '"}';
+        array_push($apcards, $jsCdDel);
     }
 }
 $jsAPAccts = '[' . implode(",", $apaccts) . ']';
+$jsAPCards = '[' . implode(",", $apcards) . ']';

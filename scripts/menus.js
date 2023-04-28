@@ -289,8 +289,35 @@ $('#dac').on('click', function() {
             alert("You must specify a card");
             return false;
         }
-        let ajaxdata = {id: 'decard', target: todelete};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, delcard, 'stay', {});
+        let ans = confirm("This will remove the card from your budget\n" +
+            "If the card is used for any autopays, those will also be removed");
+        if (ans) {
+            let ajaxdata = {id: 'decard', target: todelete};
+            executeScript('../edit/saveAcctEdits.php', ajaxdata, delcard, 'stay', {});
+            // remove any associated autopay data
+            var rm_aps = [];
+            for (let n=0; n<ap_cds.length; n++) {
+                if (ap_cds[n].card === todelete) {
+                    rm_aps.push(ap_cds[n].budrec);
+                }
+            }
+            if (rm_aps.length > 0) {
+                let adata = {set: JSON.stringify(rm_aps)};
+                $.ajax({
+                    url: '../edit/clearAutopays.php',
+                    method: 'post',
+                    data: adata,
+                    success: function() {
+                        window.location.reload();
+                    },
+                    error: function(jqXHR) {
+                        alert(jqXHR.responseText);
+                    }
+                });
+            }
+        } else {
+            return false;
+        }
     });
     delcard.show();
 });

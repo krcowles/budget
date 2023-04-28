@@ -132,7 +132,6 @@ require_once "../utilities/getCards.php";
                     </li>
                 </ul>
             </li>
-
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle active" href="#"
                     id="reports" role="button" data-bs-toggle="dropdown"
@@ -198,3 +197,6 @@ require_once "../utilities/getCards.php";
 <div id="preloader">
     <img src="../images/preload.gif" alt="waiting..." />
 </div>
+<script type="text/javascript">
+    var ap_cds = <?=$jsAPCards;?>;
+</script>

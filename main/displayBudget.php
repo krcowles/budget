@@ -40,7 +40,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 
 <body>
 <?php require "navbar.php"; ?>
-<p id="mstr" class="noshow""><?=$admin;?></p>
+<p id="mstr" class="noshow"><?=$admin;?></p>
 <div id="ubtns">
 <button id="medpg" type="button" class="btn btn-secondary btn-sm">
     Medical Refs</button>
