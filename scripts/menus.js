@@ -390,6 +390,7 @@ $('#addauto').on('click', function() {
         }
         let ajaxdata = {id: 'apset', acct: apadder, method: card, day: day};
         executeScript('../edit/saveAcctEdits.php', ajaxdata, autopay, 'home', {});
+        // Note: ap_cds updated via 'home' location above
     });
     autopay.show();
 });
