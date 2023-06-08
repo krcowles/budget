@@ -13,8 +13,10 @@ $digits = explode("/", $date);
 $tbldate = $digits[2] . '-' . $digits[0] . '-' . $digits[1];
 $month_names = array('January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December');
-// array index is zero-based
-$thismo = intval($digits[0]) - 1;
+$numeric_month = intval($digits[0]); // used in saveAcctEdits.php
+$numeric_day   = intval($digits[1]); // <p> el on displayBudget.php (see menus.js)
+// month_names array index is zero-based, $thismo is index, NOT numeric month
+$thismo = $numeric_month - 1;
 $current_month = $month_names[$thismo];
 $nextmo = $thismo === 11 ? 0 : $thismo + 1; // 11 => December, so rollover nextmo
 $next_month = $month_names[$nextmo];

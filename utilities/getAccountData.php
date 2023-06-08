@@ -173,6 +173,8 @@ $partsel .= '</select>';
 $apaccts = [];
 $apcards = [];
 $apcdlst = [];
+$apacctsel = '<select id="current_aps">' . PHP_EOL .
+    '<option value="SELECT">SELECT ONE</option>' . PHP_EOL;
 for ($k=0; $k<count($account_names); $k++) {
     if (!empty($autopay[$k])) {
         // js for main budget page
@@ -184,7 +186,11 @@ for ($k=0; $k<count($account_names); $k++) {
         $jsCdDel = '{budrec:"' . $acctid[$k] . '",card:"' . $autopay[$k] .
             '"}';
         array_push($apcards, $jsCdDel);
+        // select for modify autopay
+        $apacctsel .= '<option value="opt' . $k . '">' . $account_names[$k]
+            . '</option>' . PHP_EOL;
     }
 }
+$apacctsel .= '</select>' . PHP_EOL;
 $jsAPAccts = '[' . implode(",", $apaccts) . ']';
 $jsAPCards = '[' . implode(",", $apcards) . ']';

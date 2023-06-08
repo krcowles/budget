@@ -12,6 +12,7 @@ session_start();
 require_once "../database/global_boot.php";
 require "../utilities/getAccountData.php";
 require "../utilities/getCards.php";
+require "../utilities/timeSetup.php";
 
 $id = filter_input(INPUT_POST, 'id');
 
@@ -168,21 +169,32 @@ case 'apmod':
     $apday     = filter_input(INPUT_POST, 'day');
     $acctindx = array_search($apaccount, $account_names);
     $tblid = $acctid[$acctindx];
-    $sql = "UPDATE `Budgets` SET `autopay` = :ap,`moday` = :moday " .
-        "WHERE `id` = :uid;";
+    $todays_numeric_day = date('d');
+    $apmo = intval($apday) <= intval($todays_numeric_day) ? 
+        $numeric_month - 1 : $numeric_month;
+    $apmo = $apmo < 10 ? '0' . $apmo : $apmo;
+    $sql = "UPDATE `Budgets` SET `autopay` = :ap,`moday` = :moday," .
+        "`autopd` = :autopd WHERE `id` = :uid;";
     $apset = $pdo->prepare($sql);
-    $apset->execute(["ap" => $apmethod, "moday" => $apday, "uid" => $tblid]);
+    $apset->execute(
+        ["ap" => $apmethod, "moday" => $apday, "autopd" => $apmo,  "uid" => $tblid]
+    );
     break;
 case 'apset':
     $charged = filter_input(INPUT_POST, 'acct');
     $method  = filter_input(INPUT_POST, 'method');
     $day     = filter_input(INPUT_POST, 'day');
+    $pd      = filter_input(INPUT_POST, 'pd');
     $acctindx = array_search($charged, $account_names);
+    $apmo = $pd === 'no' ? $numeric_month - 1 : $numeric_month;
+    $apmo = $apmo < 10 ? '0' . $apmo : $apmo;    
     $tblid = $acctid[$acctindx];
-    $sql = "UPDATE `Budgets` SET `autopay` = :ap,`moday` = :moday " .
-        "WHERE `id` = :uid;";
+    $sql = "UPDATE `Budgets` SET `autopay` = :ap,`moday` = :moday, " .
+        "`autopd` = :autopd WHERE `id` = :uid;";
     $apset = $pdo->prepare($sql);
-    $apset->execute(["ap" => $method, "moday" => $day, "uid" => $tblid]);
+    $apset->execute(
+        ["ap" => $method, "moday" => $day, "autopd" =>$apmo, "uid" => $tblid]
+    );
     break;
 case 'delapay':
     $delacct = filter_input(INPUT_POST, 'acct');

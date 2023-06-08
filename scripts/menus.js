@@ -327,11 +327,8 @@ $('#modauto').on('click', function() {
     $('#modapbtn').on('click', function() {
         let $moditem   = $('#mapitem').children();
         let modifyap   = getSelect($moditem[0]);
-        // does this account have an existing autopay?
-        let acctCheck = apacctExists(modifyap);
-        // advise immediately if not an existing autopay account
-        if (!acctCheck[0]) {
-            alert("This account has no existing autopay:\nNo modifications can be made");
+        if (modifyap === 'SELECT ONE') {
+            alert("You must select an autopay account");
             return false;
         }
         let $modmethod = $('#maselap').children();
@@ -348,8 +345,9 @@ $('#modauto').on('click', function() {
         if (!valDay(modday)) {
             return false;
         }
+        let acctCheck = apacctExists(modifyap);
         if (acctCheck[0]) {
-            if (existingAPs[acctCheck[1]].paid && modday > dd) {
+            if (existingAPs[acctCheck[1]].paid === 'true') {
                 msg = "NOTE: " + modifyap + " has already been paid for the current month";
                 alert(msg);
             }
@@ -364,6 +362,15 @@ $('#modauto').on('click', function() {
 $('#addauto').on('click', function() {
     let $card = $('#ccselap').children();
     $card[0].options[1].disabled = true;
+    let appd = 'no';
+    let present_mo = $('#currmo').text();
+    $('#useday').on('change', function() {
+        let ans = confirm(`Has this item been paid in ${present_mo}?` +
+            "\n[OK = yes; Cancel = no]");
+        if (ans) {
+            appd = 'yes';
+        }
+    });
     $('#addapbtn').on('click', function() {
         let $addap = $('#apsel').children();
         let apadder = getSelect($addap[0]);
@@ -371,7 +378,7 @@ $('#addauto').on('click', function() {
         let acctCheck = apacctExists(apadder);
         if (acctCheck[0]) {
             let msg = "There is already an autopay specified for this account\n";
-            msg += "You may use Modify Autopay instead";
+            msg += "Use Modify Autopay instead";
             alert(msg);
             return false;
         }
@@ -388,7 +395,7 @@ $('#addauto').on('click', function() {
         if (!valDay(day)) {
             return false;
         }
-        let ajaxdata = {id: 'apset', acct: apadder, method: card, day: day};
+        let ajaxdata = {id: 'apset', acct: apadder, method: card, day: day, pd: appd};
         executeScript('../edit/saveAcctEdits.php', ajaxdata, autopay, 'home', {});
         // Note: ap_cds updated via 'home' location above
     });

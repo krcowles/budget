@@ -30,8 +30,8 @@ if ($rollover) {
         $acct['prev1'] = $acct['current'];
     }
     for ($k=0; $k<count($all_accounts); $k++) {
-        $putBals = "UPDATE `Budgets` SET `prev0` = :p0,`prev1` = :p1,`funded` = '0'" .
-            "WHERE `id` = :uid;";
+        $putBals = "UPDATE `Budgets` SET `prev0` = :p0,`prev1` = :p1," .
+            "`funded` = '0' WHERE `id` = :uid;";
         $newdat = $pdo->prepare($putBals);
         $newdat->execute(
             ["p0" => $all_accounts[$k]['prev0'], "p1" => $all_accounts[$k]['prev1'],

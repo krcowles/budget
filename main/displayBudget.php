@@ -158,7 +158,9 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/budget.js"></script>
 <script src="../scripts/jQnumberFormat.js"></script>
-<script type="text/javascript">var existingAPs = <?=$jsAPAccts;?></script>
+<script type="text/javascript">
+    var existingAPs = <?=$jsAPAccts;?>
+</script>
 
 </body>
 
