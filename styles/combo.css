@@ -1,5 +1,5 @@
 
-#content {
+.content {
     margin-top: 1rem;
     margin-left: 2rem;
 }
@@ -47,4 +47,7 @@ input[type="checkbox"] {
 }
 .rms {
     text-align: center;
+}
+.gray {
+    color: cadetblue;
 }

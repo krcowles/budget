@@ -54,135 +54,181 @@ function cleanupExcel($excelDat)
     return $excelDat;
 }
 /**
- * Retrieve the user's Non-monthly data items and calculate the expected
- * balance for the current month. The calculation assumes all monthly incomes
- * have been deposited, or, in essence, that it is the end of the current month.
+ * This function returns the number of months between each payment in a 
+ * Non-Monthlies account
  * 
- * @param PDO     $pdo         The database PDO class
- * @param array   $month_names The full names of all 12 months
- * @param integer $current_yr  The current 4-digit year
- * @param integer $current_mo  The current month (integer)
+ * @param number $frequency How often are payments scheduled?
  * 
- * @return float $balance Expected balance
+ * @return number $payfreq
  */
-function getExpectedBalance($pdo, $month_names, $current_yr, $current_mo)
+function getFrequency($frequency)
 {
-    $relations = array( // no of payments in one year
-        "Bi-Annually"   => 0.5,
-        "Annually"      => 1,
-        "Semi-Annually" => 2,
-        "Quarterly"     => 4,
-        "Bi-Monthly"    => 6
-    );
-    $freqs = array_keys($relations);
-    // Assume 'first' mo is January, then adjust later
-    $base_freq  = [[0], [0], [0, 6], [0, 3, 6, 9], [0, 2, 4, 6, 8, 10]];
-    $cycle_time = [12, 12, 6, 3, 2];
-    // Get user's data
-    $comboReq = "SELECT * FROM `Irreg` WHERE `userid`=?;";
-    $nonmonthlies = $pdo->prepare($comboReq);
-    $nonmonthlies->execute([$_SESSION['userid']]);
-    $items = $nonmonthlies->fetchALL(PDO::FETCH_ASSOC);
-    $ebal = 0;  // expected balance as of this month
-    $item_total = count($items);
-    if ($item_total === 0) {
-        return $ebal;
-    } else {
-        for ($j=0; $j<$item_total; $j++) {
-            $freq   = $items[$j]['freq'];
-            $amt    = $items[$j]['amt'];
-            $first  = $items[$j]['first'];
-            $altyrs = $items[$j]['SA_yr'];
-            $fmonth = array_search($first, $month_names); // base 0 array
-            if ($freq === 'Bi-Annually') {
-                /**
-                 * Bi-Annual payments are treated differently
-                 */
-                $paymo = $fmonth;
-                $bud = $amt/24; // monthly budget amt, not rounded up
-                $thisalt = $current_yr % 2 === 1 ? 'Odd' : 'Even';
-                if ($altyrs === $thisalt) {
-                    // payable this year
-                    if ($current_mo < $paymo) {  // pay month not yet arrived
-                        $postpay = (11 - $fmonth) * $bud;
-                        $ebal += $postpay + (12 + $current_mo) * $bud;
-                    } elseif ($current_mo > $paymo) {  // pay month passed
-                        $ebal += ($current_mo - $paymo) * $bud;
-                    } else {  // payable this month ... no action
-                        $ebal += 0;
-                    }
+    switch ($frequency) {
+    case "Bi-Annually":
+        $payfreq = 0.5;
+        break;
+    case "Annually":
+        $payfreq = 1;
+        break;
+    case "Semi-Annually":
+        $payfreq = 2;
+        break;
+    case "Quarterly" :
+        $payfreq = 4;
+        break;
+    case "Bi-Monthly" :
+        $payfreq = 6;
+    }
+    return $payfreq;
+}
+/**
+ * The current balance of all Non-Monthlies accounts can change during use
+ * when logged in - this function will retrieve the current balance when invoked
+ * 
+ * @param string $type Either 'funds' or 'expected'
+ * @param PDO    $pdo  Database PDO
+ * @param number $uid  User's id
+ * 
+ * @return number $balance The current balance of all Non-Monthlies accounts
+ */
+function getCurrentNMBal($type, $pdo, $uid)
+{
+    $balanceReq = "SELECT SUM(`{$type}`) AS Total FROM `Irreg` WHERE `userid`=?;";
+    $current = $pdo->prepare($balanceReq);
+    $current->execute([$uid]);
+    $sum = $current->fetch(PDO::FETCH_NUM); 
+    $balance = floatval($sum[0]);
+    return $balance;
+}
+/**
+ * This function will determine expected balances for all
+ * Non-Monthlies accounts based on payment frequency and
+ * payment amount. Expected balance will vary each month
+ * and also when an item is paid in the month due.
+ * 
+ * @param PDO      $pdo         Database pdo
+ * @param number   $uid         User id
+ * @param string[] $month_names From timeSetup.php
+ * @param number   $thismo      Current month as 0-based index
+ * @param number   $thisyear    Current 4-digit year
+ * 
+ * @return null
+ */
+function setNMExpected($pdo, $uid, $month_names, $thismo, $thisyear)
+{
+    $getNMDataReq = "SELECT * FROM `Irreg` WHERE `userid`=?;";
+    $getNMData = $pdo->prepare($getNMDataReq);
+    $getNMData->execute([$uid]);
+    $nmdata = $getNMData->fetchAll(PDO::FETCH_ASSOC);
+
+    for ($k=0; $k<count($nmdata); $k++) {
+        // Enumerate months where funds are paid throughout the year
+        $first_mo = $nmdata[$k]['first']; // <string> month name
+        $index_mo = array_search($first_mo, $month_names);
+        $dist_months = [];  // digits representing month_names indices
+        $dist_months[0] = $index_mo;
+        $payfreq = getFrequency($nmdata[$k]['freq']);
+        $incr_months  = intval(12/$payfreq);
+        $eoyr = false;
+        if (!empty($nmdata[$k]['mo_pd'])) {
+            $month_paid = array_search($nmdata[$k]['mo_pd'], $month_names);
+            $acct_paid = $month_paid === $thismo ? true : false;
+        } else {
+            $acct_paid = false;
+        } 
+        /**
+         * Annual payments are assigned $dist_months[0] and require
+         * no further processing [$payfreq = 1]
+         */
+        if ($payfreq > 1) { // multiple distribution months per annum
+            for ($j=1; $j<$payfreq; $j++) {
+                if ($dist_months[$j-1] + $incr_months > 11) {
+                    // adjust for base 0: $pay_incr -1
+                    $next_mo = ($incr_months - 1) - (11 - $dist_months[$j-1]);
                 } else {
-                    /**
-                     * Payable next year; therefore, collect whatever remains
-                     * from last year after the payment and add bud amts for
-                     * this year to date
-                     */
-                    $postpay = (11 - $fmonth);
-                    $ebal += ($postpay + $current_mo) * $bud;   
+                    $next_mo = $dist_months[$j-1] + $incr_months;
                 }
+                $dist_months[$j] = $next_mo;
+            }
+            sort($dist_months);   
+        } elseif ($payfreq === 0.5) { // every other year...
+            $eoyr = true;
+            // odd or even years?
+            if (!empty($items[$k]['SA_yr'])) {
+                $dist_months[0] = $index_mo;
+                if ($items[$k]['SA_yr'] === 'Odd' && $thisyear%2 === 1
+                    && !empty($items[$k]['mo_pd'])
+                ) {
+                    $dist_months[0] = -1;
+                } elseif ($items[$k]['SA_yr'] === 'Odd' && $thisyear%2 === 0) {
+                    $dist_months[0] = -1;
+                }
+                if ($items[$k]['SA_yr'] === 'Even' && $thisyear%2 === 0
+                    && !empty($items[$i]['mo_pd'])
+                ) {
+                    $dist_months[0] = -1;
+                } elseif ($items[$k]['SA_yr'] === 'Even' && $thisyear%2 === 1) {
+                    $dist_months[0] = -1;
+                }
+            }
+            /*
+            if ($nmdata[$k]['SA_yr'] === 'Odd' && $thisyear % 2 !== 0) {
+                $dist_months[0] = $index_mo;
+            } elseif ($nmdata[$k]['SA_yr'] === 'Even' && $thisyear %2 === 0) {
+                $dist_months[0] = $index_mo;
+            } else { // it's an 'off' year...
+                $clearPdMoReq = "UPDATE `Irreg` SET `mo_pd`='' WHERE `record`=?;";
+                $clearPdMo = $pdo->prepare($clearPdMoReq);
+                $clearPdMo->execute([$nmdata[$k]['record']]);
+                $dist_months[0] = -1;
+            }
+            */
+        }
+        // To calculate expected balance get # mos since last distribution
+        if (count($dist_months) === 1) {
+            // every-other-year?
+            if ($eoyr && $dist_months[0] !== -1) {
+                // pay/pd this year
+                $calc_mos = $dist_months[0] >= $thismo ?
+                    (11 - $dist_months[0]) + 12 + $thismo :
+                    $thismo - $dist_months[0]; 
+                if ($thismo === $dist_months[0] && $acct_paid ) {
+                    $calc_mos = 0;
+                }
+            } elseif ($eoyr && $dist_months[0] === -1) {
+                // pay next year
+                $calc_mos = (11 - $dist_months[0]) + $thismo + 1;
             } else {
-                /**
-                 * All other frequency types (NOT Bi-Annual)
-                 */
-                $mo_indx = array_search($freq, $freqs);
-                // payment frequency (array of month numbers)
-                $item_freq  = $base_freq[$mo_indx];
-                $item_cycle = $cycle_time[$mo_indx];
-                // month of first payment
-                $item_start = $fmonth;
-                // adjust $item_freq array per $item_start month
-                if (count($item_freq) > 1) {
-                    $adder = 0;
-                    for ($k=0; $k<count($item_freq); $k++) {
-                        if ($item_freq[$k] === $item_start) {
-                            /**
-                             * In this case (it is the month of payment),
-                             * The balance may start off as fully funded
-                             * but will eventually be paid off and the
-                             * balance will then be 0. This routine assumes
-                             * that the item will be paid off (by month's end).
-                             */
-                            $adder = 0;
-                            break;
-                        } else {
-                            if ($item_start < $item_freq[$k]) {
-                                $adder = $item_start - $item_freq[$k-1];
-                                break;
-                            } elseif ($k === count($item_freq) -1) {
-                                $adder = $item_start - $item_freq[$k];
-                            }
-                        }
-                    }
-                    foreach ($item_freq as &$period) {
-                        $period += $adder;
-                    }
-                } else {
-                    $item_freq[0] = $item_start;
+                // annual payment - once a yeaer
+                $calc_mos = $thismo > $dist_months[0] ?
+                    $thismo - $dist_months[0] : (11 - $dist_months[0]) + $thismo + 1;
+                if ($thismo === $dist_months[0] && $acct_paid) {
+                    $calc_mos = 0;
                 }
-                // calculate monthly budget amount
-                $ann_bud = $relations[$freq] * $amt;
-                $bud = $ann_bud/12; // monthly amt not rounded up
-                // determine where today is with respect to adjusted period months
-                for ($i=0; $i<count($item_freq); $i++) {
-                    $freq_i = $item_freq[$i]; // simplify typing!
-                    if ($freq_i === $current_mo) { 
-                        $ebal += 0; // don't add (most likely be paid this month)
-                        break;
-                    } elseif ($current_mo < $freq_i) { // no payment yet
-                        $months_till_pay = $freq_i - $current_mo; 
-                        $delta = $item_cycle - $months_till_pay;
-                        // what portion of the cycle is this?
-                        $ratio = $delta/$item_cycle;
-                        $ebal += $ratio * $amt;
-                        break;
-                    } elseif ($i === (count($item_freq) -1)) { // end of the array
-                        $delta = $current_mo - $freq_i;
-                        $ratio = $delta/$item_cycle;
-                        $ebal += $ratio * $amt;
+            }
+        } else { // multiple payments per year
+            for ($n=1; $n<count($dist_months); $n++) {
+                if ($thismo <= $dist_months[$n]
+                    && $thismo > $dist_months[$n-1]
+                ) {
+                    $calc_mos = $thismo - $dist_months[$n-1];
+                    if ($thismo === $dist_months[$n] && $acct_paid) {
+                        $calc_mos = 0;
                     }
+                    break;
+                } elseif (($n === count($dist_months) - 1)
+                    && $thismo > $dist_months[$n]
+                ) {
+                    $calc_mos = $thismo - $dist_months[$n];
                 }
             }
         }
-        return ceil($ebal);
+        // calculate expected balance
+        $incr_payment = ceil($nmdata[$k]['amt']/$incr_months);
+        $new_bal = $calc_mos * $incr_payment;
+        // record new balance
+        $udReq = "UPDATE `Irreg` SET `expected`=? WHERE `record`=?;";
+        $updateIrreg = $pdo->prepare($udReq);
+        $updateIrreg->execute([$new_bal, $nmdata[$k]['record']]);
     }
-}  
+}

@@ -67,17 +67,61 @@ case 'payexp':
         ]
     );
     break;
+case 'nmexp':
+    $acct = filter_input(INPUT_POST, 'acct_name');
+    // 'method' is either 'Check or Draft', or card name:
+    $method = filter_input(INPUT_POST, 'method');  
+    $amt = filter_input(INPUT_POST, 'amt', FILTER_VALIDATE_FLOAT);
+    $payto = filter_input(INPUT_POST, 'payto');
+    $cdname = $method;
+    // Update the Budgets value for 'Non-Monthlies'
+    $item = array_search('Non-Monthlies', $account_names);
+    $bal = floatval($current[$item]) - $amt;
+    $budupdte = "UPDATE `Budgets` SET `current` = :bal WHERE " .
+        "`userid` = :uid AND `budname`='Non-Monthlies';";
+    $bud = $pdo->prepare($budupdte);
+    $bud->execute([":bal" => $bal, ":uid" => $_SESSION['userid']]);
+
+    // Update Irreg with new balance and month paid
+    $NMBalReq = "SELECT `funds` FROM `Irreg` WHERE `item`=? AND `userid`=?;";
+    $NMBal = $pdo->prepare($NMBalReq);
+    $NMBal->execute([$acct, $_SESSION['userid']]);
+    $acct_bal_row = $NMBal->fetch(PDO::FETCH_ASSOC);
+    $acct_bal = floatval($acct_bal_row['funds']);
+    $acct_bal -= $amt;
+    $NMUpdateReq = "UPDATE `Irreg` SET `mo_pd`=?,`funds`=? WHERE " .
+        " `item`=? AND `userid`=?;";
+    $NMUpdate = $pdo->prepare($NMUpdateReq);
+    // add to `Charges` table
+    $NMUpdate->execute([$current_month, $acct_bal, $acct, $_SESSION['userid']]);
+    if (in_array($method, $cr)) { // a credit card
+        $dbmethod = "Credit";
+        $pd = 'N';
+    } elseif (in_array($method, $dr)) { // a debit card
+        $dbmethod = "Debit";
+        $pd = 'Y';
+    } else { // 'Check or Draft'
+        $dbmethod = "Check";
+        $pd = 'Y';
+    }
+    $addchg = "INSERT INTO `Charges` (`userid`, `method`, `cdname`," .
+        "`expdate`, `expamt`, `payee`, `acctchgd`, `paid`) " .
+        "VALUES (?,?,?,?,?,?,'Non-Monthlies',?);";
+    $pdo->prepare($addchg)->execute(
+        [$_SESSION['userid'], $dbmethod, $cdname, $dbdate, $amt, $payto, $pd]
+    );
+    break;
 case 'income':
-    $newcur = [];
-    $newfnd = [];
+    $newcur = []; // updated balance in account
+    $newfnd = []; // updated amt of account that has been funded
     $funds = floatval(filter_input(INPUT_POST, 'funds'));
-    $deposit_amt = $funds;
+    $deposit_amt = $funds;  // $funds will change later...
     $indx = array_search('Undistributed Funds', $account_names);
     for ($j=0; $j<count($account_names); $j++) {
         $funded = floatval($income[$j]);
         $budval = floatval($budgets[$j]);
         $curbal = floatval($current[$j]);
-        if ($funded < $budval) {
+        if ($funded < $budval) { // more funding needed for account?
             $delta = $budval - $funded;
             if ($funds >= $delta) {
                 $fnd = array((string) $acctid[$j] => (string) $budval);
@@ -101,9 +145,9 @@ case 'income':
     $fndkey = [];
     for ($q=0; $q<count($newfnd); $q++) {
         // this is the item's unique table `id`
-        $fndkey[$q] = (string) key($newfnd[$q]); 
+        $fndkey[$q] = (string) key($newfnd[$q]); // this is the account_id in DB
         // this is the new value for `funded`
-        $fndval[$q] = $newfnd[$q][$fndkey[$q]];  
+        $fndval[$q] = $newfnd[$q][$fndkey[$q]];
     }
     // Note: $newbal has the same indices and does not need to be an array of arrays
     if ($funds > 0) {
@@ -119,6 +163,51 @@ case 'income':
         $adjmt->execute(
             ["bal" => $newcur[$l], "newfund" => $fndval[$l], "id" => $fndkey[$l]]
         );
+    }
+    /**
+     * If a Non-Monthlies account exists, update the individual Non-Monthlies
+     * account balances (`Irreg` table) based on current Non-Monthlies account
+     * balance in `Budgets` (may have changed above)
+     */
+    $nm_indx = array_search('Non-Monthlies', $account_names); // false if no acct
+    if ($nm_indx !== false) {
+        // Current Non-Monthlies balance:
+        $getNMbalanceReq = "SELECT `current` FROM `Budgets` WHERE " .
+            "`userid`=? AND `budname`='Non-Monthlies';";
+        $getNMbalance = $pdo->prepare($getNMbalanceReq);
+        $getNMbalance->execute([$_SESSION['userid']]);
+        $NMbalance = $getNMbalance->fetch(PDO::FETCH_ASSOC);
+        $nm_funds = floatval($NMbalance['current']); 
+        for ($k=0; $k<count($nmdata); $k++) {
+            // distribute cash
+            if ($nm_funds > 0) {
+                $full = $nmdata[$k]['expected'];
+                if ($full <= $nm_funds) {
+                    $new_bal = $full;
+                    $nm_funds -= $full;
+                } elseif ($nm_funds > 0) {
+                    $new_bal = $nm_funds;
+                    $nm_funds = 0;
+                }
+            } else { // $nm_funds = 0
+                $new_bal = 0;
+            }
+            $udReq = "UPDATE `Irreg` SET `funds`=? WHERE `record`=?;";
+            $updateIrreg = $pdo->prepare($udReq);
+            $updateIrreg->execute([$new_bal, $nmdata[$k]['record']]);
+        }
+        // Any $nm_funds remaining?
+        if ($nm_funds > 0) {
+            $updteReq = "UPDATE `Budgets` SET `current`=`current` + {$nm_funds} " .
+                "WHERE `budname`='Undistributed Funds' AND `userid`=?;";
+            // Place overages in Undistributed Funds
+            $updte = $pdo->prepare($updteReq);
+            $updte->execute([$_SESSION['userid']]);
+            $updteNMReq = "UPDATE `Budgets` SET `current`=`current` - {$nm_funds} " .
+                "WHERE `budname`='Non-Monthlies' AND `userid`=?;";
+            $updateNM = $pdo->prepare($updteNMReq);
+            $updateNM->execute([$_SESSION['userid']]);
+        }
     }
     // Record the deposit
     $depositReq = "INSERT INTO `Deposits` (`userid`,`date`,`amount`,`otd`," .

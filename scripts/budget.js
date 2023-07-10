@@ -14,21 +14,19 @@ $('#bp').css('display', 'none'); // not needed on home (budget) page
  * expected balance.
  */
 if ($('#combo_acct').length > 0) {
+    // set navbar menu item
     $('#combo').text("Manage Non-Monthlies Account");
-    var ebal = parseInt($('#combo_acct').text());
-    if (ebal > 0) {
-        $('.acct').each(function() {
-            if ($(this).text() === 'Non-Monthlies') {
-                $(this).css('background-color', '#fff5e6');
-                var $ctd  = $(this).siblings().filter(".mo3");
-                //var cbal = parseFloat($ctd.children().eq(1).text());
-                $(this).on('click', function() {
-                    alert('The account expected balance is: ' + ebal);
-                });
-                return false;
-            }
-        });
-    }
+    let actual = parseFloat($('#combo_acct').text());
+    let expected = parseFloat($('#expected_sum').text());
+    let $accts = $('.acct');
+    $accts.each(function(indx, acct_item) {
+        if (acct_item.innerText === 'Non-Monthlies') {
+            $(acct_item).css('color', 'cadetblue');
+            $(acct_item).on('click', function() {
+                alert("Expect " + expected + "; Available: " + actual);
+            });
+        }
+    });
 }
 /**
  * If an income deferral was recorded earlier...
@@ -234,18 +232,14 @@ $allrows.each(function() {
         $(this).on('mouseover', function() {
             let $cells = $(this).find('td')
             $cells.each(function() {
-                if ($(this).text() !== 'Non-Monthlies') {
-                    $(this).css('background-color', 'gainsboro');
-                }
+                $(this).css('background-color', 'gainsboro');
             });
         });
         $(this).on('mouseout', function() {
             let $cells = $(this).find('td')
             $cells.each(function(i) {
                 if (i < 5) {
-                    if ($(this).text() !== 'Non-Monthlies') {
-                        $(this).css('background-color', 'white');
-                    }
+                    $(this).css('background-color', 'white');
                 }  else {
                     $(this).css('background-color', '#F8FFFA');
                 }

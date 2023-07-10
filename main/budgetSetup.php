@@ -44,10 +44,15 @@ require_once "../utilities/getCards.php";
 require_once "../utilities/getExpenses.php";
 
 $nonmonthly = false;
-// If there is a non-monthlies account, get the expected balance 
+/**
+ * If there is a non-monthlies account, set the expected balances for all
+ * based on payment frequency, current month, and payment history
+ */ 
 if (in_array('Non-Monthlies', $account_names)) {
     $nonmonthly = true;
-    $expected = getExpectedBalance($pdo, $month_names, $thisyear, $thismo);
+    $nmfbal = getCurrentNMBal('funds', $pdo, $_SESSION['userid']);
+    $nmebal = getCurrentNMBal('expected', $pdo, $_SESSION['userid']);
+    setNMExpected($pdo, $_SESSION['userid'], $month_names, $thismo, $thisyear);
 }
 // form balances
 $balBudget  = 0;

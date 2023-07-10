@@ -32,7 +32,7 @@
                     data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table id="exptbl" class="modals">
+                <table class="modals exptbl">
                     <tr>
                         <td style="text-align:left;">Deduct From:</td>
                         <td style="text-align:left;"><div id="fsel0">
@@ -59,6 +59,47 @@
                 <button type="button" class="btn btn-secondary"
                     data-bs-dismiss="modal">Close</button>
                 <button id="pebtn" type="button" class="btn btn-success">Pay</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Non-Monthlies Expense Modal -->
+<div id="nmexp" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pay Non-Monthly Expense</h5>
+                <button type="button" class="btn-close"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="modals exptbl">
+                    <tr>
+                        <td style="text-align:left;">Deduct From:</td>
+                        <td style="text-align:left;"><div id="dedsel0">
+                            <?=$nmsel;?></div></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;">Pay With</td>
+                        <td style="text-align:left;"><div id="nmsel0">
+                            <?= $allCardsHtml;?></div></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;">Amount to pay:</td>
+                        <td style="text-align:left;"><input type="text"
+                            id="nmexpamt" /></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;">Paid to:</td>
+                        <td style="text-align:left;"><input type="text"
+                            id="nmexppayto" /></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Close</button>
+                <button id="nmpebtn" type="button" class="btn btn-success">Pay</button>
             </div>
         </div>
     </div>

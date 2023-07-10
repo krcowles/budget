@@ -194,3 +194,19 @@ for ($k=0; $k<count($account_names); $k++) {
 $apacctsel .= '</select>' . PHP_EOL;
 $jsAPAccts = '[' . implode(",", $apaccts) . ']';
 $jsAPCards = '[' . implode(",", $apcards) . ']';
+
+/**
+ * When a Non-Monthlies account exists, populate the expense <select> drop-down
+ */
+if (array_search('Non-Monthlies', $account_names) !== false) {
+    $nmsel = '<select id="nmsel">' . PHP_EOL;
+    $getNMDataReq = "SELECT * FROM `Irreg` WHERE `userid`=?;";
+    $getNMData = $pdo->prepare($getNMDataReq);
+    $getNMData->execute([$_SESSION['userid']]);
+    $nmdata = $getNMData->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($nmdata as $nmitem) {
+        $nmsel .= '<option value="' . $nmitem['item'] . '">' . $nmitem['item'] .
+        '</option>' . PHP_EOL;
+    }
+    $nmsel .= '</select>' . PHP_EOL;
+}

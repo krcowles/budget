@@ -54,7 +54,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <p id="defamt" class="noshow"><?=$deferred_amount;?></p>
 
 <?php if ($nonmonthly) : ?>
-<p id="combo_acct" class="noshow"><?=$expected;?></p>                  
+<p id="combo_acct" class="noshow"><?=$nmfbal;?></p> 
+<p id="expected_sum" class="noshow"><?=$nmebal;?></p>                 
 <?php endif; ?>
 
 <div id="budget">

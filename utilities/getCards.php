@@ -15,7 +15,7 @@ $dr = [];
 $cds = "SELECT * FROM `Cards` WHERE `userid` = :uid;";
 $carddat = $pdo->prepare($cds);
 $carddat->execute(["uid" => $_SESSION['userid']]);
-$cards = $carddat->fetchALL(PDO::FETCH_ASSOC);
+$cards = $carddat->fetchAll(PDO::FETCH_ASSOC);
 $credit_cards = count($cards) > 0 ? true : false;
 if ($credit_cards) {
     foreach ($cards as $card) {

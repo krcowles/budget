@@ -4,27 +4,27 @@
 .modal-footer {
     background-color: #e9f2e9;
 }
-#exptbl {
+.exptbl {
     border-collapse: collapse;
     border: none;
 }
-#exptbl tr td {
+.exptbl tr td {
     border: none;
 }
 input[type=checkbox] {
     transform: scale(1.4);
 }
-.fullsel {
+.fullsel, #nmsel {
     height: 28px;
 }
-#expamt {
+#expamt, #nmexpamt {
     height: 24px;
     width: 70px;
     font-size: 14px;
     border-width: 1px;
     margin-bottom: 8px;
 }
-#exppayto {
+#exppayto, #nmexppayto {
     height: 28px;
 }
 #onedep {
@@ -71,9 +71,6 @@ input[id^=q] {
     margin-bottom: 6px;
 }
 /* modal for charging expense */
-#exptbl {
-    border: none;
-}
 table#aptbl {
     box-sizing: content-box;
     border: 2px solid darkgreen;

@@ -5,13 +5,14 @@
  * @version 2.0 Separated out from budget.js
  * @version 2.1 Corrected and improved valAmt() function
  * @version 3.0 Added check for user activity
+ * @version 4.0 Improved management of Non-Monthlies accou nt
  */
 /**
  * Check for user activity: all user pages use this menus.js script, 
  * hence it was deemed appropriate for inclusion here instead of adding it
  * as a separate module
  */
-const activity_timeout = 15 * 60 * 1000; // 15 minutes of inactivity
+const activity_timeout = 20 * 60 * 1000; // 20 minutes of inactivity
 var activity = setTimeout(function() {
     $.get('../accounts/logout.php');
     window.open('expired.html', '_self');
@@ -33,6 +34,7 @@ $('body').on('keydown', function() {
 
 // Modal handles:
 var expitem = new bootstrap.Modal(document.getElementById('expmodal'));
+var nonmexp = new bootstrap.Modal(document.getElementById('nmexp'));
 var depinc  = new bootstrap.Modal(document.getElementById('incmodal'));
 var onetdep = new bootstrap.Modal(document.getElementById('othrdeps'));
 var delinc  = new bootstrap.Modal(document.getElementById('removeinc'));
@@ -100,16 +102,16 @@ var modig = parseInt(mm);
  * All other modal operation
  */
 $('#chgexp').on('click', function() {
+    var amtin = "#expamt";
+    var payin = "#exppayto";
     // was triggering twice, don't know why, so:
     $('#pebtn').off('click').on('click', function() {
-        let $tbl_selects = $('#exptbl').find('tr').find('select'); // modal body data
         let sel1 = getSelect($tbl_selects[0]); // Acct to charge
         let sel2 = getSelect($tbl_selects[1]); // 'Check or Draft' or cd name
         if (sel2 === 'SELECT ONE:') {
             alert("You must select a payment method");
             return false;
         }
-        let amtin = "#expamt"; // required in clean_obj, below
         let chgamt = $(amtin).val();
         let amt = valAmt(chgamt, true);
         if (amt < 0) {
@@ -118,7 +120,6 @@ $('#chgexp').on('click', function() {
         if (amt === 0) {
             return false;
         }
-        let payin = "#exppayto"; // required in clean_obj
         let payee = $(payin).val()
         if (!valPayee(payee)) {
             return false;
@@ -129,6 +130,44 @@ $('#chgexp').on('click', function() {
         executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem, 'stay', clean_obj);
     });
     expitem.show();
+    // Note: gets tables not displayed...
+    var $tbl_selects = $('.exptbl').find('tr').find('select'); // modal body data
+    $tbl_selects[3].id = "nmcds";
+    $($tbl_selects[0]).on('change', function() {
+        if (getSelect(this) === 'Non-Monthlies') {
+            expitem.hide();
+            let thismodal = {ids:[amtin, payin], sels:[$tbl_selects[0], $tbl_selects[1]]};    
+            resetModalContents(thismodal);
+            nonmexp.toggle();
+        }
+    });
+});
+$('body').on('click', '#nmpebtn', function() {
+    let nmsel = $('#nmsel'); 
+    let nmcd  = $('#nmcds');
+    let sel1 = getSelect(nmsel[0]); // Acct to charge
+    let sel2 = getSelect(nmcd[0]);  // 'Check or Draft' or cd name
+    if (sel2 === 'SELECT ONE:') {
+        alert("You must select a payment method");
+        return false;
+    }
+    let amtin = "#nmexpamt"; // required in clean_obj, below
+    let chgamt = $(amtin).val();
+    let amt = valAmt(chgamt, true);
+    if (amt < 0) {
+        alert("Nagative amount will act as a credit towards " + sel1);
+    }
+    if (amt === 0) {
+        return false;
+    }
+    let payin = "#nmexppayto"; // required in clean_obj
+    let payee = $(payin).val()
+    if (!valPayee(payee)) {
+        return false;
+    }
+    let clean_obj = {ids:[amtin, payin], sels:[nmsel, nmcds]};
+    let ajaxdata = {id: 'nmexp', acct_name: sel1, method: sel2, amt: amt, payto: payee};
+    executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem, 'stay', clean_obj);
 });
 $('#reginc').on('click', function() {
     $('#incbtn').off('click').on('click', function() {

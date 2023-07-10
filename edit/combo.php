@@ -54,6 +54,82 @@ if ($noOfItems > 0) {
     $action = "create a list of non-monthly expenses to track in a single account";
     $saving = "Add to Budget";
 }
+/**
+ * Prepare data for display in status table
+ */
+$next_dues = [];
+$waityr = [];
+for ($k=0; $k<$noOfItems; $k++) {
+    $waityr[$k] = false;
+}
+
+for ($i=0; $i<$noOfItems; $i++) {
+    $first_mo = $items[$i]['first']; // <string> month name
+    $index_mo = array_search($first_mo, $month_names); // 0-based index
+    $dist_months = [];  // digits representing month_names indices
+    $dist_months[0] = $index_mo;
+    $payfreq = getFrequency($items[$i]['freq']);
+    $incr_months = intval(12/$payfreq);
+    $eoyr = false;
+    if (!empty($items[$i]['mo_pd'])) {
+        $month_paid = array_search($items[$i]['mo_pd'], $month_names);
+        $acct_paid = $month_paid === $thismo ? true : false;
+    } else {
+        $acct_paid = false;
+    } 
+    // calculate 'next_due' payment
+    if ($payfreq === 1 || $payfreq === 0.5) { // annual or every-other yr payments
+        $next_dues[$i] = $dist_months[0];
+        if (!empty($items[$i]['SA_yr'])) {
+            if ($items[$i]['SA_yr'] === 'Odd' && $thisyear%2 === 1
+                && !empty($items[$i]['mo_pd'])
+            ) {
+                $waityr[$i] = true;
+            } elseif ($items[$i]['SA_yr'] === 'Odd' && $thisyear%2 === 0) {
+                $waityr[$i] = true;
+            }
+
+            if ($items[$i]['SA_yr'] === 'Even' && $thisyear%2 === 0
+                && !empty($items[$i]['mo_pd'])
+            ) {
+                $waityr[$i] = true;
+            } elseif ($items[$i]['SA_yr'] === 'Even' && $thisyear%2 === 1) {
+                $waityr[$i] = true;
+            }
+        }
+    }
+    if ($payfreq > 1) { // multiple distribution months per annum
+        for ($j=1; $j<$payfreq; $j++) {
+            if ($dist_months[$j-1] + $incr_months > 11) {
+                // adjust for base 0: $pay_incr -1
+                $next_mo = ($incr_months - 1) - (11 - $dist_months[$j-1]);
+            } else {
+                $next_mo = $dist_months[$j-1] + $incr_months;
+            }
+            $dist_months[$j] = $next_mo;
+        }
+        sort($dist_months);
+        // next due month:
+        $payouts = count($dist_months);
+        for ($j=0; $j<$payouts; $j++) {
+            if ($thismo <= $dist_months[$j]) {
+                if ($thismo === $dist_months[$j] && $acct_paid) {
+                    if ($j === $payouts -1) {
+                        $next = $dist_months[0];
+                    } else {
+                        $next = $dist_months[$j+1];
+                    }
+                } elseif ($thismo === $dist_months[$j] && !$acct_paid) {
+                    $next = $dist_months[$j];
+                } else { 
+                    $next = $dist_months[$j];
+                }
+                $next_dues[$i] = $next;
+                break;
+            }
+        }   
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +146,7 @@ if ($noOfItems > 0) {
 </head>
 
 <body>
-<div id="content">
+<div class="content">
     <form method="post" action="saveCombo.php">
         <h4>This page allows you to <?=$action;?>. The following data must be
         entered or modified - no field is optional. Rows will be added automatically.
@@ -105,7 +181,6 @@ if ($noOfItems > 0) {
             </colgroup>
             <thead>
                 <tr>  
-                    <!-- first cell is hidden / no header here -->
                     <th>Expense Item</th>
                     <th>Occurrence</th>
                     <th>Each Payment</th>
@@ -174,7 +249,50 @@ if ($noOfItems > 0) {
         </table>
     </form>
 </div>
-
+<hr />
+<div class="content">
+    <p>This is the current state of the non-monthlies account. The amounts shown
+    represent the accumulated funds as of the beginning of <?=$current_month;?>.
+    </p> 
+    <table id="current_state">
+        <colgroup>
+            <col span="1" style="width: 30%;">
+            <col span="1" style="width: 22%;">
+            <col span="1" style="width: 16%;">
+            <col span="1" style="width: 16%;">
+            <col span="1" style="width: 16%;">
+        </colgroup>
+        <thead>
+            <tr>  
+                <!-- first cell is hidden / no header here -->
+                <th>Expense Item</th>
+                <th>Paid</th>
+                <th>Each Payment</th>
+                <th>Next Due</th>
+                <th>Accum. To Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php for ($j=0; $j<$noOfItems; $j++) : ?>
+            <tr>
+                <td><?=$items[$j]['item'];?></td>
+                <?php if ($items[$j]['freq'] === 'Bi-Annually') : ?>
+                    <td>Bi-Annually [<?=$items[$j]['SA_yr'];?>]</td>
+                <?php else : ?>
+                    <td><?=$items[$j]['freq'];?></td>
+                <?php endif; ?>
+                <td><?=$items[$j]['amt'];?></td>
+                <?php if ($waityr[$j]) : ?>
+                    <td class="gray"><?=$month_names[$next_dues[$j]];?></td>
+                <?php else : ?>
+                    <td><?=$month_names[$next_dues[$j]];?></td>
+                <?php endif; ?>
+                <td><?=$items[$j]['funds'];?></td>
+            </tr>
+            <?php endfor; ?>
+        </tbody>
+    </table>
+</div><br /><br />
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
