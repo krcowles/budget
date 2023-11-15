@@ -21,13 +21,6 @@ var nmth_input = '<input type="hidden" name="nfirst[]" value="" />';
 var nayr_input = '<input type="hidden" name="eyrs[]" value="" />';
 var npay_input = '<input type="hidden" name="nap[]" value="" />';
 
-// aptype selects will have option1 disabled [Check/Draft]
-$('.aptype').each(function(indx) {
-    let $card = $(this).children();
-    if ($card.get(0).tagName === 'SELECT') {
-        $card[0].options[1].disabled = true;
-    }
-});
 // If window is too narrow, table needs to expand for <select>s
 adjustWidth = () => {
     if (window.innerWidth < 1000) {
