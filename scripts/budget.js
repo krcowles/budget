@@ -4,7 +4,8 @@
  * 
  * @author Ken Cowles
  * @version 3.0 Bootstrap navbar
- * @version 4.0 Spearated navbar operation into menus.js; added row highlighting
+ * @version 4.0 Separated navbar operation into menus.js; added row highlighting
+ * @version 5.0 Added autopay for Non-Monthlies acccount
  */
 $(function() { 
 
@@ -21,7 +22,23 @@ if ($('#combo_acct').length > 0) {
     let $accts = $('.acct');
     $accts.each(function(indx, acct_item) {
         if (acct_item.innerText === 'Non-Monthlies') {
-            $(acct_item).css('color', 'cadetblue');
+            acct_item.id = 'nmacct';
+            let nmpos = $(acct_item).offset();
+            let note_left = nmpos.left + 120;
+            let note_top  = nmpos.top + 2;
+            let note = '<div id="nmnote" style="position:absolute;z-index:100;' +
+                'top:' + note_top + 'px;left:' + note_left + 'px;"' +
+                '>Click for status</div>';
+           
+            $('body').append(note);
+            $(acct_item).hover(
+                function() {
+                    $('#nmnote').css('display', 'block');
+                },
+                function() {
+                    $('#nmnote').css('display', 'none');
+                }
+            );
             $(acct_item).on('click', function() {
                 alert("Expect " + expected + "; Available: " + actual);
             });
@@ -91,24 +108,29 @@ if ($('#mstr').text() === 'yes') {
     });
 }
 /**
- * Set up for autopays
+ * Set up for autopays - budget page only; for non-monthlies, next loop
  */
 var ap_items = new bootstrap.Modal(document.getElementById('presentap'));
 // check autopayment status
-var payday = [];
-var paywith = []; // method of payment
-var aname = []; // account name of autopay candidate
-var rowno = []; // budget rowno in which AP occurs
+var payday  = [];
+var paywith = [];  // method of payment
+var aname   = [];  // account name of autopay candidate
+var ptype   = [];  // whether a budget or a non-monthlies acct autopay
 var ap_candidates = false;
 
 /**
- * Get autopay data, where `moday` (day-of-the-month) is not equal to 0
- * The .apday class is assigned to `moday`, and next sibling is `autopd`,
- * the latter being the month in which the last autopay was made.
- * `moday`  => integer; `autopd` => 2-char string; but all read from HTML
- * as strings by jQuery: dd, mm, yyyy are set in menus.js and are ints.
- * NOTE: budget home page is loaded with empty strings where `moday` is 0,
- * and where `autopd` is empty 
+ * All data is extracted in budget_setup.php and presented to the page as
+ * script variables.
+ *  1. For budget page autopays, get autopay data, where `moday`
+ *     (day-of-the-month) is not equal to 0.the .apday class is assigned to
+ *     `moday`. The next sibling is `autopd`, that being the month in which
+ *     the last autopay was made. Here `moday`  => integer;
+ *     `autopd` => 2-char string; The vars dd, mm, yyyy are set in menus.js
+ *     and are ints.
+ *     NOTE: the budget home page is loaded with empty strings where
+ *     `moday` is 0, and where `autopd` is empty 
+ *  2. For the Non-Monthlies account, if present, extract qualified autopays
+ *     from the script variables assigned in budget_setup.php.
  */ 
 $('.apday').each(function(indx) {
     if ($(this).text() !== "") { // this is `moday` or empty string
@@ -118,7 +140,6 @@ $('.apday').each(function(indx) {
         if (apday <= dd && appd !== modig) { // dd & modig are day/month ints
             $rowtds = $(this).siblings();
             // siblings do not include 'this' (moday td)
-            rowno.push(indx);
             let $paywith = $rowtds.eq(5);
             let $acct = $rowtds.eq(0);
             let dueday = apday;
@@ -140,6 +161,7 @@ $('.apday').each(function(indx) {
             payday.push(dueday);
             paywith.push($paywith.text().trim());
             aname.push($acct.text());
+            ptype.push('bud');
             ap_candidates = true;
         } else if (appd === modig) {
             $(this).css('color', 'darkgray');
@@ -147,6 +169,23 @@ $('.apday').each(function(indx) {
         }
     }
 });
+/**
+ * If there is a 'Non-Monthlies' account, and it has specified autopays,
+ * add them to the arrays created above.
+ */
+if ($('#combo_acct').length > 0) {
+    for (let k=0; k<nonm_apacct.length; k++) {
+        if (nonm_apdays[k] <= dd && nonm_apnext[k] !== modig) {
+            payday.push(nonm_apdays[k]);
+            paywith.push(nonm_aptype[k]);
+            aname.push(nonm_apacct[k]);
+            ptype.push('non');
+            ap_candidates = true;
+        }
+    }
+}
+
+
 // user presentation of autopay candidates:
 if (ap_candidates) {
     for (let j=0; j<aname.length; j++) {
@@ -173,7 +212,7 @@ if (ap_candidates) {
             '<td class="lst"><input id="payee' + j +'" type="text" size="8" ' +
             '/></td><td class="lst">Pay</td><td class="lst">' +
             '<input id="py' + j + '" class="paybox" type="checkbox" /></td>' +
-            '</tr>';
+            '<td id="ptype' + j + '" style="display:none;">' + ptype[j] + '</td></tr>';
         $('#apbody').append(apdata);
     }
     // set up actions for making autopayments
@@ -195,7 +234,9 @@ if (ap_candidates) {
                 acct = acct.trim();
                 let means = $('#acmeth' + idno).text();
                 means = means.trim();
-                let ajaxdata = {acct: acct, amt: amt, payee: pye, method: means};
+                let acctype = $('#ptype' + idno).text();
+                let ajaxdata = {acct: acct, amt: amt, payee: pye, 
+                    method: means, acctype: acctype};
                 $.ajax({
                     url: '../utilities/makeAutopayment.php',
                     method: 'post',

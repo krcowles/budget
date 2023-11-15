@@ -7,34 +7,203 @@
  */
 // parent window
 var parent = window.opener;
+/**
+ * Prior to submitting, two steps are taken:
+ *  1. Certain selects must be rendered for posting (both existing and new)
+ *  2. For new entries, rows with data must be completely specified
+ */
 
-// Form submission check:
-$('#review').on('click', function() {
-    $('#return_type').val("self");
-});
-$('#savit').on('click', function() {
-    $('#return_type').val("budget");
-    // check for unfilled cells
-    if (cell1 || cell2 || cell3 || cell4) {
-        var msg = "You have a partially filled last row; Click 'OK' to clear it." +
-            " If you select 'Cancel' you must complete the row in order to Save";
-        var clearit = confirm(msg);
-        if (clearit) {
-            var $clear_tds = $('tbody tr[id=new' + newbies + ']').children();
-            $($clear_tds[0]).children().eq(0).val('');
-            $($clear_tds[1]).children().eq(0).val('0');
-            $($clear_tds[2]).children().eq(0).val('');
-            $($clear_tds[3]).children().eq(0).val('0');
-            var save = confirm("Do you now wish to save the data as is?");
-            if (!save) {
-                return false;
-            }
-        } else {
-            return false;
-        }
+// inputs to replace 'un-postable' selects:
+var sayr_input = '<input type="hidden" name="oyrs[]" value="" />';
+var apay_input = '<input type="hidden" name="oap[]" value="" />';
+var nocc_input = '<input type="hidden" name="nfreq[]" value="" />';
+var nmth_input = '<input type="hidden" name="nfirst[]" value="" />';
+var nayr_input = '<input type="hidden" name="eyrs[]" value="" />';
+var npay_input = '<input type="hidden" name="nap[]" value="" />';
+
+// aptype selects will have option1 disabled [Check/Draft]
+$('.aptype').each(function(indx) {
+    let $card = $(this).children();
+    if ($card.get(0).tagName === 'SELECT') {
+        $card[0].options[1].disabled = true;
     }
 });
-// Return to Budget page if still extant
+// If window is too narrow, table needs to expand for <select>s
+adjustWidth = () => {
+    if (window.innerWidth < 1000) {
+        $('table').width("98%");
+    } else if (window.innerWidth < 1200) {
+        $('table').width("94%");
+    } else if (window.innerWidth < 1400) {
+        $('table').width("90%");
+    }
+}
+adjustWidth(); // on page load
+$(window).on('resize', function() {
+    adjustWidth();
+});
+/**
+ * 1. Replace un-selected <selects> with hidden inputs, value ''
+ * 
+ * @returns {null}
+ */
+function renderSelects() {
+    if ($('#old_entries').length > 0) {
+        $old_rows = $('table#old_entries tbody tr');
+        $old_rows.each(function(indx, row) {
+            // NOTE: there is a hidden child at td0
+            let $sayr_td = $(row).children().eq(5);
+            let $apay_td = $(row).children().eq(6);
+            let $sayr_select = $sayr_td.children().eq(0);
+            if ($sayr_select.css('display') === 'none') {
+                $sayr_select[0].remove();
+                $sayr_td.prepend(sayr_input);
+            }
+            let $apay_select = $apay_td.children().eq(0);
+            if ($apay_select.val() === 'Select') {
+                $apay_select[0].remove();
+                $apay_td.prepend(apay_input);
+            }
+        });
+    }
+    $new_rows = $('table#new_entries tbody tr');
+    $new_rows.each(function(indx, newrow) {
+        // NOTE: there is no hidden child at td0, but additional <select> checks
+        let $ntds = $(newrow).children();
+        // <td>s with selects:
+        let $nocc_td = $ntds.eq(1);
+        let $nmth_td = $ntds.eq(3);
+        let $nayr_td = $ntds.eq(4);
+        let $npay_td = $ntds.eq(5);
+        let $nocc_select = $nocc_td.children().eq(0);
+        if ($nocc_select.val() === 'Select Frequency') {
+            $nocc_select[0].remove();
+            $nocc_td.prepend(nocc_input);
+        }
+        let $nmth_select = $nmth_td.children().eq(0);
+        if ($nmth_select.val() === '99') {
+            $nmth_select[0].remove();
+            $nmth_td.prepend(nmth_input);
+        }
+        let $nayr_select = $nayr_td.children().eq(0);
+        if ($nayr_select.css('display') === 'none') {
+            $nayr_select[0].remove();
+            $nayr_td.prepend(nayr_input);
+        }
+        let $npay_select = $npay_td.children().eq(0);
+        if ($npay_select.val() === 'Select') {
+            $npay_select[0].remove();
+            $npay_td.prepend(npay_input);
+        }
+    });
+}
+
+/**
+ * 2. For any new entries, ensure that the row has been completely filled
+ * 
+ * @returns {boolean}
+ */
+function validateNewData() {
+    var $row_cells = $('table#new_entries tbody').find('tr');
+    var partial = false;
+    $row_cells.each(function(index) {
+        var $td_cells = $(this).children();
+        var $tds2check = $td_cells.slice(0, 5);
+        var altyrs;
+        $tds2check.each(function(indx) {
+            console.log("Item " + indx);
+            var $contents = $(this).children().eq(0);
+            switch (indx) {
+                case 0:
+                    cells[0] = $contents.val() == '' ? false : true;
+                    break;
+                case 1:
+                    cells[1] = $contents.val() == 'Select Frequency' ? false : true;
+                    altyrs   = $contents.val() === 'Bi-Annually' ? true : false;
+                    break;
+                case 2:
+                    cells[2] = $contents.val() == '' ? false : true;
+                    break;
+                case 3:
+                    cells[3] = $contents.val() == '99' ? false : true;
+                    break;
+                case 4:
+                    // the sense of cells[4] is inverted to simplify logic
+                    if (altyrs) {
+                        cells[4] = $contents.val() == 'Odd/Even?' ? false : true;
+                    } else {
+                        cells[4] = true;
+                    }
+            }
+        });
+        if (rowFilled(altyrs)) {
+            alert("Row is good");
+        } else if (!rowEmpty(altyrs)) {
+            partial = true;
+            alert("Row " + (index + 1) + " is not completed");
+        }
+        clearCells();
+    });
+    if (partial) {
+        return false;
+    } else {
+        return true;
+    }
+}
+var cells = [];
+function clearCells() {
+    cells[0] = cells[1] = cells[2] = cells[3] = cells[4] = false;
+}
+clearCells();
+
+/**
+ * For new entries, checking row states depends on whether or not a
+ * payment frequency option has been set to 'Bi-Annually' [Every Other Year]
+ * 
+ * @param {boolean} alts 
+ * @returns  {boolean}
+ */
+function rowFilled(alts) {
+    if (alts) {
+        return cells.every(element => element === true);
+    } else {
+        var noalts = cells.slice(0,4);
+        return noalts.every(element => element === true);
+    }
+}
+function rowEmpty(alts) {
+    if (alts) {
+        return cells.every(element => element === false);
+    } else {
+        var noalts = cells.slice(0,4);
+        return noalts.every(element => element === false);
+    }
+}
+
+
+/**
+ * The following code handles the three buttons at the top of the page;
+ * the 'return_type' hidden input informs 'saveCombo.php' which button
+ * was clicked so that it can redirect appropriately.
+ */
+function formChecks(type) {
+    $('#return_type').val(type);
+    if (validateNewData()) {
+        renderSelects();
+        return true;
+    } else {
+        return false;
+    }
+}
+$('#review').on('click', function(ev) {
+    formChecks('self');
+});
+$('#savit').on('click', function(ev) {
+    ev.preventDefault();
+    if (formChecks('budget')) {
+        $('form').trigger("submit");
+    }
+});
 $('#nosave').on('click', function(ev) {
     ev.preventDefault();
     if (parent.closed) {
@@ -56,166 +225,135 @@ if (old_entries > 0) { //initialize select boxes
         $(this).val(fval);
     });
 }
+// Check the new entries row for empty cells [only 0-4]
+
+/**
+ * Initialization of the editable table <select>s
+ */
+// payment frequency <select>
+var $pay_opts = $('.opayfreq');
+orgfreq.forEach(function(payfreq, indx) {
+    $pay_opts[indx].value = payfreq;
+});
+$pay_opts.on('change', function() {
+    var yr_cell = $(this).parent().next().next().next().children().eq(0);
+    // when 'Every Other Year' is selected, show the Odd/Even select box
+    if ($(this).val() === 'Bi-Annually') {
+        yr_cell[0].value = "Odd/Even?";
+        yr_cell.show();
+    } else {
+        yr_cell.hide();
+    }
+});
+// Payment due month <select>
+var $first_mo = $('.omonth');
+orgmonth.forEach(function(due_mo, indx) {
+    $first_mo[indx].value = due_mo;
+});
+// Alternate year choice <select>
+var $yr_choice = $('.oyears');
+orgsa.forEach(function(choice, indx) {
+    if (choice == '') {
+        $yr_choice[indx].value = "Odd/Even";
+        $yr_choice[indx].style.display = "none";
+    } else {
+        $yr_choice[indx].value = choice;
+    }
+});
+// Autopay type <select>
+var $autopay = $('.old_ap');
+orgtypes.forEach(function(type, indx) {
+    if (type == '') {
+        $autopay[indx].value = "Select";
+    } else {
+        $autopay[indx].value = type;
+    }
+});
+// Rows to be deleted will be highlighted in grey
+$('.dels').each(function() {  // .dels belongs to the checkbox <td>
+    var $td = $(this);
+    var $chkbox  = $td.children().eq(0);
+    var $allTds  = $td.parent().children();
+    $chkbox.on('click', function() {
+        if ($(this).is(':checked')) {
+            $allTds.each(function() {
+                $(this).css('background-color', 'lightgrey');
+            });
+        } else {
+            $allTds.each(function() {
+                $(this).css('background-color', 'white');
+            });
+        }
+    });
+});
+
+/**
+ * This section pertains only to the 'New rows' table
+ */
+var newfreqs;
+function specYrs() {
+    newfreqs = null;
+    newfreqs = $('.npayfreq');
+    newfreqs.on('change', function() {
+        var yr_cell = $(this).parent().next().next().next().children().eq(0);
+        // when 'Every Other Year' is selected, show the Odd/Even select box
+        if ($(this).val() === 'Bi-Annually') {
+            yr_cell.show();
+        } else {
+            yr_cell.hide();
+        }
+    });
+}
+specYrs();
+
+
 /**
  * HTML elements needed when adding rows
  */
-var tbl    = $('table#new_entries tbody');
-var $sel1  = $('select[name^=freq]').clone();
-var $sel2  = $('select[name^=first]').clone();
-var $alts  = $('input[name^=alts]').clone();
-var $td1   = $('<td class="add1"><input type="text" name="item[]" placeholder="Expense Item" /></td>');
-var $td2   = $('<td class="add2"></td>');
+var nrows = 1; // next row id
+var $tbl  = $('table#new_entries tbody');
+var $row  = $tbl.find('tr').eq(0);
+var $tds  = $row.children();
+var $sel1 = $tds.eq(1).children().eq(0).clone();
+var $sel2 = $tds.eq(3).children().eq(0).clone();
+var $sel3 = $tds.eq(4).children().eq(0).clone();
+var $sel4 = $tds.eq(5).children().eq(0).clone();
+var $td1  = $('<td class="add1"><input type="text" name="nitem[]" placeholder="Expense Item" /></td>');
+var $td2  = $('<td class="add2"></td>');
 $td2.append($sel1);
-$td2.append($alts);
-var $td3   = $('<td class="add3"><input type="text" name="amt[]" placeholder="Amount" /></td>');
-var $td4   = $('<td class="add4"></td>');
+var $td3  = $('<td class="add3"><input type="text" name="namt[]" placeholder="Amount" /></td>');
+var $td4  = $('<td class="add4 rms"></td>');
 $td4.append($sel2);
+var $td5  = $('<td class="sayr rms"></td>');
+$td5.append($sel3);
+var $td6  = $('<td class="aptype rms"></td>');
+$td6.append($sel4);
+var $td7  = $('<td class="apday"><input type="text" name="napday[]" value="" /></td>');
+var $td8  = $('<td style="display:none;">Not Filled</td>');
 
-// For purpose of detecting if all cells have been specified before adding a row
-var cell1 = false;
-var cell2 = false;
-var cell3 = false;
-var cell4 = false;
-var newbies;
-var altyrs = 'Even';
-lastRowSetup(); // initialize change detection for last row of newbies
+
+$('#newrow').on('click', addRow);
 /**
- * This function will enable change detection on the last (current) row of 
- * newbies.
- * 
- * @return {null}
- */
-function lastRowSetup() {
-    newbies = $('table#new_entries tbody tr[id^=new]').length;
-    var lastid = newbies > 1 ? `tbody tr[id=new${newbies}]` : "tbody tr[id=new1]";
-    var $lastcells = $(lastid).find('td');
-    var $dat1 = $($lastcells[0]).children().eq(0); // input
-    var $dat2 = $($lastcells[1]).children().eq(0); // select
-    $dat2.attr('id', 'sel1');
-    var $alt  = $dat2.next();
-    $alt.attr('id', 'alt1');
-    var $dat3 = $($lastcells[2]).children().eq(0); // input
-    var $dat4 = $($lastcells[3]).children().eq(0); // select
-    $dat4.attr('id', 'sel2');
-    $dat1.on('change', function() {
-        if (!cell1) {
-            cell1 = true;
-            if (cell2 && cell3 && cell4) {
-                addRow();
-            }
-        }
-    });
-    $dat2.on('change', function() {
-        var cursel = $('#sel1 option:selected').text();
-        if ($('#sel1 option:selected').text() === 'Select Payment Frequency') {
-            cell2 = false;
-        } else {
-            if (cursel === 'Every Other Year') {
-            // Add place to indicate odd or even year payments{
-                var choice = "Press 'OK' if Even year payments, 'Cancel' if Odd year payments";
-                var sched = confirm(choice);
-                altyrs = sched ? 'Even' : 'Odd';
-                $('#alt1').val(altyrs);
-            }
-            cell2 = true;
-            if (cell1 && cell3 && cell4) {
-                addRow();
-            }
-        }
-    });
-    $dat3.on('change', function() {
-        if (!cell3) {
-            var no = parseFloat($(this).val());
-            if (isNaN(no)) {
-                alert("The value entered is not a number; Please enter a number (no commas)");
-                $(this).val('');
-                return;
-            } else {
-                if (no < 0) {
-                    alert("No negative numbers are allowed");
-                    $(this).val('');
-                    return;
-                }
-                if (!Number.isInteger(no*100)) {
-                    alert("Too many digits after the decimal point; Please correct");
-                    return;
-                }
-            }
-            cell3 = true;
-            if (cell1 && cell2 && cell4) {
-                addRow();
-            }
-        }
-    });
-    $dat4.on('change', function() {
-        if ($('#sel2 option:selected').text() === 'Select Month') {
-            cell4 = false;
-        } else {
-            cell4 = true;
-            if (cell1 && cell2 && cell3) {
-                addRow();
-            }
-        }
-    });
-    return;
-}
-/**
- * When it's time for the next newbie row to be added, remove the previous select box
- * id's, add the next row, and then redo the lastRowSetup()
+ * This row will appear below the last row in the new entries section
  * 
  * @return {null}
  */
 function addRow() {
-    // remove id's from current selects
-    $('#sel1').removeAttr('id');
-    $('#sel2').removeAttr('id');
-    $('#alt1').removeAttr('id');
     var $nextrow = $('<tr />');
-    var rowid = "new" + ++newbies;
+    var statid = "f" + nrows;  // status = Not Filled or Filled
+    $td8.attr('id', statid);
+    var rowid = "new" + nrows++;
     $nextrow.attr('id', rowid);
     $nextrow.addClass('itemrow');
-    /**
-     * cloning is required!
-     * append() will otherwise move the old element to the new location
-     * this results in the old row having a height=0
-     */ 
     $nextrow.append($td1.clone());
     $nextrow.append($td2.clone());
     $nextrow.append($td3.clone());
     $nextrow.append($td4.clone());
-    tbl.append($nextrow);
-    cell1 = cell2 = cell3 = cell4 = false;
-    lastRowSetup();
+    $nextrow.append($td5.clone());
+    $nextrow.append($td6.clone());
+    $nextrow.append($td7.clone());
+    $nextrow.append($td8.clone());
+    $tbl.append($nextrow);
+    specYrs();
     return;
 }
-$('.rms').each(function() {
-    let $td = $(this);
-    let $chkbox = $td.children().eq(0);
-    $chkbox.on('click', function() {
-        if ($(this).is(':checked')) {
-            let $allTds = $td.parent().children();
-            $allTds.each(function(i) {
-                if (i > 0) {
-                    let $contents = $(this).children().eq(0);
-                    $contents.css({
-                        color: 'grey',
-                        backgroundColor: 'gainsboro'
-                    });
-                }
-            });
-            $td.parent().css('background-color', 'gainsboro');
-        } else {
-            let $allTds = $td.parent().children();
-            $allTds.each(function(i) {
-                if (i > 0) {
-                    let $contents = $(this).children().eq(0);
-                    $contents.css({
-                        color: 'black',
-                        backgroundColor: 'white'
-                    });
-                }
-            });
-            $td.parent().css('background-color', 'white');
-        }
-    });
-});

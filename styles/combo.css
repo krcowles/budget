@@ -3,9 +3,24 @@
     margin-top: 1rem;
     margin-left: 2rem;
 }
+@media only screen and (max-width:1000px) {
+    .content {
+        margin-left: 2px;
+    }
+}
+@media only screen and (max-width:1200px) {
+    .content {
+        margin-left: 8px;
+    }
+}
+@media only screen and (max-width:1400px) {
+    .content {
+        margin-left: 16px;
+    }
+}
 table {
     table-layout: fixed;
-    width: 75%;
+    width: 80%;
     border: 2px solid darkgreen;
     margin-left: auto;
     margin-right: auto;
@@ -25,12 +40,23 @@ table td {
 table input {
     border: none;
 }
-.add2, .add4 {
+.add2, .add4, .apday {
     text-align: center;
 }
+input[name^=napday] {
+    width: 32px;
+}
+input[name^=namt] {
+    width: 64px;
+}
 input[name^=orec], input[name^=oitem], input[name^=oamt],
-input[name^=item], input[name^=amt], input[name^=osa_yr] {
+input[name^=item], input[name^=amt], input[name^=osa_yr],
+input[name^=oaptype], input[name^=oapday], input[name^=aptype],
+input[name^=apday] {
     width: 96%;
+}
+select[name^=sa_yr], .nyears {
+    display: none;
 }
 input[type="checkbox"] {
        /* Double-sized Checkboxes */
@@ -49,5 +75,8 @@ input[type="checkbox"] {
     text-align: center;
 }
 .gray {
-    color: cadetblue;
+    color: darkgray;
+}
+#newrow {
+    border-radius: 6px;
 }

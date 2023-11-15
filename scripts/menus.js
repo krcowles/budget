@@ -101,6 +101,7 @@ var modig = parseInt(mm);
 /**
  * All other modal operation
  */
+// Pay Expense (other than Non-Monthlies account)
 $('#chgexp').on('click', function() {
     var amtin = "#expamt";
     var payin = "#exppayto";
@@ -115,7 +116,7 @@ $('#chgexp').on('click', function() {
         let chgamt = $(amtin).val();
         let amt = valAmt(chgamt, true);
         if (amt < 0) {
-            alert("Nagative amount will act as a credit towards " + sel1);
+            alert("Negative amount will act as a credit towards " + sel1);
         }
         if (amt === 0) {
             return false;
@@ -142,6 +143,7 @@ $('#chgexp').on('click', function() {
         }
     });
 });
+// Pay Non-Monthlies expense
 $('body').on('click', '#nmpebtn', function() {
     let nmsel = $('#nmsel'); 
     let nmcd  = $('#nmcds');
@@ -169,6 +171,7 @@ $('body').on('click', '#nmpebtn', function() {
     let ajaxdata = {id: 'nmexp', acct_name: sel1, method: sel2, amt: amt, payto: payee};
     executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem, 'stay', clean_obj);
 });
+// Deposit monthly (regular) income
 $('#reginc').on('click', function() {
     $('#incbtn').off('click').on('click', function() {
         let moamt = $('#incdep').val();
@@ -227,6 +230,7 @@ $('#reginc').on('click', function() {
     });
     depinc.show();
 });
+// Deposit 'Other' [One-time] Income
 $('#onetimer').on('click', function() {
     $('#otbtn').on('click', function() {
         let otamt = $('#onedep').val();
@@ -240,6 +244,7 @@ $('#onetimer').on('click', function() {
     });
     onetdep.show();
 });
+// Undo a deposit (not Regular Income)
 $('#undoinc').on('click', function() {
     delinc.show();
     let $items = $('#irdeps tr').find('input[id^=incitem]');
@@ -264,6 +269,7 @@ $('#undoinc').on('click', function() {
     });
     return;
 });
+// Transfer 
 $('#transfers').on('click', function() {
     $('#xfrbtn').on('click', function() {
         let xframt = $('#xframt').val();
@@ -292,6 +298,7 @@ $('#transfers').on('click', function() {
     });
     xfrfund.show();
 });
+// Reconcile a card
 $('#cd2rec').on('click', function() {
     $('#recbtn').on('click', function() {
         let $cardsel = $('#ccsel0').children();
@@ -305,6 +312,7 @@ $('#cd2rec').on('click', function() {
     });
     reccard.show();
 });
+// Add a credit or debit card
 $('#addcrdr').on('click', function() {
     $('#addcdbtn').on('click', function() {
         let cname = $('#cda').val();
@@ -319,6 +327,7 @@ $('#addcrdr').on('click', function() {
     });
     addcard.show();
 });
+// Delete a credit or debit card
 $('#dac').on('click', function() {
     let $delitem = $('#deletecard').children();
     $delitem[0].options[1].disabled = true;
@@ -360,6 +369,7 @@ $('#dac').on('click', function() {
     });
     delcard.show();
 });
+// Modify an existing autopay
 $('#modauto').on('click', function() {
     let $apchoices = $('#maselap').children();
     $apchoices[0].options[1].disabled = true;
@@ -398,6 +408,7 @@ $('#modauto').on('click', function() {
     });
     modauto.show();
 });
+// Add an autopay
 $('#addauto').on('click', function() {
     let $card = $('#ccselap').children();
     $card[0].options[1].disabled = true;
@@ -440,6 +451,7 @@ $('#addauto').on('click', function() {
     });
     autopay.show();
 });
+// Remove an autopay
 $('#rmap').on('click', function() {
     $('#delapbtn').on('click', function() {
         let $delap = $('#delapacct').children();
@@ -456,6 +468,7 @@ $('#rmap').on('click', function() {
     });
     delauto.show();
 });
+// Add an account to the budget
 $('#add1').on('click', function() {
     $('#addactbtn').on('click', function() {
         let newname = $('#newacct').val();
@@ -473,9 +486,11 @@ $('#add1').on('click', function() {
     });
     addacct.show();
 });
+// Show/Edit the Non-Monthlies account
 $('#combo').on('click', function() {
     window.open('../edit/combo.php', "_blank");
 });
+// Delete a budget account
 $('#del1').on('click', function() {
     $('#daccbtn').on('click', function() {
         let $acct0 = $('#remacct').children();
@@ -485,6 +500,7 @@ $('#del1').on('click', function() {
     });
     delacct.show();
 });
+// Move a budget account's position on the page
 $('#moveit').on('click', function() {
     $('#mvbtn').on('click', function() {
         let $from = $('#mvfrom').children();
@@ -500,6 +516,7 @@ $('#moveit').on('click', function() {
     });
     moveacc.show();
 });
+// Rename a budget account
 $('#ren1').on('click', function() {
     $('#renbtn').on('click', function() {
         let $acct = $('#asel').children();
@@ -514,6 +531,7 @@ $('#ren1').on('click', function() {
     });
     rename.show();
 });
+// Generate a monthly expenses report
 $('#mexpense').on('click', function() {
     $('#mexpbtn').on('click', function() {
         let month = document.getElementById('rptmo');
@@ -524,6 +542,7 @@ $('#mexpense').on('click', function() {
     });
     monthly.show();
 });
+// Generate an annual expense report
 $('#annual').on('click', function() {
     $('#anexpbtn').on('click', function() {
         let rptyr = document.getElementById('rptyr');
@@ -534,6 +553,7 @@ $('#annual').on('click', function() {
     });
     yearly.show();
 });
+// Generate a yearly income report
 $('#yrinc').on('click', function() {
     $('#aincbtn').on('click', function() {
         let incyr = document.getElementById('incyear');
@@ -544,6 +564,7 @@ $('#yrinc').on('click', function() {
     });
     anninc.show();
 });
+// Generate a report of all transfers
 $('#xfrrpt').on('click', function() {
     $('#yrlyXfrbtn').on('click', function() {
         let xfryr = document.getElementById('xfryr');
@@ -554,6 +575,7 @@ $('#xfrrpt').on('click', function() {
     });
     annxfrs.show();
 });
+
 
 $('#logout').on('click', function() {
     $('#preloader').show();

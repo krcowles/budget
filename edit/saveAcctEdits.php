@@ -82,18 +82,20 @@ case 'nmexp':
     $bud = $pdo->prepare($budupdte);
     $bud->execute([":bal" => $bal, ":uid" => $_SESSION['userid']]);
 
-    // Update Irreg with new balance and month paid
+    // Update Irreg with new balance and month/year paid
     $NMBalReq = "SELECT `funds` FROM `Irreg` WHERE `item`=? AND `userid`=?;";
     $NMBal = $pdo->prepare($NMBalReq);
     $NMBal->execute([$acct, $_SESSION['userid']]);
     $acct_bal_row = $NMBal->fetch(PDO::FETCH_ASSOC);
     $acct_bal = floatval($acct_bal_row['funds']);
     $acct_bal -= $amt;
-    $NMUpdateReq = "UPDATE `Irreg` SET `mo_pd`=?,`funds`=? WHERE " .
+    $NMUpdateReq = "UPDATE `Irreg` SET `mo_pd`=?,`yr_pd`=?,`funds`=? WHERE " .
         " `item`=? AND `userid`=?;";
     $NMUpdate = $pdo->prepare($NMUpdateReq);
     // add to `Charges` table
-    $NMUpdate->execute([$current_month, $acct_bal, $acct, $_SESSION['userid']]);
+    $NMUpdate->execute(
+        [$current_month, $thisyear, $acct_bal, $acct, $_SESSION['userid']]
+    );
     if (in_array($method, $cr)) { // a credit card
         $dbmethod = "Credit";
         $pd = 'N';

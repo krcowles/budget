@@ -101,134 +101,168 @@ function getCurrentNMBal($type, $pdo, $uid)
     return $balance;
 }
 /**
- * This function will determine expected balances for all
- * Non-Monthlies accounts based on payment frequency and
- * payment amount. Expected balance will vary each month
- * and also when an item is paid in the month due.
+ * This function will:
+ *  1. Calculate the next month a payment is due for a non-monthly account;
+ *  2. Set the 'expected' balance for the current month. The expected balance
+ *     is based on the expired time since the last paymnt.
  * 
- * @param PDO      $pdo         Database pdo
- * @param number   $uid         User id
- * @param string[] $month_names From timeSetup.php
- * @param number   $thismo      Current month as 0-based index
- * @param number   $thisyear    Current 4-digit year
+ * @param string   $freq   how often a payment is to be made
+ * @param string   $first  the 'first' month of a cycle of payment due months
+ * @param float    $amt    the amount applied at each instalment
+ * @param string   $alt    'Odd' or 'Even' years for bi-annual payment
+ * @param string   $paymo  the month the last payment was made
+ * @param int      $payyr  year in which payment was made
+ * @param string[] $months names of the months in a year
+ * @param int      $thismo INDEX into $months representing current month
+ * @param int      $thisyr 4-digit integer representing the current year
  * 
- * @return null
+ * @return array   [$wait, $next_due]
  */
-function setNMExpected($pdo, $uid, $month_names, $thismo, $thisyear)
-{
-    $getNMDataReq = "SELECT * FROM `Irreg` WHERE `userid`=?;";
-    $getNMData = $pdo->prepare($getNMDataReq);
-    $getNMData->execute([$uid]);
-    $nmdata = $getNMData->fetchAll(PDO::FETCH_ASSOC);
-
-    for ($k=0; $k<count($nmdata); $k++) {
-        // Enumerate months where funds are paid throughout the year
-        $first_mo = $nmdata[$k]['first']; // <string> month name
-        $index_mo = array_search($first_mo, $month_names);
-        $dist_months = [];  // digits representing month_names indices
-        $dist_months[0] = $index_mo;
-        $payfreq = getFrequency($nmdata[$k]['freq']);
-        $incr_months  = intval(12/$payfreq);
-        $eoyr = false;
-        if (!empty($nmdata[$k]['mo_pd'])) {
-            $month_paid = array_search($nmdata[$k]['mo_pd'], $month_names);
-            $acct_paid = $month_paid === $thismo ? true : false;
-        } else {
-            $acct_paid = false;
-        } 
+function prepNonMonthly(
+    $freq, $first, $amt, $alt, $paymo, $payyr, $months, $thismo, $thisyr
+) {
+    $expected = 0;
+    $acct_paid = false;
+    $wait = false; // true => already paid, OR it's an off year to pay [for autopays]
+    $dist_months = []; // all months in which a payment would be due
+    $dist_months[0] = array_search($first, $months);
+    if ($paymo === '') {
         /**
-         * Annual payments are assigned $dist_months[0] and require
-         * no further processing [$payfreq = 1]
+         * In this case, the expense has not registered a payment, thus $payyr
+         * will also be empty. Set $last_pd = $first and set $payyr to an arbitrary
+         * value so that it appears that the payment hasn't been made this year.
+         * The next statement works for annual/bi-annual, but when $payfreq > 1,
+         * $first may not be the earliest month. This case will be addressed in
+         * the case where $payfrq > 1
          */
-        if ($payfreq > 1) { // multiple distribution months per annum
-            for ($j=1; $j<$payfreq; $j++) {
-                if ($dist_months[$j-1] + $incr_months > 11) {
-                    // adjust for base 0: $pay_incr -1
-                    $next_mo = ($incr_months - 1) - (11 - $dist_months[$j-1]);
-                } else {
-                    $next_mo = $dist_months[$j-1] + $incr_months;
-                }
-                $dist_months[$j] = $next_mo;
-            }
-            sort($dist_months);   
-        } elseif ($payfreq === 0.5) { // every other year...
-            $eoyr = true;
-            // odd or even years?
-            if (!empty($items[$k]['SA_yr'])) {
-                $dist_months[0] = $index_mo;
-                if ($items[$k]['SA_yr'] === 'Odd' && $thisyear%2 === 1
-                    && !empty($items[$k]['mo_pd'])
-                ) {
-                    $dist_months[0] = -1;
-                } elseif ($items[$k]['SA_yr'] === 'Odd' && $thisyear%2 === 0) {
-                    $dist_months[0] = -1;
-                }
-                if ($items[$k]['SA_yr'] === 'Even' && $thisyear%2 === 0
-                    && !empty($items[$i]['mo_pd'])
-                ) {
-                    $dist_months[0] = -1;
-                } elseif ($items[$k]['SA_yr'] === 'Even' && $thisyear%2 === 1) {
-                    $dist_months[0] = -1;
-                }
-            }
-            /*
-            if ($nmdata[$k]['SA_yr'] === 'Odd' && $thisyear % 2 !== 0) {
-                $dist_months[0] = $index_mo;
-            } elseif ($nmdata[$k]['SA_yr'] === 'Even' && $thisyear %2 === 0) {
-                $dist_months[0] = $index_mo;
-            } else { // it's an 'off' year...
-                $clearPdMoReq = "UPDATE `Irreg` SET `mo_pd`='' WHERE `record`=?;";
-                $clearPdMo = $pdo->prepare($clearPdMoReq);
-                $clearPdMo->execute([$nmdata[$k]['record']]);
-                $dist_months[0] = -1;
-            }
-            */
-        }
-        // To calculate expected balance get # mos since last distribution
-        if (count($dist_months) === 1) {
-            // every-other-year?
-            if ($eoyr && $dist_months[0] !== -1) {
-                // pay/pd this year
-                $calc_mos = $dist_months[0] >= $thismo ?
-                    (11 - $dist_months[0]) + 12 + $thismo :
-                    $thismo - $dist_months[0]; 
-                if ($thismo === $dist_months[0] && $acct_paid ) {
-                    $calc_mos = 0;
-                }
-            } elseif ($eoyr && $dist_months[0] === -1) {
-                // pay next year
-                $calc_mos = (11 - $dist_months[0]) + $thismo + 1;
-            } else {
-                // annual payment - once a yeaer
-                $calc_mos = $thismo > $dist_months[0] ?
-                    $thismo - $dist_months[0] : (11 - $dist_months[0]) + $thismo + 1;
-                if ($thismo === $dist_months[0] && $acct_paid) {
-                    $calc_mos = 0;
-                }
-            }
-        } else { // multiple payments per year
-            for ($n=1; $n<count($dist_months); $n++) {
-                if ($thismo <= $dist_months[$n]
-                    && $thismo > $dist_months[$n-1]
-                ) {
-                    $calc_mos = $thismo - $dist_months[$n-1];
-                    if ($thismo === $dist_months[$n] && $acct_paid) {
-                        $calc_mos = 0;
-                    }
-                    break;
-                } elseif (($n === count($dist_months) - 1)
-                    && $thismo > $dist_months[$n]
-                ) {
-                    $calc_mos = $thismo - $dist_months[$n];
-                }
-            }
-        }
-        // calculate expected balance
-        $incr_payment = ceil($nmdata[$k]['amt']/$incr_months);
-        $new_bal = $calc_mos * $incr_payment;
-        // record new balance
-        $udReq = "UPDATE `Irreg` SET `expected`=? WHERE `record`=?;";
-        $updateIrreg = $pdo->prepare($udReq);
-        $updateIrreg->execute([$new_bal, $nmdata[$k]['record']]);
+        $last_pd = array_search($first, $months);
+        $payyr = 1000;
+    } else {
+        $last_pd = array_search($paymo, $months);
     }
+    $payfreq = getFrequency($freq); // how many months in a year are pay months
+    $incr_months = intval(12/$payfreq);
+    $paypermo = round($amt/$incr_months, 2);
+ 
+    /**
+     * Find the next month a payment is due; Calculate the resulting $expected funds
+     */
+    if ($payfreq === 1 || $payfreq === 0.5) {
+        // Bi-annual or annual payments
+        $next_due = $dist_months[0];
+        if (!empty($alt)) {
+            // bi-annual payment; $payfreq = 0.5
+            if ($alt === 'Odd' && $thisyr%2 === 1) {
+                // this is the year to pay
+                if ($thismo >= $last_pd && $payyr === $thisyr) {
+                    $acct_paid = true;
+                    $wait = true; // right year for payment, but already paid
+                    $delta = $thismo - $last_pd;  // may = 0
+                } elseif ($payyr === 1000
+                    || ($thismo >= $last_pd && $payyr !== $thisyr)
+                    || ($thismo < $last_pd )
+                ) { 
+                    // not paid yet: last years accum = (11 - $last_pd)
+                    $delta =  (11 - $last_pd) + $thismo;
+                }   
+            } elseif ($alt === 'Odd' && $thisyr%2 === 0) {
+                $wait = true; // Not this year!
+                $delta = (11 - $last_pd) + $thismo;
+            }
+            if ($alt === 'Even' && $thisyr%2 === 0) {
+                if ($thismo >= $last_pd && $payyr === $thisyr) {
+                    $acct_paid = true;
+                    $wait = true; // right year for payment, but already paid
+                    $delta = $thismo - $last_pd;
+                } elseif ($payyr === 1000
+                    || ($thismo >= $last_pd && $payyr !== $thisyr)
+                    || ($thismo < $last_pd)
+                ) {
+                    // not paid yet: last years accum = (11 - $last_pd)
+                    $delta = (11 - $last_pd) + $thismo;
+                }
+            } elseif ($alt === 'Even' && $thisyr%2 === 1) {
+                $wait = true; // Not this year!
+                $delta = (11 - $last_pd) + $thismo;
+            }
+            $expected = round($paypermo * $delta, 2);
+        } else {
+            // annual payment: $payfreq = 1
+            if ($thismo >= $last_pd && $payyr === $thisyr) {
+                $acct_paid = true;
+                $wait = true;
+                $delta = ($thismo - $last_pd) * $paypermo;
+                $expected = round($delta, 2);
+            } else {
+                // not paid yet
+                if ($thismo === $last_pd) { // $payyr is nor $thisyr
+                    $expected = $amt;
+                } elseif ($thismo > $last_pd ) {
+                    // here, $paymo was empty; assume new pay cycle
+                    $wait = true;
+                    $delta = ($thismo - $last_pd) * $paypermo;
+                    $expected = round($delta, 2);
+                } else {  // $thismo < $last_pd
+                    $delta = (11 - $last_pd) + $thismo;
+                    $expected = round($delta * $paypermo, 2);
+                }
+            }
+        }
+    }
+    if ($payfreq > 1) {
+        // get a list of payment months in the cycle [$dist_months]
+        for ($j=1; $j<$payfreq; $j++) {
+            if ($dist_months[$j-1] + $incr_months > 11) {
+                // adjust for base 0: $pay_incr -1
+                $next_mo = ($incr_months - 1) - (11 - $dist_months[$j-1]);
+            } else {
+                $next_mo = $dist_months[$j-1] + $incr_months;
+            }
+            $dist_months[$j] = $next_mo;
+        }
+        sort($dist_months);
+        // find next payment due month
+        $payouts = count($dist_months);
+        for ($k=0; $k<$payouts; $k++) {
+            // NOTE: $dist_months are in increasing order
+            if ($thismo <= $dist_months[$k]) {
+                // this is the next payment month
+                $next_due = $dist_months[$k];
+                if ($thismo === $dist_months[$k]) {
+                    if ($k === 0) {
+                        // this is the 1st pay month: get accum from last year
+                        $delta = $thismo + (11 - $dist_months[$payouts -1]);
+                    } else {
+                        if ($payyr !== $thisyr) {
+                            // not yet paid [or $paymo is empty]
+                            $delta = $thismo - $dist_months[$k-1];
+                        } else {
+                            $delta = $incr_months;
+                            $acct_paid = true;
+                        }
+                    }
+                    $expected = round($delta * $paypermo, 2);
+                } else {
+                    // not there yet
+                    if ($k === 0) {
+                        // any from last dist_month of prev year
+                        $delta = (11 - $dist_months[$payouts-1]) + $thismo;
+                    } else {
+                        $delta = $thismo - $dist_months[$k-1];  
+                    }
+                    $expected = round($delta * $paypermo, 2);
+                }
+                // got data, break loop
+                break;
+            } else {
+                if ($k === $payouts - 1) {
+                    // this is the 'last chance'
+                    $next_due = $dist_months[0];
+                    $delta = $thismo - $dist_months[$k];
+                    $expected = round($delta * $paypermo, 2);
+                }
+            }
+        }
+    }
+    return [$acct_paid, $wait, $next_due, $expected];  
 }

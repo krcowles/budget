@@ -2,6 +2,9 @@
 /**
  * This page will either create a new non-monthlies account, or
  * if one already exists, it will allow the user to edit it.
+ * Note that any existing data which can be edited requires MySQL
+ * update, and new data provided will require MySQL insert, hence
+ * these two tables will have different POSTing names.
  * PHP Version 7.4
  * 
  * @package Budget
@@ -13,26 +16,32 @@ $user = $_SESSION['userid'];
 require "../database/global_boot.php";
 require "../utilities/timeSetup.php";
 require "../utilities/getAccountData.php";
+require "../utilities/getCards.php";
 
-// define payment frequency options
-$old_payopts = '<select name="ofreq[]">';
-$new_payopts = '<select name="freq[]">';
-$payopts = <<<PAYOPTS
-    <option value="Payment Frequency">Payment Frequency</option>
+/**
+ * This section contains 4 html string definitions for the various
+ * <select>s used on the page. The arrays will be filled from these
+ * assignments
+ */
+// define payment frequency option <selects>s
+$old_payopts = '<select class="opayfreq" name="ofreq[]">';
+$new_payopts = '<select class="npayfreq" name="nfreq[]">';
+$payopts = <<<FREQOPTS
+    <option value="Select Frequency">Select Frequency</option>
     <option value="Bi-Annually">Every Other Year</option>
     <option value="Annually">Annually</option>
     <option value="Semi-Annually">Semi-Annually</option>
     <option value="Quarterly">Quarterly</option>
     <option value="Bi-Monthly">Every Other Month</option>
 </select>
-PAYOPTS;
+FREQOPTS;
 $old_payopts .= $payopts;
 $new_payopts .= $payopts;
 
-// define month-select drop-down
-$old_opts = '<select name="ofirst[]">';
-$new_opts = '<select name="first[]">';
-$opts = '<option value="99">Select Month</option>';
+// define month <select> drop-downs
+$old_opts = '<select class="omonth" name="ofirst[]">';
+$new_opts = '<select class="nmonth" name="nfirst[]">';
+$opts = '<option value="99">Month</option>';
 for ($i=0; $i<12; $i++) {
     $opts .= '<option value="' . $month_names[$i] . '">' .
             $month_names[$i] . '</option>';
@@ -41,7 +50,34 @@ $opts .= '</select'>
 $old_opts .= $opts;
 $new_opts .= $opts;
 
-// extract any existing user data
+// define alternate year choice <selects>
+$eyears = '<select class="oyears" name="oyrs[]">';
+$nyears = '<select class="nyears" name="eyrs[]">';
+$altyrs = <<<ALTYRS
+    <option value="Odd/Even?">Odd/Even?</option>
+    <option value="Odd">Odd yrs</option>
+    <option value="Even">Even yrs</option>
+</select>
+ALTYRS;
+$eyears .= $altyrs;
+$nyears .= $altyrs;
+
+// define autopay selects
+$eapname = 'class="old_ap" name="oap[]" ';
+$napname = 'class="new_ap" name="nap[]" ';
+$eap = substr_replace($allCardsHtml, $eapname, 8, 0);
+$eap = str_replace("SELECT ONE", "SELECT", $eap);
+$eap = str_replace(
+    '<option value="Check or Draft">Check or Draft</option>', '', $eap
+);
+$nap = substr_replace($allCardsHtml, $napname, 8, 0);
+$nap = str_replace("SELECT ONE", "SELECT", $nap);
+$nap = str_replace(
+    '<option value="Check or Draft">Check or Draft</option>', '', $nap
+);
+/**
+ * Get the user's data from the database
+ */
 $itemReq = "SELECT * FROM `Irreg` WHERE `userid`=?";
 $current = $pdo->prepare($itemReq);
 $current->execute([$user]);
@@ -54,82 +90,52 @@ if ($noOfItems > 0) {
     $action = "create a list of non-monthly expenses to track in a single account";
     $saving = "Add to Budget";
 }
+
 /**
- * Prepare data for display in status table
+ * Prepare data for display in tables
+ * NOTE: 'newbies' will require id's to detect if row is properly filled
  */
-$next_dues = [];
+
+// javascript arrays holding current <select> values
+$ofreq    = [];
+$omonth   = [];
+$osa      = [];
+$aptype   = [];
+// days corresponding to specified autopays [ap]] 
+$apdayval = []; 
+
+$napid = "id='nap0' ";  // 'new row' table
+$newap = substr_replace($allCardsHtml, $napid, 8, 0);  // new row table
+
+/**
+ * Parse user's data for display in editable table and retrieve data
+ * for display of 'current state' at the bottom of the page.
+ */
+$next_dues = []; 
 $waityr = [];
 for ($k=0; $k<$noOfItems; $k++) {
     $waityr[$k] = false;
 }
-
 for ($i=0; $i<$noOfItems; $i++) {
-    $first_mo = $items[$i]['first']; // <string> month name
-    $index_mo = array_search($first_mo, $month_names); // 0-based index
-    $dist_months = [];  // digits representing month_names indices
-    $dist_months[0] = $index_mo;
-    $payfreq = getFrequency($items[$i]['freq']);
-    $incr_months = intval(12/$payfreq);
-    $eoyr = false;
-    if (!empty($items[$i]['mo_pd'])) {
-        $month_paid = array_search($items[$i]['mo_pd'], $month_names);
-        $acct_paid = $month_paid === $thismo ? true : false;
-    } else {
-        $acct_paid = false;
-    } 
-    // calculate 'next_due' payment
-    if ($payfreq === 1 || $payfreq === 0.5) { // annual or every-other yr payments
-        $next_dues[$i] = $dist_months[0];
-        if (!empty($items[$i]['SA_yr'])) {
-            if ($items[$i]['SA_yr'] === 'Odd' && $thisyear%2 === 1
-                && !empty($items[$i]['mo_pd'])
-            ) {
-                $waityr[$i] = true;
-            } elseif ($items[$i]['SA_yr'] === 'Odd' && $thisyear%2 === 0) {
-                $waityr[$i] = true;
-            }
-
-            if ($items[$i]['SA_yr'] === 'Even' && $thisyear%2 === 0
-                && !empty($items[$i]['mo_pd'])
-            ) {
-                $waityr[$i] = true;
-            } elseif ($items[$i]['SA_yr'] === 'Even' && $thisyear%2 === 1) {
-                $waityr[$i] = true;
-            }
-        }
-    }
-    if ($payfreq > 1) { // multiple distribution months per annum
-        for ($j=1; $j<$payfreq; $j++) {
-            if ($dist_months[$j-1] + $incr_months > 11) {
-                // adjust for base 0: $pay_incr -1
-                $next_mo = ($incr_months - 1) - (11 - $dist_months[$j-1]);
-            } else {
-                $next_mo = $dist_months[$j-1] + $incr_months;
-            }
-            $dist_months[$j] = $next_mo;
-        }
-        sort($dist_months);
-        // next due month:
-        $payouts = count($dist_months);
-        for ($j=0; $j<$payouts; $j++) {
-            if ($thismo <= $dist_months[$j]) {
-                if ($thismo === $dist_months[$j] && $acct_paid) {
-                    if ($j === $payouts -1) {
-                        $next = $dist_months[0];
-                    } else {
-                        $next = $dist_months[$j+1];
-                    }
-                } elseif ($thismo === $dist_months[$j] && !$acct_paid) {
-                    $next = $dist_months[$j];
-                } else { 
-                    $next = $dist_months[$j];
-                }
-                $next_dues[$i] = $next;
-                break;
-            }
-        }   
-    }
+    $ofreq[$i] = $items[$i]['freq'];
+    $omonth[$i] = $items[$i]['first'];
+    $osa[$i] = empty($items[$i]['SA_yr']) ? "" : $items[$i]['SA_yr'];
+    $aptype[$i] = empty($items[$i]['APType']) ? "" : $items[$i]['APType'];
+    $apdayval[$i] = $items[$i]['APDay'] == '0' ? "" : $items[$i]['APDay'];
+    $stats = prepNonMonthly(
+        $items[$i]['freq'], $items[$i]['first'], $items[$i]['amt'],
+        $items[$i]['SA_yr'], $items[$i]['mo_pd'], $items[$i]['yr_pd'],
+        $month_names, $thismo, $thisyear
+    );
+    $waityr[$i]    = $stats[1];
+    $next_dues[$i] = $stats[2];
 }
+// prep arrays for import by javascript
+$js_freq  = json_encode($ofreq);
+$js_month = json_encode($omonth);
+$js_sayr  = json_encode($osa);
+$js_type  = json_encode($aptype);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -157,7 +163,7 @@ for ($i=0; $i<$noOfItems; $i++) {
 
         <button id="review" type="submit" class="btn btn-success">
             Save and Review Edits</button>
-        <button id="savit" type="submit" class="btn btn-success">
+        <button id="savit" type="button" class="btn btn-success">
             Save / <?=$saving;?></button>
         <button id="nosave" type="button" class="btn btn-secondary">
             Return: Don't Save</button><br /><br />
@@ -172,21 +178,25 @@ for ($i=0; $i<$noOfItems; $i++) {
         </div>
         <table id="old_entries">
             <colgroup>
-                <col span="1" style="width: 28%;">
-                <col span="1" style="width: 20%;">
-                <col span="1" style="width: 15%;">
-                <col span="1" style="width: 15%;">
-                <col span="1" style="width: 15%;">
-                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 24%;">
+                <col span="1" style="width: 18%;">
+                <col span="1" style="width: 8%;">
+                <col span="1" style="width: 14%;">
+                <col span="1" style="width: 13%;">
+                <col span="1" style="width: 13%;">
+                <col span="1" style="width: 4%;">
+                <col span="1" style="width: 6%;">
             </colgroup>
             <thead>
                 <tr>  
                     <th>Expense Item</th>
                     <th>Occurrence</th>
-                    <th>Each Payment</th>
-                    <th>1st Payment Mo</th>
-                    <th>Pay [ ] Years</th>
-                    <th>Delete</th>
+                    <th>Each<br />Payment</th>
+                    <th>[1st] Pay Month</th>
+                    <th>Paymnt Years</th>
+                    <th class="rms">AutoPay<br />With</th>
+                    <th style="padding:4px;">Day</th>
+                    <th class="rms">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -194,19 +204,17 @@ for ($i=0; $i<$noOfItems; $i++) {
                 <tr id="old<?=$i;?>"class="itemrow">
                     <td style="display:none;"><input type="text" name="orec[]"
                         value="<?=$items[$i]['record'];?>" /></td>
-                    <td class="add1"><input type="text" name="oitem[]"
+                    <td class="add1"><input id="it<?=$i;?>"  name="item[]"
                         value="<?=$items[$i]['item'];?>" /></td>
-                    <td class="add2"><?=$old_payopts;?>
-                        <input id="op<?=$i;?>" style="display:none"
-                            value="<?=$items[$i]['freq'];?>" /></td>
+                    <td class="add2"><?=$old_payopts;?></td>
                     <td class="add3"><input type="text" name="oamt[]"
                         value="<?=$items[$i]['amt'];?>" /></td>
-                    <td class="add4"><?=$old_opts;?>
-                        <input id="of<?=$i;?>" style="display:none;"
-                            value="<?=$items[$i]['first'];?>" /></td>
-                    <td class="sayr"><input type="text" name="osa_yr[]"
-                        value="<?=$items[$i]['SA_yr'];?>" /></td>
-                    <td class="rms"><input type="checkbox" name="rms[]"
+                    <td class="add4"><?=$old_opts;?></td>
+                    <td class="sayr rms"><?=$eyears;?></td>
+                    <td class="aptype rms"><?=$eap;?></td>
+                    <td class="apday"><input type="text" name="oapday[]"
+                        value="<?=$apdayval[$i];?>" /></td>
+                    <td class="rms dels"><input type="checkbox" name="rms[]"
                         value="<?=$items[$i]['record'];?>" /></td>
                 </tr>
                 <?php endfor; ?>
@@ -216,34 +224,44 @@ for ($i=0; $i<$noOfItems; $i++) {
         <?php endif; ?>
 
         <div>
-            <h5>You may add entries here...</h5>
+            <h5>You may add entries here...&nbsp;&nbsp;
+            <button id="newrow" type="button" class="btn btn-success btn-sm">
+                Add A Row</button>
+            </h5>
         </div>
         <table id="new_entries">
             <colgroup>
-                <col span="1" style="width: 40%;">
                 <col span="1" style="width: 25%;">
-                <col span="1" style="width: 20%;">
+                <col span="1" style="width: 18%;">
+                <col span="1" style="width: 9%;">
+                <col span="1" style="width: 13%;">
+                <col span="1" style="width: 16%;">
                 <col span="1" style="width: 15%;">
+                <col span="1" style="width: 6%;">
             </colgroup>
             <thead>
-                <tr>
+                <tr>  
                     <th>Expense Item</th>
                     <th>Occurrence</th>
-                    <th>Each Payment</th>
-                    <th>1st Payment Mo</th>
+                    <th>Each<br />Payment</th>
+                    <th class="rms">[1st] Pay Month</th>
+                    <th>Payment Years<br />(If every other)</th>
+                    <th class="rms">AutoPay<br />With</th>
+                    <th>Day</th>
                 </tr>
             </thead>
             <tbody>
-                <tr id="new1" class="itemrow">
-                    <td class="add1"><input type="text" name="item[]"
-                        placeholder="Expense Item" />
-                    <td class="add2">
-                        <?=$new_payopts;?>
-                        <input type="hidden" name="alts[]" value=""/>
-                    </td>
-                    <td class="add3"><input type="text" name="amt[]"
+                <tr id="new0" class="itemrow">
+                    <td class="add1"><input type="text" name="nitem[]"
+                        placeholder="Expense Item" /></td>
+                    <td class="add2"><?=$new_payopts;?></td>
+                    <td class="add3"><input type="text" name="namt[]"
                         placeholder="Amount" /></td>
-                    <td class="add4"><?=$new_opts;?></td>
+                    <td class="add4 rms"><?=$new_opts;?></td>
+                    <td class="sayr rms"><?=$nyears;?></td>
+                    <td class="aptype rms"><?=$nap;?></td>
+                    <td class="apday"><input type="text" name="napday[]"
+                        value="" /></td>
                 </tr>
             </tbody>
         </table>
@@ -297,6 +315,12 @@ for ($i=0; $i<$noOfItems; $i++) {
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/jquery.min.js"></script>
+<script type="text/javascript">
+    var orgfreq  = <?=$js_freq;?>;
+    var orgmonth = <?=$js_month;?>;
+    var orgsa = <?=$js_sayr;?>;
+    var orgtypes = <?=$js_type;?>;  
+</script>
 <script src="../scripts/combo.js"></script>
 
 </body>

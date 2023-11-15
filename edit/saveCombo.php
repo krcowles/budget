@@ -1,6 +1,6 @@
 <?php
 /**
- * Save the user data entered on the Non-Monthly Expense page
+ * Save the user data entered on the 'Non-Monthlies' Expense page
  * PHP Version 7.4
  *
  * @package Budget
@@ -22,24 +22,30 @@ $relations = array( // no of payments in one year
     "Bi-Monthly"    => 6
 );
 
+// Datbase updates to existing data
 $return_to = filter_input(INPUT_POST, 'return_type');
-$old_recno = isset($_POST['orec'])   ? $_POST['orec']   : false;
-$old_items = isset($_POST['oitem'])  ? $_POST['oitem']  : false;
-$old_freqs = isset($_POST['ofreq'])  ? $_POST['ofreq']  : false;
-$old_amts  = isset($_POST['oamt'])   ? $_POST['oamt']   : false;
-$old_first = isset($_POST['ofirst']) ? $_POST['ofirst'] : false;
-$old_SA_yr = isset($_POST['osa_yr']) ? $_POST['osa_yr'] : false;
-$old_dels  = isset($_POST['rms'])    ? $_POST['rms']    : false;
-$old_count = $old_items ? count($old_items) : 0;
-if ($old_count > 0) {
+$old_recno = isset($_POST['orec']) ? $_POST['orec'] : false;
+if ($old_recno) {
+    $old_items = $_POST['item'];
+    $old_freqs = $_POST['ofreq'];
+    $old_amts  = $_POST['oamt'];
+    $old_first = $_POST['ofirst'];
+    $old_SA_yr = $_POST['oyrs'];
+    $old_auto  = $_POST['oap'];
+    $old_apday = $_POST['oapday'];
+    $old_dels  = isset($_POST['rms']) ? $_POST['rms'] : false;
+    $old_count = $old_items ? count($old_items) : 0;
+    foreach ($old_apday as &$day) {
+        $day = $day == '' ? 0 : (int) $day;
+    }
     for ($j=0; $j<$old_count; $j++) {
         if (!$old_dels || !in_array($old_recno[$j], $old_dels)) {
-            $saveItem = 'UPDATE `Irreg` SET `item`=?, `freq`=?, `amt`=?,' .
-                '`first`=?,`SA_yr`=? WHERE `record`=?;';
+            $saveItem = 'UPDATE `Irreg` SET `item`=?,`freq`=?,`amt`=?,' .
+                '`first`=?,`SA_yr`=?,`APType`=?,`APDay`=? WHERE `record`=?;';
             $update = $pdo->prepare($saveItem);
             $update->execute(
                 [$old_items[$j], $old_freqs[$j], $old_amts[$j], $old_first[$j], 
-                $old_SA_yr[$j], $old_recno[$j]]
+                $old_SA_yr[$j], $old_auto[$j], $old_apday[$j], $old_recno[$j]]
             );
             $payments = $relations[$old_freqs[$j]];
             $ann_bud  = $payments * $old_amts[$j];
@@ -50,30 +56,38 @@ if ($old_count > 0) {
             $deletion->execute([$old_recno[$j]]);
         }
     }
-} else { // need to add this account to user's budget
+} else { // need to add the 'Non-Monthlies' account to user's budget
     $addbud = true;
 }
 // there is always at least one new row, whether data is present or not
-$new_items  = $_POST['item'];
-$new_freqs  = $_POST['freq'];
-$new_amts   = $_POST['amt'];
-$new_first  = $_POST['first'];
-$new_altyrs = $_POST['alts'];
-$new_entries = count($new_items) - 1;
-if ($new_entries > 0) {  // save only if new_entries > 1
-    for ($k=0; $k<$new_entries; $k++) {
-        $saveNew = "INSERT INTO `Irreg` (`userid`,`item`,`freq`,`amt`,`first`," .
-            "`SA_yr`) VALUES (?, ?, ?, ?, ?, ?);";
+$new_items  = $_POST['nitem'];
+$new_freqs  = $_POST['nfreq'];
+$new_amts   = $_POST['namt'];
+$new_first  = $_POST['nfirst'];
+$new_altyrs = $_POST['eyrs'];
+$new_auto   = $_POST['nap'];
+$new_apday  = $_POST['napday'];
+foreach ($new_apday as &$day) {
+    $day = $day == '' ? 0 : (int) $day;
+}
+ 
+for ($k=0; $k<count($new_items); $k++) {
+    // save only rows where item is specified (complete row checked before submit)
+    if (!empty($new_items[$k])) {
+        $saveNew = "INSERT INTO `Irreg` (`userid`,`item`,`freq`,`amt`,`funds`," .
+            "`expected`,`first`,`SA_yr`,`APType`,`APDay`,`mo_pd`) " .
+            "VALUES (?, ?, ?, ?, '','',?, ?, ?, ?,'');";
         $newData = $pdo->prepare($saveNew);
         $newData->execute(
             [$user, $new_items[$k], $new_freqs[$k], $new_amts[$k],
-            $new_first[$k], $new_altyrs[$k]]
+            $new_first[$k], $new_altyrs[$k], $new_auto[$k], $new_apday[$k]]
         );
         $payments = $relations[$new_freqs[$k]];
         $ann_bud  = $payments * $new_amts[$k];
         $budget  += $ann_bud/12;
-    }  
-}
+    }
+}  
+
 if ($addbud) { // a Non-Monthlies account does not yet exist
     // get current highest budpos
     $budposReq = "SELECT `budpos` FROM `Budgets` WHERE `userid` = :uid AND " .

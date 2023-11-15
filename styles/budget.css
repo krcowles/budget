@@ -30,3 +30,13 @@
 .amt {
     color: #006600;
 }
+/* User note if hover over Non-Monthlies accoutn */
+#nmacct {
+    color:  cadetblue;
+}
+#nmnote {
+    display: none;
+    height: 26px;
+    width: 124px;
+    color: brown;
+}

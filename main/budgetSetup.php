@@ -45,16 +45,53 @@ require_once "../utilities/getExpenses.php";
 
 $nonmonthly = false;
 /**
- * If there is a non-monthlies account, set the expected balances for all
- * based on payment frequency, current month, and payment history
+ * If there is a non-monthlies account perform the following activities:
+ * NOTE: Every non-monthly account will have a cycle of payment months
+ *   1. Retrieve data to calculate the current funds available and the
+ *      funds expected to meet the month's needs (info available to user);
+ *   2. Extract any data pertinent to autopays and present to displayBudget.php
+ *      javascript (budget.js)
  */ 
 if (in_array('Non-Monthlies', $account_names)) {
     $nonmonthly = true;
+    $apacct   = [];
+    $aptype   = [];
+    $apday    = [];
+    $apnext   = [];
+    $getNM_Data = "SELECT `record`,`item`,`freq`,`amt`,`first`,`SA_yr`,`APType`," .
+        "`APDay`,`mo_pd`,`yr_pd` FROM `Irreg` WHERE `userid`=?;";
+    $NM_Data = $pdo->prepare($getNM_Data);
+    $NM_Data->execute([$_SESSION['userid']]);
+    $nmdata = $NM_Data->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($nmdata as $data) {
+        $month_data = prepNonMonthly(
+            $data['freq'], $data['first'], $data['amt'], $data['SA_yr'], 
+            $data['mo_pd'], $data['yr_pd'], $month_names, $thismo, $thisyear
+        );
+        if (!empty($data['APType'])) {  // collect autopay data
+            if (!$month_data[0] && !$month_data[1]) { // not paid yet
+                array_push($apacct, $data['item']);
+                array_push($aptype, $data['APType']);
+                array_push($apday,  $data['APDay']);
+                array_push($apnext, $month_data[2]);
+            }
+        }
+        $updateExpReq = "UPDATE `Irreg` SET `expected`=? WHERE `record`=?;";
+        $updateExp = $pdo->prepare($updateExpReq);
+        $updateExp->execute([$month_data[3], $data['record']]);
+    }
+
+    // 1. This month's balances
     $nmfbal = getCurrentNMBal('funds', $pdo, $_SESSION['userid']);
     $nmebal = getCurrentNMBal('expected', $pdo, $_SESSION['userid']);
-    setNMExpected($pdo, $_SESSION['userid'], $month_names, $thismo, $thisyear);
+    // 2. Present autopay data to javascript on displayBudget.php
+    $js_nmapacct = json_encode($apacct);
+    $js_nmaptype = json_encode($aptype);
+    $js_nmapdues = json_encode($apnext);
+    $js_nmapdays = json_encode($apday);
 }
-// form balances
+
+// form budget balances
 $balBudget  = 0;
 $balPrev0   = 0;
 $balPrev1   = 0;
