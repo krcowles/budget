@@ -66,7 +66,7 @@ if (in_array('Non-Monthlies', $account_names)) {
     foreach ($nmdata as $data) {
         $month_data = prepNonMonthly(
             $data['freq'], $data['first'], $data['amt'], $data['SA_yr'], 
-            $data['mo_pd'], $data['yr_pd'], $month_names, $thismo, $thisyear
+            $data['mo_pd'], intval($data['yr_pd']), $month_names, $thismo, $thisyear
         );
         if (!empty($data['APType'])) {  // collect autopay data
             if (!$month_data[0] && !$month_data[1]) { // not paid yet
@@ -80,7 +80,6 @@ if (in_array('Non-Monthlies', $account_names)) {
         $updateExp = $pdo->prepare($updateExpReq);
         $updateExp->execute([$month_data[3], $data['record']]);
     }
-
     // 1. This month's balances
     $nmfbal = getCurrentNMBal('funds', $pdo, $_SESSION['userid']);
     $nmebal = getCurrentNMBal('expected', $pdo, $_SESSION['userid']);
