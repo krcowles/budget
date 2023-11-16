@@ -65,7 +65,7 @@ INSERT INTO Budgets VALUES
 ('52','Albuquerque Gal','11','Car maintenance ','6','A','60','1120.00','1180.00','1180.00','','0','','0'),
 ('53','Albuquerque Gal','11','Dentist ','7','A','40','817.10','857.10','857.10','','0','','0'),
 ('54','Albuquerque Gal','11','Birthday','8','A','35','147.90','182.90','182.90','','0','','0'),
-('55','Albuquerque Gal','11','Christmas','9','A','35','317.88','352.88','352.88','','0','','0'),
+('55','Albuquerque Gal','11','Christmas','9','A','35','317.88','352.88','306.68','','0','','0'),
 ('56','Albuquerque Gal','11','Glasses','10','A','20','273.63','293.63','293.63','','0','','0'),
 ('57','Albuquerque Gal','11','Bird','11','A','20','28.88','48.88','40.00','','0','','0'),
 ('58','Albuquerque Gal','11','Phone','12','A','103','92.00','190.00','103.00','','0','','0'),
@@ -140,7 +140,7 @@ INSERT INTO Budgets VALUES
 ('138',NULL,'28','Tmp4','30004','T','0','0.00','0.00','0.00','','0','','0'),
 ('139',NULL,'28','Tmp5','30005','T','0','0.00','0.00','0.00','','0','','0'),
 ('142',NULL,'30','Undistributed Funds','30000','T','0','0.00','0.00','0.00','','0','','0'),
-('141',NULL,'4','Non-Monthlies','31','A','142','288.30','365.72','434.64','','0','','142'),
+('141',NULL,'4','Non-Monthlies','31','A','142','288.30','365.72','360.25','','0','','142'),
 ('143',NULL,'30','Tmp1','30001','T','0','0.00','0.00','0.00','','0','','0'),
 ('144',NULL,'30','Tmp2','30002','T','0','0.00','0.00','0.00','','0','','0'),
 ('145',NULL,'30','Tmp3','30003','T','0','0.00','0.00','0.00','','0','','0'),
@@ -188,7 +188,7 @@ CREATE TABLE `Charges` (
   `acctchgd` varchar(60) NOT NULL,
   `paid` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`expid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3639 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3641 DEFAULT CHARSET=latin1;
 
 
 INSERT INTO Charges VALUES
@@ -2820,7 +2820,7 @@ INSERT INTO Charges VALUES
 INSERT INTO Charges VALUES
 ('3583',NULL,'11','Credit','MC','2023-10-26','20.94','CVS','Medical','N'),
 ('3584',NULL,'11','Credit','MC','2023-10-26','9.68','Albertsons','vet/cat','N'),
-('3585',NULL,'11','Credit','MC','2023-10-26','54.31','JCP','cash','N'),
+('3585',NULL,'11','Credit','MC','2023-10-26','54.31','JCP','cash','Y'),
 ('3586',NULL,'11','Credit','MC','2023-10-26','12.04','Kohls','Misc','N'),
 ('3587',NULL,'4','Credit','Citi','2023-10-27','47.76','Albertsons','Groceries','Y'),
 ('3588',NULL,'4','Credit','Citi','2023-10-27','76.23','Sprouts','Groceries','N'),
@@ -2873,7 +2873,9 @@ INSERT INTO Charges VALUES
 ('3635',NULL,'4','Credit','Visa','2023-11-15','36.92','Village Inn','Entertainment','N'),
 ('3636',NULL,'4','Credit','Visa','2023-11-15','16.12','Home Depot - varnish','Home Misc','N'),
 ('3637',NULL,'4','Credit','Visa','2023-11-15','52.67','Staples','Christmas','N'),
-('3638',NULL,'4','Credit','Visa','2023-11-15','37.72','Barnes & Noble','Christmas','N');
+('3638',NULL,'4','Credit','Visa','2023-11-15','37.72','Barnes & Noble','Christmas','N'),
+('3639',NULL,'11','Credit','MC','2023-11-15','46.20','Saga cards','Christmas','N'),
+('3640',NULL,'4','Credit','Visa','2023-11-15','74.39','Sirius XM','Non-Monthlies','N');
 
 
 
@@ -3160,19 +3162,19 @@ CREATE TABLE `Irreg` (
 
 
 INSERT INTO Irreg VALUES
-('1','4','RoadRunner Waste Mgmt','Quarterly','74.00','1.92','0.00','August','','','0','November','0'),
-('2','4','AAA NM Membership','Annually','130.00','66.00','66.00','May','','','0','','0'),
-('3','4','Kinetico Water Filters','Annually','165.00','98.00','98.00','April','','','0','','0'),
-('4','4','Costco Membership','Annually','65.00','12.00','12.00','September','','','0','October','0'),
-('5','4','DMV License Fee','Bi-Annually','50.00','9.00','9.00','August','Odd','','0','','0'),
-('6','4','RGNC Membership','Annually','30.00','27.00','27.00','February','','','0','','0'),
-('7','4','Sirius XM','Quarterly','72.00','24.00','24.00','October','','','0','','0'),
-('8','4','Water Softener Salt','Semi-Annually','45.00','24.00','24.00','August','','','0','','0'),
-('10','4','Magazines','Semi-Annually','40.00','42.00','42.00','May','','','0','','0'),
-('11','4','Atlas Septic','Bi-Annually','200.00','63.00','63.00','April','Even','','0','','0'),
-('12','4','Terminix Contract','Annually','340.00','67.72','203.00','April','','','0','','0'),
+('1','4','RoadRunner Waste Mgmt','Quarterly','74.00','1.92','74.01','August','','','0','November','0'),
+('2','4','AAA NM Membership','Annually','130.00','66.00','64.98','May','','','0','','0'),
+('3','4','Kinetico Water Filters','Annually','165.00','98.00','96.25','April','','','0','','0'),
+('4','4','Costco Membership','Annually','65.00','12.00','5.42','September','','Citi','1','October','0'),
+('5','4','DMV License Fee','Bi-Annually','50.00','9.00','29.12','August','Odd','','0','','0'),
+('6','4','RGNC Membership','Annually','30.00','27.00','22.50','February','','','0','','0'),
+('7','4','Sirius XM','Quarterly','75.00','-50.39','75.00','November','','Visa','1','November','2023'),
+('8','4','Water Softener Salt','Semi-Annually','45.00','24.00','22.50','August','','','0','','0'),
+('10','4','Magazines','Semi-Annually','40.00','42.00','40.02','May','','','0','','0'),
+('11','4','Atlas Septic','Bi-Annually','200.00','63.00','149.94','April','Even','','0','','0'),
+('12','4','Terminix Contract','Annually','340.00','67.72','198.31','April','','','0','','0'),
 ('13','4','IPCC Membership','Annually','60.00','0.00','5.00','October','','','0','','0'),
-('14','4','Barnes & Noble Membership','Annually','25.00','0.00','36.00','November','','','0','','0');
+('14','4','Barnes & Noble Membership','Annually','25.00','0.00','25.00','November','','','0','','0');
 
 
 
