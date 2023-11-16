@@ -218,8 +218,10 @@ if (ap_candidates) {
     // set up actions for making autopayments
     $('#appaybtn').on('click', function() {
         // collect any checkboxes that are checked
+        var noOfChecked = 0;
         $('.paybox').each(function() {
             if ($(this).is(':checked')) {
+                noOfChecked++;
                 let idno = this.id;
                 idno = idno.substring(2);
                 let amt = $('#amt' + idno).val();
@@ -258,6 +260,12 @@ if (ap_candidates) {
                 });
             }
         });
+        if (noOfChecked === 0) {
+            alert("You have not checked any autopays for payment");
+        }
+    });
+    $('#payap').on('click', function() {
+        alert("No action has been taken");
     });
     ap_items.show();  
 }
