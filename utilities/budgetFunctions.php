@@ -121,6 +121,11 @@ function getCurrentNMBal($type, $pdo, $uid)
 function prepNonMonthly(
     $freq, $first, $amt, $alt, $paymo, $payyr, $months, $thismo, $thisyr
 ) {
+    // TEST CODE
+    if ($freq === 'Quarterly' && $first === 'November') {
+        $x = 1; // breakpoint
+    }
+    // ---------
     $expected = 0;
     $acct_paid = false;
     $wait = false; // true => already paid, OR it's an off year to pay [for autopays]
@@ -146,6 +151,8 @@ function prepNonMonthly(
  
     /**
      * Find the next month a payment is due; Calculate the resulting $expected funds
+     * Note that the incoming $thismo is an index into $months, and is numerically
+     * one less than the current month digit (e.g. $thismo = 10 => November);
      */
     if ($payfreq === 1 || $payfreq === 0.5) {
         // Bi-annual or annual payments
@@ -260,6 +267,11 @@ function prepNonMonthly(
                     $next_due = $dist_months[0];
                     $delta = $thismo - $dist_months[$k];
                     $expected = round($delta * $paypermo, 2);
+                    if ($thismo >= array_search($paymo, $months)
+                        && $payyr === $thisyr
+                    ) {
+                        $acct_paid = true;
+                    }
                 }
             }
         }
