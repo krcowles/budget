@@ -8,10 +8,11 @@ th {
 th, td {
     padding: 4px 10px 4px 10px;
 }
-table {
+table#bud_mgr {
     border-collapse: collapse;
+    float: left;
 }
-table, th {
+table#bud_mgr, th {
     border-style: ridge;
     border-width: 1px;
 }
@@ -24,4 +25,11 @@ tbody tr:nth-child(odd):hover {
 }
 tbody tr:nth-child(even):hover {
     background-color: #bfd9bf;
+}
+#budsum {
+    position: fixed;
+    font-size: 20px;
+    font-weight: bold;
+    color: darkgreen;
+    width: 400px;
 }
