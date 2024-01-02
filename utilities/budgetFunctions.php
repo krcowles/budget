@@ -121,11 +121,6 @@ function getCurrentNMBal($type, $pdo, $uid)
 function prepNonMonthly(
     $freq, $first, $amt, $alt, $paymo, $payyr, $months, $thismo, $thisyr
 ) {
-    // TEST CODE
-    if ($freq === 'Quarterly' && $first === 'November') {
-        $x = 1; // breakpoint
-    }
-    // ---------
     $expected = 0;
     $acct_paid = false;
     $wait = false; // true => already paid, OR it's an off year to pay [for autopays]

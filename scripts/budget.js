@@ -15,34 +15,29 @@ $('#bp').css('display', 'none'); // not needed on home (budget) page
  * expected balance.
  */
 if ($('#combo_acct').length > 0) {
-    // set navbar menu item
+    // set navbar menu item (default is "Add Non-Monthlies Account"):
     $('#combo').text("Manage Non-Monthlies Account");
     let actual = parseFloat($('#combo_acct').text());
     let expected = parseFloat($('#expected_sum').text());
-    let $accts = $('.acct');
-    $accts.each(function(indx, acct_item) {
-        if (acct_item.innerText === 'Non-Monthlies') {
-            acct_item.id = 'nmacct';
-            let nmpos = $(acct_item).offset();
-            let note_left = nmpos.left + 120;
-            let note_top  = nmpos.top + 2;
-            let note = '<div id="nmnote" style="position:absolute;z-index:100;' +
-                'top:' + note_top + 'px;left:' + note_left + 'px;"' +
-                '>Click for status</div>';
-           
-            $('body').append(note);
-            $(acct_item).hover(
-                function() {
-                    $('#nmnote').css('display', 'block');
-                },
-                function() {
-                    $('#nmnote').css('display', 'none');
-                }
-            );
-            $(acct_item).on('click', function() {
-                alert("Expect " + expected + "; Available: " + actual);
-            });
+    let nonm_note = $('.acct:contains("Non-Monthlies")');
+    nonm_note.attr('id', 'nmacct');
+    let nmpos = $(nonm_note).offset();
+    let note_left = nmpos.left + 120;
+    let note_top  = nmpos.top + 2;
+    let note = '<div id="nmnote" style="position:absolute;z-index:100;' +
+        'top:' + note_top + 'px;left:' + note_left + 'px;"' +
+        '>Click for status</div>';
+    $('body').append(note);
+    $(nonm_note).hover(
+        function() {
+            $('#nmnote').css('display', 'block');
+        },
+        function() {
+            $('#nmnote').css('display', 'none');
         }
+    );
+    $(nonm_note).on('click', function() {
+        alert("Expect " + expected + "; Available: " + actual);
     });
 }
 /**
@@ -108,7 +103,7 @@ if ($('#mstr').text() === 'yes') {
     });
 }
 /**
- * Set up for autopays - budget page only; for non-monthlies, next loop
+ * Set up for autopays - budget page only; for non-monthlies, see #combo_acct
  */
 var ap_items = new bootstrap.Modal(document.getElementById('presentap'));
 // check autopayment status
@@ -131,6 +126,7 @@ var ap_candidates = false;
  *     `moday` is 0, and where `autopd` is empty 
  *  2. For the Non-Monthlies account, if present, extract qualified autopays
  *     from the script variables assigned in budget_setup.php.
+ *  3. NOTE: var modig is the current month (1-based!) defined in menus.js
  */ 
 $('.apday').each(function(indx) {
     if ($(this).text() !== "") { // this is `moday` or empty string
@@ -170,21 +166,23 @@ $('.apday').each(function(indx) {
     }
 });
 /**
- * If there is a 'Non-Monthlies' account, and it has specified autopays,
- * add them to the arrays created above.
+ * If there is a 'Non-Monthlies' account, and it has specified UNPAID 
+ * autopays, add them to the arrays created above for posting.
+ * NOTE: "nonm_*" vars are defined in displayBudget.php; nonm_apnext
+ * values are  0-based;
  */
 if ($('#combo_acct').length > 0) {
     for (let k=0; k<nonm_apacct.length; k++) {
-        if (nonm_apdays[k] <= dd && nonm_apnext[k] !== modig) {
-            payday.push(nonm_apdays[k]);
-            paywith.push(nonm_aptype[k]);
-            aname.push(nonm_apacct[k]);
-            ptype.push('non');
-            ap_candidates = true;
+        if (modig-1 > nonm_apnext[k]
+        || (nonm_apnext[k] === (modig-1) &&  nonm_apdays[k] >= dd)) {
+                payday.push(nonm_apdays[k]);
+                paywith.push(nonm_aptype[k]);
+                aname.push(nonm_apacct[k]);
+                ptype.push('non');
+                ap_candidates = true;
         }
     }
 }
-
 
 // user presentation of autopay candidates:
 if (ap_candidates) {

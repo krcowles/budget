@@ -161,12 +161,12 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <script src="../scripts/jQnumberFormat.js"></script>
 <script type="text/javascript">
     var existingAPs = <?=$jsAPAccts;?>;
-    <?php if ($nonmonthly) : ?>
+<?php if ($nonmonthly) : ?>
     var nonm_apacct = <?=$js_nmapacct;?>;
     var nonm_aptype = <?=$js_nmaptype;?>;
     var nonm_apdays = <?=$js_nmapdays;?>;
     var nonm_apnext = <?=$js_nmapdues;?>;
-    <?php endif; ?>
+<?php endif; ?>
 </script>
 
 </body>

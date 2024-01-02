@@ -63,7 +63,7 @@ $old_bud = "$" . number_format($old_bud, 0, ".", ",");
             <?php endfor; ?>
             </tbody>
         </table>
-        <div id="budsum"><span>Total Monthly Allocatio: </span>
+        <div id="budsum"><span>Total Monthly Allocation: </span>
             <span id="allocation"><?=$old_bud;?></span><br />
         </div>
     </div>
