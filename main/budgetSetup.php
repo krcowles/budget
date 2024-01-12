@@ -65,7 +65,7 @@ if (in_array('Non-Monthlies', $account_names)) {
     $nmdata = $NM_Data->fetchAll(PDO::FETCH_ASSOC);
     foreach ($nmdata as $data) {
         $month_data = prepNonMonthly(
-            $data['freq'], $data['first'], $data['amt'], $data['SA_yr'], 
+            $data['freq'], $data['first'], $data['amt'], $data['SA_yr'],
             $data['mo_pd'], intval($data['yr_pd']), $month_names, $thismo, $thisyear
         );
         if (!empty($data['APType'])) {  // collect autopay data

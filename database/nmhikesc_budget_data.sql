@@ -25,38 +25,38 @@ INSERT INTO Budgets VALUES
 ('4','krc','4','Natural Gas','5','A','70','198.32','162.13','232.13','','0','','70'),
 ('5','krc','4','Auto Gas','6','A','115','10.57','22.34','137.34','','0','','115'),
 ('7','krc','4','Chiro','8','A','195','37.09','37.91','232.91','Visa','20','12','195'),
-('8','krc','4','Medical/Dental','9','A','500','405.37','844.45','1134.45','','0','','290'),
-('9','krc','4','Cash','10','A','200','100.00','0.00','0.00','','0','','0'),
-('10','krc','4','TV/Internet','11','A','180','65.95','61.54','61.54','Wells Fargo','23','12','0'),
-('11','krc','4','Auto Insurance','13','A','130','542.00','642.00','642.00','','0','','0'),
-('12','krc','4','Auto Maintenance','14','A','130','-9.96','82.75','82.75','','0','','0'),
-('13','krc','4','Appliances/Repair','15','A','120','286.39','406.39','406.39','','0','','0'),
-('14','krc','4','Home Misc','16','A','350','-567.36','-89.12','-89.12','','0','','0'),
-('15','krc','4','Verizon','17','A','75','42.41','45.12','45.12','Visa','7','12','0'),
-('17','krc','4','Clothing','19','A','25','-92.38','-16.98','-16.98','','0','','0'),
-('18','krc','4','Health Items','20','A','100','-202.27','-263.99','-263.99','','0','','0'),
-('19','krc','4','Vision','21','A','20','454.00','437.43','437.43','','0','','0'),
-('20','krc','4','Travel','23','A','300','-377.81','-127.81','-127.81','','0','','0'),
-('21','krc','4','Charities','24','A','30','-30.00','0.00','0.00','','0','','0'),
-('23','krc','4','Wine','26','A','75','-159.98','-161.91','-161.91','','0','','0'),
-('24','krc','4','Entertainment','27','A','325','-36.64','-20.28','-20.28','','0','','0'),
-('26','krc','4','Groceries','3','A','1150','-129.23','33.03','1183.03','','0','','1150'),
-('27','krc','4','Gifts','22','A','40','104.01','61.75','61.75','','0','','0'),
-('28','krc','4','Christmas','25','A','125','996.14','6.27','6.27','','0','','0'),
-('29','krc','4','Undistributed Funds','30000','T','0','46.40','0.00','0.00','','0','','0'),
-('30','krc','4','Computer','30001','T','25','-301.09','-276.09','-276.09','','0','','0'),
+('8','krc','4','Medical/Dental','9','A','500','405.37','844.45','1015.70','','0','','500'),
+('9','krc','4','Cash','10','A','200','100.00','0.00','200.00','','0','','200'),
+('10','krc','4','TV/Internet','11','A','180','65.95','61.54','241.54','Wells Fargo','23','12','180'),
+('11','krc','4','Auto Insurance','13','A','130','542.00','642.00','117.00','','0','','130'),
+('12','krc','4','Auto Maintenance','14','A','130','-9.96','82.75','212.75','','0','','130'),
+('13','krc','4','Appliances/Repair','15','A','120','286.39','406.39','526.39','','0','','120'),
+('14','krc','4','Home Misc','16','A','350','-567.36','-89.12','140.69','','0','','350'),
+('15','krc','4','Verizon','17','A','75','42.41','45.12','47.83','Visa','7','01','75'),
+('17','krc','4','Clothing','19','A','25','-92.38','-16.98','8.02','','0','','25'),
+('18','krc','4','Health Items','20','A','100','-202.27','-263.99','-144.89','','0','','100'),
+('19','krc','4','Vision','21','A','20','454.00','437.43','457.43','','0','','20'),
+('20','krc','4','Travel','23','A','300','-377.81','-127.81','172.19','','0','','300'),
+('21','krc','4','Charities','24','A','30','-30.00','0.00','30.00','','0','','30'),
+('23','krc','4','Wine','26','A','75','-159.98','-161.91','-86.91','','0','','75'),
+('24','krc','4','Entertainment','27','A','325','-36.64','-20.28','245.62','','0','','325'),
+('26','krc','4','Groceries','3','A','1150','-129.23','33.03','1021.20','','0','','1150'),
+('27','krc','4','Gifts','22','A','40','104.01','61.75','101.75','','0','','40'),
+('28','krc','4','Christmas','25','A','125','996.14','6.27','131.27','','0','','125'),
+('29','krc','4','Undistributed Funds','30000','T','0','46.40','0.00','20000.00','','0','','0'),
+('30','krc','4','Computer','30001','T','25','-301.09','-276.09','-301.19','','0','','25'),
 ('31','krc','4','Escrow Account','30002','T','0','0.00','0.00','0.00','','0','','0'),
 ('32','krc','4','Crowns','30003','T','0','100.00','50.00','50.00','','0','','0'),
 ('33','krc','4','2023 Taxes','30004','T','0','0.00','0.00','0.00','','0','','0'),
-('34','krc','4','Tires','30005','T','25','110.00','135.00','135.00','','0','','0'),
+('34','krc','4','Tires','30005','T','25','110.00','135.00','160.00','','0','','25'),
 ('41','Albuquerque Gal','11','Undistributed Funds','30000','T','0','0.10','0.00','0.00','','0','','0'),
 ('42','Albuquerque Gal','11','Medicare','30001','T','0','4666.14','4666.14','4666.14','','0','','0'),
 ('43','Albuquerque Gal','11','Savings','30002','T','105','2469.80','2196.50','2196.50','','0','','0'),
 ('44','Albuquerque Gal','11','Computer/phone','30003','T','50','996.00','1046.00','1046.00','','0','','0'),
 ('45','Albuquerque Gal','11','Medical','30004','T','83','481.92','382.09','382.09','','0','','0'),
 ('46','Albuquerque Gal','11','Tmp5','30005','T','0','0.00','0.00','0.00','','0','','0'),
-('47','Albuquerque Gal','11','cash','1','A','240','133.15','172.00','172.00','','0','','0'),
-('48','Albuquerque Gal','11','vet/cat','2','A','85','178.51','182.41','126.15','','0','','0'),
+('47','Albuquerque Gal','11','cash','1','A','240','133.15','172.00','100.52','','0','','0'),
+('48','Albuquerque Gal','11','vet/cat','2','A','85','178.51','182.41','86.68','','0','','0'),
 ('49','Albuquerque Gal','11','hair','3','A','25','225.00','195.00','195.00','','0','','0'),
 ('50','Albuquerque Gal','11','Gas','4','A','45','937.36','951.69','928.52','','0','','0'),
 ('51','Albuquerque Gal','11','Class','5','A','50','106.94','68.17','68.17','','0','','0'),
@@ -69,7 +69,7 @@ INSERT INTO Budgets VALUES
 ('58','Albuquerque Gal','11','Phone','12','A','103','103.00','103.00','103.00','','0','','0'),
 ('59','Albuquerque Gal','11','Vitamins','13','A','100','57.50','98.42','98.42','','0','','0'),
 ('60','Albuquerque Gal','11','Travel','14','A','50','245.00','295.00','295.00','','0','','0'),
-('61','Albuquerque Gal','11','Misc','15','A','45','0.00','45.00','45.00','','0','','0'),
+('61','Albuquerque Gal','11','Misc','15','A','45','0.00','45.00','8.46','','0','','0'),
 ('62','Albuquerque Gal','11','Massage','16','A','20','80.00','100.00','100.00','','0','','0'),
 ('72','','13','Tmp1','30001','T','0','0.00','0.00','0.00','','0','','0'),
 ('73','','13','Tmp2','30002','T','0','0.00','0.00','0.00','','0','','0'),
@@ -79,8 +79,8 @@ INSERT INTO Budgets VALUES
 ('76','','13','Tmp5','30005','T','0','0.00','0.00','0.00','','0','','0'),
 ('71','','13','Undistributed Funds','30000','T','0','0.00','0.00','0.00','','0','','0'),
 ('70','','4','Genworth LTC Policy','29','A','0','9.94','9.94','9.94','','0','','0'),
-('81','N/A','4','Landscape Maintenance','12','A','150','1663.35','1113.35','1113.35','','0','','0'),
-('80','N/A','4','Hearing Aids','28','A','50','1200.00','1250.00','1250.00','','0','','0'),
+('81','N/A','4','Landscape Maintenance','12','A','150','1663.35','1113.35','1263.35','','0','','150'),
+('80','N/A','4','Hearing Aids','28','A','50','1200.00','1250.00','1300.00','','0','','50'),
 ('87',NULL,'14','Tmp2','30002','T','0','0.00','0.00','0.00','','0','','0'),
 ('88',NULL,'14','Tmp3','30003','T','0','0.00','0.00','0.00','','0','','0'),
 ('89',NULL,'14','Tmp4','30004','T','0','0.00','0.00','0.00','','0','','0'),
@@ -138,7 +138,7 @@ INSERT INTO Budgets VALUES
 ('138',NULL,'28','Tmp4','30004','T','0','0.00','0.00','0.00','','0','','0'),
 ('139',NULL,'28','Tmp5','30005','T','0','0.00','0.00','0.00','','0','','0'),
 ('142',NULL,'30','Undistributed Funds','30000','T','0','0.00','0.00','0.00','','0','','0'),
-('141',NULL,'4','Non-Monthlies','31','A','140','285.86','441.86','441.86','','0','','0'),
+('141',NULL,'4','Non-Monthlies','31','A','149','285.86','441.86','581.86','','0','','140'),
 ('143',NULL,'30','Tmp1','30001','T','0','0.00','0.00','0.00','','0','','0'),
 ('144',NULL,'30','Tmp2','30002','T','0','0.00','0.00','0.00','','0','','0'),
 ('145',NULL,'30','Tmp3','30003','T','0','0.00','0.00','0.00','','0','','0'),
@@ -186,7 +186,7 @@ CREATE TABLE `Charges` (
   `acctchgd` varchar(60) NOT NULL,
   `paid` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`expid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3806 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3828 DEFAULT CHARSET=latin1;
 
 
 INSERT INTO Charges VALUES
@@ -2923,8 +2923,8 @@ INSERT INTO Charges VALUES
 ('3686',NULL,'4','Credit','Visa','2023-11-29','276.87','TLC - Shower/valve','Appliances/Repair','Y'),
 ('3687',NULL,'4','Credit','Visa','2023-11-29','45.00','Copay - Dermatology','Medical/Dental','Y'),
 ('3688',NULL,'4','Credit','Visa','2023-11-29','50.00','Range Cafe','Entertainment','Y'),
-('3689',NULL,'4','Credit','Citi','2023-11-29','38.92','Albertsons','Groceries','N'),
-('3690',NULL,'4','Credit','Citi','2023-11-29','61.56','Sprouts','Groceries','N'),
+('3689',NULL,'4','Credit','Citi','2023-11-29','38.92','Albertsons','Groceries','Y'),
+('3690',NULL,'4','Credit','Citi','2023-11-29','61.56','Sprouts','Groceries','Y'),
 ('3691',NULL,'4','Credit','Visa','2023-11-29','53.90','FedEx','Home Misc','Y'),
 ('3692',NULL,'11','Credit','MC','2023-11-29','17.16','Amazon','cash','Y'),
 ('3693',NULL,'11','Credit','MC','2023-11-29','41.51','oil','cash','Y'),
@@ -2936,16 +2936,16 @@ INSERT INTO Charges VALUES
 ('3699',NULL,'4','Credit','Visa','2023-11-30','45.00','Karen copay','Medical/Dental','Y'),
 ('3700',NULL,'4','Debit','Wells Fargo','2023-12-01','116.99','Mosaic','Electric','Y'),
 ('3701',NULL,'4','Check','Check or Draft','2023-12-01','170.00','Adidam','Tithe','Y'),
-('3702',NULL,'4','Credit','Citi','2023-12-01','54.20','Albertsons','Groceries','N'),
-('3703',NULL,'4','Credit','Citi','2023-12-01','28.75','Sprouts','Groceries','N'),
+('3702',NULL,'4','Credit','Citi','2023-12-01','54.20','Albertsons','Groceries','Y'),
+('3703',NULL,'4','Credit','Citi','2023-12-01','28.75','Sprouts','Groceries','Y'),
 ('3708',NULL,'4','Credit','Visa','2023-12-02','46.50','River of Lights','Entertainment','Y'),
 ('3705',NULL,'4','Credit','Visa','2023-12-02','51.80','Olive Garden','Entertainment','Y'),
 ('3706',NULL,'4','Credit','Visa','2023-12-02','64.55','Hobby Lobby - Luminarias','Christmas','Y'),
 ('3707',NULL,'4','Credit','Visa','2023-12-01','91.94','TSC - Bird Seed','Home Misc','Y'),
 ('3709',NULL,'4','Credit','Visa','2023-12-04','127.95','Spinal Hygiene','Medical/Dental','Y'),
 ('3710',NULL,'4','Credit','Visa','2023-12-05','2.13','Walmart - box','Christmas','Y'),
-('3711',NULL,'4','Credit','Citi','2023-12-05','64.11','Albertsons','Groceries','N'),
-('3712',NULL,'4','Credit','Citi','2023-12-05','6.09','Sprouts','Groceries','N'),
+('3711',NULL,'4','Credit','Citi','2023-12-05','64.11','Albertsons','Groceries','Y'),
+('3712',NULL,'4','Credit','Citi','2023-12-05','6.09','Sprouts','Groceries','Y'),
 ('3713',NULL,'11','Credit','MC','2023-12-05','12.88','cvs','cash','Y'),
 ('3714',NULL,'11','Credit','MC','2023-12-05','5.49','smith','cash','Y'),
 ('3715',NULL,'11','Credit','MC','2023-12-05','48.57','Adobe','Christmas','Y'),
@@ -2968,9 +2968,9 @@ INSERT INTO Charges VALUES
 ('3732',NULL,'4','Credit','Visa','2023-12-08','38.40','Murphys','Auto Gas','Y'),
 ('3733',NULL,'4','Credit','Visa','2023-12-08','32.29','Mister Car wash','Auto Maintenance','Y'),
 ('3734',NULL,'4','Credit','Visa','2023-12-09','44.34','Thai Boran','Entertainment','Y'),
-('3735',NULL,'4','Credit','Citi','2023-12-09','86.90','Albertsons','Groceries','N'),
-('3736',NULL,'4','Credit','Citi','2023-12-09','47.49','Sprouts','Groceries','N'),
-('3737',NULL,'4','Credit','Citi','2023-12-09','48.53','Sprouts','Groceries','N'),
+('3735',NULL,'4','Credit','Citi','2023-12-09','86.90','Albertsons','Groceries','Y'),
+('3736',NULL,'4','Credit','Citi','2023-12-09','47.49','Sprouts','Groceries','Y'),
+('3737',NULL,'4','Credit','Citi','2023-12-09','48.53','Sprouts','Groceries','Y'),
 ('3738',NULL,'11','Credit','MC','2023-12-09','40.61','amazon tea','Savings','Y'),
 ('3739',NULL,'11','Credit','MC','2023-12-10','9.54','movie','cash','Y'),
 ('3740',NULL,'11','Credit','MC','2023-12-10','25.11','Murphy','Gas','Y'),
@@ -2984,10 +2984,10 @@ INSERT INTO Charges VALUES
 ('3748',NULL,'11','Credit','MC','2023-12-12','55.46','JM','Christmas','N'),
 ('3749',NULL,'4','Credit','Visa','2023-12-13','3.19','Walmart - padded envelope','Christmas','Y'),
 ('3750',NULL,'4','Credit','Visa','2023-12-13','25.23','Jasons','Entertainment','N'),
-('3751',NULL,'4','Credit','Citi','2023-12-13','61.06','Albertsons','Groceries','N'),
-('3752',NULL,'4','Credit','Citi','2023-12-13','50.10','Sprouts','Groceries','N'),
+('3751',NULL,'4','Credit','Citi','2023-12-13','61.06','Albertsons','Groceries','Y'),
+('3752',NULL,'4','Credit','Citi','2023-12-13','50.10','Sprouts','Groceries','Y'),
 ('3753',NULL,'11','Credit','MC','2023-12-14','20.87','CVS','Medical','Y'),
-('3754',NULL,'4','Credit','Visa','2023-12-15','55.46','Josie Maran - Southern ','Christmas','N'),
+('3754',NULL,'4','Credit','Visa','2023-12-15','55.46','Josie Maran - Southern','Christmas','N'),
 ('3755',NULL,'4','Credit','Visa','2023-12-15','32.44','Sawmill Food','Entertainment','N'),
 ('3756',NULL,'4','Credit','Visa','2023-12-15','16.10','Walmart','Medical/Dental','N'),
 ('3757',NULL,'4','Credit','Visa','2023-12-15','30.14','Rocky Mtn Choc','Christmas','N'),
@@ -2999,8 +2999,8 @@ INSERT INTO Charges VALUES
 ('3763',NULL,'4','Credit','Visa','2023-12-16','36.57','Walgreens - Readers','Vision','N'),
 ('3764',NULL,'11','Credit','MC','2023-12-17','10.04','Michaels','Savings','Y'),
 ('3765',NULL,'11','Credit','MC','2023-12-17','16.80','SV','Savings','Y'),
-('3766',NULL,'4','Credit','Citi','2023-12-18','61.82','Albertsons','Groceries','N'),
-('3767',NULL,'4','Credit','Citi','2023-12-18','52.43','Sprouts','Groceries','N'),
+('3766',NULL,'4','Credit','Citi','2023-12-18','61.82','Albertsons','Groceries','Y'),
+('3767',NULL,'4','Credit','Citi','2023-12-18','52.43','Sprouts','Groceries','Y'),
 ('3768',NULL,'4','Credit','Visa','2023-12-20','194.18','illumint8','Chiro','N'),
 ('3769',NULL,'4','Credit','Visa','2023-12-20','13.79','Walmart','Christmas','N'),
 ('3770',NULL,'4','Credit','Visa','2023-12-20','30.63','Home Depot','Home Misc','N'),
@@ -3012,15 +3012,15 @@ INSERT INTO Charges VALUES
 ('3776',NULL,'4','Credit','Visa','2023-12-21','15.05','Amazon - Swiffer','Home Misc','Y'),
 ('3777',NULL,'4','Credit','Visa','2023-12-21','47.97','Wolferman\'s','Christmas','Y'),
 ('3778',NULL,'4','Credit','Visa','2023-12-21','-128.13','Pres refund','Medical/Dental','Y'),
-('3779',NULL,'4','Credit','Citi','2023-12-21','57.15','Albertsons','Groceries','N'),
-('3780',NULL,'4','Credit','Citi','2023-12-21','71.48','Sprouts','Groceries','N'),
-('3781',NULL,'4','Credit','Citi','2023-12-22','27.48','Kellers','Groceries','N'),
-('3782',NULL,'4','Credit','Citi','2023-12-22','33.28','Rocky Mtn Chocolate','Gifts','N'),
+('3779',NULL,'4','Credit','Citi','2023-12-21','57.15','Albertsons','Groceries','Y'),
+('3780',NULL,'4','Credit','Citi','2023-12-21','0.00','Sprouts - paid by check','Groceries','N'),
+('3781',NULL,'4','Credit','Citi','2023-12-22','27.48','Kellers','Groceries','Y'),
+('3782',NULL,'4','Credit','Citi','2023-12-22','33.28','Rocky Mtn Chocolate','Gifts','Y'),
 ('3783',NULL,'4','Credit','Visa','2023-12-22','48.35','Wayfair - sink soap dispenser','Home Misc','N');
 INSERT INTO Charges VALUES
-('3784',NULL,'4','Credit','Citi','2023-12-22','111.80','Costco','Groceries','N'),
+('3784',NULL,'4','Credit','Citi','2023-12-22','111.80','Costco','Groceries','Y'),
 ('3785',NULL,'4','Debit','Wells Fargo','2023-12-23','179.41','Century Link','TV/Internet','Y'),
-('3786',NULL,'4','Credit','Citi','2023-12-23','37.16','Albertsons','Groceries','N'),
+('3786',NULL,'4','Credit','Citi','2023-12-23','37.16','Albertsons','Groceries','Y'),
 ('3787',NULL,'4','Credit','Visa','2023-12-23','48.98','Hickory Farms','Gifts','N'),
 ('3788',NULL,'11','Credit','MC','2023-12-24','26.96','Walgreen','Medical','N'),
 ('3789',NULL,'11','Credit','MC','2023-12-24','52.64','Petsmart','vet/cat','N'),
@@ -3039,7 +3039,29 @@ INSERT INTO Charges VALUES
 ('3802',NULL,'11','Credit','MC','2024-01-01','23.17','Murphy','Gas','N'),
 ('3803',NULL,'11','Credit','MC','2024-01-01','39.81','JCPenney','Birthday','N'),
 ('3804',NULL,'11','Credit','MC','2024-01-01','56.26','vet','vet/cat','N'),
-('3805',NULL,'4','Debit','Wells Fargo','2024-01-02','116.99','Mosaic','Electric','Y');
+('3805',NULL,'4','Debit','Wells Fargo','2024-01-02','116.99','Mosaic','Electric','Y'),
+('3806',NULL,'4','Credit','Visa','2024-01-02','275.00','Presbyterian - CT Scan','Medical/Dental','N'),
+('3807',NULL,'4','Credit','Visa','2024-01-02','12.89','Lowe\'s','Home Misc','N'),
+('3808',NULL,'4','Credit','Citi','2024-01-03','45.00','Albertsons','Groceries','N'),
+('3809',NULL,'4','Credit','Citi','2024-01-03','21.30','Walmart - batteries','Home Misc','N'),
+('3810',NULL,'11','Credit','MC','2024-01-04','71.48','Sprouts','cash','N'),
+('3811',NULL,'4','Check','Check or Draft','2024-01-04','71.48','Karen - wrong credit card','Groceries','Y'),
+('3812',NULL,'4','Credit','Citi','2024-01-04','13.84','Whispering Bean','Entertainment','Y'),
+('3813',NULL,'4','Credit','Visa','2024-01-04','9.94','Albertsons','Groceries','N'),
+('3814',NULL,'4','Credit','Visa','2024-01-04','17.20','Home Depot','Home Misc','N'),
+('3815',NULL,'4','Credit','Visa','2024-01-04','68.80','Replacement Plates','Home Misc','N'),
+('3816',NULL,'4','Credit','Visa','2024-01-04','53.75','Thai Balls','Medical/Dental','N'),
+('3817',NULL,'4','Credit','Visa','2024-01-05','31.21','Moons Coffee','Groceries','N'),
+('3818',NULL,'4','Credit','Citi','2024-01-05','14.00','Sprouts','Groceries','N'),
+('3819',NULL,'11','Credit','MC','2024-01-05','39.47','PetSmart','vet/cat','N'),
+('3820',NULL,'4','Credit','Visa','2024-01-05','21.60','Catopia','Entertainment','N'),
+('3821',NULL,'11','Credit','MC','2024-01-06','36.54','amazon bath napkins & holder','Misc','N'),
+('3822',NULL,'4','Credit','Visa','2024-01-07','72.29','Verizon','Verizon','N'),
+('3823',NULL,'4','Credit','Visa','2024-01-07','655.00','Connect Insurance','Auto Insurance','N'),
+('3824',NULL,'4','Credit','Visa','2024-01-07','23.66','Olive Garden','Entertainment','N'),
+('3825',NULL,'4','Credit','Citi','2024-01-07','19.81','Albertsons','Groceries','N'),
+('3826',NULL,'4','Credit','Citi','2024-01-07','41.87','Sprouts','Groceries','N'),
+('3827',NULL,'4','Credit','Visa','2024-01-08','50.10','MochaHost','Computer','N');
 
 
 
@@ -3052,7 +3074,7 @@ CREATE TABLE `Deposits` (
   `otd` char(1) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`depid`)
-) ENGINE=MyISAM AUTO_INCREMENT=255 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=257 DEFAULT CHARSET=latin1;
 
 
 INSERT INTO Deposits VALUES
@@ -3310,7 +3332,9 @@ INSERT INTO Deposits VALUES
 ('251','4','2023-12-09','2831.40','N',''),
 ('252','11','2023-12-22','1241.10','N',''),
 ('253','4','2023-12-27','59.08','Y','Karen - reimb'),
-('254','4','2024-01-01','4000.00','N','');
+('254','4','2024-01-01','4000.00','N',''),
+('255','4','2024-01-06','2844.10','N',''),
+('256','4','2024-01-06','20000.00','Y','For Mosaic Pay-down');
 
 
 
@@ -3330,7 +3354,7 @@ CREATE TABLE `Irreg` (
   `mo_pd` varchar(14) NOT NULL,
   `yr_pd` smallint(4) NOT NULL,
   PRIMARY KEY (`record`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 
 INSERT INTO Irreg VALUES
@@ -3344,8 +3368,9 @@ INSERT INTO Irreg VALUES
 ('8','4','Water Softener Salt','Semi-Annually','45.00','30.00','30.00','August','','','0','','0'),
 ('10','4','Magazines','Semi-Annually','40.00','6.67','6.67','May','','','0','','0'),
 ('11','4','Atlas Septic','Bi-Annually','200.00','66.64','66.64','April','Even','','0','','0'),
-('12','4','Terminix Contract','Annually','340.00','58.91','226.64','April','','','0','','0'),
-('13','4','IPCC Membership','Annually','60.00','0.00','10.00','October','','','0','','0');
+('12','4','Terminix Contract','Annually','340.00','198.91','226.64','April','','','0','','0'),
+('13','4','IPCC Membership','Annually','60.00','0.00','10.00','October','','','0','','0'),
+('14','4','Mochahost Hosting Service','Semi-Annually','51.00','0.00','42.50','January','','Visa','5','','0');
 
 
 
@@ -3376,7 +3401,7 @@ CREATE TABLE `Transfers` (
   `amount` decimal(10,2) DEFAULT NULL,
   `xfr_date` date DEFAULT NULL,
   PRIMARY KEY (`xfrid`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 
 
 INSERT INTO Transfers VALUES
@@ -3451,7 +3476,8 @@ INSERT INTO Transfers VALUES
 ('69','4','Cash','Health Items','40.00','2023-12-15'),
 ('70','4','Crowns','Christmas','50.00','2023-12-21'),
 ('71','4','Undistributed Funds','Health Items','59.08','2023-12-27'),
-('72','4','Landscape Maintenance','Wine','100.00','2023-12-31');
+('72','4','Landscape Maintenance','Wine','100.00','2023-12-31'),
+('73','4','Undistributed Funds','Health Items','19.10','2024-01-06');
 
 
 
