@@ -58,6 +58,8 @@ if (!isset($_SESSION['userid'])) {
                 $days = floor(($orgDate - time())/$UX_DAY);
                 if ($days <= 5) {
                     $cstat = 'RENEW';
+                } else {
+                    header("Location: main/displayBudget.php");
                 }
             }
         } else {
@@ -68,4 +70,5 @@ if (!isset($_SESSION['userid'])) {
     // login session variables already exist
     $cstat = "OK";
     $start = $_SESSION['start'];
+    header("Location: main/displayBudget.php");
 }

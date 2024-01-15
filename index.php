@@ -168,8 +168,8 @@ require "accounts/getLogin.php";
     </div>
 </div>
 
-<script src="index.js"></script>
 <script src="scripts/getLogin.js"></script>
+<script defer src="index.js"></script>
 
 </body>
 </html>
