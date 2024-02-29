@@ -174,7 +174,7 @@ $('.apday').each(function(indx) {
 if ($('#combo_acct').length > 0) {
     for (let k=0; k<nonm_apacct.length; k++) {
         if (modig-1 > nonm_apnext[k]
-        || (nonm_apnext[k] === (modig-1) &&  nonm_apdays[k] >= dd)) {
+        || (nonm_apnext[k] === (modig-1) && dd >= nonm_apdays[k])) {
                 payday.push(nonm_apdays[k]);
                 paywith.push(nonm_aptype[k]);
                 aname.push(nonm_apacct[k]);
