@@ -4,6 +4,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Items Due for Autopay</h5>
+                <button type="button" style="visibility:hidden;" 
+                    class="btn">INVISIBLE BTN SPACE UTILIZATION</button>
+                <button id="iteration" type="button" class="btn 
+                    btn-secondary">Don't show again this session
+                </button>
+                
                 <button type="button" class="btn-close"
                     data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -14,10 +20,10 @@
                 </table>                
             </div>
             <div class="modal-footer">
-                <button id="appaybtn" type="button" class="btn btn-secondary">
+                <button id="appaybtn" type="button" class="btn btn-success">
                     Pay Checked Items</button>
-                <button id="payap" type="button" class="btn btn-secondary"
-                    data-bs-dismiss="modal">Close</button>
+                <button id="payap" type="button" class="btn btn-danger"
+                    data-bs-dismiss="modal">No Payments</button>
             </div>
         </div>
     </div>

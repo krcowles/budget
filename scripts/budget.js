@@ -10,6 +10,10 @@
 $(function() { 
 
 $('#bp').css('display', 'none'); // not needed on home (budget) page
+if (typeof sessionStorage.getItem("iterate") === 'undefined'
+        || sessionStorage.getItem("iterate") === null) {
+    sessionStorage.setItem("iterate", "yes");
+}
 /**
  * Look for a non-monthlies account; if present, adjust navbar text & calculate
  * expected balance.
@@ -208,7 +212,7 @@ if (ap_candidates) {
             '<td class="lst"><input id="amt' + j + '" type="text" size="6" ' +
             '/></td><td class="lst">Payee:</td>' +
             '<td class="lst"><input id="payee' + j +'" type="text" size="8" ' +
-            '/></td><td class="lst">Pay</td><td class="lst">' +
+            '/></td><td class="lst">Pay This</td><td class="lst">' +
             '<input id="py' + j + '" class="paybox" type="checkbox" /></td>' +
             '<td id="ptype' + j + '" style="display:none;">' + ptype[j] + '</td></tr>';
         $('#apbody').append(apdata);
@@ -263,9 +267,16 @@ if (ap_candidates) {
         }
     });
     $('#payap').on('click', function() {
-        alert("No action has been taken");
+        alert("No payments have been made");
     });
-    ap_items.show();  
+    $('#iteration').on('click', function() {
+        sessionStorage.setItem("iterate", "no");
+        $(this).attr("disabled", "disabled");
+        $(this).text("Dialog Will Not Repeat");
+    });
+    if (sessionStorage.getItem("iterate") === 'yes') {
+        ap_items.show();  
+    }
 }
 
 /**
