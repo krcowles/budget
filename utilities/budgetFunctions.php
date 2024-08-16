@@ -132,7 +132,7 @@ function prepNonMonthly(
     $acct_paid = false;
     $wait = false; // true => already paid, OR it's an off year to pay [for autopays]
     $dist_months = []; // all months in which a payment would be due
-    $dist_months[0] = array_search($first, $months);
+    $dist_months[0] = array_search($first, $months); // NOTE: 0-based!
     if (empty($paymo)) {
         /**
          * In this case, the expense has not registered a payment, thus $payyr
@@ -142,10 +142,11 @@ function prepNonMonthly(
          * $first may not be the earliest month. This case will be addressed in
          * the case where $payfreq > 1
          */
-        $last_pd = array_search($first, $months);
+        $last_pd = array_search($first, $months); // 0-based
         $payyr = 1000;
     } else {
-        $last_pd = array_search($paymo, $months);
+        $last_pd = array_search($paymo, $months); // 0-based
+        // $payyr should already be specified as an incoming argument
     }
     $payfreq = getFrequency($freq); // how many months in a year are pay months
     $incr_months = intval(12/$payfreq);
@@ -239,7 +240,8 @@ function prepNonMonthly(
     if ($payfreq > 1) {
         /**
          * Get the list of payment months in the cycle [$dist_months]
-         * and put them in ascending order
+         * and put them in ascending order; only $dist_months[0] has been
+         * specified so far...
          */
         for ($j=1; $j<$payfreq; $j++) {
             if ($dist_months[$j-1] + $incr_months > 11) {
@@ -255,6 +257,7 @@ function prepNonMonthly(
         /**
          * Get the next expected payment month:
          */
+        $rollover = false;
         for ($k=0; $k<$payouts; $k++) {
             if ($thismo <= $dist_months[$k]) {
                 // this is the next payment month
@@ -262,36 +265,54 @@ function prepNonMonthly(
                 break;
             } else {
                 if ($k === $payouts - 1) {
-                    // $thismo has passed the last dist_month
+                    /**
+                     * $thismo has passed the last dist_month, so next dist_month
+                     * will be in the next year.
+                     */ 
+                    $rollover = true;
                     $next_due = $dist_months[0];
                 }
             }
         }
-        /**
-         * Get account status & expected balance for $next_due
-         * Assumptions:
-         * 1. $last_pd is always one of the $dist_months (i.e. autopay items
-         *    only get paid when due).
-         * 2. If $last_pd = $thismo, the item has been paid (if $paymo not empty)
-         * 3. If $paymo is empty ($payyr = 1000), the item has not been paid
-         */
-        if ($payyr !== 1000 && $last_pd === $thismo) {
-            $acct_paid = true;
-            $wait = true;
-            $expected = 0;
-        } else {
-            // not paid yet: (obviously includes $payyr = 1000)
-            $acct_paid = false;
-            $wait = false;
-            // by defnition, $thismo <= $next_due
-            if ($thismo === $next_due) {
-                $expected = $amt;
-            } elseif ($next_due === $dist_months[0]) {
-                $delta = $thismo + (11 - $dist_months[$payouts -1]);
-                $expected = round($delta * $paypermo, 2);
+        if ($rollover) { 
+            if ($last_pd >= $dist_months[$payouts -1]) {
+                // paid on or after last payment of year
+                $acct_paid = true;
+                $wait = false;
             } else {
-                $delta = ($payfreq - ($next_due - $thismo));
-                $expected = round($delta * $paypermo, 2);
+                // paid before last payment of year (rare case)
+                $acct_paid = false;
+                $wait = false;
+            }
+            $exp = ($thismo - $last_pd) * $paypermo;
+            $expected = round($exp, 2);
+        } else {
+            /**
+             * Get account status & expected balance for $next_due
+             * Assumptions:
+             * 1. $last_pd is always one of the $dist_months (i.e. autopay items
+             *    only get paid when due).
+             * 2. If $last_pd = $thismo, the item has been paid (if $paymo not empty)
+             * 3. If $paymo is empty ($payyr = 1000), the item has not been paid
+             */
+            if ($payyr !== 1000 && $last_pd === $thismo) {
+                $acct_paid = true;
+                $wait = true;
+                $expected = 0;
+            } else {
+                // not paid yet: (obviously includes $payyr = 1000)
+                $acct_paid = false;
+                $wait = false;
+                // by defnition, $thismo <= $next_due
+                if ($thismo === $next_due) {
+                    $expected = $amt;
+                } elseif ($next_due === $dist_months[0]) {
+                    $delta = $thismo + (11 - $dist_months[$payouts -1]);
+                    $expected = round($delta * $paypermo, 2);
+                } else {
+                    $delta = ($payfreq - ($next_due - $thismo));
+                    $expected = round($delta * $paypermo, 2);
+                }
             }
         }
     }

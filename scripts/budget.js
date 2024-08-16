@@ -131,6 +131,7 @@ var ap_candidates = false;
  *  2. For the Non-Monthlies account, if present, extract qualified autopays
  *     from the script variables assigned in budget_setup.php.
  *  3. NOTE: var modig is the current month (1-based!) defined in menus.js
+ *     ********* It must be adjusted for 0-based comparisons!! *********
  */ 
 $('.apday').each(function(indx) {
     if ($(this).text() !== "") { // this is `moday` or empty string
