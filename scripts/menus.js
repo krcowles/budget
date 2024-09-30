@@ -174,6 +174,7 @@ $('body').on('click', '#nmpebtn', function() {
 // Deposit monthly (regular) income
 $('#reginc').on('click', function() {
     $('#incbtn').off('click').on('click', function() {
+        $(this).prop('disabled', true);
         let moamt = $('#incdep').val();
         reg = valAmt(moamt, true);
         if (reg === 0) {
@@ -233,6 +234,7 @@ $('#reginc').on('click', function() {
 // Deposit 'Other' [One-time] Income
 $('#onetimer').on('click', function() {
     $('#otbtn').on('click', function() {
+        $(this).prop('disabled', true);
         let otamt = $('#onedep').val();
         funds = valAmt(otamt, true);
         if (funds === 0) {
@@ -249,6 +251,7 @@ $('#undoinc').on('click', function() {
     delinc.show();
     let $items = $('#irdeps tr').find('input[id^=incitem]');
     $('#selinc').on('click', function() {
+        $(this).prop('disabled', true);
         let incids = [];
         $items.each(function() {
             if ($(this).is(":checked")) {

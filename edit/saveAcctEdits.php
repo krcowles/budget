@@ -114,49 +114,42 @@ case 'nmexp':
     );
     break;
 case 'income':
-    $newcur = []; // updated balance in account
+    $newcur = []; // updated balance in account after processing
     $newfnd = []; // updated amt of account that has been funded
     $funds = floatval(filter_input(INPUT_POST, 'funds'));
     $deposit_amt = $funds;  // $funds will change later...
-    $indx = array_search('Undistributed Funds', $account_names);
+    
     for ($j=0; $j<count($account_names); $j++) {
-        $funded = floatval($income[$j]);
-        $budval = floatval($budgets[$j]);
-        $curbal = floatval($current[$j]);
+        // $funded, $budbval, and $curbal are in lock-step wrt/ $account_names
+        $funded = floatval($income[$j]);  // amount already funded for this acct
+        $budval = floatval($budgets[$j]); // amount budgeted for this acct
+        $curbal = floatval($current[$j]); // current balance for this acct
         if ($funded < $budval) { // more funding needed for account?
-            $delta = $budval - $funded;
-            if ($funds >= $delta) {
-                $fnd = array((string) $acctid[$j] => (string) $budval);
-                array_push($newfnd, $fnd);
-                $bal = $curbal + $delta;
-                array_push($newcur, (string) $bal);
+            $delta = $budval - $funded; // additional amt to add to acct funding
+            if ($funds >= $delta) { // sufficient funds remain
+                $newfnd[$acctid[$j]] = (string) $budval;
+                $bal = $curbal + $delta; // new acct balance
                 $funds -= $delta;
-            } else {
-                $newbucks = $funded + $funds;
-                $fnd = array((string) $acctid[$j] => (string) $newbucks);
-                array_push($newfnd, $fnd);
-                $bal = $curbal + $funds;
-                array_push($newcur, (string) $bal);
+            } else { // not enough funding left to fully fund this acct
+                $newbucks = $funded + $funds; // add what left in funding
+                $newfnd[$acctid[$j]] = (string) $newbucks;
+                $bal = $curbal + $funds; // new acct balance
                 $funds = 0;
+            }
+            array_push($newcur, (string) $bal);
+            if ($funds === 0) {
                 break;
             }
         }
     }
-    // $newfnd is an array of arrays, thus cannot use fct array_values()
-    $fndval = [];
-    $fndkey = [];
-    for ($q=0; $q<count($newfnd); $q++) {
-        // this is the item's unique table `id`
-        $fndkey[$q] = (string) key($newfnd[$q]); // this is the account_id in DB
-        // this is the new value for `funded`
-        $fndval[$q] = $newfnd[$q][$fndkey[$q]];
-    }
-    // Note: $newbal has the same indices and does not need to be an array of arrays
-    if ($funds > 0) {
+    $fndkey = array_keys($newfnd);   // acct ids of updated accts
+    $fndval = array_values($newfnd); // updated amt funded of updated acct
+    if ($funds > 0) { // any funds left?
+        $indx = array_search('Undistributed Funds', $account_names);
         $uinc = floatval($current[$indx]) + $funds;
         array_push($newcur, (string) $uinc);
-        array_push($fndval, '0');
-        array_push($fndkey, $acctid[$indx]); // unique id for this Undist acct
+        array_push($fndkey, $indx); // unique id for this Undist acct
+        array_push($fndval, '0'); // undist gets no funding
     }
     for ($l=0; $l<count($fndkey); $l++) {
         $adjinc = "UPDATE `Budgets` SET `current` = :bal," .
@@ -180,8 +173,8 @@ case 'income':
         $getNMbalance->execute([$_SESSION['userid']]);
         $NMbalance = $getNMbalance->fetch(PDO::FETCH_ASSOC);
         $nm_funds = floatval($NMbalance['current']); 
-        for ($k=0; $k<count($nmdata); $k++) {
-            // distribute cash
+        for ($k=0; $k<count($nmdata); $k++) { // $nmdata found in getAccountData.php
+            // distribute cash from current non-monthly acct balance
             if ($nm_funds > 0) {
                 $full = $nmdata[$k]['expected'];
                 if ($full <= $nm_funds) {

@@ -73,7 +73,7 @@ require_once "../utilities/getCards.php";
                     <li><a id="onetimer" class="dropdown-item"
                         href="#">Other Deposits</a></li>
                     <li><a id="undoinc" class="dropdown-item"
-                        href="#">Undo a Deposit</a></li>
+                        href="#">Undo a (Non-Monthly) Deposit</a></li>
                 </ul>
             </li>
             <li class="nav-item">
