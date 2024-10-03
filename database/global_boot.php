@@ -20,6 +20,7 @@ require $documentRoot . "vendor/autoload.php";
 require $documentRoot . "database/sql_modes.php";
 require $documentRoot . "utilities/budgetFunctions.php";
 require $documentRoot . "database/errFunctions.php";
+require $documentRoot . "database/userFunding.php";
 // PHP site recommends following value for future expansion of E_ALL
 error_reporting(-1);  // 2147483647 is also suggested on PHP site, both work
 if ($HOSTNAME !== '127.0.0.1') { // production environment

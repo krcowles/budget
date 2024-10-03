@@ -61,7 +61,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
 <div id="budget">
     <table id="roll3">
         <colgroup>
-            <col style="width:260px" />
+            <col style="width:232px" />
             <col style="width:100px" />
             <col style="width:120px" />
             <col style="width:120px" />
@@ -69,7 +69,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             <col style="width:100px" />
             <col style="width:64px" />
             <col style="width:10px" class="noshow" />
-            <col style="width:16px" class="noshow" />
+            <col style="width:64px" class="<?=$fundClass;?>" />
         </colgroup>
         <thead>
             <tr>
@@ -80,8 +80,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                 <th class="tableHdrColor"><?= $month[2];?></th>
                 <th class="tableHdrColor">AutoPay With</th>
                 <th class="tableHdrColor">Day of Month</th>
-                <th class="noshow">Paid</th>
-                <th class="noshow">Income</th>
+                <th class="noshow">Funding</th>
+                <th class="tableHdrColor <?=$fundClass;?>">Income</th>
             </tr>
         </thead>
         <tbody>
@@ -97,7 +97,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                     <td class="ap tmp_color"></td>
                     <td class="apday tmp_color"></td>
                     <td class="noshow"></td>
-                    <td class="noshow"></td>
+                    <td class="tmp_color <?=$fundClass;?>"></td>
                 </tr>
                 <?php endif; ?>
                 <tr>
@@ -113,7 +113,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                         <td class="apcolor apday"><?= $day[$j];?></td>
                     <?php endif; ?>
                     <td class="noshow"><?= $paid[$j];?></td>
-                    <td class="noshow"><?= $income[$j];?></td>
+                    <td class="apcolor <?=$fundClass;?>"><?= $income[$j];?></td>
                 </tr>
             <?php endfor; ?>
             <tr id="cchd">
@@ -122,7 +122,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                     &nbsp;&nbsp;-- Not deducted from Balance until
                     reconciled --</td>
                 <td class="noshow"></td>
-                <td class="noshow"></td>
+                <td class="cc_color <?=$fundClass?>"></td>
             </tr>
             <?php for ($cc=0; $cc<count($cr); $cc++) : ?>
                 <tr>
@@ -133,7 +133,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                     <td><?= $cardbal[$cc]['bal'];?></td>
                     <td colspan="2"></td>
                     <td class="noshow"></td>
-                    <td class="noshow"></td>
+                    <td class="<?=$fundClass;?>"></td>
                 </tr>
             <?php endfor; ?>
             <tr id="balances">

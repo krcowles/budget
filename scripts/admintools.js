@@ -209,5 +209,13 @@ $('#newusr').on('click', function() {
     }
     return;
 });
+$('#showFunding').on('click', function() {
+    $.get('../utilities/displayFunding.php?disp=on');
+    return;
+});
+$('#hideFunding').on('click', function() {
+    $.get('../utilities/displayFunding.php?disp=off');
+    return;
+});
 
 });  // end of doc loaded

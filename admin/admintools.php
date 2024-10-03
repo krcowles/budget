@@ -123,7 +123,11 @@ while ($arch_yr < $current_yr) {
         </span>&nbsp;&nbsp;
         <button id="newusr" type="button" class="btn btn-warning">
             Switch User</button>
-        <br />
+        <br /><br />
+        <button id="showFunding" type="button" class="btn btn-secondary">
+            Display Funding Levels</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="hideFunding" type="button" class="btn btn-secondary">
+            Hide Funding Levels</button>
     </fieldset>
 </div>
    
