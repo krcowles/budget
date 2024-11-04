@@ -79,7 +79,7 @@ function getExceptionTraceAsString($exception)
 function budgetizerErrors($errno, $errstr, $errfile, $errline)
 {
     $lastTrace = getExceptionTraceAsString(new Exception);
-    error_log($kastTrace);
+    error_log($lastTrace);
     errorEmail($lastTrace);
     errorPage();
     

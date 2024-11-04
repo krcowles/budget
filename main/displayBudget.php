@@ -10,7 +10,6 @@
  * @license No license
  */
 session_start();
-
 if (isset($_SESSION['userid'])) {
     include "budgetSetup.php";
 } else {
@@ -80,8 +79,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                 <th class="tableHdrColor"><?= $month[2];?></th>
                 <th class="tableHdrColor">AutoPay With</th>
                 <th class="tableHdrColor">Day of Month</th>
-                <th class="noshow">Funding</th>
-                <th class="tableHdrColor <?=$fundClass;?>">Income</th>
+                <th class="noshow">AutoPd</th>
+                <th class="tableHdrColor <?=$fundClass;?>">Funding</th>
             </tr>
         </thead>
         <tbody>
@@ -149,11 +148,11 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
         </tbody>
     </table>
 </div>
-
-<?php require "bootstrapModals.html"; ?>
+<?php require "bootstrapModals.php"; ?>
 <br /><br />
 
-<script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
+<!--<script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>-->
+<script src="../scripts/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/menus.js"></script>

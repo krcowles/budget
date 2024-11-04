@@ -166,7 +166,6 @@ for ($p=0; $p<count($dr); $p++) {
     <hr />
 <?php endfor; ?>
 </div>
-
 <div id="exps">
     <h4 style="padding-left:4px;">The following entries display paid
         <em style="color:darkgreen;">check,
@@ -190,7 +189,6 @@ for ($p=0; $p<count($dr); $p++) {
             <?=$ebody;?>
         </table>
         <hr />
-
         <?php for ($i=0; $i<count($dr); $i++) : ?>
             <span class="SmallHeading">For debit card <em style="color:brown;">
             <?=$dr[$i];?></em> :</span>&nbsp;&nbsp;&nbsp;
@@ -213,7 +211,7 @@ for ($p=0; $p<count($dr); $p++) {
     </div>
 </div>
 
-<?php require_once "../main/bootstrapModals.html"; ?>
+<?php require_once "../main/bootstrapModals.php"; ?>
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>

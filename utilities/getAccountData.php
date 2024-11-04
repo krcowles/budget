@@ -209,4 +209,6 @@ if (array_search('Non-Monthlies', $account_names) !== false) {
         '</option>' . PHP_EOL;
     }
     $nmsel .= '</select>' . PHP_EOL;
+} else {
+    $nmsel = false;
 }

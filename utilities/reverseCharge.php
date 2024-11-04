@@ -117,11 +117,11 @@ if ($charges) {
         </div>
     <?php endif; ?>
     </div>
-    <?php require_once "../main/bootstrapModals.html"; ?>
+    <?php require_once "../main/bootstrapModals.php"; ?>
 </div>
 <br />
 
-<?php require_once "../main/bootstrapModals.html"; ?>
+<?php require_once "../main/bootstrapModals.php"; ?>
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>

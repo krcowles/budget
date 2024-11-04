@@ -123,12 +123,14 @@ if ($xfrs) {
 <body>
 <?php
     require "../main/navbar.php";
-    require "../main/bootstrapModals.html";
+    require "../main/bootstrapModals.php";
 ?>
 <div id="page">
 <?php
 // for export to Excel...
 $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+echo "Read it...";
+exit;
 try {
     $able = $reader->canRead($templ);
 }
@@ -148,6 +150,8 @@ if ($monthly) {
 } elseif ($xfrs) {
     include "formatTransfers.php";
 }
+echo "Reader...";
+exit;
 ?>
 </div><br />
 

@@ -10,7 +10,6 @@
  * @license No license to date
  */
 session_start();
-
 // check for no previous or 'partial' logins
 if (!isset($_SESSION['userid']) || !isset($_SESSION['cookies'])
     || !isset($_SESSION['start'])

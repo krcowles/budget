@@ -9,7 +9,7 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-require_once "database/global_boot.php";
+require "database/global_boot.php";
 require "accounts/getLogin.php";
 ?>
 <!DOCTYPE html>
