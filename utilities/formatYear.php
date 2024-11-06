@@ -9,14 +9,8 @@
  * @license No license to date
  */
 ?>
-<br />
-<h4>The following charges were incurred in <?= $period;?></h4>
+<h4><?=$hdr1;?></h4>
 <h5>NOTE: You can sort by clicking the column header</h5>
-<div style="font-size: 22px;">
-    <a href="user_annual.xlsx" download>Click to Download as Excel</a>
-    &nbsp;&nbsp;NOTE: The report takes some time to complete... wait until
-    tab activity has stopped.
-</div><br />
 <?php for ($k=1; $k<=12; $k++) : ?>
     <h5>In <?=$month_names[$k-1];?>:</h5>
     <table class="sortable">
@@ -62,46 +56,4 @@
             <?php endfor; ?>
         </tbody>
     </table><br />
-    <?php
-    /*
-    ---------------- THIS SEEMS TO CONSUME TOO MUCH MEMORY ------------
-    // Setup Excel Spreadsheet
-    if (file_exists("user_annual.xlsx")) {
-        unlink("user_annual.xlsx");
-    }
-    $monthly_excel_data = [];
-    $indx = 0;
-    for ($j=1; $j<12; $j++) {
-        foreach ($mo[$j] as $modata) {
-            $row = 'A' . $rowno;
-            $amtcell  = 'E' . $rowno++;
-            $unixTime = strtotime($modata[2]);
-            $monthly_excel_data[0] 
-                = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($unixTime);
-            $monthly_excel_data[1] = $modata[6] === 'Y' ? 'Paid' : 'Unpaid';
-            $monthly_excel_data[2] = $modata[0];
-            $monthly_excel_data[3] = $modata[1];
-            $monthly_excel_data[4] = $modata[3];
-            $monthly_excel_data[5] = $modata[4];
-            $monthly_excel_data[6] = $modata[5];
-            $spreadsheet->getActiveSheet()->fromArray(
-                $monthly_excel_data,
-                null,
-                $row,
-            );
-            $spreadsheet->getActiveSheet()->getStyle($row)->getNumberFormat()
-                ->setFormatCode(
-                    \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_XLSX15
-                );
-            $spreadsheet->getActiveSheet()->getStyle($amtcell)->getNumberFormat()
-                ->setFormatCode(
-                    \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_ACCOUNTING_USD
-                );
-            $indx++;
-        }
-    }
-    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-    $writer->save("user_annual.xlsx");
-    */
-    ?>
 <?php endfor; ?>

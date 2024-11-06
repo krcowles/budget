@@ -539,6 +539,7 @@ $('#mexpense').on('click', function() {
     $('#mexpbtn').on('click', function() {
         let month = document.getElementById('rptmo');
         let rptmo = getSelect(month);
+        // if user selects nothing, default month is January...
         var getdata = '../utilities/reports.php?id=morpt&mo=' + rptmo;
         window.open(getdata, "_blank");
         monthly.hide();
@@ -550,6 +551,7 @@ $('#annual').on('click', function() {
     $('#anexpbtn').on('click', function() {
         let rptyr = document.getElementById('rptyr');
         let year  = getSelect(rptyr);
+        // if user selects nothing, default is current year...
         let getdata = '../utilities/reports.php?id=yrrpt&yr=' + year;
         window.open(getdata, "_blank");
         yearly.hide();
@@ -561,6 +563,7 @@ $('#yrinc').on('click', function() {
     $('#aincbtn').on('click', function() {
         let incyr = document.getElementById('incyear');
         let year  = getSelect(incyr);
+        // if user selects nothing, default is current year...
         let getdata = '../utilities/reports.php?id=inc&incyr=' + year;
         window.open(getdata, "_blank");
         anninc.hide();
@@ -572,6 +575,7 @@ $('#xfrrpt').on('click', function() {
     $('#yrlyXfrbtn').on('click', function() {
         let xfryr = document.getElementById('xfryr');
         let year = getSelect(xfryr);
+        // if user selects nothing, default is current year...
         let getxfrs = '../utilities/reports.php?id=xfr&xfryr=' + year;
         window.open(getxfrs, "_blank");
         annxfrs.hide();

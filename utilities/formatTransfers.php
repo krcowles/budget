@@ -11,18 +11,14 @@
  */
 ?>
 <br />
-<h4>The following transfers were executed in <?= $period;?></h4>
+<h4><?=$hdr1;?></h4>
 <h5>NOTE: You can sort by clicking the column header</h5>
-<div style="font-size: 22px;">
-    <a href="user_annual.xlsx" download>Click to Download as Excel</a>
-    &nbsp;&nbsp;NOTE: The report takes some time to complete... wait until
-    tab activity has stopped.
-</div><br />
+<br />
 <table class="sortable">
     <colgroup>
         <col style="width:120px" />
-        <col style="width:120px" />
-        <col style="width:120px" />
+        <col style="width:200px" />
+        <col style="width:200px" />
         <col style="width:100px" />
     </colgroup>
     <thead>

@@ -2,7 +2,7 @@
 /**
  * This utility will generate a monthly or annual report, where the user
  * specifies the parameters. All expenses, paid or not, will be displayed.
- * PHP Version 7.1
+ * PHP Version 8.3.9
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -18,79 +18,85 @@ $monthly  = $id === 'morpt' ? true : false;
 $annual   = $id === 'yrrpt' ? true : false;
 $user_inc = $id === 'inc' ? true : false;
 $xfrs     = $id === 'xfr' ? true : false;
+if ($monthly || $annual) {
+    $datareq = "SELECT * FROM `Charges` WHERE `userid` = :uid;";
+    $data = $pdo->prepare($datareq); 
+    $data->execute(["uid" => $_SESSION['userid']]);
+    $report_data = $data->fetchALL(PDO::FETCH_ASSOC);
+    if ($monthly) {
+        $rmethod = [];
+        $rcdname = [];
+        $rdate = [];
+        $ramt = [];
+        $rpayee = [];
+        $racct = [];
+        $rpaid = [];
+        $period = isset($_GET['mo']) ? filter_input(INPUT_GET, 'mo') : 'No Month';
+        // NOTE: default is January, so 'mo' should always be specified...
+        $mon = array_search($period, $month_names) + 1;
+        $hdr1  = "Expenses for the month of {$period}";
 
-$datareq = "SELECT * FROM `Charges` WHERE `userid` = :uid;";
-$data = $pdo->prepare($datareq); 
-$data->execute(["uid" => $_SESSION['userid']]);
-$report_data = $data->fetchALL(PDO::FETCH_ASSOC);
-$rmethod = [];
-$rcdname = [];
-$rdate = [];
-$ramt = [];
-$rpayee = [];
-$racct = [];
-$rpaid = [];
-if ($monthly) {
-    $templ = "Monthly.xlsx";
-    $period = isset($_GET['mo']) ? filter_input(INPUT_GET, 'mo') : 'No Month';
-    $mon = array_search($period, $month_names) + 1;
-    $hdr1  = "Expenses for the month of " . $period;
-    foreach ($report_data as $item) {
-        $expdate = explode("-", $item['expdate']);
-        if ($expdate[0] === $digits[2] && $expdate[1] == $mon) {
-            array_push($rmethod, $item['method']);
-            array_push($rcdname, $item['cdname']);
-            array_push($rdate, $item['expdate']);
-            array_push($ramt, $item['expamt']);
-            array_push($rpayee, $item['payee']);
-            array_push($racct, $item['acctchgd']);
-            array_push($rpaid, $item['paid']);
+        foreach ($report_data as $item) {
+            $expdate = explode("-", $item['expdate']);
+            if ($expdate[0] === $digits[2] && $expdate[1] == $mon) {
+                array_push($rmethod, $item['method']);
+                array_push($rcdname, $item['cdname']);
+                array_push($rdate, $item['expdate']);
+                array_push($ramt, $item['expamt']);
+                array_push($rpayee, $item['payee']);
+                array_push($racct, $item['acctchgd']);
+                array_push($rpaid, $item['paid']);
+            }
+        }
+    } else { // annual
+        $period = isset($_GET['yr']) ? filter_input(INPUT_GET, 'yr') : false;
+        // default is current year, so $period should never be false
+
+        $hdr1 = "Expense Report for the Year {$period}";
+        $mo = [];
+        for ($j=1; $j<=12; $j++) {
+            $mo[$j] = [];
+        }
+        foreach ($report_data as $item) {
+            $expdate = explode("-", $item['expdate']);
+            if ($expdate[0] === $period) {
+                $month_item = array(
+                    $item['method'],
+                    $item['cdname'],
+                    $item['expdate'],
+                    $item['expamt'],
+                    $item['payee'],
+                    $item['acctchgd'],
+                    $item['paid']
+                );
+                $indx = intval($expdate[1]);
+                array_push($mo[$indx], $month_item);
+            }
         }
     }
-} 
-if ($annual) {
-    $templ = "Annual.xlsx";
-    $period = isset($_GET['yr']) ? filter_input(INPUT_GET, 'yr') : false;
-    $hdr1 = "Expense Report for " .   $period;
-    $mo = [];
-    for ($j=1; $j<=12; $j++) {
-        $mo[$j] = [];
-    }
-    foreach ($report_data as $item) {
-        $expdate = explode("-", $item['expdate']);
-        if ($expdate[0] === $period) {
-            $month_item = array(
-                $item['method'],
-                $item['cdname'],
-                $item['expdate'],
-                $item['expamt'],
-                $item['payee'],
-                $item['acctchgd'],
-                $item['paid']
-            );
-            $indx = intval($expdate[1]);
-            array_push($mo[$indx], $month_item);
-        }
-    }
-}
-if ($user_inc) {
-    $templ = "Income.xlsx";
-    $period = isset($_GET['incyr']) ? filter_input(INPUT_GET, 'incyr') : 'No year';
-    $hdr1 = "Income for the Year of " .   $period;
-}
-if ($xfrs) {
-    $templ = "Transfers.xlsx";
+} elseif ($user_inc) {
+    $period = isset($_GET['incyr']) ? filter_input(INPUT_GET, 'incyr') : false;
+    // default is current year, so $period should never be false
+    $hdr1 = "Income Report for the Year {$period}";
+
+    $depositReq = "SELECT * FROM `Deposits` WHERE `userid` = ? AND YEAR(`date`) = ?;";
+    $depositQ = $pdo->prepare($depositReq);
+    $depositQ->execute([$_SESSION['userid'], $period]);
+    $deposits = $depositQ->fetchAll(PDO::FETCH_ASSOC);
+} elseif ($xfrs) {
     $period = isset($_GET['xfryr']) ? filter_input(INPUT_GET, 'xfryr') : false;
-    $hdr1 = "Transfers for the Year of " . $period;
+    // default is current year so $period should never be false
+    $hdr1 = "Transfers for the Year of {$period}";
+
+    $getXfrsReq = "SELECT * FROM `Transfers` WHERE `userid`=?;";
+    $getXfrs = $pdo->prepare($getXfrsReq);
+    $getXfrs->execute([$_SESSION['userid']]);
+    $userXfrs = $getXfrs->fetchAll(PDO::FETCH_ASSOC);
     // set reporting timeframe:
     $start = "{$period}-01-01";
     $end   = "{$period}-12-31";
     $yr_start = strtotime($start);
     $yr_end   = strtotime($end);
-    $getXfrsReq = "SELECT * FROM `Transfers` WHERE `userid`=?;";
-    $getXfrs = $pdo->prepare($getXfrsReq);
-    $getXfrs->execute([$_SESSION['userid']]);
-    $userXfrs = $getXfrs->fetchAll(PDO::FETCH_ASSOC);
     $transfers = [];
     foreach ($userXfrs as $tran) {
         $xfd = strtotime($tran['xfr_date']);
@@ -122,62 +128,28 @@ if ($xfrs) {
 
 <body>
 <?php
-    require "../main/navbar.php";
-    require "../main/bootstrapModals.php";
+require "../main/navbar.php";
+require "../main/bootstrapModals.php";
 ?>
-<div id="page">
-<?php
-// for export to Excel...
-$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-echo "Read it...";
-exit;
-try {
-    $able = $reader->canRead($templ);
-}
-catch (Exception $ex) {
-    throw new Exception("{$templ} cannot be read by the Spreadsheet Reader");
-} 
-$spreadsheet = $reader->load($templ);
-// Set main header
-$spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, 1, $hdr1);
-$rowno = 3; // data starts at row 3
-if ($monthly) {
-    include "formatMonth.php";
-} elseif ($annual) {
-    include "formatYear.php";
-} elseif ($user_inc) {
-    include "formatIncome.php";
-} elseif ($xfrs) {
-    include "formatTransfers.php";
-}
-echo "Reader...";
-exit;
-?>
-</div><br />
+<div id="page"></div><br />
+<div id="tableOfResults" style="margin-left: 24px;">
+    <?php if ($monthly) {
+        include "formatMonth.php";
+    } elseif ($annual) {
+        include "formatYear.php";
+    } elseif ($user_inc) {
+        include "formatIncome.php";
+    } else {
+        include "formatTransfers.php";
+    }
+    ?>
+</div>
 
 <script src="https://unpkg.com/@popperjs/core@2.4/dist/umd/popper.min.js"></script>
 <script src="../scripts/bootstrap.min.js"></script>
 <script src="../scripts/jquery.min.js"></script>
 <script src="../scripts/menus.js"></script>
 <script src="../scripts/tableSort.js"></script>
-<script>
-    $('a').on('click', function() {
-        let page = $(this).attr('href');
-        $.ajax({
-            type: 'HEAD',
-            url: page,
-        success: function() {
-                // perform click;
-                return;
-        },
-        error: function() {
-                alert("Sorry, the spreadsheet did not get produced\n" +
-                    "Admin has been advised");
-                return false;
-        }
-        });
-    });
-</script>
 
 </body>
 </html>

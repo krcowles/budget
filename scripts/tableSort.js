@@ -9,19 +9,60 @@ var compare = {
 			return a > b ? 1 : 0;
 		}
 	},
-	date: function(a, b) {  // data using yyyy-mm-dd
-		// all tables contain only 1 month's data, so sort by day
+	date: function(a, b) {
+		// incoming data value is a string "yyyy-mm-dd"
 		a = a.split("-");
 		b = b.split("-");
-		a = Number(a[2]);
-		b = Number(b[2]);
-		return a - b;
+		/**
+		 * [0] is the year (this can be ignored as all reports generated
+		 * are for the same year); [1] is month, [2] is day, so first, 
+		 * sort by month:
+		 */
+		let ret_val = 0;
+		let moa = Number(a[1]);
+		let mob = Number(b[1]);
+		// if moa > mob, no need to check day
+		if (moa > mob) {
+			ret_val = 1;
+		} else if (moa < mob) {
+			ret_val = -1;
+		} else { // month values are identical
+			let daya = Number(a[2]);
+			let dayb = Number(b[2]);
+			if (daya > dayb) {
+				ret_val = 1;
+			} else if (daya < dayb) {
+				ret_val = -1;
+			} // else default value of  0
+		}
+		return ret_val;
 	},
 	amt: function(a, b) {
+		// number (a string) may not have a decimal point, so:
+		if (a.indexOf(".") === -1) {
+			a += ".00";
+		}
+		if (b.indexOf(".") === -1) {
+			b += ".00";
+		}
+		let ret_val = 0;
 		a = a.split(".");
 		b = b.split(".");
 		a = Number(a[0]) * 100 + Number(a[1]);
 		b = Number(b[0]) * 100 + Number(b[1]);
+		if (a > b) {
+			ret_val = 1;
+		} else if (a < b) {
+			ret_val = -1;
+		} else { // the characteristics are equal, so compare 'cents' values
+			let mana = Number(a[1]);
+			let manb = Number(b[1]);
+			if (mana > manb) {
+				ret_val = 1;
+			} else if (mana < manb) {
+				ret_val = -1
+			} // otherwise they are the same - ret_val = 0
+		}
 		return a - b;
 	},
 	// 'lan' will need work if commas are allowed for amts (e.g. see 'amt')
