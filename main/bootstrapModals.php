@@ -1,3 +1,13 @@
+<?php
+/**
+ * These modals are packaged for use by bootstrap
+ * PHP Version 8.3.9
+ * 
+ * @package Budget
+ * @author  Ken Cowles <krcowles29@gmail.com>
+ * @license No license to date
+ */
+?>
 <!-- Autopays Pending modal -->
 <div id="presentap" class="modal" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -70,7 +80,6 @@
     </div>
 </div>
 <!-- Non-Monthlies Expense Modal -->
-<?php if ($nmsel) : ?>
 <div id="nmexp" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -106,12 +115,12 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
                     data-bs-dismiss="modal">Close</button>
-                <button id="nmpebtn" type="button" class="btn btn-success">Pay</button>
+                <button id="nmpebtn" type="button"
+                    class="btn btn-success">Pay</button>
             </div>
         </div>
     </div>
 </div>
-<?php endif; ?>
 <!-- Monthly Income Modal -->
 <div id="incmodal" class="modal" tabindex="-1">
     <div class="modal-dialog">
@@ -124,14 +133,16 @@
             <div class="modal-body">
                 <div>Enter Income Amount:&nbsp;&nbsp;<input id="incdep"
                     type="text" /></div>
-                <div>Defer automatic distribution until <span id="defermo"></span>&nbsp;&nbsp;
+                <div>Defer automatic distribution until 
+                    <span id="defermo"></span>&nbsp;&nbsp;
                     <input id="defer" type="checkbox" /><br />
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
                     data-bs-dismiss="modal">Close</button>
-                <button id="incbtn" type="button" class="btn btn-success">Deposit</button>
+                <button id="incbtn" type="button" class="btn btn-success">
+                    Deposit</button>
             </div>
         </div>
     </div>
@@ -154,7 +165,8 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
                     data-bs-dismiss="modal">Close</button>
-                <button id="otbtn" type="button" class="btn btn-success">Deposit</button>
+                <button id="otbtn" type="button" class="btn btn-success">
+                    Deposit</button>
             </div>
         </div>
     </div>
@@ -169,8 +181,9 @@
                         data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <span style="font-style:italic">NOTE: This applies only to non-monthly deposits. Funds will be
-                removed from the "Undistributed Funds" account.</span><br />
+                <span style="font-style:italic">NOTE: This applies only to
+                    non-monthly deposits. Funds will be removed from the
+                    "Undistributed Funds" account.</span><br />
                 <hr class="dropdown-divider">
                 <div id="inclist">Recent Non-monthly deposits:
                     <table id="irdeps"></table>
@@ -424,9 +437,9 @@
             </div>
             <div class="modal-body">
                 <div>Note: you cannot move the 'Undistributed Funds' nor any
-                'Temporary Account'</div><br />
+                'Temporary Account'</div>
                 <div id="mvfrom">Place the following account:&nbsp;&nbsp;
-                    <?= $partsel;?></div>
+                    <?= $partsel;?></div><br />
                 <div id="mvto">Directly above:&nbsp;&nbsp;
                     <?= $partsel;?></div>
             </div>
