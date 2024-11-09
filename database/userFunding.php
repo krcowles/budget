@@ -8,5 +8,5 @@
  * @author  Ken Cowles <krcowles29@gmail.com>
  * @license No license to date
  */
-$fundClass = 'noshow';
+$fundClass = 'unhide';
 // admintools can toggle between 'display' and 'noshow'

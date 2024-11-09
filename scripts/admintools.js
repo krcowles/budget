@@ -56,7 +56,9 @@ $('#drall').on('click', function() {
     }
 });
 $('#ldall').on('click', function() {
-    window.open('load_all_tables.php', "_blank");
+    if (confirm("Proceed with reload?")) {
+        window.open('drop_all_tables.php', "_blank");
+    }
     $(this).blur();
 });
 $('#show').on('click', function()  {

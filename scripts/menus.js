@@ -5,7 +5,8 @@
  * @version 2.0 Separated out from budget.js
  * @version 2.1 Corrected and improved valAmt() function
  * @version 3.0 Added check for user activity
- * @version 4.0 Improved management of Non-Monthlies accou nt
+ * @version 4.0 Improved management of Non-Monthlies account
+ * @version 4.1 Further improvement to valAmt
  */
 /**
  * Check for user activity: all user pages use this menus.js script, 
@@ -182,6 +183,7 @@ $('#reginc').on('click', function() {
         }
         let save_url = '../edit/saveAcctEdits.php';
         let ajaxdata;
+        // For deposits being deferred until next month:
         if($('#defer').is(':checked')) {
             $('#preloader').show();
             let nxtmo = $('#defermo').text();
@@ -794,6 +796,9 @@ const cents   = " (or dollars.cents)\nCents must contain one or two digits only"
 
 /**
  * Validate the amount entered:
+ * The incoming 'user_entry' is a string; it is parsed for non-numerical characters,
+ * and if ok, is converted to a number and returned. When non-numerical characters
+ * are encountered, a user alert is issued, and what is returned is '0'.
  * Dollars must be at least one digit (no decimal value); Dollar.cents must be at least
  * one digit followed by an optional '.' and optionally 1 or 2 digits
  * 
@@ -805,17 +810,18 @@ const cents   = " (or dollars.cents)\nCents must contain one or two digits only"
 function valAmt(user_entry, cents_allowed) {
     let amt = user_entry.trim();
     if (amt === '') {
-        alert("There is no entry for Amount");
+        alert("No numercial amount specified");
         return 0;
     }
-    let test_amt = Math.abs(amt);
+    // Note: 'dollars' & 'cents' are strings
     pattern = cents_allowed ? /^\d+\.?[0-9]?[0-9]?$/ : /^\d+$/;
     msg = cents_allowed ? dollars + cents : dollars + " only";
-    if (pattern.test(test_amt) === false) {
+    // 'amt' is still a string...
+    if (pattern.test(amt) === false) {
         alert(msg + "\nNo commas or other non-numeric characters are allowed");
-            return 0;
+        return 0;
     }
-    let checkval = parseFloat(amt);
+    let checkval = parseFloat(amt); // can be a negative number for credit applied
     if (checkval === 0) {
         alert("An entry amount of 0 will not be applied");
         return 0;
