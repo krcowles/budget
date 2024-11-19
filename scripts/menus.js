@@ -814,7 +814,7 @@ function valAmt(user_entry, cents_allowed) {
         return 0;
     }
     // Note: 'dollars' & 'cents' are strings
-    pattern = cents_allowed ? /^\d+\.?[0-9]?[0-9]?$/ : /^\d+$/;
+    pattern = cents_allowed ? /^[-0-9]+\.?[0-9]?[0-9]?$/ : /^\d+$/;
     msg = cents_allowed ? dollars + cents : dollars + " only";
     // 'amt' is still a string...
     if (pattern.test(amt) === false) {
