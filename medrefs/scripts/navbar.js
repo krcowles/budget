@@ -88,14 +88,20 @@ const displayPage = (ajaxdata) => {
  * @returns {null} 
  */
 const setContent = (active) => {
+    let lgth = window.setOfPages.length;
+    let fred = window.setOfPages.indexOf(active);
+    alert("Qty: " + lgth + "; Result: " + fred +
+        "; [0]: " + window.setOfPages[0] + "; [1]" + window.setOfPages[1]);
     if (window.setOfPages.indexOf(active) !== -1) {
         // get the active page for display
         var ajaxdata = {mode: 'display', menu: active};
         displayPage(ajaxdata);
     } else {
+        alert("Ya boss");
         // go directly to the user_form to create the active page's list
         let selected_item = menuArr[active-1];
-        let new_list = "user_form.php?menu=" + active + "&item=" + selected_item;
+        let new_list = "user_form.php?menu=" + active + "&item=" +
+            selected_item + "&new=no";
         window.open(new_list, "_self");
     }
     return;

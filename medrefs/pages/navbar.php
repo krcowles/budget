@@ -9,7 +9,8 @@
  * @license No license to date
  */
 require_once "../../database/global_boot.php";
-
+// this page might get called from a page with no $new defni:
+$new = isset($_GET['new']) ? true : false;
 if ($new) {
     // setup a new default `Settings` for this user
     $newmenu   = 'My Doctors|Prescriptions|Emergency Contacts';
