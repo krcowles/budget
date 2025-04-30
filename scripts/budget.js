@@ -299,11 +299,22 @@ $allrows.each(function() {
             $cells.each(function(i) {
                 if (i < 5) {
                     $(this).css('background-color', 'white');
-                }  else {
+
+               }  else {
                     $(this).css('background-color', '#F8FFFA');
                 }
             });
         });
     }
 });
+$('.acct').each(function(indx, cell) {
+    cell.addEventListener('dblclick', (ev) => {
+        let account_name = $(cell).text();
+        let $acct_td = $('#expmodal table tbody').find('tr').children().eq(1);
+        let $select = $acct_td.children().eq(0).children().eq(0);
+        $select.val(account_name);
+        expitem.show();
+    });
+});
+
 }); // end page loaded

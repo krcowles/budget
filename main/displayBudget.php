@@ -62,25 +62,26 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
         <colgroup>
             <col style="width:232px" />
             <col style="width:100px" />
+            <col style="width:64px" class="<?=$fundClass;?>" />
             <col style="width:120px" />
             <col style="width:120px" />
             <col style="width:120px" />
             <col style="width:100px" />
             <col style="width:64px" />
             <col style="width:10px" class="noshow" />
-            <col style="width:64px" class="<?=$fundClass;?>" />
         </colgroup>
         <thead>
             <tr>
                 <th class="tableHdrColor">Budget Acct Name</th>
                 <th class="tableHdrColor heavy-right">Monthly Budget</th>
+                <th class="tableHdrColor <?=$fundClass;?>">September
+                    <br/>Funding</th>
                 <th class="tableHdrColor"><?= $month[0];?></th>
                 <th class="tableHdrColor"><?= $month[1];?></th>
                 <th class="tableHdrColor"><?= $month[2];?></th>
                 <th class="tableHdrColor">AutoPay With</th>
                 <th class="tableHdrColor">Day of Month</th>
                 <th class="noshow">AutoPd</th>
-                <th class="tableHdrColor <?=$fundClass;?>">Funding</th>
             </tr>
         </thead>
         <tbody>
@@ -89,6 +90,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                 <tr id="tmphd">
                     <td class="BoldText tmp_color"
                         style="text-align:center;">Temporary Accounts</td>
+                    <td class="tmp_color <?=$fundClass;?>"></td>
                     <td class="amt tmp_color"></td>
                     <td class="mo1 tmp_color"></td>
                     <td class="mo2 tmp_color"></td>
@@ -96,12 +98,12 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                     <td class="ap tmp_color"></td>
                     <td class="apday tmp_color"></td>
                     <td class="noshow"></td>
-                    <td class="tmp_color <?=$fundClass;?>"></td>
                 </tr>
                 <?php endif; ?>
                 <tr>
                     <td class="acct"><?= $account_names[$j];?></td>
                     <td class="amt"><?= $budgets[$j];?></td>
+                    <td class="apcolor <?=$fundClass;?>"><?= $income[$j];?></td>
                     <td class="mo1"><?= $prev0[$j];?></td>
                     <td class="mo2"><?= $prev1[$j];?></td>
                     <td class="mo3"><?= $current[$j];?></td>
@@ -112,7 +114,6 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                         <td class="apcolor apday"><?= $day[$j];?></td>
                     <?php endif; ?>
                     <td class="noshow"><?= $paid[$j];?></td>
-                    <td class="apcolor <?=$fundClass;?>"><?= $income[$j];?></td>
                 </tr>
             <?php endfor; ?>
             <tr id="cchd">
