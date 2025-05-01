@@ -99,11 +99,12 @@ var dd = parseInt(String(today.getDate()).padStart(2, '0'));
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January was otherwise 0!
 var yyyy = parseInt(today.getFullYear());
 var modig = parseInt(mm);
-/**
- * All other modal operation
+
+/** 
+ * Expense modal may be invoked either by menu or by double click, hence
+ * the following function call is used in both cases
  */
-// Pay Expense (other than Non-Monthlies account)
-$('#chgexp').on('click', function() {
+function payModal() {
     var amtin = "#expamt";
     var payin = "#exppayto";
     // was triggering twice, don't know why, so:
@@ -143,6 +144,10 @@ $('#chgexp').on('click', function() {
             nonmexp.toggle();
         }
     });
+}
+// Pay Expense (other than Non-Monthlies account)
+$('#chgexp').on('click', function() {
+    payModal();
 });
 // Pay Non-Monthlies expense
 $('body').on('click', '#nmpebtn', function() {
@@ -172,6 +177,9 @@ $('body').on('click', '#nmpebtn', function() {
     let ajaxdata = {id: 'nmexp', acct_name: sel1, method: sel2, amt: amt, payto: payee};
     executeScript('../edit/saveAcctEdits.php', ajaxdata, expitem, 'stay', clean_obj);
 });
+/**
+ * All other modal operation
+ */
 // Deposit monthly (regular) income
 $('#reginc').on('click', function() {
     $('#incbtn').off('click').on('click', function() {

@@ -313,7 +313,7 @@ $('.acct').each(function(indx, cell) {
         let $acct_td = $('#expmodal table tbody').find('tr').children().eq(1);
         let $select = $acct_td.children().eq(0).children().eq(0);
         $select.val(account_name);
-        expitem.show();
+        payModal();
     });
 });
 
