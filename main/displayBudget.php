@@ -74,8 +74,8 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             <tr>
                 <th class="tableHdrColor">Budget Acct Name</th>
                 <th class="tableHdrColor heavy-right">Monthly Budget</th>
-                <th class="tableHdrColor <?=$fundClass;?>">September
-                    <br/>Funding</th>
+                <th class="tableHdrColor <?=$fundClass;?>"><?=$current_month;?>
+                    <br />Funding</th>
                 <th class="tableHdrColor"><?= $month[0];?></th>
                 <th class="tableHdrColor"><?= $month[1];?></th>
                 <th class="tableHdrColor"><?= $month[2];?></th>
@@ -128,22 +128,22 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                 <tr>
                     <td class="acct"><?= $cr[$cc];?></td>
                     <td></td>
+                    <td class="apcolor <?=$fundClass;?>"></td>
                     <td></td>
                     <td></td>
                     <td><?= $cardbal[$cc]['bal'];?></td>
                     <td colspan="2"></td>
                     <td class="noshow"></td>
-                    <td class="<?=$fundClass;?>"></td>
                 </tr>
             <?php endfor; ?>
             <tr id="balances">
                 <td class="BoldText heavyTop">Checkbook Balance</td>
                 <td class="balance heavyTop"><?= $balBudget;?></td>
+                <td class="heavyTop <?=$fundClass;?>"></td>
                 <td class="balance heavyTop"><?= $balPrev0;?></td>
                 <td class="balance heavyTop"><?= $balPrev1;?></td>
                 <td class="balance heavyTop"><?= $balCurrent;?></td>
                 <td class="heavyTop" colspan="2"></td>
-                <td class="noshow heavyTop"></td>
                 <td class="noshow heavyTop"></td>
             </tr>
         </tbody>

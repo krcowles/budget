@@ -46,10 +46,10 @@ td span:first-child {
     color: black;
 }
 .tableHdrColor {
-    background-color: #dfecdf;
+    background-color: #cfe2cf;
 }
 #tmphd .tmp_color {
-    background-color: #ecdfec;
+    background-color: #cfe2cf;
 }
 #cchd .cc_color {
     background-color: #fcfce8;
@@ -66,7 +66,7 @@ td span:first-child {
     padding-bottom: 6px;
 }
 #roll3 tbody .apcolor, .apdaycolor {
-    background-color: #F8FFFA;
+    background-color: #eff5ef;
 }
 .BoldText {
     font-family: Arial, Tahoma, Verdana;

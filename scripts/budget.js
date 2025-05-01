@@ -297,11 +297,16 @@ $allrows.each(function() {
         $(this).on('mouseout', function() {
             let $cells = $(this).find('td')
             $cells.each(function(i) {
-                if (i < 5) {
-                    $(this).css('background-color', 'white');
-
-               }  else {
-                    $(this).css('background-color', '#F8FFFA');
+                switch (i) {
+                    case 0:
+                    case 1:
+                    case 3:
+                    case 4:
+                    case 5:
+                        $(this).css('background-color', 'white');
+                        break;
+                    default: 
+                        $(this).css('background-color', '#eff5ef');
                 }
             });
         });
