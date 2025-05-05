@@ -141,7 +141,7 @@ $('.apday').each(function(indx) {
         if (apday <= dd && appd !== modig) { // dd & modig are day/month ints
             $rowtds = $(this).siblings();
             // siblings do not include 'this' (moday td)
-            let $paywith = $rowtds.eq(5);
+            let $paywith = $rowtds.eq(6);
             let $acct = $rowtds.eq(0);
             let dueday = apday;
             let ordinal;
