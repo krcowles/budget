@@ -71,7 +71,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
             <col style="width:10px" class="noshow" />
         </colgroup>
         <thead>
-            <tr>
+            <tr> <!-- Table Header Row -->
                 <th class="tableHdrColor">Budget Acct Name</th>
                 <th class="tableHdrColor heavy-right">Monthly Budget</th>
                 <th class="tableHdrColor <?=$fundClass;?>"><?=$current_month;?>
@@ -87,7 +87,7 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
         <tbody>
             <?php for($j=0; $j<count($account_names); $j++) : ?>
                 <?php if ($j === $user_cnt + 1) : ?>
-                <tr id="tmphd">
+                <tr id="tmphd"> <!-- Temporay accounts header row -->
                     <td class="BoldText tmp_color"
                         style="text-align:center;">Temporary Accounts</td>
                     <td class="tmp_color <?=$fundClass;?>"></td>
@@ -100,8 +100,13 @@ $admin = $_SESSION['userid'] == '4' ? 'yes' : 'no'
                     <td class="noshow"></td>
                 </tr>
                 <?php endif; ?>
-                <tr>
+                <tr> <!-- actual accounts [all] -->
+                    <?php if ($account_names[$j] === 'Non-Monthlies') : ?>
+                    <td class="acct">
+                        Non-Monthlies&nbsp;<button id="nmstat">Status</button></td>
+                    <?php else : ?>
                     <td class="acct"><?= $account_names[$j];?></td>
+                    <?php endif; ?>
                     <td class="amt"><?= $budgets[$j];?></td>
                     <td class="apcolor <?=$fundClass;?>"><?= $income[$j];?></td>
                     <td class="mo1"><?= $prev0[$j];?></td>

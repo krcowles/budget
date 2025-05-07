@@ -25,23 +25,8 @@ if ($('#combo_acct').length > 0) {
     let expected = parseFloat($('#expected_sum').text());
     let nonm_note = $('.acct:contains("Non-Monthlies")');
     nonm_note.attr('id', 'nmacct');
-    let nmpos = $(nonm_note).offset();
-    let note_left = nmpos.left + 120;
-    let note_top  = nmpos.top + 2;
-    let note = '<div id="nmnote" style="position:absolute;z-index:100;' +
-        'top:' + note_top + 'px;left:' + note_left + 'px;"' +
-        '>Click for status</div>';
-    $('body').append(note);
-    $(nonm_note).hover(
-        function() {
-            $('#nmnote').css('display', 'block');
-        },
-        function() {
-            $('#nmnote').css('display', 'none');
-        }
-    );
-    $(nonm_note).on('click', function() {
-        alert("Expect " + expected + "; Available: " + actual);
+    $('#nmstat').on('click', function() {
+        alert("Expected " + expected + "; Available: " + actual);
     });
 }
 /**
@@ -315,10 +300,16 @@ $allrows.each(function() {
 $('.acct').each(function(indx, cell) {
     cell.addEventListener('dblclick', (ev) => {
         let account_name = $(cell).text();
-        let $acct_td = $('#expmodal table tbody').find('tr').children().eq(1);
-        let $select = $acct_td.children().eq(0).children().eq(0);
-        $select.val(account_name);
-        payModal();
+        if (account_name.indexOf("Non-Monthlies") !== -1) {
+            var $tbl_selects = $('.exptbl').find('tr').find('select'); // modal body data
+            $tbl_selects[3].id = "nmcds";
+            nonmexp.show();
+        } else {
+            let $acct_td = $('#expmodal table tbody').find('tr').eq(0).children().eq(1);
+            let $select = $acct_td.children().eq(0).children().eq(0);
+            $select.val(account_name);
+            payModal();
+        }
     });
 });
 
