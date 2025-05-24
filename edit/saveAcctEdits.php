@@ -124,7 +124,7 @@ case 'income':
         $budval = floatval($budgets[$j]); // amount budgeted for this acct
         $curbal = floatval($current[$j]); // current balance for this acct
         $item_acctid = $acctid[$j];
-        if ($budval == 0) { // includes at least Undistributed Funds
+        if ($budval == 0) { // includes (at least) Undistributed Funds
             $newfnd[$item_acctid] = (string) 0;
             $newcur[$item_acctid] = (string) $curbal;
         } else if ($funded < $budval) { // more funding needed for account?
@@ -167,50 +167,9 @@ case 'income':
         );
     }
     /**
-     * If a Non-Monthlies account exists, update the individual Non-Monthlies
-     * account balances (`Irreg` table) based on current Non-Monthlies account
-     * balance in `Budgets` (may have changed above)
+     * Note that Non-Monthlies records are updated during budgetSetup.php,
+     * so there is no need to update them here...
      */
-    $nm_indx = array_search('Non-Monthlies', $account_names); // false if no acct
-    if ($nm_indx !== false) {
-        // Current Non-Monthlies balance:
-        $getNMbalanceReq = "SELECT `current` FROM `Budgets` WHERE " .
-            "`userid`=? AND `budname`='Non-Monthlies';";
-        $getNMbalance = $pdo->prepare($getNMbalanceReq);
-        $getNMbalance->execute([$_SESSION['userid']]);
-        $NMbalance = $getNMbalance->fetch(PDO::FETCH_ASSOC);
-        $nm_funds = floatval($NMbalance['current']); 
-        for ($k=0; $k<count($nmdata); $k++) { // $nmdata found in getAccountData.php
-            // distribute cash from current non-monthly acct balance
-            if ($nm_funds > 0) {
-                $full = $nmdata[$k]['expected'];
-                if ($full <= $nm_funds) {
-                    $new_bal = $full;
-                    $nm_funds -= $full;
-                } elseif ($nm_funds > 0) {
-                    $new_bal = $nm_funds;
-                    $nm_funds = 0;
-                }
-            } else { // $nm_funds = 0
-                $new_bal = 0;
-            }
-            $udReq = "UPDATE `Irreg` SET `funds`=? WHERE `record`=?;";
-            $updateIrreg = $pdo->prepare($udReq);
-            $updateIrreg->execute([$new_bal, $nmdata[$k]['record']]);
-        }
-        // Any $nm_funds remaining?
-        if ($nm_funds > 0) {
-            $updteReq = "UPDATE `Budgets` SET `current`=`current` + {$nm_funds} " .
-                "WHERE `budname`='Undistributed Funds' AND `userid`=?;";
-            // Place overages in Undistributed Funds
-            $updte = $pdo->prepare($updteReq);
-            $updte->execute([$_SESSION['userid']]);
-            $updteNMReq = "UPDATE `Budgets` SET `current`=`current` - {$nm_funds} " .
-                "WHERE `budname`='Non-Monthlies' AND `userid`=?;";
-            $updateNM = $pdo->prepare($updteNMReq);
-            $updateNM->execute([$_SESSION['userid']]);
-        }
-    }
     // Record the deposit
     $depositReq = "INSERT INTO `Deposits` (`userid`,`date`,`amount`,`otd`," .
         "`description`) VALUES (?,?,?,'N','');";

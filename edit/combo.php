@@ -20,7 +20,7 @@ require "../utilities/getCards.php";
 
 /**
  * This section contains 4 html string definitions for the various
- * <select>s used on the page. The arrays will be filled from these
+ * <select>'s used on the page. The arrays will be filled from these
  * assignments
  */
 // define payment frequency option <selects>s
@@ -78,6 +78,9 @@ $nap = str_replace(
 /**
  * Get the user's data from the database
  */
+$totalFunds = "SELECT SUM(`funds`) AS `current_funding` FROM `Irreg`;";
+$fundStatus = $pdo->query($totalFunds)->fetch(PDO::FETCH_NUM);
+$currentFunds = $fundStatus[0];
 $itemReq = "SELECT * FROM `Irreg` WHERE `userid`=?";
 $current = $pdo->prepare($itemReq);
 $current->execute([$user]);
@@ -112,10 +115,7 @@ $newap = substr_replace($allCardsHtml, $napid, 8, 0);  // new row table
  * for display of 'current state' at the bottom of the page.
  */
 $next_dues = []; 
-$waityr = [];
-for ($k=0; $k<$noOfItems; $k++) {
-    $waityr[$k] = false;
-}
+$yr_due = [];
 for ($i=0; $i<$noOfItems; $i++) {
     $ofreq[$i] = $items[$i]['freq'];
     $omonth[$i] = $items[$i]['first'];
@@ -124,10 +124,10 @@ for ($i=0; $i<$noOfItems; $i++) {
     $apdayval[$i] = $items[$i]['APDay'] == '0' ? "" : $items[$i]['APDay'];
     $stats = prepNonMonthly(
         $items[$i]['freq'], $items[$i]['first'], $items[$i]['amt'],
-        $items[$i]['SA_yr'], $items[$i]['mo_pd'], $items[$i]['yr_pd'],
-        $month_names, $thismo, $thisyear
+        $items[$i]['SA_yr'], $items[$i]['mo_pd'], intval($items[$i]['yr_pd']),
+        $month_names, $thismo, $thisyear, $items[$i]['record']
     );
-    $waityr[$i]    = $stats[1];
+    $yr_due[$i]    = $stats[1];
     $next_dues[$i] = $stats[2];
 }
 // prep arrays for import by javascript
@@ -210,6 +210,7 @@ $js_type  = json_encode($aptype);
                     <td class="add3"><input type="text" name="oamt[]"
                         value="<?=$items[$i]['amt'];?>" /></td>
                     <td class="add4"><?=$old_opts;?></td>
+                    
                     <td class="sayr rms"><?=$eyears;?></td>
                     <td class="aptype rms"><?=$eap;?></td>
                     <td class="apday"><input type="text" name="oapday[]"
@@ -269,14 +270,16 @@ $js_type  = json_encode($aptype);
 </div>
 <hr />
 <div class="content">
-    <p>This is the current state of the non-monthlies account. The amounts shown
-    represent the accumulated funds as of the beginning of <?=$current_month;?>.
-    </p> 
+    <h5>This is the current state of the non-monthlies account.<br/>
+    The amounts shown represent the current funding in <?=$current_month;?>.
+    Available: $ <?=$currentFunds;?>
+    </h5> 
     <table id="current_state">
         <colgroup>
-            <col span="1" style="width: 30%;">
-            <col span="1" style="width: 22%;">
-            <col span="1" style="width: 16%;">
+            <col span="1" style="width: 24%;">
+            <col span="1" style="width: 15%;">
+            <col span="1" style="width: 15%;">
+            <col span="1" style="width: 14%;">
             <col span="1" style="width: 16%;">
             <col span="1" style="width: 16%;">
         </colgroup>
@@ -284,10 +287,11 @@ $js_type  = json_encode($aptype);
             <tr>  
                 <!-- first cell is hidden / no header here -->
                 <th>Expense Item</th>
-                <th>Paid</th>
+                <th>Pay Cycle</th>
                 <th>Each Payment</th>
+                <th>Last Paid</th>
                 <th>Next Due</th>
-                <th>Accum. To Date</th>
+                <th>Funding</th>
             </tr>
         </thead>
         <tbody>
@@ -300,10 +304,19 @@ $js_type  = json_encode($aptype);
                     <td><?=$items[$j]['freq'];?></td>
                 <?php endif; ?>
                 <td><?=$items[$j]['amt'];?></td>
-                <?php if ($waityr[$j]) : ?>
-                    <td class="gray"><?=$month_names[$next_dues[$j]];?></td>
+                <?php
+                if (empty($items[$j]['mo_pd']) || empty($items[$j]['yr_pd'])) : ?>
+                <td>No payment</td>
                 <?php else : ?>
-                    <td><?=$month_names[$next_dues[$j]];?></td>
+                <td><?=$items[$j]['mo_pd'];?>, <?=$items[$j]['yr_pd'];?></td>
+                <?php endif; ?>
+                <?php if ($yr_due[$j] > $thisyear) : ?>
+                <td style="color:gray;"><?=$month_names[$next_dues[$j]] .
+                    ", " . $yr_due[$j];?>
+                </td>
+                <?php else : ?>
+                <td style="color:darkblue;"><?=$month_names[$next_dues[$j]] .
+                    ", " . $yr_due[$j];?></td>
                 <?php endif; ?>
                 <td><?=$items[$j]['funds'];?></td>
             </tr>

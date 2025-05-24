@@ -12,7 +12,7 @@ require "../utilities/getBudgetData.php"; // includes cleanup function
 if (file_exists($credit_data)) {
     $ccdat = fopen($credit_data, "r");
     $cards = fgetcsv($ccdat);
-    $cards = cleanupExcel($cards);
+    //$cards = cleanupExcel($cards);
     if ($cards[0] === 'None') {
         fclose($ccdat);
         echo "Nodat";

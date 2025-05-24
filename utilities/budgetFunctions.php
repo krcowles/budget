@@ -1,7 +1,7 @@
 <?php
 /**
  * This module contains any/all php functions utilized by the various routines
- * PHP Version 7.1
+ * PHP Version 8.3.9
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -34,25 +34,7 @@ function dataPrep($amt, $type)
     }
     return $prepped;
 }
-/**
- * This function will attempt to 'clean' up potential UTF-16 formatting from
- * excel spreadsheet data.
- * 
- * @param array $excelDat an array of strings representing retrieved .csv data
- * 
- * @return array the 'cleaned' array returned
- */
-function cleanupExcel($excelDat)
-{
-    foreach ($excelDat as &$item) {
-        $len = strlen($item);
-        $item = filter_var($item, FILTER_SANITIZE_STRING);
-        $item = trim($item);
-        $item = utf8_decode($item);
-        $item = str_replace("?", "", $item); // after decode <feff> converts to '??'
-    }
-    return $excelDat;
-}
+
 /**
  * This function returns the number of months between each payment in a 
  * Non-Monthlies account
@@ -100,13 +82,16 @@ function getCurrentNMBal($type, $pdo, $uid)
     $balance = floatval($sum[0]);
     return $balance;
 }
+
 /**
  * This function is invoked only on Non-Monthlies accounts;
- *  1. Calculate the next month that a payment is due for a non-monthly account;
- *  2. Determine if account has been paid for this period or not
- *  3. Set the 'expected' balance for the current month. The expected balance
- *     is based on the expired time since the last payment, or from expired time
- *     since last payment would have been made [for new entries]
+ * ----- Test cases: -----
+ *  I.   Bi-annual Payments
+ *  II.  Annual Payments
+ *  III. Other (Quarterly, Semi-annually)
+ *  Note: other test cases represent very irregular scenarios and are
+ *  not addressed in this routine.
+ * ------------------------
  * 
  * @param string   $freq   how often a payment is to be made
  * @param string   $first  '1st' month of a cycle of payments as recorded in the db:
@@ -114,138 +99,46 @@ function getCurrentNMBal($type, $pdo, $uid)
  * @param float    $amt    the amount applied at each instalment
  * @param string   $alt    'Odd' or 'Even' years for bi-annual payment
  * @param string   $paymo  the month the last payment was made
- * @param int      $payyr  year in which payment was made
+ * @param int      $payyr  year in which the last payment was made
  * @param string[] $months names of the months in a year
  * @param int      $thismo INDEX into $months representing current month
  * @param int      $thisyr 4-digit integer representing the current year
+ * @param int      $record Unique record no. in `Irreg` table
  * 
- * @return array   [$wait, $next_due]
+ * @return array   [$acct_paid, $payInYr, $nextDueMo, $record]
  */
 function prepNonMonthly(
-    $freq, $first, $amt, $alt, $paymo, $payyr, $months, $thismo, $thisyr
+    $freq, $first, $amt, $alt, $paymo, $payyr, $months,
+    $thismo, $thisyr, $record
 ) {
     /*
      * Note that the incoming arg '$thismo' is 0-based, and is numerically one less
-     * than the standard current month digit (e.g. $thismo = 10 => November);
+     * than the standard current month digit (e.g. $thismo = 10 => November); All
+     * numeric-month-based arrays in this script are also 0-based, as is the pointer,
+     * '$int_paymo' (the numeric representation of the argument '$paymo').
      */
+    // initial values:
+    $int_paymo = 0;
     $expected = 0;
     $acct_paid = false;
-    $wait = false; // true => already paid, OR it's an off year to pay [for autopays]
+    $payInYr = $thisyr;
     $dist_months = []; // all months in which a payment would be due
-    $dist_months[0] = array_search($first, $months); // NOTE: 0-based!
-    if (empty($paymo)) {
-        /**
-         * In this case, the expense has not registered a payment, thus $payyr
-         * will also be empty. Set $last_pd = $first and set $payyr to an arbitrary
-         * value so that it appears that the payment hasn't been made this year.
-         * The next statement works for annual/bi-annual, but when $payfreq > 1,
-         * $first may not be the earliest month. This case will be addressed in
-         * the case where $payfreq > 1
-         */
-        $last_pd = array_search($first, $months); // 0-based
-        $payyr = 1000;
-    } else {
-        $last_pd = array_search($paymo, $months); // 0-based
-        // $payyr should already be specified as an incoming argument
-    }
+    $dist_months[0] = array_search($first, $months);
     $payfreq = getFrequency($freq); // how many months in a year are pay months
     $incr_months = intval(12/$payfreq);
     $paypermo = round($amt/$incr_months, 2);
-    /**
-     * 1. Form an array holding all the months in which a payment is due (0-based);
-     * 2. Find the next month a payment is due;
-     * 3. Determine whether or not the account has been paid for this period;
-     * 4. Calculate the resulting $expected funds.
-     */
-    if ($payfreq === 1 || $payfreq === 0.5) {
-        // Bi-annual or annual payments [there is only one month in $dist_months]
-        $next_due = $dist_months[0];
-        if (!empty($alt)) {
-            // bi-annual payment; $payfreq = 0.5
-            if ($alt === 'Odd' && $thisyr%2 === 1) {
-                // this is the year to pay
-                if ($payyr === $thisyr) {
-                    // right year for payment, but already paid
-                    $acct_paid = true;
-                    $wait = true; 
-                    if ($thismo > $last_pd) {
-                        // begin accumulating
-                        $delta = $thismo - $last_pd;
-                    } else {
-                        // whether < or =, $expected is 0
-                        $delta = 0;
-                    }
-                } else { 
-                    // not paid yet, even if $payyr = 1000, and regardless of $thismo
-                    $delta =  (11 - $last_pd) + $thismo;
-                }   
-            } elseif ($alt === 'Odd' && $thisyr%2 === 0) {
-                $wait = true; // Not this year!
-                $delta = (11 - $last_pd) + $thismo;
-            }
-            if ($alt === 'Even' && $thisyr%2 === 0) {
-                // this is the year to pay
-                if ($payyr === $thisyr) {
-                    // right year for payment, but already paid
-                    $acct_paid = true;
-                    $wait = true; 
-                    if ($thismo > $last_pd) {
-                        // begin accumulating
-                        $delta = $thismo - $last_pd;
-                    } else {
-                        // whether < or =, $expected is 0
-                        $delta = 0;
-                    }
-                } else { 
-                    // not paid yet, even if $payyr = 1000, and regardless of $thismo
-                    $delta =  (11 - $last_pd) + $thismo;
-                }   
-            } elseif ($alt === 'Even' && $thisyr%2 === 1) {
-                $wait = true; // Not this year!
-                $delta = (11 - $last_pd) + $thismo;
-            }
-            $expected = round($paypermo * $delta, 2);
-        } else {
-            // annual payment: $payfreq = 1
-            if ($payyr === $thisyr) {
-                // it has already been paid for the year
-                $acct_paid = true;
-                $wait = true;
-                if ($thismo > $last_pd) {
-                    $delta = ($thismo - $last_pd) * $paypermo;
-                    $expected = round($delta, 2);
-                    // begin accumulating for next year...
-                } else {
-                    $expected = 0; // redundant but immune from future changes...
-                }
-            } else { // it has not been paid this year [includes 1st-timers => 1000]
-                $acct_paid = false;
-                $wait = false;
-                if ($thismo === $last_pd) {
-                    // it's due this month
-                    $expected = $amt;
-                } else {
-                    if ($thismo > $last_pd) {
-                        // overdue: autopay modal should be showing regularly
-                        $delta = ($thismo - $last_pd) * $paypermo + $amt;
-                        $expected = round($delta, 2);
-                    } else {
-                        $delta = ((11 - $last_pd) + $thismo) * $paypermo;
-                        $expected = round($delta, 2);
-                    }
-                }
-            }
-        }
+    if ($record === 3) {
+        $debug = true;
     }
     if ($payfreq > 1) {
         /**
-         * Get the list of payment months in the cycle [$dist_months]
+         * Create the list of payment months in the cycle [$dist_months]
          * and put them in ascending order; only $dist_months[0] has been
          * specified so far...
          */
         for ($j=1; $j<$payfreq; $j++) {
+            // adjustment for base 0: $j - 1
             if ($dist_months[$j-1] + $incr_months > 11) {
-                // adjust for base 0: $pay_incr -1
                 $next_mo = ($incr_months - 1) - (11 - $dist_months[$j-1]);
             } else {
                 $next_mo = $dist_months[$j-1] + $incr_months;
@@ -253,68 +146,225 @@ function prepNonMonthly(
             $dist_months[$j] = $next_mo;
         }
         sort($dist_months);
-        $payouts = count($dist_months);
+    }
+    if (empty($paymo) || empty($payyr)) { // Test case: A, B1, B2
         /**
-         * Get the next expected payment month:
+         * In this case, the expense has not registered a payment. Set 
+         * $int_paymo = first due month, and set $payyr to an arbitrary value
+         * so that it appears that a payment hasn't been made this year.
          */
-        $rollover = false;
-        for ($k=0; $k<$payouts; $k++) {
-            if ($thismo <= $dist_months[$k]) {
-                // this is the next payment month
-                $next_due = $dist_months[$k];
-                break;
-            } else {
-                if ($k === $payouts - 1) {
-                    /**
-                     * $thismo has passed the last dist_month, so next dist_month
-                     * will be in the next year.
-                     */ 
-                    $rollover = true;
-                    $next_due = $dist_months[0];
-                }
+        $int_paymo = $dist_months[0];
+        $payyr = 1000;
+    } else {
+        $int_paymo = array_search($paymo, $months); // 0-based
+    }
+
+    /**
+     * PROCESS:
+     * 1. Determine whether or not the account has been paid for this period;
+     * 2. For bi-annual accts, determine if payment is in current yr:
+     *    $payInYr = $thisyr, or $payInYr = $thisyr + 1
+     * 3. Find the next month a payment is due; 
+     * 4. Calculate the resulting $expected funds.
+     * RETURN: $acct_paid, $payInYr, $nextDueMo, $expected (funding so far)
+     */
+    if ($payfreq === 1 || $payfreq === 0.5) {
+        // Bi-annual or annual payments [there is only one month in $dist_months]
+        $nextDueMo = $dist_months[0];
+        if (!empty($alt)) { // Assumes SA_Yr is not empty for bi-annual payments!!
+            // TEST CASE SET I: bi-annual payment; $payfreq = 0.5 [$payments = 24]
+            if ($alt === 'Odd' && $thisyr%2 === 1) {
+                if ($payyr === $thisyr) {  // Test case: D, E, G 
+                    $payInYr = $thisyr + 2;
+                    $acct_paid = true;
+                    if ($thismo > $dist_months[0]) { // Test case: G
+                        // begin accumulating
+                        $delta = $thismo - $dist_months[0];
+                    } else { // Test case:  // Test case: D, E
+                        $delta = 0;
+                    }
+                } else {  // Test case: A, B, C
+                    // not paid yet
+                    $acct_paid = false; // redundant but clarifying
+                    if ($thismo < $dist_months[0]) { // Test case: A
+                        /**
+                         * Remaining months to accum from previous odd yr:
+                         *    (11 - $dist_months[0]);
+                         * Months accum in even yr: 12
+                         * Months accum so far this (odd) year: $thismo + 1
+                         */
+                        $delta = (11 - $dist_months[0]) + 12 + $thismo + 1;
+                    } elseif ($thismo === $dist_months[0]) { // Test case: B
+                        $delta = 24;
+                    } else { // Test case: C
+                        $delta = 24 + ($thismo - $dist_months[0]);
+                    } 
+                }   
+            } elseif ($alt === 'Odd' && $thisyr%2 === 0) { // Test case: F
+                $payInYr = $thisyr + 1;
+                $delta = (11 - $dist_months[0]) + $thismo + 1;
             }
-        }
-        if ($rollover) { 
-            if ($last_pd >= $dist_months[$payouts -1]) {
-                // paid on or after last payment of year
-                $acct_paid = true;
-                $wait = false;
-            } else {
-                // paid before last payment of year (rare case)
-                $acct_paid = false;
-                $wait = false;
+            if ($alt === 'Even' && $thisyr%2 === 0) {
+                if ($payyr === $thisyr) { // Test case: D, E, G
+                    $acct_paid = true;
+                    $payInYr = $thisyr + 2;
+                    if ($thismo > $dist_months[0]) { // Test case: G
+                        // begin accumulating
+                        $delta = $thismo - $dist_months[0];
+                    } else { // Test case: D, E
+                        $delta = 0;
+                    }
+                } else { // Test case: A, B, C
+                    // not paid yet
+                    $acct_paid = false; // redundant but clarifying
+                    if ($thismo < $dist_months[0]) { // Test case: A
+                        /**
+                         * Remaining months to accum in last odd yr:
+                         *      (11 - $dist_months[0]);
+                         * Months accum in even yr: 12
+                         * Months accum so far this (odd) year: $thismo + 1
+                         */
+                        $delta = (11 - $dist_months[0]) + 12 + $thismo + 1;
+                    } elseif ($thismo === $dist_months[0]) {
+                        // Test case B
+                        $delta = 24;
+                    } else { // Test case: C
+                        $delta =  24 + ($thismo - $dist_months[0]);
+                    }
+                }   
+            } elseif ($alt === 'Even' && $thisyr%2 === 1) { // Test case: F
+                $payInYr = $thisyr + 1;
+                $delta = (11 - $dist_months[0]) + $thismo + 1;
             }
-            $exp = ($thismo - $last_pd) * $paypermo;
-            $expected = round($exp, 2);
+            $expected = round($paypermo * $delta, 2);
         } else {
-            /**
-             * Get account status & expected balance for $next_due
-             * Assumptions:
-             * 1. $last_pd is always one of the $dist_months (i.e. autopay items
-             *    only get paid when due).
-             * 2. If $last_pd = $thismo, the item has been paid (if $paymo not empty)
-             * 3. If $paymo is empty ($payyr = 1000), the item has not been paid
-             */
-            if ($payyr !== 1000 && $last_pd === $thismo) {
+            // TEST CASE SET II. annual payment: $payfreq = 1
+            if ($payyr === $thisyr) {
+                // paid for the year, regardless if before or after $dist_months[0]
                 $acct_paid = true;
-                $wait = true;
-                $expected = 0;
-            } else {
-                // not paid yet: (obviously includes $payyr = 1000)
-                $acct_paid = false;
-                $wait = false;
-                // by defnition, $thismo <= $next_due
-                if ($thismo === $next_due) {
+                $payInYr = $thisyr + 1; // wait for next year to pay again
+                if ($thismo > $dist_months[0]) { // Test case: E
+                    // begin accumulating for next year...
+                    $delta = ($thismo - $dist_months[0]) * $paypermo;
+                    $expected = round($delta, 2);
+                } else { // Test case: D
+                    $expected = 0;
+                }
+            } else { // Test case: A, B, C
+                $acct_paid = false; // redundant, but clarifying
+                if ($thismo < $dist_months[0]) { // Test case: A 
+                    // get accum from last year, add accum from this year:
+                    $delta = 11 - $dist_months[0]; // accum from last yr
+                    $expected = ($delta + $thismo +1 ) * $paypermo;
+                } elseif ($thismo === $dist_months[0]) { // Test case: B
                     $expected = $amt;
-                } elseif ($next_due === $dist_months[0]) {
-                    $delta = $thismo + (11 - $dist_months[$payouts -1]);
-                    $expected = round($delta * $paypermo, 2);
                 } else {
-                    $delta = ($payfreq - ($next_due - $thismo));
-                    $expected = round($delta * $paypermo, 2);
+                    if ($thismo > $dist_months[0]) { // Test case: C
+                        // last paid in prev yr:
+                        $delta = ($thismo - $dist_months[0]) * $paypermo + $amt;
+                        $expected = round($delta, 2);
+                    }
                 }
             }
         }
     }
-    return [$acct_paid, $wait, $next_due, $expected];  
+    if ($payfreq > 1) {
+        // TEST CASE SET III.
+        $payouts = count($dist_months);
+        /**
+         * Determine the status of the account and expected funding:
+         * Scenarios when $payyr = $thisyr:
+         *  a. $thismo is in first pay cycle of yr;
+         *  b. $thismo is in last pay cycle of yr;
+         *  c. $thismo is in-between pay cycles.
+         */
+        if ($payyr < $thisyr) { // Test case: C, D [paid in prev. yr, or never]
+            $acct_paid = false; //redundant but clarifying
+            $nextDueMo = $dist_months[0];
+            if ($thismo === $dist_months[0]) {
+                $expected = $amt;
+            } else {
+                $prev_yr_accum = 11 - $dist_months[$payouts-1];
+                $delta  = ($prev_yr_accum + $thismo + 1) * $paypermo;
+                $expected = round($delta, 2);
+            }
+        } else { // Some payment has been made this year...
+            if ($thismo <= $dist_months[0]) { // Scenario a;
+                // Test case: A, B
+                // the payment made is first payment of year (regardless of $paymo)
+                $nextDueMo = $dist_months[1];
+                $acct_paid = true;
+                $expected = 0;
+            } elseif ($thismo >= $dist_months[$payouts-1]) {
+                // Scenario b: last pay cycle of year
+                // Test case: I, J, K
+                if (!($int_paymo > $dist_months[$payouts-2])) {
+                    $acct_paid = false;
+                    $nextDueMo = $dist_months[$payouts-1];
+                    if ($thismo === $dist_months[$payouts-1]) {
+                        // Test case: I
+                        $expected = $amt;
+                    } else { // somehow payment was missed? No test case...
+                        $delta = ($thismo - $dist_months[$payouts-2]) * $paypermo;
+                        $expected = round($delta, 2);
+                    }
+                } else { // Test case: J, K
+                    $nextDueMo = $dist_months[0];
+                    $acct_paid = true;
+                    $payInYr = $thisyr + 1;
+                    if ($thismo === $dist_months[$payouts-1]) {
+                        $expected = 0;
+                    } else {
+                        $delta = ($thismo - $dist_months[$payouts-1]) * $paypermo;
+                        $expected = round($delta, 2);
+                    }
+                }
+            } else { // Scenario c:
+                    // in-between cycles: assume the last payment was already made
+                    // prior to or on the previous due date
+                for ($i=1; $i<$payouts; $i++) {
+                    if ($thismo <= $dist_months[$i]
+                        && $thismo > $dist_months[$i-1]
+                    ) {
+                        if (!($int_paymo > $dist_months[$i-1])) {
+                            $nextDueMo = $dist_months[$i];
+                            // Test case: E, F, H
+                            if ($thismo === $dist_months[$i]) {
+                                // Test case: F
+                                $expected = $amt;
+                            } else {
+                                // Test case: E, H
+                                $acct_paid = false;
+                                $delta = ($thismo - $dist_months[$i-1]) * $paypermo;
+                                $expected = round($delta, 2);
+                            }
+                        } else { // Test case: G [paid for in $dist_months[$i]]
+                            if ($int_paymo === $dist_months[$i]) {
+                                $nextDueMo = $dist_months[$i+1];
+                                $acct_paid = true;
+                                $expected = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+    }
+    return [$acct_paid, $payInYr, $nextDueMo, $expected, $record]; 
+}
+ 
+/**
+ * There is a need to sort the array of arrays created when invoking the
+ * above functions in a for loop. This function is the compare function for
+ * the usort callback.
+ * 
+ * @param array $first  first element of array
+ * @param array $second next element of array
+ * 
+ * @return int $comp_value
+ */
+function compareNextDue($first, $second)
+{
+    return strnatcmp(intval($first[2]), intval($second[2]));
 }

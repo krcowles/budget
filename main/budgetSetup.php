@@ -2,7 +2,7 @@
 /**
  * This script acquires the data needed to create the main budget table displayed
  * to the user.
- * PHP Version 7.1
+ * PHP Version 8.3.9
  * 
  * @package Budget
  * @author  Ken Cowles <krcowles29@gmail.com>
@@ -11,11 +11,7 @@
 require_once "../database/global_boot.php";
 require_once "../utilities/timeSetup.php";
 
-if ($_SESSION['cookies'] === 'accept') {
-    $menu_item = 'Reject Cookies';
-} else {
-    $menu_item = 'Accept Cookies';
-}
+$menu_item = $_SESSION['cookies'] === 'accept' ? 'Reject Cookies' : 'Accept Cookies';
 // if month has rolled over: get all current balances for each budget item
 if ($rollover) {
     $getBals = "SELECT `id`,`prev0`,`prev1`,`current` FROM `Budgets` " .
@@ -25,7 +21,7 @@ if ($rollover) {
     $all_accounts = $buddat->fetchALL(PDO::FETCH_ASSOC);
     $tblids = [];
     foreach ($all_accounts as &$acct) {
-        array_push($tblids, $acct['id']);
+        array_push($tblids, $acct['id']); // id = table id
         $acct['prev0'] = $acct['prev1'];
         $acct['prev1'] = $acct['current'];
     }
@@ -54,31 +50,104 @@ $nonmonthly = false;
  */ 
 if (in_array('Non-Monthlies', $account_names)) {
     $nonmonthly = true;
-    $apacct   = [];
-    $aptype   = [];
-    $apday    = [];
-    $apnext   = [];
+    $nm_indx = array_search('Non-Monthlies', $account_names);
+    $nm_bal  = floatval($current[$nm_indx]);
+    // collect autopay info
+    $apacct  = [];
+    $aptype  = [];
+    $apday   = [];
+    $apnext  = [];
+     /**
+     * Redistribute current available $nm_bal into non-monthly accounts;
+     */
     $getNM_Data = "SELECT `record`,`item`,`freq`,`amt`,`first`,`SA_yr`,`APType`," .
         "`APDay`,`mo_pd`,`yr_pd` FROM `Irreg` WHERE `userid`=?;";
     $NM_Data = $pdo->prepare($getNM_Data);
     $NM_Data->execute([$_SESSION['userid']]);
     $nmdata = $NM_Data->fetchAll(PDO::FETCH_ASSOC);
+    $sortByDueDate = [];
+    // extract data needed for sorting and processing of non-monthly accts
     foreach ($nmdata as $data) {
         $month_data = prepNonMonthly(
             $data['freq'], $data['first'], $data['amt'], $data['SA_yr'],
-            $data['mo_pd'], intval($data['yr_pd']), $month_names, $thismo, $thisyear
+            $data['mo_pd'], intval($data['yr_pd']), $month_names, $thismo,
+            $thisyear, $data['record']
         );
+        // add in record no for recording results later...
+        array_push($sortByDueDate, $month_data);
+    }
+    // any 'next_due' months earlier than the current mo are for next year:
+    $next_yr = [];
+    $two_yrs = [];
+    $removals = [];
+    for ($j=0; $j<count($sortByDueDate); $j++) {
+        if ($sortByDueDate[$j][1] === $thisyear + 1) {
+            array_push($next_yr, $sortByDueDate[$j]);
+            array_push($removals, $j);
+        } elseif ($sortByDueDate[$j][1] === $thisyear + 2) {
+            array_push($two_yrs, $sortByDueDate[$j]);
+            array_push($removals, $j);
+        }
+    }
+    // remove any due dates scheduled for a later year
+    if (count($removals) > 0) {
+        foreach ($removals as $postpone) {
+            unset($sortByDueDate[$postpone]);
+        }
+    }
+    // sort by dates two years ahead, if needed:
+    if (count(value: $two_yrs) > 1) {
+        usort($two_yrs, 'compareNextDue');
+    }
+    // sort by next year's due date if needed:
+    if (count($next_yr) > 1) {
+        usort($next_yr, 'compareNextDue');
+    }
+    // sort the 'current year' due dates
+    usort($sortByDueDate, 'compareNextDue');
+    // add in next year's sorted due dates
+    $sorted = array_merge($sortByDueDate, $next_yr, $two_yrs);
+    // process the data
+    foreach ($sorted as $check) {
+        echo "Record: " . $check[4] . ", Yr: " . $check[1] . 
+            ", Mo: " . $check[2] . "<br>";
+    }
+    exit;
+    foreach ($sorted as $data) {
         if (!empty($data['APType'])) {  // collect autopay data
-            if (!$month_data[0] && !$month_data[1]) { // not paid yet
+            if (!$data[0] && !$data[1]) { // not paid yet
                 array_push($apacct, $data['item']);
                 array_push($aptype, $data['APType']);
                 array_push($apday,  $data['APDay']);
-                array_push($apnext, $month_data[2]);
+                array_push($apnext, $data[2]);
             }
         }
-        $updateExpReq = "UPDATE `Irreg` SET `expected`=? WHERE `record`=?;";
+        $expected = $data[3];
+        $funding = 0;
+        if ($nm_bal > 0) {
+            if ($nm_bal >= $expected) {
+                // if funds are available, set accumulated funds = expected
+                $funding = $expected;
+                $nm_bal -= $funding;
+            } else {
+                $funding = $nm_bal;
+                $nm_bal = 0;
+            }   
+        }
+        $updateExpReq = "UPDATE `Irreg` SET `expected`=?,`funds`=? WHERE " .
+            "`record`=?;";
         $updateExp = $pdo->prepare($updateExpReq);
-        $updateExp->execute([$month_data[3], $data['record']]);
+        $updateExp->execute([$expected, $funding, $data[4]]);
+        //$updateFundsReq = "UPDATE `Irreg` SET `funds`=? WHERE `record`=?;";
+    }
+    if ($nm_bal > 0) {
+        // place any excess into undistributed funds
+        $undis = array_search("Undistributed Funds", $account_names);
+        $current[$undis] += $nm_bal;
+        $incUndisReq = "UPDATE `Budgets` SET `current`=? WHERE `userid`=? " .
+            "AND `budname`='Undistributed Funds';";
+        $incUndis = $pdo->prepare($incUndisReq);
+        $incUndis->execute([$current[$undis], $_SESSION['userid']]);
     }
     // 1. This month's balances
     $nmfbal = getCurrentNMBal('funds', $pdo, $_SESSION['userid']);

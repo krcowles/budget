@@ -21,42 +21,42 @@ CREATE TABLE `Budgets` (
 
 INSERT INTO Budgets VALUES
 ('2','krc','4','Mortgage','2','A','2125','-2096.24','28.76','30.25','','0','','2125'),
-('3','krc','4','Electric','4','A','85','31.85','35.51','50.84','Wells Fargo','1','05','85'),
-('4','krc','4','Natural Gas','6','A','75','338.16','341.76','416.76','','0','','75'),
-('5','krc','4','Auto Gas','7','A','120','320.77','373.02','456.15','','0','','120'),
-('7','krc','4','Chiro','8','A','195','50.21','51.03','246.03','Visa','20','04','195'),
-('8','krc','4','Medical/Dental','9','A','150','1337.01','1060.48','1110.48','','0','','50'),
-('9','krc','4','Cash','10','A','100','20.00','60.00','60.00','','0','','0'),
-('10','krc','4','TV/Internet','11','A','190','53.49','78.39','78.39','Wells Fargo','23','04','0'),
-('11','krc','4','Auto Insurance','13','A','145','320.71','465.71','465.71','','0','','0'),
-('12','krc','4','Auto Maintenance','14','A','115','192.01','198.78','198.78','','0','','0'),
-('13','krc','4','Appliances/Repair','15','A','125','521.88','646.88','646.88','','0','','0'),
-('14','krc','4','Home Misc','16','A','310','-53.01','93.28','93.28','','0','','0'),
-('15','krc','4','Verizon','17','A','80','73.73','77.23','77.23','Visa','7','04','0'),
-('17','krc','4','Clothing','18','A','25','-74.85','-49.85','-49.85','','0','','0'),
-('18','krc','4','Health Items','19','A','125','86.08','104.83','104.83','','0','','0'),
-('19','krc','4','Vision','20','A','20','92.00','112.00','112.00','','0','','0'),
-('20','krc','4','Travel','22','A','350','1001.76','1224.88','1224.88','','0','','0'),
-('21','krc','4','Charities','23','A','35','40.00','75.00','75.00','','0','','0'),
-('23','krc','4','Wine','25','A','75','41.72','116.72','116.72','','0','','0'),
-('24','krc','4','Entertainment','26','A','350','-108.32','26.43','-69.02','','0','','0'),
-('26','krc','4','Groceries','3','A','1100','705.31','456.41','1354.93','','0','','1100'),
-('27','krc','4','Gifts','21','A','50','-45.85','4.15','4.15','','0','','0'),
-('28','krc','4','Christmas','24','A','125','376.00','501.00','501.00','','0','','0'),
-('29','krc','4','Undistributed Funds','31','T','0','0.20','65.69','65.69','','0','','0'),
-('30','krc','4','Computer','32','T','40','97.52','71.53','71.53','','0','','0'),
+('3','krc','4','Electric','4','A','85','31.85','35.51','39.17','Wells Fargo','1','05','85'),
+('4','krc','4','Natural Gas','6','A','75','338.16','341.76','385.08','','0','','75'),
+('5','krc','4','Auto Gas','7','A','120','320.77','373.02','400.69','','0','','120'),
+('7','krc','4','Chiro','8','A','195','50.21','51.03','51.85','Visa','20','05','195'),
+('8','krc','4','Medical/Dental','9','A','150','1337.01','1060.48','1210.48','','0','','150'),
+('9','krc','4','Cash','10','A','100','20.00','60.00','160.00','','0','','100'),
+('10','krc','4','TV/Internet','11','A','190','53.49','78.39','268.39','Wells Fargo','23','04','190'),
+('11','krc','4','Auto Insurance','13','A','145','320.71','465.71','610.71','','0','','145'),
+('12','krc','4','Auto Maintenance','14','A','115','192.01','198.78','272.88','','0','','115'),
+('13','krc','4','Appliances/Repair','15','A','125','521.88','646.88','771.88','','0','','125'),
+('14','krc','4','Home Misc','16','A','310','-53.01','93.28','400.12','','0','','310'),
+('15','krc','4','Verizon','17','A','80','73.73','77.23','-26.48','Wells Fargo','7','05','80'),
+('17','krc','4','Clothing','18','A','25','-74.85','-49.85','-24.85','','0','','25'),
+('18','krc','4','Health Items','19','A','125','86.08','104.83','148.21','','0','','125'),
+('19','krc','4','Vision','20','A','20','92.00','112.00','132.00','','0','','20'),
+('20','krc','4','Travel','22','A','350','1001.76','1224.88','93.65','','0','','350'),
+('21','krc','4','Charities','23','A','35','40.00','75.00','110.00','','0','','35'),
+('23','krc','4','Wine','25','A','75','41.72','116.72','191.72','','0','','75'),
+('24','krc','4','Entertainment','26','A','350','-108.32','26.43','112.98','','0','','350'),
+('26','krc','4','Groceries','3','A','1100','705.31','456.41','1099.42','','0','','1100'),
+('27','krc','4','Gifts','21','A','50','-45.85','4.15','54.15','','0','','50'),
+('28','krc','4','Christmas','24','A','125','376.00','501.00','626.00','','0','','125'),
+('29','krc','4','Undistributed Funds','31','T','0','0.20','65.69','151.96','','0','','0'),
+('30','krc','4','Computer','32','T','40','97.52','71.53','111.53','','0','','40'),
 ('31','krc','4','Escrow Account','33','T','0','0.00','0.00','0.00','','0','','0'),
 ('32','krc','4','Slush','34','T','0','0.00','0.00','0.00','','0','','0'),
 ('33','krc','4','2024 Taxes','30004','T','0','-2401.86','0.00','0.00','','0','','0'),
-('34','krc','4','Tires','30005','T','25','395.40','420.40','420.40','','0','','0'),
-('41','Albuquerque Gal','11','Undistributed Funds','30000','T','40','3031.19','2547.24','2547.24','','0','','0'),
+('34','krc','4','Tires','30005','T','25','395.40','420.40','445.40','','0','','25'),
+('41','Albuquerque Gal','11','Undistributed Funds','30000','T','40','3031.19','2547.24','2030.90','','0','','0'),
 ('42','Albuquerque Gal','11','Medicare','30001','T','0','0.00','0.00','0.00','','0','','0'),
 ('43','Albuquerque Gal','11','Savings','30002','T','120','5048.22','4966.12','4966.12','','0','','0'),
 ('44','Albuquerque Gal','11','Computer/phone','30003','T','60','1631.60','771.96','771.96','','0','','0'),
-('45','Albuquerque Gal','11','Medical','30004','T','85','401.94','470.00','470.00','','0','','0'),
+('45','Albuquerque Gal','11','Medical','30004','T','85','401.94','470.00','336.38','','0','','0'),
 ('46','Albuquerque Gal','11','Tmp5','30005','T','0','0.00','0.00','0.00','','0','','0'),
 ('47','Albuquerque Gal','11','Monthly','1','A','240','0.00','0.00','0.00','','0','','0'),
-('48','Albuquerque Gal','11','Misc','2','A','80','53.99','0.00','0.00','','0','','0'),
+('48','Albuquerque Gal','11','Misc','2','A','80','53.99','0.00','8.33','','0','','0'),
 ('49','Albuquerque Gal','11','hair','3','A','24','273.12','216.40','216.40','','0','','0'),
 ('50','Albuquerque Gal','11','Gas','4','A','45','999.95','956.46','956.46','','0','','0'),
 ('51','Albuquerque Gal','11','Class','5','A','50','100.00','150.00','126.33','','0','','0'),
@@ -73,9 +73,9 @@ INSERT INTO Budgets VALUES
 ('62','Albuquerque Gal','11','Massage','16','A','20','179.96','3.94','3.94','','0','','0'),
 ('69','Albuquerque Gal','11','Amazon Prime','17','A','13','176.00','39.49','39.49','','0','','0'),
 ('179','krc','4','Genworth LTC Pollicy','28','A','0','0.00','0.00','0.00','','0','','0'),
-('178','krc','4','Hearing Aids','27','A','25','40.01','65.01','65.01','','0','','0'),
-('177','krc','4','Landscape Maintenance','12','A','400','250.90','240.90','240.90','','0','','0'),
-('183','Not used','4','HI 2025','30','A','0','12506.29','12224.77','11972.07','','0','','0'),
+('178','krc','4','Hearing Aids','27','A','25','40.01','65.01','90.01','','0','','25'),
+('177','krc','4','Landscape Maintenance','12','A','400','250.90','240.90','140.90','','0','','400'),
+('183','Not used','4','HI 2025','30','A','0','12506.29','12224.77','9522.07','','0','','0'),
 ('127',NULL,'23','Tmp2','30002','T','0','0.00','0.00','0.00','','0','','0'),
 ('126',NULL,'23','Tmp1','30001','T','0','0.00','0.00','0.00','','0','','0'),
 ('125',NULL,'23','Undistributed Funds','30000','T','0','0.00','0.00','0.00','','0','','0'),
@@ -91,7 +91,7 @@ INSERT INTO Budgets VALUES
 ('138',NULL,'28','Tmp4','30004','T','0','0.00','0.00','0.00','','0','','0'),
 ('139',NULL,'28','Tmp5','30005','T','0','0.00','0.00','0.00','','0','','0'),
 ('142',NULL,'30','Undistributed Funds','30000','T','0','0.00','0.00','0.00','','0','','0'),
-('141','krc','4','Non-Monthlies','29','A','162','239.79','347.97','26.36','','0','','0'),
+('141','krc','4','Non-Monthlies','29','A','159','239.79','347.97','257.54','','0','','159'),
 ('143',NULL,'30','Tmp1','30001','T','0','0.00','0.00','0.00','','0','','0'),
 ('144',NULL,'30','Tmp2','30002','T','0','0.00','0.00','0.00','','0','','0'),
 ('145',NULL,'30','Tmp3','30003','T','0','0.00','0.00','0.00','','0','','0'),
@@ -141,7 +141,7 @@ CREATE TABLE `Charges` (
   `acctchgd` varchar(60) NOT NULL,
   `paid` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`expid`)
-) ENGINE=MyISAM AUTO_INCREMENT=5256 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5301 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 
 INSERT INTO Charges VALUES
@@ -266,7 +266,7 @@ INSERT INTO Charges VALUES
 ('5002',NULL,'4','Credit','Visa','2025-02-11','133.25','People\'s Flowers','Entertainment','Y'),
 ('5003',NULL,'4','Credit','Visa','2025-02-11','11.44','Satellite','Entertainment','Y'),
 ('5004',NULL,'4','Credit','Visa','2025-02-12','122.59','Canon','Computer','Y'),
-('5005',NULL,'4','Credit','Visa','2025-02-12','20.79','Amazon - double-sided tape','Home Misc','N'),
+('5005',NULL,'4','Credit','Visa','2025-02-12','0.00','Amazon - double-sided tape','Home Misc','N'),
 ('5006',NULL,'4','Credit','Visa','2025-02-13','321.44','Martin\'s','Entertainment','Y'),
 ('5007',NULL,'4','Credit','Citi','2025-02-13','55.46','Sprouts','Groceries','Y'),
 ('5008',NULL,'4','Credit','Citi','2025-02-13','104.80','Albertsons','Groceries','Y'),
@@ -439,12 +439,12 @@ INSERT INTO Charges VALUES
 ('5177',NULL,'4','Credit','Citi','2025-04-10','29.30','Albertsons','Groceries','Y'),
 ('5178',NULL,'11','Credit','MC','2025-04-10','1290.42','Apple','Computer/phone','Y'),
 ('5179',NULL,'11','Credit','MC','2025-04-11','10.75','amazon','Misc','Y'),
-('5180',NULL,'4','Credit','Visa','2025-04-11','13.99','Fat Tire','Home Misc','N'),
+('5180',NULL,'4','Credit','Visa','2025-04-11','13.99','Fat Tire','Home Misc','Y'),
 ('5181',NULL,'4','Check','Check or Draft','2025-04-11','11.67','PNM','Electric','Y'),
-('5182',NULL,'4','Credit','Visa','2025-04-11','2054.42','Best Buy','HI 2025','N'),
+('5182',NULL,'4','Credit','Visa','2025-04-11','2054.42','Best Buy','HI 2025','Y'),
 ('5183',NULL,'4','Credit','Citi','2025-04-12','3.00','Albertsons','Groceries','Y'),
-('5184',NULL,'4','Credit','Visa','2025-04-12','34.44','Mister Car Wash','Auto Maintenance','N'),
-('5185',NULL,'4','Credit','Visa','2025-04-12','27.78','Murphys','Auto Gas','N'),
+('5184',NULL,'4','Credit','Visa','2025-04-12','34.44','Mister Car Wash','Auto Maintenance','Y'),
+('5185',NULL,'4','Credit','Visa','2025-04-12','27.78','Murphys','Auto Gas','Y'),
 ('5186',NULL,'11','Credit','MC','2025-04-13','81.98','tec','Undistributed Funds','Y'),
 ('5187',NULL,'11','Credit','MC','2025-04-13','40.22','seat','Gas','Y');
 INSERT INTO Charges VALUES
@@ -454,9 +454,9 @@ INSERT INTO Charges VALUES
 ('5191',NULL,'4','Credit','Citi','2025-04-16','16.23','Albertsons','Groceries','Y'),
 ('5192',NULL,'11','Credit','MC','2025-04-16','48.41','Marshalla','Undistributed Funds','Y'),
 ('5193',NULL,'11','Credit','MC','2025-04-16','35.50','Best buy','Undistributed Funds','Y'),
-('5194',NULL,'4','Credit','Visa','2025-04-16','53.76','Best Buy - adapters to TV','HI 2025','N'),
-('5195',NULL,'4','Credit','Visa','2025-04-16','287.30','Amazon - DVD/VCR unit','HI 2025','N'),
-('5196',NULL,'4','Credit','Visa','2025-04-16','36.56','Amazon - Warranty for DV/VCR','HI 2025','N'),
+('5194',NULL,'4','Credit','Visa','2025-04-16','53.76','Best Buy - adapters to TV','HI 2025','Y'),
+('5195',NULL,'4','Credit','Visa','2025-04-16','287.30','Amazon - DVD/VCR unit','HI 2025','Y'),
+('5196',NULL,'4','Credit','Visa','2025-04-16','36.56','Amazon - Warranty for DV/VCR','HI 2025','Y'),
 ('5197',NULL,'11','Credit','MC','2025-04-16','173.67','Miracle','Massage','N'),
 ('5198',NULL,'4','Credit','Citi','2025-04-17','59.08','Costco','Groceries','Y'),
 ('5199',NULL,'4','Credit','Visa','2025-04-17','30.00','Dermatology co-pay','Medical/Dental','Y'),
@@ -468,36 +468,36 @@ INSERT INTO Charges VALUES
 ('5205',NULL,'11','Credit','MC','2025-04-18','26.93','Verizon','Phone','Y'),
 ('5206',NULL,'4','Credit','Citi','2025-04-18','62.64','Sprouts','Groceries','Y'),
 ('5207',NULL,'4','Credit','Citi','2025-04-18','44.69','Albertsons','Groceries','Y'),
-('5208',NULL,'4','Credit','Visa','2025-04-18','29.04','Lowe\'s - bench paint','Home Misc','N'),
+('5208',NULL,'4','Credit','Visa','2025-04-18','29.04','Lowe\'s - bench paint','Home Misc','Y'),
 ('5209',NULL,'4','Check','Check or Draft','2025-04-18','600.00','Janet Trujillo','HI 2025','Y'),
 ('5210',NULL,'11','Credit','MC','2025-04-19','35.00','Mark Kelly','Undistributed Funds','N'),
 ('5211',NULL,'11','Credit','MC','2025-04-20','70.00','Cam','Savings','N'),
-('5212',NULL,'4','Credit','Visa','2025-04-21','194.18','Illumin8','Chiro','N'),
+('5212',NULL,'4','Credit','Visa','2025-04-21','194.18','Illumin8','Chiro','Y'),
 ('5213',NULL,'4','Credit','Citi','2025-04-21','61.55','Sprouts','Groceries','Y'),
 ('5214',NULL,'4','Credit','Citi','2025-04-21','38.25','Albertsons','Groceries','Y'),
-('5215',NULL,'4','Credit','Visa','2025-04-21','122.69','Illumin8 - neck pillow','Medical/Dental','N'),
+('5215',NULL,'4','Credit','Visa','2025-04-21','122.69','Illumin8 - neck pillow','Medical/Dental','Y'),
 ('5216',NULL,'4','Credit','Citi','2025-04-22','20.69','Natural Grocers','Groceries','Y'),
-('5217',NULL,'11','Credit','Pennys','2025-04-23','80.72','Pen','hair','N'),
+('5217',NULL,'11','Credit','Pennys','2025-04-23','80.72','Pen','hair','Y'),
 ('5218',NULL,'11','Credit','MC','2025-04-23','24.59','Murphy','Gas','N'),
 ('5219',NULL,'4','Debit','Wells Fargo','2025-04-23','165.10','Century Link','TV/Internet','Y'),
-('5220',NULL,'4','Credit','Visa','2025-04-23','39.97','Murphys','Auto Gas','N'),
+('5220',NULL,'4','Credit','Visa','2025-04-23','39.97','Murphys','Auto Gas','Y'),
 ('5221',NULL,'11','Credit','MC','2025-04-25','83.88','am','Savings','N'),
 ('5222',NULL,'4','Credit','Citi','2025-04-25','46.48','Sprouts','Groceries','N'),
 ('5223',NULL,'4','Credit','Citi','2025-04-25','53.15','Albertsons','Groceries','Y'),
-('5224',NULL,'4','Credit','Visa','2025-04-25','51.10','Staples','Home Misc','N'),
-('5225',NULL,'4','Credit','Visa','2025-04-25','22.26','Village Mercantile','Home Misc','N'),
-('5226',NULL,'4','Credit','Visa','2025-04-25','23.08','Flying Star','Entertainment','N'),
+('5224',NULL,'4','Credit','Visa','2025-04-25','51.10','Staples','Home Misc','Y'),
+('5225',NULL,'4','Credit','Visa','2025-04-25','22.26','Village Mercantile','Home Misc','Y'),
+('5226',NULL,'4','Credit','Visa','2025-04-25','23.08','Flying Star','Entertainment','Y'),
 ('5227',NULL,'4','Debit','Wells Fargo','2025-04-25','60.00','ATM','Cash','Y'),
 ('5228',NULL,'11','Credit','MC','2025-04-26','86.85','BWH','Vitamins','N'),
 ('5229',NULL,'11','Credit','MC','2025-04-26','12.05','sprouts','Vitamins','N'),
-('5230',NULL,'4','Credit','Visa','2025-04-26','47.32','Amazon - dish tablets','Home Misc','N'),
+('5230',NULL,'4','Credit','Visa','2025-04-26','47.32','Amazon - dish tablets','Home Misc','Y'),
 ('5231',NULL,'4','Credit','Citi','2025-04-27','22.38','Albertsons','Groceries','N'),
-('5232',NULL,'4','Credit','Visa','2025-04-29','103.26','Range Cafe','Entertainment','N'),
-('5233',NULL,'4','Credit','Visa','2025-04-29','126.88','Sandia Tram','Travel','N'),
-('5234',NULL,'4','Credit','Visa','2025-04-29','86.85','Better Way Health - curcumin','Health Items','N'),
-('5235',NULL,'4','Credit','Visa','2025-04-29','55.82','Sirius XM','Non-Monthlies','N'),
-('5236',NULL,'4','Credit','Visa','2025-04-29','73.79','Subaru - sun shade','Auto Maintenance','N'),
-('5237',NULL,'4','Credit','Visa','2025-04-29','387.31','Jack-a-lope pots','HI 2025','N'),
+('5232',NULL,'4','Credit','Visa','2025-04-29','103.26','Range Cafe','Entertainment','Y'),
+('5233',NULL,'4','Credit','Visa','2025-04-29','126.88','Sandia Tram','Travel','Y'),
+('5234',NULL,'4','Credit','Visa','2025-04-29','86.85','Better Way Health - curcumin','Health Items','Y'),
+('5235',NULL,'4','Credit','Visa','2025-04-29','55.82','Sirius XM','Non-Monthlies','Y'),
+('5236',NULL,'4','Credit','Visa','2025-04-29','73.79','Subaru - sun shade','Auto Maintenance','Y'),
+('5237',NULL,'4','Credit','Visa','2025-04-29','387.31','Jack-a-lope pots','HI 2025','Y'),
 ('5238',NULL,'11','Credit','MC','2025-04-29','36.94','CVS','Medical','N'),
 ('5239',NULL,'4','Credit','Citi','2025-04-30','94.35','Sprouts','Groceries','N'),
 ('5240',NULL,'4','Credit','Citi','2025-04-30','82.53','Albertsons','Groceries','N'),
@@ -507,15 +507,61 @@ INSERT INTO Charges VALUES
 ('5244',NULL,'11','Credit','MC','2025-05-01','23.67','K & C - oils','Class','N'),
 ('5245',NULL,'4','Check','Check or Draft','2025-05-01','0.00','test entry','Mortgage','Y'),
 ('5246',NULL,'4','Credit','Citi','2025-05-01','3.98','Tip - Flying Star takeout soup','Groceries','Y'),
-('5247',NULL,'4','Credit','Visa','2025-05-03','321.61','Terminix','Non-Monthlies','N'),
-('5248',NULL,'4','Credit','Visa','2025-05-03','40.41','Bosque Brewing','Entertainment','N'),
-('5249',NULL,'4','Credit','Visa','2025-05-03','35.52','Moons Coffee','Groceries','N'),
-('5250',NULL,'4','Credit','Visa','2025-05-03','55.04','Harrys Roadhouse','Entertainment','N'),
-('5251',NULL,'4','Credit','Visa','2025-05-03','36.87','Murphys','Auto Gas','N'),
-('5252',NULL,'4','Credit','Visa','2025-05-03','252.70','Amazon - appliances','HI 2025','N'),
+('5247',NULL,'4','Credit','Visa','2025-05-03','321.61','Terminix','Non-Monthlies','Y'),
+('5248',NULL,'4','Credit','Visa','2025-05-03','40.41','Bosque Brewing','Entertainment','Y'),
+('5249',NULL,'4','Credit','Visa','2025-05-03','35.52','Moons Coffee','Groceries','Y'),
+('5250',NULL,'4','Credit','Visa','2025-05-03','55.04','Harrys Roadhouse','Entertainment','Y'),
+('5251',NULL,'4','Credit','Visa','2025-05-03','36.87','Murphys','Auto Gas','Y'),
+('5252',NULL,'4','Credit','Visa','2025-05-03','252.70','Amazon - appliances','HI 2025','Y'),
 ('5253',NULL,'4','Credit','Citi','2025-05-03','79.91','Sprouts','Groceries','N'),
 ('5254',NULL,'4','Credit','Citi','2025-05-03','82.07','Albertsons','Groceries','N'),
-('5255',NULL,'4','Debit','Wells Fargo','2025-05-05','395.22','Nusenda','Auto Loan','Y');
+('5255',NULL,'4','Debit','Wells Fargo','2025-05-05','395.22','Nusenda','Auto Loan','Y'),
+('5256',NULL,'4','Check','Check or Draft','2025-05-06','31.68','NM Gas','Natural Gas','Y'),
+('5257',NULL,'4','Check','Check or Draft','2025-05-06','151.00','AAA New Mexcio','Non-Monthlies','Y'),
+('5258',NULL,'4','Check','Check or Draft','2025-05-06','500.00','Janet Trujillo','Landscape Maintenance','Y'),
+('5259',NULL,'4','Credit','Citi','2025-05-06','22.76','Sprouts','Groceries','N'),
+('5260',NULL,'4','Credit','Citi','2025-05-06','81.62','Walgreens','Health Items','N'),
+('5261',NULL,'4','Check','Check or Draft','2025-05-06','78.93','Roadrunner Waste Svcs','Non-Monthlies','Y'),
+('5262',NULL,'4','Check','Check or Draft','2025-05-06','11.67','PNM','Electric','Y'),
+('5263',NULL,'11','Credit','MC','2025-05-07','108.93','Walgreens','Medical','N'),
+('5264',NULL,'4','Debit','Wells Fargo','2025-05-08','183.71','Verizon','Verizon','Y'),
+('5265',NULL,'4','Credit','Visa','2025-05-08','80.24','Tia B\'s Waffleria','Travel','Y'),
+('5266',NULL,'4','Credit','Citi','2025-05-08','42.95','Sprouts','Groceries','N'),
+('5267',NULL,'4','Credit','Citi','2025-05-08','46.31','Albertsons','Groceries','N'),
+('5268',NULL,'11','Credit','MC','2025-05-09','24.69','cvs','Medical','N'),
+('5269',NULL,'11','Credit','MC','2025-05-09','35.47','Jasons','Undistributed Funds','N'),
+('5270',NULL,'4','Credit','Visa','2025-05-11','97.66','Los Arcos','Travel','Y'),
+('5271',NULL,'4','Credit','Visa','2025-05-11','19.40','Hatch Chile Express','Travel','Y'),
+('5272',NULL,'4','Credit','Visa','2025-05-11','33.60','T or C Brewery','Travel','Y'),
+('5273',NULL,'4','Credit','Visa','2025-05-11','38.99','Passion Pie Cafe','Travel','Y'),
+('5274',NULL,'4','Credit','Citi','2025-05-11','26.99','Albertsons','Groceries','N'),
+('5275',NULL,'4','Credit','Visa','2025-05-15','44.75','Bosque Brewing','Entertainment','N'),
+('5276',NULL,'4','Credit','Visa','2025-05-15','34.28','Madrid Gallery','Travel','N'),
+('5277',NULL,'4','Credit','Visa','2025-05-15','117.01','Ristaurante de Chimayo','Travel','N'),
+('5278',NULL,'4','Credit','Visa','2025-05-15','35.58','Allsups Taos','Auto Gas','N'),
+('5279',NULL,'4','Credit','Visa','2025-05-15','136.40','Medley Taos','Travel','N'),
+('5280',NULL,'4','Credit','Visa','2025-05-15','113.54','Taos Mtn Outfitters','Travel','N'),
+('5281',NULL,'4','Credit','Visa','2025-05-15','30.31','Coyote Club Taos','Travel','N'),
+('5282',NULL,'4','Credit','Visa','2025-05-15','623.14','Taos Guesthouse','Travel','N'),
+('5283',NULL,'4','Credit','Visa','2025-05-15','60.00','Taos Art Museum - Fechin','Travel','N'),
+('5284',NULL,'11','Credit','MC','2025-05-16','68.78','Taos rockers','Undistributed Funds','N'),
+('5285',NULL,'11','Credit','MC','2025-05-16','26.67','Madrid','Misc','N'),
+('5286',NULL,'4','Credit','Visa','2025-05-18','19.88','Muprhys','Auto Gas','N'),
+('5287',NULL,'4','Credit','Visa','2025-05-18','40.90','Mister Car Wash','Auto Maintenance','N');
+INSERT INTO Charges VALUES
+('5288',NULL,'4','Credit','Visa','2025-05-18','21.82','Blackbird Coffee','Entertainment','N'),
+('5289',NULL,'4','Credit','Visa','2025-05-18','20.40','Crumbl','Entertainment','N'),
+('5290',NULL,'4','Credit','Citi','2025-05-18','57.91','Sprouts','Groceries','N'),
+('5291',NULL,'4','Credit','Citi','2025-05-18','58.59','Albertsons','Groceries','N'),
+('5292',NULL,'4','Credit','Visa','2025-05-18','120.00','IPCC','Non-Monthlies','N'),
+('5293',NULL,'4','Credit','Visa','2025-05-18','53.22','IPCC Cafe','Entertainment','N'),
+('5294',NULL,'11','Credit','MC','2025-05-19','37.64','Az','Undistributed Funds','N'),
+('5295',NULL,'4','Credit','Visa','2025-05-20','96.66','Steelbenders','Travel','N'),
+('5296',NULL,'4','Credit','Visa','2025-05-21','194.18','Illumin8','Chiro','N'),
+('5297',NULL,'4','Credit','Visa','2025-05-21','27.81','Jasons','Entertainment','N'),
+('5298',NULL,'4','Credit','Visa','2025-05-21','23.95','Londontown (Karen)','Home Misc','Y'),
+('5299',NULL,'4','Credit','Visa','2025-05-22','377.10','Farm & Table','Undistributed Funds','N'),
+('5300',NULL,'4','Credit','Visa','2025-05-22','2500.00','LazyBoy','HI 2025','N');
 
 
 
@@ -528,7 +574,7 @@ CREATE TABLE `Deposits` (
   `otd` char(1) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`depid`)
-) ENGINE=MyISAM AUTO_INCREMENT=341 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=344 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 
 INSERT INTO Deposits VALUES
@@ -872,7 +918,10 @@ INSERT INTO Deposits VALUES
 ('337','4','2025-04-05','2986.20','N',''),
 ('338','4','2025-04-18','53.49','Y','Karen - reimb misc'),
 ('339','11','2025-04-22','1303.20','N',''),
-('340','4','2025-05-01','4150.00','N','');
+('340','4','2025-05-01','4150.00','N',''),
+('341','4','2025-05-08','72.95','Y','Karen - verizon et al'),
+('342','4','2025-05-11','2986.20','N',''),
+('343','4','2025-05-21','845.33','Y','Credit from Visa');
 
 
 
@@ -896,21 +945,21 @@ CREATE TABLE `Irreg` (
 
 
 INSERT INTO Irreg VALUES
-('1','4','RoadRunner Waste Mgmt','Quarterly','80.00','80.00','80.00','August','Odd','','0','February','2025'),
-('2','4','AAA NM Membership','Annually','151.00','138.38','138.38','May','Even','','0','','0'),
+('1','4','RoadRunner Waste Mgmt','Quarterly','80.00','0.00','0.00','August','','','0','May','2025'),
+('2','4','AAA NM Membership','Annually','151.00','0.00','0.00','May','','','0','May','2025'),
 ('3','4','Kinetico Water Filters','Annually','165.00','68.75','68.75','January','','','0','November','2024'),
 ('4','4','Costco Membership','Annually','70.00','34.98','34.98','October','','Citi','1','October','2024'),
 ('5','4','DMV License Fee','Bi-Annually','50.00','16.64','16.64','August','','','0','','0'),
-('6','4','RGNC Membership','Annually','30.00','9.22','37.50','February','','','0','February','2024'),
+('6','4','RGNC Membership','Annually','30.00','7.50','7.50','February','','','0','February','2025'),
 ('7','4','Sirius XM','Quarterly','75.00','0.00','0.00','May','','Visa','3','May','2025'),
-('8','4','Water Softener Salt','Semi-Annually','45.00','0.00','-7.50','August','','','0','August','2024'),
-('10','4','Magazines','Semi-Annually','40.00','0.00','40.00','May','','','0','April','2024'),
-('11','4','Atlas Septic','Bi-Annually','200.00','0.00','74.97','April','','','0','July','2024'),
-('12','4','Terminix Contract','Annually','340.00','-321.61','0.00','April','','','0','May','2025'),
-('13','4','IPCC Membership','Annually','120.00','0.00','120.00','October','','','0','May','2024'),
-('14','4','Mochahost: Budgetizer.com','Annually','25.99','0.00','17.36','May','','Visa','14','August','2024'),
-('16','4','Mochahost Hosting Service','Semi-Annually','51.10','0.00','-8.52','February','','Visa','6','February','2025'),
-('17','4','Domain.com: nmhikes.com','Annually','25.99','0.00','21.70','June','','Visa','7','','0');
+('8','4','Water Softener Salt','Semi-Annually','25.00','-4.17','-4.17','August','','','0','February','2025'),
+('10','4','Magazines','Semi-Annually','40.00','0.00','0.00','May','','','0','May','2025'),
+('11','4','Atlas Septic','Bi-Annually','200.00','74.97','74.97','April','','','0','July','2024'),
+('12','4','Terminix Contract','Annually','340.00','28.33','28.33','April','','','0','April','2025'),
+('13','4','IPCC Membership','Annually','120.00','0.00','0.00','May','','','0','May','2025'),
+('14','4','Mochahost: Budgetizer.com','Annually','25.99','17.36','17.36','June','','Visa','14','August','2024'),
+('16','4','Mochahost Hosting Service','Semi-Annually','51.10','-8.52','-8.52','February','','Visa','6','February','2025'),
+('17','4','Domain.com: nmhikes.com','Annually','25.99','21.70','21.70','June','','Visa','7','','0');
 
 
 
@@ -942,7 +991,7 @@ CREATE TABLE `Transfers` (
   `amount` decimal(10,2) DEFAULT NULL,
   `xfr_date` date DEFAULT NULL,
   PRIMARY KEY (`xfrid`)
-) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 
 INSERT INTO Transfers VALUES
@@ -1100,7 +1149,9 @@ INSERT INTO Transfers VALUES
 ('151','4','Undistributed Funds','HI 2025','5303.20','2025-04-04'),
 ('152','4','HI 2025','Undistributed Funds','5303.20','2025-04-04'),
 ('153','4','HI 2025','Landscape Maintenance','500.00','2025-04-04'),
-('154','4','2024 Taxes','HI 2025','1598.14','2025-04-19');
+('154','4','2024 Taxes','HI 2025','1598.14','2025-04-19'),
+('155','4','HI 2025','Non-Monthlies','450.00','2025-05-07'),
+('156','4','Undistributed Funds','HI 2025','500.00','2025-05-22');
 
 
 
@@ -1121,7 +1172,7 @@ CREATE TABLE `Users` (
   `an2` varchar(4096) DEFAULT NULL,
   `an3` varchar(4096) DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=134 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=142 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 
 INSERT INTO Users VALUES
@@ -1233,6 +1284,14 @@ INSERT INTO Users VALUES
 ('130','laraannemari2000@gmail.com','8d6334532c5f5ce4e63493687fe0510027af68978c6fa6ada6186a706993a5a2b034c15a315c32885472b81cd8ac296dba407ce88c3fc3c6a4290f155f2087b462faade7bf1b12d220a39d521dd0f92740dc8d8ff1c63007201cda0d63c2dded1bfc2f1882d85562aaf44023b56b8c422b99284d30bab04698abb2dd7ee3d58a','000','April',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 ('131','eibiking65@gmail.com','0d3af627ee7ada73dc4588e8b9157c4d50e2ef91da0d37e782e12b3511d6be40457665e1d6db43dc221226cc2bbfa928f737a535563dee8b372e8e31fe12aedec3bde1b3843bd5b78e924693a2d1c3262070830935c4c4d5d076ff2386568ac35b11ae977ef9361f2aab206baac626f44a8e2974350e85fdb4096951ae6459db','000','April',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 ('132','brethebertk2@gmail.com','56b49a2ada06e252f74c64d37255602ad260caf129d2e5ea071f78f76f702dfb99e0f96b650399338e2b445c43b7453c149c4f16a7d3ab613ee7f11f73a3880dd720c37ce2e67f941213326880704aacd0f69f564d6e7c1186cabccbf50eaf7aa7986500267ad048b7773da6e7965f9cd796336cb1b339433ee1d979ea163520','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-('133','irinapra1983@yahoo.com','8dd00a19a3bb0e7965caa35aaf35ea23584f9402153de7a26129550ab2b372d86e3a6ebe20e92ed32771d0fa7c03d6bc87cab1fb926db378d89a6487e2956cf5ed646d73b641d605b6c0aa577d9169ff9e4f060c24b8ede65602a4d6d9d71406b857b861ff07f37418a4d0c1544a8a004602ff92bde9829fa52562fc27f0f60d','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+('133','irinapra1983@yahoo.com','8dd00a19a3bb0e7965caa35aaf35ea23584f9402153de7a26129550ab2b372d86e3a6ebe20e92ed32771d0fa7c03d6bc87cab1fb926db378d89a6487e2956cf5ed646d73b641d605b6c0aa577d9169ff9e4f060c24b8ede65602a4d6d9d71406b857b861ff07f37418a4d0c1544a8a004602ff92bde9829fa52562fc27f0f60d','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('134','hessderkvf44@gmail.com','2ef914179bd31c8aacaff8ebde26968b2112326fbf6e88f840de8e2377144bd72e6a40b11ba1e73f84256a98794a769b32075b08e1e2181d70c9a9198592340f644fed7bd64d246165b1d78dfb5b6bcca9c41816a06bd28f74e36a58688216cb77ee72b719ecd9df7b7d2871c1d2e9a61868b57ef39d3522bbdfe0d201cd11f0','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('135','chonsihunt@gmail.com','0ce126df49b52ef5226de76fca8c92c7501f16f2a2b6ad7a62e2d6c4a01c29d9b02cd90fd2295c256e1bd4aa777aafbe99c24a12828128b3ccfc05773f2afdcb4bc349346d33590b0db4ae480d777faf49356b2c3378d5a895f593e0da9e5fd436c9a37072af0cc4710c5d74bd08d2c7b0c83a6844484fb026379cf828526405','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('136','storeytodd346376@yahoo.com','14b8437c6d5fed733821696470a4d7868bd21d9b84fbeca8755fb0954e98581798a36a784e3230475010526cbab09693ecdf81d7dcd53ad67388cab7fbf671b76b5730c67c29195c8eef57e00f4403d25e2e3eb8983047a64d608308382570ed88e37de4b6273a2680a01e281a472dc9c9c7d41d4e5bf59accb97ad7cffeb89b','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('137','konnorhso1996@gmail.com','b6a8b5b344617f794dd5eee1bc8589c0c89e6ff61cdf8456595231be68ed0d2700af88bf6ec8f9eba29f73ed5ba9c5b7df249e312061b8e71990145e3e2bd5ed9e76e5c3b7c992d141959ac73255c48f1ca201f1f83ba8bac5093e735c8b1fc199f0f853a0dfd9d50d91172005bd14834445e4b9ec3bf558a170dd78c352d0f4','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('138','animarti2006@gmail.com','25051589fc961996f9e22ac11d28e4c83ba40280cc9ecb3e36ca94aa898f96bf31a4f2bfd429c785c4049354ce6c2d2c620910f0e03a6e03ae4860bdeaa1ad7cf59021fed9eff611204bbf133909d8ef43d179a6027805b1e7cff1246395cc215de3bd4a2a269955c9473d619b1960a420ec1b9b8a76a0997630b84f82747471','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('139','rmaldonadoew1998@gmail.com','28ec817bf66ff29b8a01a06aacff01e3a1ba0f539b277edc7e55b20458d424dbd3b20ba7237c52785fe1e29156ff5e6863790324f8c54493ddad591b76305ae3399b247198df8090b6edee521740889d97f18cf9fcbf9204e0e15f30f3829e4516be81d6a66c7ec92722a524af3f476eadc8a4e8b7bb17c5292eb333ba058c44','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('140','chunglisandrqa6@gmail.com','4ce99f59e7ee3812b950f288554c2f0810631025a1ddd840a61e8d3da26f7dc2078e3154eab07ca20cd419cad0816d57659f5cd5f308da4f514de0bf849df3b39172448fd9836aa7600bd0a3e006d9d8f42f2ff981a1e6d365857d8de2fdbc453bf66d9fc8a0a6e269bbfd159d4793547a395cba33ce8a0b574c909ba548ee2a','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('141','bryantjamie74598@yahoo.com','963e24c7e3596f0ffe87a21d76ac637a2b81b2472380d65fea8f9d98a13061ff8356fa222581fd6e80549232318c390b0c8a1108f071bec7898ede49cd268939271bc61d726b341c875799d74e5ab2e91683b57cf33525a35be3b393609cc87f3b9edce38e907877738cd7f30fbe23c15902a0851e7f9b5fc24f548828919db2','000','May',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 
