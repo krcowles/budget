@@ -108,11 +108,6 @@ if (in_array('Non-Monthlies', $account_names)) {
     // add in next year's sorted due dates
     $sorted = array_merge($sortByDueDate, $next_yr, $two_yrs);
     // process the data
-    foreach ($sorted as $check) {
-        echo "Record: " . $check[4] . ", Yr: " . $check[1] . 
-            ", Mo: " . $check[2] . "<br>";
-    }
-    exit;
     foreach ($sorted as $data) {
         if (!empty($data['APType'])) {  // collect autopay data
             if (!$data[0] && !$data[1]) { // not paid yet

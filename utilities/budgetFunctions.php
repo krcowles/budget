@@ -117,7 +117,7 @@ function prepNonMonthly(
      * numeric-month-based arrays in this script are also 0-based, as is the pointer,
      * '$int_paymo' (the numeric representation of the argument '$paymo').
      */
-    // initial values:
+    // default values:
     $int_paymo = 0;
     $expected = 0;
     $acct_paid = false;
@@ -127,9 +127,6 @@ function prepNonMonthly(
     $payfreq = getFrequency($freq); // how many months in a year are pay months
     $incr_months = intval(12/$payfreq);
     $paypermo = round($amt/$incr_months, 2);
-    if ($record === 3) {
-        $debug = true;
-    }
     if ($payfreq > 1) {
         /**
          * Create the list of payment months in the cycle [$dist_months]
