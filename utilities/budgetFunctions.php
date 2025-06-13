@@ -340,6 +340,10 @@ function prepNonMonthly(
                                 $nextDueMo = $dist_months[$i+1];
                                 $acct_paid = true;
                                 $expected = 0;
+                            } else {
+                                $nextDueMo = $dist_months[$i];
+                                $acct_paid = true;
+                                $expected = 0;
                             }
                         }
                     }
