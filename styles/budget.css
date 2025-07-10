@@ -51,3 +51,6 @@
     width: 124px;
     color: brown;
 }
+.btmrow {
+    border-bottom: 1px solid black;
+}

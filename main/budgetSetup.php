@@ -68,13 +68,15 @@ if (in_array('Non-Monthlies', $account_names)) {
     $sortByDueDate = [];
     // extract data needed for sorting and processing of non-monthly accts
     foreach ($nmdata as $data) {
-        $month_data = prepNonMonthly(
-            $data['freq'], $data['first'], $data['amt'], $data['SA_yr'],
-            $data['mo_pd'], intval($data['yr_pd']), $month_names, $thismo,
-            $thisyear, $data['record']
-        );
-        // add in record no for recording results later...
-        array_push($sortByDueDate, $month_data);
+        // only interested in autopays at this time...
+        if (!empty($data['APType'])) {
+            $month_data = prepNonMonthly(
+                $data['freq'], $data['first'], $data['amt'], $data['SA_yr'],
+                $data['mo_pd'], intval($data['yr_pd']), $month_names, $thismo,
+                $thisyear, $data['record']
+            );
+            array_push($sortByDueDate, $month_data);
+        }
     }
     // any 'next_due' months earlier than the current mo are for next year:
     $next_yr = [];
@@ -109,13 +111,19 @@ if (in_array('Non-Monthlies', $account_names)) {
     $sorted = array_merge($sortByDueDate, $next_yr, $two_yrs);
     // process the data
     foreach ($sorted as $data) {
-        if (!empty($data['APType'])) {  // collect autopay data
-            if (!$data[0] && !$data[1]) { // not paid yet
-                array_push($apacct, $data['item']);
-                array_push($aptype, $data['APType']);
-                array_push($apday,  $data['APDay']);
-                array_push($apnext, $data[2]);
+        if (!$data[0] && $data[1] === $thisyear) { // not paid yet
+            // get the associated data for this record
+            $key = 0;
+            for ($j=0; $j<count($nmdata); $j++) {
+                if ($data[4] === $nmdata[$j]['record']) {
+                    $key = $j;
+                    break;
+                }
             }
+            array_push($apacct, $nmdata[$key]['item']);
+            array_push($aptype, $nmdata[$key]['APType']);
+            array_push($apday,  $nmdata[$key]['APDay']);
+            array_push($apnext, $data[2]);
         }
         $expected = $data[3];
         $funding = 0;
@@ -150,8 +158,8 @@ if (in_array('Non-Monthlies', $account_names)) {
     // 2. Present autopay data to javascript on displayBudget.php
     $js_nmapacct = json_encode($apacct);
     $js_nmaptype = json_encode($aptype);
-    $js_nmapdues = json_encode($apnext);
     $js_nmapdays = json_encode($apday);
+    $js_nmapdues = json_encode($apnext);
 }
 
 // form budget balances

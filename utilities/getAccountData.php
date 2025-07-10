@@ -126,7 +126,8 @@ foreach ($temps as $tacct) {
     array_push($tap, $ta);
     $td = empty($tacct['moday']) ? 0 : $tacct['moday'];
     array_push($tday, $td);
-    $tp = empty($tacct['autopd']) ? '' : $tacct['autopd'];
+    // NOTE: 'autopd' may have an entry, but it might be prev month:
+    $tp = empty($tacct['autopd']) ? 0 : (int) $tacct['autopd'];
     array_push($tpd, $tp);
     $ti = empty($tacct['funded']) ? 0 : $tacct['funded'];
     array_push($tinc, $ti);

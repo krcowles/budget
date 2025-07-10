@@ -118,7 +118,7 @@ var ap_candidates = false;
  *  3. NOTE: var modig is the current month (1-based!) defined in menus.js
  *     ********* It must be adjusted for 0-based comparisons!! *********
  */ 
-$('.apday').each(function(indx) {
+$('.apday').each(function() {
     if ($(this).text() !== "") { // this is `moday` or empty string
         // assumption: if not empty string, 'next' is also not empty
         let apday = parseInt($(this).text()); // `moday` as int
