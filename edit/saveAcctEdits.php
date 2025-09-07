@@ -145,8 +145,6 @@ case 'income':
             }
         }
     }
-    $fndkey = array_keys($newfnd);   // acct ids of updated accts
-    $fndval = array_values($newfnd); // updated amt funded of updated acct
     if ($funds > 0) { // any funds left?
         /**
          * Adjust the entry for Undistributed Funds to reflect any post-distribution
@@ -157,6 +155,8 @@ case 'income':
         $undis_balance = floatval($current[$undis_indx]) + $funds;
         $newcur[$undis_acct_id] = (string) $undis_balance;
     }
+    $fndkey = array_keys($newfnd);   // acct ids of updated accts
+    $fndval = array_values($newfnd); // updated amts funded for accts
     for ($l=0; $l<count($fndkey); $l++) {
         $new_balance = $newcur[$fndkey[$l]];
         $adjinc = "UPDATE `Budgets` SET `current` = :bal," .
