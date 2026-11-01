@@ -283,33 +283,33 @@ $('#undoinc').on('click', function() {
     return;
 });
 // Transfer 
-$('#transfers').on('click', function() {
-    $('#xfrbtn').on('click', function() {
-        let xframt = $('#xframt').val();
-        amt = valAmt(xframt, true);
-        if (amt === 0) {
-            return false;
-        }
-        let $from = $('#xfrfrom').children();
-        let xfrom = getSelect($from[0]);
-        let $to   = $('#xfrto').children();
-        let xfrto = getSelect($to[0]);
-        if (xfrom == xfrto) {
-            alert("You have specified the same account for 'Take from' and 'Place in'");
-            return false;
-        }
-        let ajaxdata = {id: 'xfr', from: xfrom, to: xfrto, sum: amt};
-        executeScript('../edit/saveAcctEdits.php', ajaxdata, xfrfund, 'home', {});
-        // register transfer in 'Transfers' database
-        let xfrdata  ={from: xfrom, to: xfrto, amt: amt};
-        $.post('../utilities/transfers.php', xfrdata, function(result) {
-            if (result !== 'ok') {
-                alert("Failed to register transfer in database");
-            }
-        });
-
-    });
+$('#transfers').on('click', function() {    
     xfrfund.show();
+});
+$('#xfrbtn').on('click', function() {
+    let xframt = $('#xframt').val();
+    amt = valAmt(xframt, true);
+    if (amt === 0) {
+        return false;
+    }
+    let $from = $('#xfrfrom').children();
+    let xfrom = getSelect($from[0]);
+    let $to   = $('#xfrto').children();
+    let xfrto = getSelect($to[0]);
+    if (xfrom == xfrto) {
+        alert("You have specified the same account for 'Take from' and 'Place in'");
+        return false;
+    }
+    let ajaxdata = {id: 'xfr', from: xfrom, to: xfrto, sum: amt};
+    executeScript('../edit/saveAcctEdits.php', ajaxdata, xfrfund, 'home', {});
+    // register transfer in 'Transfers' database
+    let xfrdata  ={from: xfrom, to: xfrto, amt: amt};
+    $.post('../utilities/transfers.php', xfrdata, function(result) {
+        if (result !== 'ok') {
+            alert("Failed to register transfer in database");
+        }
+    });
+
 });
 // Reconcile a card
 $('#cd2rec').on('click', function() {
